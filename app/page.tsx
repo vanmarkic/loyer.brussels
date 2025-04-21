@@ -60,7 +60,9 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                <Button className="bg-[#e05c6d] hover:bg-[#d04c5d] rounded-full px-8">Démarrer</Button>
+                <Link href="/calculateur">
+                  <Button className="bg-[#e05c6d] hover:bg-[#d04c5d] rounded-full px-8">Démarrer</Button>
+                </Link>
 
                 <div className="flex items-center gap-3">
                   <span className="text-sm uppercase">Partagez le site</span>

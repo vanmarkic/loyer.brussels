@@ -81,7 +81,7 @@ export function AddressAutocomplete({
 
   const handleSelect = (address: AddressResult) => {
     onAddressSelect(address)
-    setQuery(`${address.street_name} ${address.street_number}, ${address.postal_code} Bruxelles`)
+    setQuery(`${address.streetname_fr} ${address.house_number}, ${address.postcode} Bruxelles`)
     setIsOpen(false)
     setError(null)
   }
@@ -121,13 +121,13 @@ export function AddressAutocomplete({
           <ul className="max-h-60 overflow-auto py-1 text-sm">
             {results.map((address) => (
               <li
-                key={`${address.street_name}-${address.street_number}-${address.postal_code}`}
+                key={`${address.streetname_fr}-${address.house_number}-${address.postcode}`}
                 className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100"
                 onClick={() => handleSelect(address)}
               >
                 <MapPin className="mr-2 h-4 w-4 text-[#f18240]" />
                 <span>
-                  {address.street_name} {address.street_number}, {address.postal_code} Bruxelles
+                  {address.streetname_fr} {address.house_number}, {address.postcode} Bruxelles
                 </span>
               </li>
             ))}

@@ -4,13 +4,16 @@ import { supabaseAdmin } from "../lib/supabase"
 
 export async function fetchDifficultyIndexAction(postalCode: string, streetName: string, streetNumber: string) {
   try {
+    // Query the addresses table to find the matching address
     const { data, error } = await supabaseAdmin
-      .from("difficulty_indices")
-      .select("index")
+      .from("addresses")
+      .select("difficulty_index")
       .eq("postal_code", postalCode)
       .ilike("street_name", `%${streetName}%`)
       .eq("street_number", streetNumber)
       .single()
+
+    console.log(data, error) 
 
     if (error) {
       console.error("Error fetching difficulty index:", error)
@@ -19,7 +22,7 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
 
     return {
       success: true,
-      data: data?.index || 0,
+      data: data?.difficulty_index || 0,
       error: null,
     }
   } catch (error) {

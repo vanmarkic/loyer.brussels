@@ -30,8 +30,8 @@ export async function searchAddresses(query: string): Promise<AddressResult[]> {
     }
 
     let supabaseQuery = supabaseAdmin
-      .from("difficulty_indices")
-      .select("id, postal_code, street_name, street_number, index as difficulty_index")
+      .from("addresses")
+      .select("id, postal_code, street_name, street_number, difficulty_index")
       .limit(10)
 
     // Add filters based on the parsed query

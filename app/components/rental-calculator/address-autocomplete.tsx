@@ -64,6 +64,7 @@ export function AddressAutocomplete({
 
           // Show a message if no results were found
           if (response.data.length === 0 && debouncedQuery.length >= 3) {
+          console.log(response)
             setError("Aucune adresse trouvée. Veuillez essayer une autre recherche.")
           }
         }

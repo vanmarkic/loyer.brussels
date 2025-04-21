@@ -82,7 +82,7 @@ export function AddressAutocomplete({
 
   const handleSelect = (address: AddressResult) => {
     onAddressSelect(address)
-    setQuery(`${address.streetname_fr} ${address.house_number}, ${address.postcode} Bruxelles`)
+    setQuery(`${address.streetname_fr} ${address.house_number} ${address.postcode}`)
     setIsOpen(false)
     setError(null)
   }
@@ -128,7 +128,7 @@ export function AddressAutocomplete({
               >
                 <MapPin className="mr-2 h-4 w-4 text-[#f18240]" />
                 <span>
-                  {address.streetname_fr} {address.house_number}, {address.postcode} Bruxelles
+                  {address.streetname_fr} {address.house_number} {address.postcode}
                 </span>
               </li>
             ))}

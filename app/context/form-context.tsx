@@ -2,25 +2,57 @@
 
 import type React from "react"
 import { createContext, useContext, useReducer, type ReactNode } from "react"
+import { fetchDifficultyIndex } from "../lib/supabase"
 
 export type PropertyType = "apartment" | "house" | "studio" | "other"
+export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G"
 export type Neighborhood = "center" | "north" | "south" | "east" | "west"
 
 export interface FormState {
   step: number
+  // Address information
+  postalCode: string
+  streetName: string
+  streetNumber: string
+  // Property details
   propertyType: PropertyType | ""
+  constructionYear: number | null
+  renovationYear: number | null
+  size: number
   bedrooms: number
   bathrooms: number
-  size: number
-  neighborhood: Neighborhood | ""
+  separateToilet: boolean
+  livingRoomSize: number | null
+  kitchenType: "open" | "closed" | "american" | "none"
+  kitchenEquipped: boolean
+  // Additional features
   floor: number
+  totalFloors: number
   hasElevator: boolean
   hasParking: boolean
+  hasGarage: boolean
   hasBalcony: boolean
+  balconySize: number | null
+  hasTerrace: boolean
+  terraceSize: number | null
   hasGarden: boolean
-  isRenovated: boolean
-  energyClass: string
+  gardenSize: number | null
+  hasBasement: boolean
+  hasAttic: boolean
+  // Energy and heating
+  energyClass: EnergyClass | ""
+  heatingType: "central" | "individual" | "none"
+  // Location
+  neighborhood: Neighborhood | ""
+  // Calculation results
+  difficultyIndex: number | null
+  baseRent: number | null
+  adjustedRent: number | null
+  minRent: number | null
+  maxRent: number | null
   estimatedRent: number | null
+  isLoading: boolean
+  error: string | null
 }
 
 type FormAction =
@@ -28,24 +60,57 @@ type FormAction =
   | { type: "PREV_STEP" }
   | { type: "GO_TO_STEP"; payload: number }
   | { type: "UPDATE_FIELD"; field: keyof FormState; value: any }
+  | { type: "FETCH_DIFFICULTY_INDEX_START" }
+  | { type: "FETCH_DIFFICULTY_INDEX_SUCCESS"; payload: number }
+  | { type: "FETCH_DIFFICULTY_INDEX_ERROR"; payload: string }
   | { type: "CALCULATE_RENT" }
   | { type: "RESET_FORM" }
 
 const initialState: FormState = {
   step: 1,
+  // Address information
+  postalCode: "",
+  streetName: "",
+  streetNumber: "",
+  // Property details
   propertyType: "",
+  constructionYear: null,
+  renovationYear: null,
+  size: 0,
   bedrooms: 1,
   bathrooms: 1,
-  size: 0,
-  neighborhood: "",
+  separateToilet: false,
+  livingRoomSize: null,
+  kitchenType: "none",
+  kitchenEquipped: false,
+  // Additional features
   floor: 0,
+  totalFloors: 0,
   hasElevator: false,
   hasParking: false,
+  hasGarage: false,
   hasBalcony: false,
+  balconySize: null,
+  hasTerrace: false,
+  terraceSize: null,
   hasGarden: false,
-  isRenovated: false,
-  energyClass: "D",
+  gardenSize: null,
+  hasBasement: false,
+  hasAttic: false,
+  // Energy and heating
+  energyClass: "",
+  heatingType: "none",
+  // Location
+  neighborhood: "",
+  // Calculation results
+  difficultyIndex: null,
+  baseRent: null,
+  adjustedRent: null,
+  minRent: null,
+  maxRent: null,
   estimatedRent: null,
+  isLoading: false,
+  error: null,
 }
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
@@ -58,8 +123,32 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
       return { ...state, step: action.payload }
     case "UPDATE_FIELD":
       return { ...state, [action.field]: action.value }
+    case "FETCH_DIFFICULTY_INDEX_START":
+      return { ...state, isLoading: true, error: null }
+    case "FETCH_DIFFICULTY_INDEX_SUCCESS":
+      return {
+        ...state,
+        difficultyIndex: action.payload,
+        isLoading: false,
+        error: null,
+      }
+    case "FETCH_DIFFICULTY_INDEX_ERROR":
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+      }
     case "CALCULATE_RENT":
-      return { ...state, estimatedRent: calculateRent(state), step: state.step + 1 }
+      const { baseRent, adjustedRent, minRent, maxRent } = calculateRent(state)
+      return {
+        ...state,
+        baseRent,
+        adjustedRent,
+        minRent,
+        maxRent,
+        estimatedRent: adjustedRent,
+        step: state.step + 1,
+      }
     case "RESET_FORM":
       return initialState
     default:
@@ -67,18 +156,26 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
   }
 }
 
-// Simple rental price calculation logic
-const calculateRent = (state: FormState): number => {
-  // Base price per square meter by neighborhood
-  const basePricePerSqm: Record<Neighborhood, number> = {
-    center: 15,
-    north: 12,
-    south: 14,
-    east: 13,
-    west: 11,
-  }
+// Rental price calculation based on loyers.brussels methodology
+const calculateRent = (
+  state: FormState,
+): {
+  baseRent: number
+  adjustedRent: number
+  minRent: number
+  maxRent: number
+} => {
+  // Base price calculation
+  // Using a simplified version of the Brussels reference rent formula
+  let basePrice = 0
 
-  // Property type multipliers
+  // Base price per square meter (simplified)
+  const basePricePerSqm = 12 // Average base price per sqm in Brussels
+
+  // Calculate base rent from size
+  basePrice = state.size * basePricePerSqm
+
+  // Apply property type adjustments
   const propertyTypeMultiplier: Record<PropertyType, number> = {
     apartment: 1.0,
     house: 1.2,
@@ -86,32 +183,24 @@ const calculateRent = (state: FormState): number => {
     other: 1.0,
   }
 
-  // Calculate base rent
-  let baseRent = state.size * (basePricePerSqm[state.neighborhood as Neighborhood] || 13)
+  basePrice *= propertyTypeMultiplier[state.propertyType as PropertyType] || 1.0
 
-  // Apply property type multiplier
-  baseRent *= propertyTypeMultiplier[state.propertyType as PropertyType] || 1.0
+  // Apply bedroom adjustments
+  basePrice += state.bedrooms * 50
 
-  // Add for bedrooms and bathrooms
-  baseRent += state.bedrooms * 50
-  baseRent += state.bathrooms * 40
+  // Apply bathroom adjustments
+  basePrice += state.bathrooms * 40
 
-  // Add for amenities
-  if (state.hasParking) baseRent += 80
-  if (state.hasBalcony) baseRent += 40
-  if (state.hasGarden) baseRent += 100
-  if (state.isRenovated) baseRent += state.size * 2
-
-  // Floor adjustments
-  if (state.floor > 0) {
-    baseRent += state.floor * 10
-    if (!state.hasElevator && state.floor > 2) {
-      baseRent -= (state.floor - 2) * 15
-    }
+  // Apply difficulty index if available
+  let adjustedPrice = basePrice
+  if (state.difficultyIndex !== null) {
+    // The difficulty index is a multiplier that adjusts the base price
+    // based on the location's desirability
+    adjustedPrice = basePrice * (1 + state.difficultyIndex / 100)
   }
 
-  // Energy class adjustments
-  const energyClassAdjustment: Record<string, number> = {
+  // Apply energy class adjustments
+  const energyClassAdjustment: Record<EnergyClass, number> = {
     A: 1.1,
     B: 1.05,
     C: 1.0,
@@ -121,15 +210,45 @@ const calculateRent = (state: FormState): number => {
     G: 0.8,
   }
 
-  baseRent *= energyClassAdjustment[state.energyClass] || 1.0
+  if (state.energyClass) {
+    adjustedPrice *= energyClassAdjustment[state.energyClass as EnergyClass] || 1.0
+  }
+
+  // Apply additional features adjustments
+  if (state.hasParking) adjustedPrice += 80
+  if (state.hasGarage) adjustedPrice += 100
+  if (state.hasBalcony && state.balconySize) adjustedPrice += Math.min(state.balconySize * 5, 50)
+  if (state.hasTerrace && state.terraceSize) adjustedPrice += Math.min(state.terraceSize * 7, 100)
+  if (state.hasGarden && state.gardenSize) adjustedPrice += Math.min(state.gardenSize * 3, 150)
+
+  // Floor adjustments
+  if (state.floor > 0) {
+    // Higher floors typically command higher rents
+    adjustedPrice += state.floor * 10
+
+    // But if there's no elevator and it's above the 2nd floor, reduce the price
+    if (!state.hasElevator && state.floor > 2) {
+      adjustedPrice -= (state.floor - 2) * 15
+    }
+  }
+
+  // Calculate min and max rent (±20% as per Brussels regulations)
+  const minRent = Math.round(adjustedPrice * 0.8)
+  const maxRent = Math.round(adjustedPrice * 1.2)
 
   // Round to nearest 10
-  return Math.round(baseRent / 10) * 10
+  return {
+    baseRent: Math.round(basePrice / 10) * 10,
+    adjustedRent: Math.round(adjustedPrice / 10) * 10,
+    minRent,
+    maxRent,
+  }
 }
 
 interface FormContextType {
   state: FormState
   dispatch: React.Dispatch<FormAction>
+  fetchDifficultyIndexAndCalculate: () => Promise<void>
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined)
@@ -137,7 +256,48 @@ const FormContext = createContext<FormContextType | undefined>(undefined)
 export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(formReducer, initialState)
 
-  return <FormContext.Provider value={{ state, dispatch }}>{children}</FormContext.Provider>
+  const fetchDifficultyIndexAndCalculate = async () => {
+    if (!state.postalCode || !state.streetName || !state.streetNumber) {
+      dispatch({
+        type: "FETCH_DIFFICULTY_INDEX_ERROR",
+        payload: "Veuillez remplir tous les champs d'adresse",
+      })
+      return
+    }
+
+    dispatch({ type: "FETCH_DIFFICULTY_INDEX_START" })
+
+    try {
+      const difficultyIndex = await fetchDifficultyIndex(state.postalCode, state.streetName, state.streetNumber)
+
+      if (difficultyIndex === null) {
+        dispatch({
+          type: "FETCH_DIFFICULTY_INDEX_ERROR",
+          payload: "Impossible de trouver l'indice de difficulté pour cette adresse",
+        })
+        return
+      }
+
+      dispatch({
+        type: "FETCH_DIFFICULTY_INDEX_SUCCESS",
+        payload: difficultyIndex,
+      })
+
+      // Calculate rent after fetching the difficulty index
+      dispatch({ type: "CALCULATE_RENT" })
+    } catch (error) {
+      dispatch({
+        type: "FETCH_DIFFICULTY_INDEX_ERROR",
+        payload: "Une erreur s'est produite lors de la récupération de l'indice de difficulté",
+      })
+    }
+  }
+
+  return (
+    <FormContext.Provider value={{ state, dispatch, fetchDifficultyIndexAndCalculate }}>
+      {children}
+    </FormContext.Provider>
+  )
 }
 
 export const useForm = (): FormContextType => {

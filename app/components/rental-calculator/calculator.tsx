@@ -3,8 +3,9 @@
 import { useForm } from "@/app/context/form-context"
 import { PropertyTypeStep } from "./property-type-step"
 import { PropertyDetailsStep } from "./property-details-step"
-import { LocationStep } from "./location-step"
+import { AddressStep } from "./address-step"
 import { FeaturesStep } from "./features-step"
+import { EnergyStep } from "./energy-step"
 import { ResultStep } from "./result-step"
 import { Progress } from "@/components/ui/progress"
 
@@ -12,7 +13,7 @@ export function RentalCalculator() {
   const { state } = useForm()
 
   // Calculate progress percentage
-  const totalSteps = 5
+  const totalSteps = 6
   const progressPercentage = (Math.min(state.step, totalSteps) / totalSteps) * 100
 
   return (
@@ -29,11 +30,12 @@ export function RentalCalculator() {
         </div>
       )}
 
-      {state.step === 1 && <PropertyTypeStep />}
-      {state.step === 2 && <PropertyDetailsStep />}
-      {state.step === 3 && <LocationStep />}
+      {state.step === 1 && <AddressStep />}
+      {state.step === 2 && <PropertyTypeStep />}
+      {state.step === 3 && <PropertyDetailsStep />}
       {state.step === 4 && <FeaturesStep />}
-      {state.step === 5 && <ResultStep />}
+      {state.step === 5 && <EnergyStep />}
+      {state.step === 6 && <ResultStep />}
     </div>
   )
 }

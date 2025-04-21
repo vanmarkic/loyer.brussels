@@ -3,7 +3,8 @@
 import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Download, Share2 } from "lucide-react"
+import { ArrowRight, Download, Share2, Info } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function ResultStep() {
   const { state, dispatch } = useForm()
@@ -19,12 +20,17 @@ export function ResultStep() {
     other: "Autre",
   }
 
-  const neighborhoodLabels: Record<string, string> = {
-    center: "Centre-ville",
-    north: "Nord",
-    south: "Sud",
-    east: "Est",
-    west: "Ouest",
+  const kitchenTypeLabels: Record<string, string> = {
+    open: "Cuisine ouverte",
+    closed: "Cuisine fermée",
+    american: "Cuisine américaine",
+    none: "Pas de cuisine",
+  }
+
+  const heatingTypeLabels: Record<string, string> = {
+    central: "Chauffage central",
+    individual: "Chauffage individuel",
+    none: "Pas de chauffage",
   }
 
   return (
@@ -39,48 +45,105 @@ export function ResultStep() {
           <div className="text-center">
             <p className="text-lg font-medium">Loyer mensuel estimé</p>
             <p className="text-5xl font-bold mt-2">{state.estimatedRent} €</p>
-            <p className="text-sm mt-2 opacity-80">Ce montant est indicatif et peut varier selon d'autres facteurs</p>
+            <div className="flex justify-center items-center mt-2">
+              <p className="text-sm opacity-80">
+                Fourchette de prix: {state.minRent} € - {state.maxRent} €
+              </p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 text-white">
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Selon la législation bruxelloise, le loyer de référence peut varier de ±20%</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
         <h3 className="font-medium">Récapitulatif du bien</h3>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <div className="text-muted-foreground">Type de bien:</div>
-          <div className="font-medium">{propertyTypeLabels[state.propertyType] || "-"}</div>
 
-          <div className="text-muted-foreground">Surface:</div>
-          <div className="font-medium">{state.size} m²</div>
+        <div className="space-y-3">
+          <div>
+            <h4 className="text-sm font-medium text-gray-500">Adresse</h4>
+            <p>
+              {state.streetNumber} {state.streetName}, {state.postalCode} Bruxelles
+            </p>
+          </div>
 
-          <div className="text-muted-foreground">Chambres:</div>
-          <div className="font-medium">{state.bedrooms}</div>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="text-muted-foreground">Type de bien:</div>
+            <div className="font-medium">{propertyTypeLabels[state.propertyType] || "-"}</div>
 
-          <div className="text-muted-foreground">Salles de bain:</div>
-          <div className="font-medium">{state.bathrooms}</div>
+            <div className="text-muted-foreground">Surface:</div>
+            <div className="font-medium">{state.size} m²</div>
 
-          <div className="text-muted-foreground">Localisation:</div>
-          <div className="font-medium">{neighborhoodLabels[state.neighborhood] || "-"}</div>
+            <div className="text-muted-foreground">Chambres:</div>
+            <div className="font-medium">{state.bedrooms}</div>
 
-          <div className="text-muted-foreground">Étage:</div>
-          <div className="font-medium">{state.floor}</div>
+            <div className="text-muted-foreground">Salles de bain:</div>
+            <div className="font-medium">{state.bathrooms}</div>
 
-          <div className="text-muted-foreground">Classe énergétique:</div>
-          <div className="font-medium">{state.energyClass}</div>
+            <div className="text-muted-foreground">Cuisine:</div>
+            <div className="font-medium">
+              {kitchenTypeLabels[state.kitchenType] || "-"}
+              {state.kitchenEquipped ? " (équipée)" : ""}
+            </div>
 
-          <div className="text-muted-foreground">Équipements:</div>
-          <div className="font-medium">
-            {[
-              state.hasElevator ? "Ascenseur" : null,
-              state.hasParking ? "Parking" : null,
-              state.hasBalcony ? "Balcon" : null,
-              state.hasGarden ? "Jardin" : null,
-              state.isRenovated ? "Rénové" : null,
-            ]
-              .filter(Boolean)
-              .join(", ") || "Aucun"}
+            <div className="text-muted-foreground">Étage:</div>
+            <div className="font-medium">
+              {state.floor} / {state.totalFloors}
+            </div>
+
+            <div className="text-muted-foreground">Classe énergétique:</div>
+            <div className="font-medium">{state.energyClass}</div>
+
+            <div className="text-muted-foreground">Chauffage:</div>
+            <div className="font-medium">{heatingTypeLabels[state.heatingType] || "-"}</div>
+
+            <div className="text-muted-foreground">Extérieurs:</div>
+            <div className="font-medium">
+              {[
+                state.hasBalcony ? `Balcon${state.balconySize ? ` (${state.balconySize} m²)` : ""}` : null,
+                state.hasTerrace ? `Terrasse${state.terraceSize ? ` (${state.terraceSize} m²)` : ""}` : null,
+                state.hasGarden ? `Jardin${state.gardenSize ? ` (${state.gardenSize} m²)` : ""}` : null,
+              ]
+                .filter(Boolean)
+                .join(", ") || "Aucun"}
+            </div>
+
+            <div className="text-muted-foreground">Équipements:</div>
+            <div className="font-medium">
+              {[
+                state.hasElevator ? "Ascenseur" : null,
+                state.hasParking ? "Parking" : null,
+                state.hasGarage ? "Garage" : null,
+                state.hasBasement ? "Cave" : null,
+                state.hasAttic ? "Grenier" : null,
+              ]
+                .filter(Boolean)
+                .join(", ") || "Aucun"}
+            </div>
           </div>
         </div>
+      </div>
+
+      <div className="bg-blue-50 p-4 rounded-lg text-sm">
+        <p className="font-medium text-blue-800">Information importante</p>
+        <p className="mt-1 text-blue-700">
+          Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires particuliers, le montant du
+          loyer est déterminé librement par le bailleur sur le marché privé.
+        </p>
+        <p className="mt-2 text-blue-700">
+          Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du loyer réel dans les baux
+          d'habitation en Région de Bruxelles Capitale.
+        </p>
       </div>
 
       <div className="flex flex-col gap-3">

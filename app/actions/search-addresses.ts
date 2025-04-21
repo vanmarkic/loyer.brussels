@@ -44,7 +44,7 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
     let supabaseQuery = supabaseAdmin
       .from("addresses")
       .select("id, postcode, streetname_fr, house_number, indice_synth_difficulte")
-      .limit(10)
+      .limit(30)
 
     // Add filters based on the parsed query
     if (postalCodeQuery) {

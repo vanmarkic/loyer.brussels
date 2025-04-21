@@ -4,10 +4,10 @@ import { supabaseAdmin } from "../lib/supabase"
 
 export interface AddressResult {
   id: string
-  postal_code: string
-  street_name: string
-  street_number: string
-  difficulty_index: number
+  postcode: string
+  streetname_fr: string
+  house_number: string
+  indice_synth_difficulte: number
 }
 
 export interface SearchAddressesResult {
@@ -43,16 +43,16 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
 
     let supabaseQuery = supabaseAdmin
       .from("addresses")
-      .select("id, postal_code, street_name, street_number, difficulty_index")
+      .select("id, postcode, streetname_fr, house_number, indice_synth_difficulte")
       .limit(10)
 
     // Add filters based on the parsed query
     if (postalCodeQuery) {
-      supabaseQuery = supabaseQuery.eq("postal_code", postalCodeQuery)
+      supabaseQuery = supabaseQuery.eq("postcode", postalCodeQuery)
     }
 
     if (streetQuery) {
-      supabaseQuery = supabaseQuery.ilike("street_name", `%${streetQuery}%`)
+      supabaseQuery = supabaseQuery.ilike("streetname_fr", `%${streetQuery}%`)
     }
 
     const { data, error } = await supabaseQuery

@@ -22,16 +22,16 @@ export function AddressStep() {
     // Clear any previous errors
     clearError()
 
-    dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: address.postal_code })
-    dispatch({ type: "UPDATE_FIELD", field: "streetName", value: address.street_name })
-    dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: address.street_number })
+    dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: address.postcode })
+    dispatch({ type: "UPDATE_FIELD", field: "streetName", value: address.streetname_fr })
+    dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: address.house_number })
 
     // If we already have the difficulty index from the search, store it
     if (address.difficulty_index !== undefined) {
       dispatch({
         type: "UPDATE_FIELD",
         field: "difficultyIndex",
-        value: address.difficulty_index,
+        value: address.indice_synth_difficulte,
       })
     }
   }

@@ -10,7 +10,7 @@ import { AddressAutocomplete } from "./address-autocomplete"
 import type { AddressResult } from "@/app/actions/search-addresses"
 
 export function AddressStep() {
-  const { state, dispatch } = useForm()
+  const { state, dispatch, clearError } = useForm()
 
   const handleContinue = () => {
     if (state.postalCode && state.streetName && state.streetNumber) {
@@ -19,6 +19,9 @@ export function AddressStep() {
   }
 
   const handleAddressSelect = (address: AddressResult) => {
+    // Clear any previous errors
+    clearError()
+
     dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: address.postal_code })
     dispatch({ type: "UPDATE_FIELD", field: "streetName", value: address.street_name })
     dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: address.street_number })
@@ -55,7 +58,10 @@ export function AddressStep() {
             <Input
               id="postalCode"
               value={state.postalCode}
-              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: e.target.value })}
+              onChange={(e) => {
+                clearError()
+                dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: e.target.value })
+              }}
               placeholder="1000"
               className="mt-1"
             />
@@ -66,7 +72,10 @@ export function AddressStep() {
             <Input
               id="streetName"
               value={state.streetName}
-              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetName", value: e.target.value })}
+              onChange={(e) => {
+                clearError()
+                dispatch({ type: "UPDATE_FIELD", field: "streetName", value: e.target.value })
+              }}
               placeholder="Rue de la Loi"
               className="mt-1"
             />
@@ -77,7 +86,10 @@ export function AddressStep() {
             <Input
               id="streetNumber"
               value={state.streetNumber}
-              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: e.target.value })}
+              onChange={(e) => {
+                clearError()
+                dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: e.target.value })
+              }}
               placeholder="16"
               className="mt-1"
             />

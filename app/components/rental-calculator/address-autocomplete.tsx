@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Loader2, MapPin } from "lucide-react"
+import { Loader2, MapPin, AlertCircle } from "lucide-react"
 import { searchAddresses, type AddressResult } from "@/app/actions/search-addresses"
 import { useDebounce } from "@/app/hooks/use-debounce"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: AddressResult) => void
@@ -22,6 +23,7 @@ export function AddressAutocomplete({
   const [results, setResults] = useState<AddressResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const debouncedQuery = useDebounce(query, 300)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -43,16 +45,32 @@ export function AddressAutocomplete({
       if (debouncedQuery.length < 3) {
         setResults([])
         setIsLoading(false)
+        setError(null)
         return
       }
 
       setIsLoading(true)
+      setError(null)
+
       try {
-        const addresses = await searchAddresses(debouncedQuery)
-        setResults(addresses)
-        setIsOpen(addresses.length > 0)
-      } catch (error) {
+        const response = await searchAddresses(debouncedQuery)
+
+        if (!response.success) {
+          setError(response.error || "Erreur lors de la recherche d'adresses")
+          setResults([])
+        } else {
+          setResults(response.data)
+          setIsOpen(response.data.length > 0)
+
+          // Show a message if no results were found
+          if (response.data.length === 0 && debouncedQuery.length >= 3) {
+            setError("Aucune adresse trouvée. Veuillez essayer une autre recherche.")
+          }
+        }
+      } catch (error: any) {
         console.error("Error fetching addresses:", error)
+        setError(`Erreur: ${error.message || "Une erreur s'est produite"}`)
+        setResults([])
       } finally {
         setIsLoading(false)
       }
@@ -65,6 +83,7 @@ export function AddressAutocomplete({
     onAddressSelect(address)
     setQuery(`${address.street_name} ${address.street_number}, ${address.postal_code} Bruxelles`)
     setIsOpen(false)
+    setError(null)
   }
 
   return (
@@ -81,7 +100,7 @@ export function AddressAutocomplete({
             }
           }}
           placeholder={placeholder}
-          className="mt-1"
+          className={`mt-1 ${error ? "border-red-300 focus-visible:ring-red-300" : ""}`}
         />
         {isLoading && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -89,6 +108,13 @@ export function AddressAutocomplete({
           </div>
         )}
       </div>
+
+      {error && (
+        <Alert variant="destructive" className="mt-2">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
       {isOpen && results.length > 0 && (
         <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg">

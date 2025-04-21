@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { AlertCircle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle, RefreshCw } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Loader2 } from "lucide-react"
 
 export function EnergyStep() {
-  const { state, dispatch, fetchDifficultyIndexAndCalculate } = useForm()
+  const { state, dispatch, fetchDifficultyIndexAndCalculate, clearError } = useForm()
 
   const handleBack = () => {
     dispatch({ type: "PREV_STEP" })
@@ -25,12 +26,77 @@ export function EnergyStep() {
     }
   }
 
+  // Function to render appropriate error message with action buttons
+  const renderErrorMessage = () => {
+    if (!state.error) return null
+
+    // Different error types might need different actions
+    switch (state.errorCode) {
+      case "NOT_FOUND":
+        return (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Adresse non trouvée</AlertTitle>
+            <AlertDescription className="space-y-2">
+              <p>{state.error}</p>
+              <div className="flex justify-end mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    clearError()
+                    dispatch({ type: "GO_TO_STEP", payload: 1 })
+                  }}
+                  className="text-xs"
+                >
+                  Modifier l'adresse
+                </Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )
+
+      case "DATABASE_ERROR":
+        return (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Erreur de base de données</AlertTitle>
+            <AlertDescription className="space-y-2">
+              <p>{state.error}</p>
+              <div className="flex justify-end mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    clearError()
+                  }}
+                  className="text-xs flex items-center gap-1"
+                >
+                  <RefreshCw className="h-3 w-3" /> Réessayer
+                </Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )
+
+      default:
+        return (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{state.error}</AlertDescription>
+          </Alert>
+        )
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold">Énergie et chauffage</h2>
         <p className="text-muted-foreground mt-2">Informations sur la performance énergétique</p>
       </div>
+
+      {renderErrorMessage()}
 
       <div className="space-y-4">
         <div>
@@ -77,13 +143,6 @@ export function EnergyStep() {
         </div>
       </div>
 
-      {state.error && (
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      )}
-
       <div className="flex gap-3">
         <Button onClick={handleBack} variant="outline" className="flex-1">
           Retour
@@ -93,7 +152,13 @@ export function EnergyStep() {
           disabled={!state.energyClass || state.isLoading}
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
-          {state.isLoading ? "Calcul en cours..." : "Calculer le loyer"}
+          {state.isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" /> Calcul en cours...
+            </span>
+          ) : (
+            "Calculer le loyer"
+          )}
         </Button>
       </div>
     </div>

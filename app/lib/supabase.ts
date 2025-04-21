@@ -22,11 +22,11 @@ export async function fetchDifficultyIndex(postalCode: string, streetName: strin
     const { data, error } = await supabaseAdmin
       .from("addresses")
       .select("difficulty_index")
-      .eq("postal_code", postalCode)
-      .ilike("street_name", `%${streetName}%`)
-      .eq("street_number", streetNumber)
+      .eq("postcode", postalCode)
+      .ilike("streetname_fr", `%${streetName}%`)
+      .eq("house_number", streetNumber)
       .single()
-
+      
     if (error) {
       console.error("Error fetching difficulty index:", error)
       return null

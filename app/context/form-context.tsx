@@ -53,6 +53,7 @@ export interface FormState {
   estimatedRent: number | null
   isLoading: boolean
   error: string | null
+  errorCode: string | null
 }
 
 type FormAction =
@@ -62,9 +63,10 @@ type FormAction =
   | { type: "UPDATE_FIELD"; field: keyof FormState; value: any }
   | { type: "FETCH_DIFFICULTY_INDEX_START" }
   | { type: "FETCH_DIFFICULTY_INDEX_SUCCESS"; payload: number }
-  | { type: "FETCH_DIFFICULTY_INDEX_ERROR"; payload: string }
+  | { type: "FETCH_DIFFICULTY_INDEX_ERROR"; payload: { message: string; code: string } }
   | { type: "CALCULATE_RENT" }
   | { type: "RESET_FORM" }
+  | { type: "CLEAR_ERROR" }
 
 const initialState: FormState = {
   step: 1,
@@ -110,32 +112,35 @@ const initialState: FormState = {
   estimatedRent: null,
   isLoading: false,
   error: null,
+  errorCode: null,
 }
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
   switch (action.type) {
     case "NEXT_STEP":
-      return { ...state, step: state.step + 1 }
+      return { ...state, step: state.step + 1, error: null, errorCode: null }
     case "PREV_STEP":
-      return { ...state, step: Math.max(1, state.step - 1) }
+      return { ...state, step: Math.max(1, state.step - 1), error: null, errorCode: null }
     case "GO_TO_STEP":
-      return { ...state, step: action.payload }
+      return { ...state, step: action.payload, error: null, errorCode: null }
     case "UPDATE_FIELD":
       return { ...state, [action.field]: action.value }
     case "FETCH_DIFFICULTY_INDEX_START":
-      return { ...state, isLoading: true, error: null }
+      return { ...state, isLoading: true, error: null, errorCode: null }
     case "FETCH_DIFFICULTY_INDEX_SUCCESS":
       return {
         ...state,
         difficultyIndex: action.payload,
         isLoading: false,
         error: null,
+        errorCode: null,
       }
     case "FETCH_DIFFICULTY_INDEX_ERROR":
       return {
         ...state,
         isLoading: false,
-        error: action.payload,
+        error: action.payload.message,
+        errorCode: action.payload.code,
       }
     case "CALCULATE_RENT":
       const { baseRent, adjustedRent, minRent, maxRent } = calculateRent(state)
@@ -147,9 +152,13 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         maxRent,
         estimatedRent: adjustedRent,
         step: state.step + 1,
+        error: null,
+        errorCode: null,
       }
     case "RESET_FORM":
       return initialState
+    case "CLEAR_ERROR":
+      return { ...state, error: null, errorCode: null }
     default:
       return state
   }
@@ -286,6 +295,7 @@ interface FormContextType {
   state: FormState
   dispatch: React.Dispatch<FormAction>
   fetchDifficultyIndexAndCalculate: () => Promise<void>
+  clearError: () => void
 }
 
 const FormContext = createContext<FormContextType | undefined>(undefined)
@@ -297,7 +307,10 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!state.postalCode || !state.streetName || !state.streetNumber) {
       dispatch({
         type: "FETCH_DIFFICULTY_INDEX_ERROR",
-        payload: "Veuillez remplir tous les champs d'adresse",
+        payload: {
+          message: "Veuillez remplir tous les champs d'adresse",
+          code: "MISSING_FIELDS",
+        },
       })
       return
     }
@@ -306,14 +319,15 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       // Use the server action to fetch the difficulty index
-      console.log(state.postalCode, state.streetName,state.streetNumber)
       const result = await fetchDifficultyIndexAction(state.postalCode, state.streetName, state.streetNumber)
-      console.log(result)
 
       if (!result.success) {
         dispatch({
           type: "FETCH_DIFFICULTY_INDEX_ERROR",
-          payload: result.error || "Erreur lors de la récupération de l'indice de difficulté",
+          payload: {
+            message: result.error || "Erreur lors de la récupération de l'indice de difficulté",
+            code: result.code || "UNKNOWN_ERROR",
+          },
         })
         return
       }
@@ -325,16 +339,23 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       // Calculate rent after fetching the difficulty index
       dispatch({ type: "CALCULATE_RENT" })
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: "FETCH_DIFFICULTY_INDEX_ERROR",
-        payload: "Une erreur s'est produite lors de la récupération de l'indice de difficulté",
+        payload: {
+          message: error.message || "Une erreur s'est produite lors de la récupération de l'indice de difficulté",
+          code: "SYSTEM_ERROR",
+        },
       })
     }
   }
 
+  const clearError = () => {
+    dispatch({ type: "CLEAR_ERROR" })
+  }
+
   return (
-    <FormContext.Provider value={{ state, dispatch, fetchDifficultyIndexAndCalculate }}>
+    <FormContext.Provider value={{ state, dispatch, fetchDifficultyIndexAndCalculate, clearError }}>
       {children}
     </FormContext.Provider>
   )

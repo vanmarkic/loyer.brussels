@@ -10,9 +10,21 @@ export interface AddressResult {
   difficulty_index: number
 }
 
-export async function searchAddresses(query: string): Promise<AddressResult[]> {
+export interface SearchAddressesResult {
+  success: boolean
+  data: AddressResult[]
+  error: string | null
+  code: string
+}
+
+export async function searchAddresses(query: string): Promise<SearchAddressesResult> {
   if (!query || query.length < 3) {
-    return []
+    return {
+      success: true,
+      data: [],
+      error: null,
+      code: "SUCCESS",
+    }
   }
 
   try {
@@ -47,12 +59,27 @@ export async function searchAddresses(query: string): Promise<AddressResult[]> {
 
     if (error) {
       console.error("Error searching addresses:", error)
-      return []
+      return {
+        success: false,
+        data: [],
+        error: `Erreur de recherche: ${error.message || "Erreur inconnue"}`,
+        code: "DATABASE_ERROR",
+      }
     }
 
-    return data as AddressResult[]
-  } catch (error) {
+    return {
+      success: true,
+      data: data as AddressResult[],
+      error: null,
+      code: "SUCCESS",
+    }
+  } catch (error: any) {
     console.error("Error in searchAddresses:", error)
-    return []
+    return {
+      success: false,
+      data: [],
+      error: `Erreur système: ${error.message || "Une erreur inattendue s'est produite"}`,
+      code: "SYSTEM_ERROR",
+    }
   }
 }

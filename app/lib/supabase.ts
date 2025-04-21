@@ -21,7 +21,7 @@ export async function fetchDifficultyIndex(postalCode: string, streetName: strin
     // Query the addresses table to find the matching address
     const { data, error } = await supabaseAdmin
       .from("addresses")
-      .select("difficulty_index")
+      .select("indice_synth_difficulte")
       .eq("postcode", postalCode)
       .ilike("streetname_fr", `%${streetName}%`)
       .eq("house_number", streetNumber)

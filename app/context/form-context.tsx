@@ -2,10 +2,11 @@
 
 import type React from "react"
 import { createContext, useContext, useReducer, type ReactNode } from "react"
-import { fetchDifficultyIndex } from "../lib/supabase"
+import { fetchDifficultyIndexAction } from "../actions/fetch-difficulty-index"
 
 export type PropertyType = "apartment" | "house" | "studio" | "other"
 export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+export type PropertyState = 1 | 2 | 3 // 1: Mauvais état, 2: Bon état, 3: Excellent état
 export type Neighborhood = "center" | "north" | "south" | "east" | "west"
 
 export interface FormState {
@@ -16,8 +17,7 @@ export interface FormState {
   streetNumber: string
   // Property details
   propertyType: PropertyType | ""
-  constructionYear: number | null
-  renovationYear: number | null
+  propertyState: PropertyState | null
   size: number
   bedrooms: number
   bathrooms: number
@@ -74,8 +74,7 @@ const initialState: FormState = {
   streetNumber: "",
   // Property details
   propertyType: "",
-  constructionYear: null,
-  renovationYear: null,
+  propertyState: null,
   size: 0,
   bedrooms: 1,
   bathrooms: 1,
@@ -165,39 +164,87 @@ const calculateRent = (
   minRent: number
   maxRent: number
 } => {
-  // Base price calculation
-  // Using a simplified version of the Brussels reference rent formula
-  let basePrice = 0
+  // Constants from the official formulas
+  const BASE_CONSTANT = 0.1758082
+  const MULTIPLIER = 1.0207648
+  const STATE_2_ADJUSTMENT = 0.2490667
+  const STATE_3_ADJUSTMENT = 1.042853
+  const DIFFICULTY_MULTIPLIER = -0.6455585
 
-  // Base price per square meter (simplified)
-  const basePricePerSqm = 12 // Average base price per sqm in Brussels
+  // Default to 0 if no difficulty index is available
+  const difficultyIndex = state.difficultyIndex || 0
 
-  // Calculate base rent from size
-  basePrice = state.size * basePricePerSqm
+  // Get the appropriate formula based on property type and number of bedrooms
+  let formulaConstant = 0
+  let inverseSurfaceMultiplier = 0
 
-  // Apply property type adjustments
-  const propertyTypeMultiplier: Record<PropertyType, number> = {
-    apartment: 1.0,
-    house: 1.2,
-    studio: 0.9,
-    other: 1.0,
+  if (state.propertyType === "studio" || (state.propertyType === "apartment" && state.bedrooms === 0)) {
+    // Studio-Apartment 0 chambre
+    formulaConstant = 3.4017754
+    inverseSurfaceMultiplier = 410.93786
+  } else if (state.propertyType === "apartment") {
+    switch (state.bedrooms) {
+      case 1:
+        // Appartement 1 chambre
+        formulaConstant = 2.8301143
+        inverseSurfaceMultiplier = 482.6853574
+        break
+      case 2:
+        // Appartement 2 chambres
+        formulaConstant = 2.9097312
+        inverseSurfaceMultiplier = 548.1594066
+        break
+      case 3:
+        // Appartement 3 chambres
+        formulaConstant = 4.3996618
+        inverseSurfaceMultiplier = 505.9611096
+        break
+      default:
+        // Appartement 4 chambres et plus
+        formulaConstant = 7.5
+        inverseSurfaceMultiplier = 250
+        break
+    }
+  } else if (state.propertyType === "house") {
+    if (state.bedrooms <= 2) {
+      // Maison 1 ou 2 chambres (approximation as the formula is partially visible)
+      formulaConstant = 3.5
+      inverseSurfaceMultiplier = 500
+    } else if (state.bedrooms <= 4) {
+      // Maison 3 ou 4 chambres (approximation)
+      formulaConstant = 5.0
+      inverseSurfaceMultiplier = 550
+    } else {
+      // Maison 5 chambres et plus (approximation)
+      formulaConstant = 8.0
+      inverseSurfaceMultiplier = 600
+    }
+  } else {
+    // Default for other property types
+    formulaConstant = 3.0
+    inverseSurfaceMultiplier = 400
   }
 
-  basePrice *= propertyTypeMultiplier[state.propertyType as PropertyType] || 1.0
+  // Calculate the inverse surface term
+  const inverseSurfaceTerm = state.size > 0 ? inverseSurfaceMultiplier / state.size : 0
 
-  // Apply bedroom adjustments
-  basePrice += state.bedrooms * 50
-
-  // Apply bathroom adjustments
-  basePrice += state.bathrooms * 40
-
-  // Apply difficulty index if available
-  let adjustedPrice = basePrice
-  if (state.difficultyIndex !== null) {
-    // The difficulty index is a multiplier that adjusts the base price
-    // based on the location's desirability
-    adjustedPrice = basePrice * (1 + state.difficultyIndex / 100)
+  // Calculate the state adjustment
+  let stateAdjustment = 0
+  if (state.propertyState === 2) {
+    stateAdjustment = STATE_2_ADJUSTMENT
+  } else if (state.propertyState === 3) {
+    stateAdjustment = STATE_3_ADJUSTMENT
   }
+
+  // Apply the formula: loyer = (BASE_CONSTANT + MULTIPLIER * (formulaConstant + inverseSurfaceTerm) + stateAdjustment - DIFFICULTY_MULTIPLIER * difficultyIndex) * surface
+  const pricePerSqm =
+    BASE_CONSTANT +
+    MULTIPLIER * (formulaConstant + inverseSurfaceTerm) +
+    stateAdjustment -
+    DIFFICULTY_MULTIPLIER * difficultyIndex
+
+  // Calculate the base rent
+  const baseRent = pricePerSqm * state.size
 
   // Apply energy class adjustments
   const energyClassAdjustment: Record<EnergyClass, number> = {
@@ -210,36 +257,26 @@ const calculateRent = (
     G: 0.8,
   }
 
+  let adjustedRent = baseRent
   if (state.energyClass) {
-    adjustedPrice *= energyClassAdjustment[state.energyClass as EnergyClass] || 1.0
+    adjustedRent *= energyClassAdjustment[state.energyClass as EnergyClass] || 1.0
   }
 
-  // Apply additional features adjustments
-  if (state.hasParking) adjustedPrice += 80
-  if (state.hasGarage) adjustedPrice += 100
-  if (state.hasBalcony && state.balconySize) adjustedPrice += Math.min(state.balconySize * 5, 50)
-  if (state.hasTerrace && state.terraceSize) adjustedPrice += Math.min(state.terraceSize * 7, 100)
-  if (state.hasGarden && state.gardenSize) adjustedPrice += Math.min(state.gardenSize * 3, 150)
-
-  // Floor adjustments
-  if (state.floor > 0) {
-    // Higher floors typically command higher rents
-    adjustedPrice += state.floor * 10
-
-    // But if there's no elevator and it's above the 2nd floor, reduce the price
-    if (!state.hasElevator && state.floor > 2) {
-      adjustedPrice -= (state.floor - 2) * 15
-    }
-  }
+  // Apply additional features adjustments (these are not in the official formula but add value)
+  if (state.hasParking) adjustedRent += 80
+  if (state.hasGarage) adjustedRent += 100
+  if (state.hasBalcony && state.balconySize) adjustedRent += Math.min(state.balconySize * 5, 50)
+  if (state.hasTerrace && state.terraceSize) adjustedRent += Math.min(state.terraceSize * 7, 100)
+  if (state.hasGarden && state.gardenSize) adjustedRent += Math.min(state.gardenSize * 3, 150)
 
   // Calculate min and max rent (±20% as per Brussels regulations)
-  const minRent = Math.round(adjustedPrice * 0.8)
-  const maxRent = Math.round(adjustedPrice * 1.2)
+  const minRent = Math.round(adjustedRent * 0.8)
+  const maxRent = Math.round(adjustedRent * 1.2)
 
   // Round to nearest 10
   return {
-    baseRent: Math.round(basePrice / 10) * 10,
-    adjustedRent: Math.round(adjustedPrice / 10) * 10,
+    baseRent: Math.round(baseRent / 10) * 10,
+    adjustedRent: Math.round(adjustedRent / 10) * 10,
     minRent,
     maxRent,
   }
@@ -268,19 +305,20 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: "FETCH_DIFFICULTY_INDEX_START" })
 
     try {
-      const difficultyIndex = await fetchDifficultyIndex(state.postalCode, state.streetName, state.streetNumber)
+      // Use the server action to fetch the difficulty index
+      const result = await fetchDifficultyIndexAction(state.postalCode, state.streetName, state.streetNumber)
 
-      if (difficultyIndex === null) {
+      if (!result.success) {
         dispatch({
           type: "FETCH_DIFFICULTY_INDEX_ERROR",
-          payload: "Impossible de trouver l'indice de difficulté pour cette adresse",
+          payload: result.error || "Erreur lors de la récupération de l'indice de difficulté",
         })
         return
       }
 
       dispatch({
         type: "FETCH_DIFFICULTY_INDEX_SUCCESS",
-        payload: difficultyIndex,
+        payload: result.data,
       })
 
       // Calculate rent after fetching the difficulty index

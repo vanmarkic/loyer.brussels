@@ -16,7 +16,13 @@ export function EnergyStep() {
   }
 
   const handleCalculate = async () => {
-    await fetchDifficultyIndexAndCalculate()
+    // If we already have the difficulty index from the address autocomplete,
+    // we can skip fetching it again and just calculate the rent
+    if (state.difficultyIndex !== null) {
+      dispatch({ type: "CALCULATE_RENT" })
+    } else {
+      await fetchDifficultyIndexAndCalculate()
+    }
   }
 
   return (

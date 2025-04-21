@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AddressAutocomplete } from "./address-autocomplete"
+import type { AddressResult } from "@/app/actions/search-addresses"
 
 export function AddressStep() {
   const { state, dispatch } = useForm()
@@ -13,6 +15,21 @@ export function AddressStep() {
   const handleContinue = () => {
     if (state.postalCode && state.streetName && state.streetNumber) {
       dispatch({ type: "NEXT_STEP" })
+    }
+  }
+
+  const handleAddressSelect = (address: AddressResult) => {
+    dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: address.postal_code })
+    dispatch({ type: "UPDATE_FIELD", field: "streetName", value: address.street_name })
+    dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: address.street_number })
+
+    // If we already have the difficulty index from the search, store it
+    if (address.difficulty_index !== undefined) {
+      dispatch({
+        type: "UPDATE_FIELD",
+        field: "difficultyIndex",
+        value: address.difficulty_index,
+      })
     }
   }
 
@@ -24,37 +41,47 @@ export function AddressStep() {
       </div>
 
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="postalCode">Code postal</Label>
-          <Input
-            id="postalCode"
-            value={state.postalCode}
-            onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: e.target.value })}
-            placeholder="1000"
-            className="mt-1"
-          />
-        </div>
+        <AddressAutocomplete
+          onAddressSelect={handleAddressSelect}
+          label="Rechercher une adresse"
+          placeholder="Ex: 1000 Rue de la Loi 16"
+        />
 
-        <div>
-          <Label htmlFor="streetName">Nom de rue</Label>
-          <Input
-            id="streetName"
-            value={state.streetName}
-            onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetName", value: e.target.value })}
-            placeholder="Rue de la Loi"
-            className="mt-1"
-          />
-        </div>
+        <div className="pt-2 border-t border-gray-200">
+          <p className="text-sm text-muted-foreground mb-3">Ou saisissez l'adresse manuellement:</p>
 
-        <div>
-          <Label htmlFor="streetNumber">Numéro</Label>
-          <Input
-            id="streetNumber"
-            value={state.streetNumber}
-            onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: e.target.value })}
-            placeholder="16"
-            className="mt-1"
-          />
+          <div>
+            <Label htmlFor="postalCode">Code postal</Label>
+            <Input
+              id="postalCode"
+              value={state.postalCode}
+              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "postalCode", value: e.target.value })}
+              placeholder="1000"
+              className="mt-1"
+            />
+          </div>
+
+          <div className="mt-3">
+            <Label htmlFor="streetName">Nom de rue</Label>
+            <Input
+              id="streetName"
+              value={state.streetName}
+              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetName", value: e.target.value })}
+              placeholder="Rue de la Loi"
+              className="mt-1"
+            />
+          </div>
+
+          <div className="mt-3">
+            <Label htmlFor="streetNumber">Numéro</Label>
+            <Input
+              id="streetNumber"
+              value={state.streetNumber}
+              onChange={(e) => dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: e.target.value })}
+              placeholder="16"
+              className="mt-1"
+            />
+          </div>
         </div>
       </div>
 

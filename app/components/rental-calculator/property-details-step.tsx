@@ -1,18 +1,19 @@
 "use client"
 
-import { useForm } from "@/app/context/form-context"
+import { useForm, type PropertyState } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { MinusCircle, PlusCircle } from "lucide-react"
 
 export function PropertyDetailsStep() {
   const { state, dispatch } = useForm()
 
   const handleContinue = () => {
-    if (state.size > 0 && state.propertyType) {
+    if (state.size > 0 && state.propertyType && state.propertyState) {
       dispatch({ type: "NEXT_STEP" })
     }
   }
@@ -41,9 +42,6 @@ export function PropertyDetailsStep() {
     }
   }
 
-  const currentYear = new Date().getFullYear()
-  const years = Array.from({ length: 124 }, (_, i) => currentYear - i)
-
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -71,55 +69,31 @@ export function PropertyDetailsStep() {
         </div>
 
         <div>
-          <Label htmlFor="constructionYear">Année de construction</Label>
-          <Select
-            value={state.constructionYear?.toString() || ""}
+          <Label className="mb-2 block">État du bien</Label>
+          <RadioGroup
+            value={state.propertyState?.toString() || ""}
             onValueChange={(value) =>
               dispatch({
                 type: "UPDATE_FIELD",
-                field: "constructionYear",
-                value: value ? Number.parseInt(value) : null,
+                field: "propertyState",
+                value: value ? (Number.parseInt(value) as PropertyState) : null,
               })
             }
+            className="space-y-2"
           >
-            <SelectTrigger id="constructionYear">
-              <SelectValue placeholder="Sélectionnez une année" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="not_specified">Non spécifié</SelectItem>
-              {years.map((year) => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label htmlFor="renovationYear">Année de rénovation (si applicable)</Label>
-          <Select
-            value={state.renovationYear?.toString() || ""}
-            onValueChange={(value) =>
-              dispatch({
-                type: "UPDATE_FIELD",
-                field: "renovationYear",
-                value: value ? Number.parseInt(value) : null,
-              })
-            }
-          >
-            <SelectTrigger id="renovationYear">
-              <SelectValue placeholder="Sélectionnez une année" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="not_renovated">Non rénové / Non spécifié</SelectItem>
-              {years.map((year) => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="1" id="state-1" />
+              <Label htmlFor="state-1">Mauvais état</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="2" id="state-2" />
+              <Label htmlFor="state-2">Bon état</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="3" id="state-3" />
+              <Label htmlFor="state-3">Excellent état</Label>
+            </div>
+          </RadioGroup>
         </div>
 
         <div>
@@ -131,24 +105,6 @@ export function PropertyDetailsStep() {
             value={state.size || ""}
             onChange={(e) =>
               dispatch({ type: "UPDATE_FIELD", field: "size", value: Number.parseInt(e.target.value) || 0 })
-            }
-            className="mt-1"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="livingRoomSize">Surface du salon (m²)</Label>
-          <Input
-            id="livingRoomSize"
-            type="number"
-            min="0"
-            value={state.livingRoomSize || ""}
-            onChange={(e) =>
-              dispatch({
-                type: "UPDATE_FIELD",
-                field: "livingRoomSize",
-                value: e.target.value ? Number.parseInt(e.target.value) : null,
-              })
             }
             className="mt-1"
           />
@@ -245,7 +201,7 @@ export function PropertyDetailsStep() {
         </Button>
         <Button
           onClick={handleContinue}
-          disabled={state.size <= 0 || !state.propertyType}
+          disabled={state.size <= 0 || !state.propertyType || !state.propertyState}
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
           Continuer

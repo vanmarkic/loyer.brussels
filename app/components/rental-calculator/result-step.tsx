@@ -3,7 +3,7 @@
 import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Download, Share2, Info } from "lucide-react"
+import { ArrowRight, Download, Share2, Info, Calculator } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 export function ResultStep() {
@@ -18,6 +18,12 @@ export function ResultStep() {
     house: "Maison",
     studio: "Studio",
     other: "Autre",
+  }
+
+  const propertyStateLabels: Record<number, string> = {
+    1: "Mauvais état",
+    2: "Bon état",
+    3: "Excellent état",
   }
 
   const kitchenTypeLabels: Record<string, string> = {
@@ -81,6 +87,9 @@ export function ResultStep() {
             <div className="text-muted-foreground">Type de bien:</div>
             <div className="font-medium">{propertyTypeLabels[state.propertyType] || "-"}</div>
 
+            <div className="text-muted-foreground">État du bien:</div>
+            <div className="font-medium">{state.propertyState ? propertyStateLabels[state.propertyState] : "-"}</div>
+
             <div className="text-muted-foreground">Surface:</div>
             <div className="font-medium">{state.size} m²</div>
 
@@ -135,12 +144,26 @@ export function ResultStep() {
       </div>
 
       <div className="bg-blue-50 p-4 rounded-lg text-sm">
-        <p className="font-medium text-blue-800">Information importante</p>
-        <p className="mt-1 text-blue-700">
+        <div className="flex items-start gap-2">
+          <Calculator className="h-5 w-5 text-blue-700 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-medium text-blue-800">Méthode de calcul</p>
+            <p className="mt-1 text-blue-700">
+              Le loyer de référence est calculé selon la formule officielle de la Région de Bruxelles-Capitale, qui
+              prend en compte le type de bien, sa surface, le nombre de chambres, l'état du bien et l'indice de
+              difficulté du quartier.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 p-4 rounded-lg text-sm">
+        <p className="font-medium text-amber-800">Information importante</p>
+        <p className="mt-1 text-amber-700">
           Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires particuliers, le montant du
           loyer est déterminé librement par le bailleur sur le marché privé.
         </p>
-        <p className="mt-2 text-blue-700">
+        <p className="mt-2 text-amber-700">
           Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du loyer réel dans les baux
           d'habitation en Région de Bruxelles Capitale.
         </p>

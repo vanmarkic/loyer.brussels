@@ -6,7 +6,7 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
   // Check if Supabase environment variables are available
   const hasSupabaseCredentials =
     process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && process.env.SERVICE_KEY
-
+  console.log('hasSupabaseCredentials', hasSupabaseCredentials)
   if (!hasSupabaseCredentials) {
     console.warn("Supabase credentials not configured. Using mock difficulty index.")
     // Return a mock success response with a default difficulty index

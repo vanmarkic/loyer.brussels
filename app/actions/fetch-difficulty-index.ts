@@ -23,9 +23,9 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
     const { data, error } = await supabaseAdmin
       .from("addresses")
       .select('*')
-      .eq("postcode", 1080)
+      .eq("postcode", parseFloat(postalCode))
       .eq('streetname_fr', 'Avenue de la Liberté')
-      .eq("house_number", '120')
+      .eq("house_number", String(streetNumber))
       .limit(1)
 
 
@@ -71,7 +71,7 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
 
     return {
       success: true,
-      data: data,
+      data: data.indice_synth_difficulte,
       error: null,
       code: "SUCCESS",
     }

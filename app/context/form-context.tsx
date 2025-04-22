@@ -190,7 +190,7 @@ const calculateRent = (
   const DIFFICULTY_MULTIPLIER = -0.6455585
 
   // Default to 0 if no difficulty index is available
-  const difficultyIndex = state.difficultyIndex || 0
+  const difficultyIndex = parseFloat(state.difficultyIndex)
 
   // Get the appropriate formula based on property type and number of bedrooms
   let formulaConstant = 0
@@ -345,6 +345,8 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         })
         return
       }
+
+      console.log(result.data)
 
       dispatch({
         type: "FETCH_DIFFICULTY_INDEX_SUCCESS",

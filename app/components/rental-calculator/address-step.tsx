@@ -4,18 +4,22 @@ import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, Loader2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AddressAutocomplete } from "./address-autocomplete"
 import type { AddressResult } from "@/app/actions/search-addresses"
 
 export function AddressStep() {
-  const { state, dispatch, clearError } = useForm()
+  const { state, dispatch, fetchDifficultyIndexAndCalculate, clearError } = useForm()
 
-  const handleContinue = () => {
+  const handleCalculate = async () => {
     if (state.postalCode && state.streetName && state.streetNumber) {
-      dispatch({ type: "NEXT_STEP" })
+      await fetchDifficultyIndexAndCalculate()
     }
+  }
+
+  const handleBack = () => {
+    dispatch({ type: "PREV_STEP" })
   }
 
   const handleAddressSelect = (address: AddressResult) => {
@@ -27,7 +31,7 @@ export function AddressStep() {
     dispatch({ type: "UPDATE_FIELD", field: "streetNumber", value: address.house_number })
 
     // If we already have the difficulty index from the search, store it
-    if (address.difficulty_index !== undefined) {
+    if (address.indice_synth_difficulte !== undefined) {
       dispatch({
         type: "UPDATE_FIELD",
         field: "difficultyIndex",
@@ -35,6 +39,10 @@ export function AddressStep() {
       })
     }
   }
+
+  // Check if Supabase environment variables are available
+  const hasSupabaseCredentials =
+    typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   return (
     <div className="space-y-6">
@@ -104,13 +112,24 @@ export function AddressStep() {
         </Alert>
       )}
 
-      <Button
-        onClick={handleContinue}
-        disabled={!state.postalCode || !state.streetName || !state.streetNumber}
-        className="w-full bg-[#e05c6d] hover:bg-[#d04c5d]"
-      >
-        Continuer
-      </Button>
+      <div className="flex gap-3">
+        <Button onClick={handleBack} variant="outline" className="flex-1">
+          Retour
+        </Button>
+        <Button
+          onClick={handleCalculate}
+          disabled={!state.postalCode || !state.streetName || !state.streetNumber || state.isLoading}
+          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+        >
+          {state.isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" /> Calcul en cours...
+            </span>
+          ) : (
+            "Calculer le loyer"
+          )}
+        </Button>
+      </div>
     </div>
   )
 }

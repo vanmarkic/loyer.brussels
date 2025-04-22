@@ -2,19 +2,75 @@
 
 import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
 export function FeaturesStep() {
   const { state, dispatch } = useForm()
 
   const handleContinue = () => {
-    dispatch({ type: "NEXT_STEP" })
+    // Check if all options have been selected
+    const allSelected =
+      state.hasCentralHeating !== null &&
+      state.hasThermalRegulation !== null &&
+      state.hasDoubleGlazing !== null &&
+      state.hasSecondBathroom !== null &&
+      state.hasRecreationalSpaces !== null &&
+      state.hasStorageSpaces !== null
+
+    if (allSelected) {
+      dispatch({ type: "NEXT_STEP" })
+    }
   }
 
   const handleBack = () => {
     dispatch({ type: "PREV_STEP" })
+  }
+
+  // Helper function to create radio options
+  const createRadioOption = (
+    field:
+      | "hasCentralHeating"
+      | "hasThermalRegulation"
+      | "hasDoubleGlazing"
+      | "hasSecondBathroom"
+      | "hasRecreationalSpaces"
+      | "hasStorageSpaces",
+    label: string,
+  ) => {
+    const value = state[field]
+
+    return (
+      <div className="grid grid-cols-[2fr,1fr,1fr] items-center py-3 border-b border-gray-100">
+        <div className="font-medium">{label}</div>
+        <div className="flex items-center justify-center">
+          <RadioGroup
+            value={value === true ? "true" : value === false ? "false" : ""}
+            onValueChange={(val) =>
+              dispatch({
+                type: "UPDATE_FIELD",
+                field,
+                value: val === "true" ? true : val === "false" ? false : null,
+              })
+            }
+            className="flex items-center space-x-4"
+          >
+            <div className="flex items-center space-x-1">
+              <RadioGroupItem value="true" id={`${field}-true`} />
+              <Label htmlFor={`${field}-true`} className="text-sm">
+                Oui
+              </Label>
+            </div>
+            <div className="flex items-center space-x-1">
+              <RadioGroupItem value="false" id={`${field}-false`} />
+              <Label htmlFor={`${field}-false`} className="text-sm">
+                Non
+              </Label>
+            </div>
+          </RadioGroup>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -24,198 +80,20 @@ export function FeaturesStep() {
         <p className="text-muted-foreground mt-2">Sélectionnez les équipements disponibles</p>
       </div>
 
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="floor">Étage</Label>
-            <Input
-              id="floor"
-              type="number"
-              min="0"
-              value={state.floor}
-              onChange={(e) =>
-                dispatch({ type: "UPDATE_FIELD", field: "floor", value: Number.parseInt(e.target.value) || 0 })
-              }
-              className="mt-1"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="totalFloors">Nombre total d'étages</Label>
-            <Input
-              id="totalFloors"
-              type="number"
-              min="0"
-              value={state.totalFloors}
-              onChange={(e) =>
-                dispatch({ type: "UPDATE_FIELD", field: "totalFloors", value: Number.parseInt(e.target.value) || 0 })
-              }
-              className="mt-1"
-            />
-          </div>
+      <div className="border rounded-md overflow-hidden">
+        <div className="grid grid-cols-[2fr,1fr,1fr] bg-gray-50 py-2 px-3 border-b border-gray-200">
+          <div className="font-semibold">Option</div>
+          <div className="text-center font-semibold">Oui</div>
+          <div className="text-center font-semibold">Non</div>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="elevator"
-            checked={state.hasElevator}
-            onCheckedChange={(checked) =>
-              dispatch({ type: "UPDATE_FIELD", field: "hasElevator", value: checked === true })
-            }
-          />
-          <Label htmlFor="elevator">Ascenseur</Label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="parking"
-            checked={state.hasParking}
-            onCheckedChange={(checked) =>
-              dispatch({ type: "UPDATE_FIELD", field: "hasParking", value: checked === true })
-            }
-          />
-          <Label htmlFor="parking">Parking</Label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="garage"
-            checked={state.hasGarage}
-            onCheckedChange={(checked) =>
-              dispatch({ type: "UPDATE_FIELD", field: "hasGarage", value: checked === true })
-            }
-          />
-          <Label htmlFor="garage">Garage</Label>
-        </div>
-
-        <div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="balcony"
-              checked={state.hasBalcony}
-              onCheckedChange={(checked) => {
-                dispatch({ type: "UPDATE_FIELD", field: "hasBalcony", value: checked === true })
-                if (checked === false) {
-                  dispatch({ type: "UPDATE_FIELD", field: "balconySize", value: null })
-                }
-              }}
-            />
-            <Label htmlFor="balcony">Balcon</Label>
-          </div>
-
-          {state.hasBalcony && (
-            <div className="mt-2 ml-6">
-              <Label htmlFor="balconySize">Surface du balcon (m²)</Label>
-              <Input
-                id="balconySize"
-                type="number"
-                min="0"
-                value={state.balconySize || ""}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    field: "balconySize",
-                    value: e.target.value ? Number.parseInt(e.target.value) : null,
-                  })
-                }
-                className="mt-1"
-              />
-            </div>
-          )}
-        </div>
-
-        <div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="terrace"
-              checked={state.hasTerrace}
-              onCheckedChange={(checked) => {
-                dispatch({ type: "UPDATE_FIELD", field: "hasTerrace", value: checked === true })
-                if (checked === false) {
-                  dispatch({ type: "UPDATE_FIELD", field: "terraceSize", value: null })
-                }
-              }}
-            />
-            <Label htmlFor="terrace">Terrasse</Label>
-          </div>
-
-          {state.hasTerrace && (
-            <div className="mt-2 ml-6">
-              <Label htmlFor="terraceSize">Surface de la terrasse (m²)</Label>
-              <Input
-                id="terraceSize"
-                type="number"
-                min="0"
-                value={state.terraceSize || ""}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    field: "terraceSize",
-                    value: e.target.value ? Number.parseInt(e.target.value) : null,
-                  })
-                }
-                className="mt-1"
-              />
-            </div>
-          )}
-        </div>
-
-        <div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="garden"
-              checked={state.hasGarden}
-              onCheckedChange={(checked) => {
-                dispatch({ type: "UPDATE_FIELD", field: "hasGarden", value: checked === true })
-                if (checked === false) {
-                  dispatch({ type: "UPDATE_FIELD", field: "gardenSize", value: null })
-                }
-              }}
-            />
-            <Label htmlFor="garden">Jardin</Label>
-          </div>
-
-          {state.hasGarden && (
-            <div className="mt-2 ml-6">
-              <Label htmlFor="gardenSize">Surface du jardin (m²)</Label>
-              <Input
-                id="gardenSize"
-                type="number"
-                min="0"
-                value={state.gardenSize || ""}
-                onChange={(e) =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    field: "gardenSize",
-                    value: e.target.value ? Number.parseInt(e.target.value) : null,
-                  })
-                }
-                className="mt-1"
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="basement"
-            checked={state.hasBasement}
-            onCheckedChange={(checked) =>
-              dispatch({ type: "UPDATE_FIELD", field: "hasBasement", value: checked === true })
-            }
-          />
-          <Label htmlFor="basement">Cave</Label>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="attic"
-            checked={state.hasAttic}
-            onCheckedChange={(checked) =>
-              dispatch({ type: "UPDATE_FIELD", field: "hasAttic", value: checked === true })
-            }
-          />
-          <Label htmlFor="attic">Grenier</Label>
+        <div className="px-3">
+          {createRadioOption("hasCentralHeating", "Chauffage central")}
+          {createRadioOption("hasThermalRegulation", "Régulation thermique")}
+          {createRadioOption("hasDoubleGlazing", "Double-vitrages")}
+          {createRadioOption("hasSecondBathroom", "2ème salle de bain")}
+          {createRadioOption("hasRecreationalSpaces", "Espaces récréatifs")}
+          {createRadioOption("hasStorageSpaces", "Espaces de rangement")}
         </div>
       </div>
 
@@ -223,7 +101,18 @@ export function FeaturesStep() {
         <Button onClick={handleBack} variant="outline" className="flex-1">
           Retour
         </Button>
-        <Button onClick={handleContinue} className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]">
+        <Button
+          onClick={handleContinue}
+          disabled={
+            state.hasCentralHeating === null ||
+            state.hasThermalRegulation === null ||
+            state.hasDoubleGlazing === null ||
+            state.hasSecondBathroom === null ||
+            state.hasRecreationalSpaces === null ||
+            state.hasStorageSpaces === null
+          }
+          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+        >
           Continuer
         </Button>
       </div>

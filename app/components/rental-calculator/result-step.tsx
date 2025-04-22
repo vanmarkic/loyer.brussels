@@ -126,6 +126,12 @@ export function ResultStep() {
             <div className="text-muted-foreground">Équipements:</div>
             <div className="font-medium">
               {[
+                state.hasCentralHeating ? "Chauffage central" : null,
+                state.hasThermalRegulation ? "Régulation thermique" : null,
+                state.hasDoubleGlazing ? "Double-vitrages" : null,
+                state.hasSecondBathroom ? "2ème salle de bain" : null,
+                state.hasRecreationalSpaces ? "Espaces récréatifs" : null,
+                state.hasStorageSpaces ? "Espaces de rangement" : null,
                 state.hasElevator ? "Ascenseur" : null,
                 state.hasParking ? "Parking" : null,
                 state.hasGarage ? "Garage" : null,

@@ -30,11 +30,11 @@ export function RentalCalculator() {
         </div>
       )}
 
-      {state.step === 1 && <AddressStep />}
-      {state.step === 2 && <PropertyTypeStep />}
-      {state.step === 3 && <PropertyDetailsStep />}
-      {state.step === 4 && <FeaturesStep />}
-      {state.step === 5 && <EnergyStep />}
+      {state.step === 1 && <PropertyTypeStep />}
+      {state.step === 2 && <PropertyDetailsStep />}
+      {state.step === 3 && <FeaturesStep />}
+      {state.step === 4 && <EnergyStep />}
+      {state.step === 5 && <AddressStep />}
       {state.step === 6 && <ResultStep />}
     </div>
   )

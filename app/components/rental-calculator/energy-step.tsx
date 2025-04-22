@@ -4,25 +4,19 @@ import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { AlertCircle, RefreshCw, Info } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Loader2 } from "lucide-react"
 
 export function EnergyStep() {
-  const { state, dispatch, fetchDifficultyIndexAndCalculate, clearError } = useForm()
+  const { state, dispatch, clearError } = useForm()
 
   const handleBack = () => {
     dispatch({ type: "PREV_STEP" })
   }
 
-  const handleCalculate = async () => {
-    // If we already have the difficulty index from the address autocomplete,
-    // we can skip fetching it again and just calculate the rent
-    if (state.difficultyIndex !== null) {
-      dispatch({ type: "CALCULATE_RENT" })
-    } else {
-      await fetchDifficultyIndexAndCalculate()
+  const handleContinue = () => {
+    if (state.energyClass) {
+      dispatch({ type: "NEXT_STEP" })
     }
   }
 
@@ -32,30 +26,6 @@ export function EnergyStep() {
 
     // Different error types might need different actions
     switch (state.errorCode) {
-      case "NOT_FOUND":
-        return (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Adresse non trouvée</AlertTitle>
-            <AlertDescription className="space-y-2">
-              <p>{state.error}</p>
-              <div className="flex justify-end mt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    clearError()
-                    dispatch({ type: "GO_TO_STEP", payload: 1 })
-                  }}
-                  className="text-xs"
-                >
-                  Modifier l'adresse
-                </Button>
-              </div>
-            </AlertDescription>
-          </Alert>
-        )
-
       case "DATABASE_ERROR":
         return (
           <Alert variant="destructive" className="mb-4">
@@ -133,28 +103,6 @@ export function EnergyStep() {
             </SelectContent>
           </Select>
         </div>
-
-        <div>
-          <Label className="mb-2 block">Type de chauffage</Label>
-          <RadioGroup
-            value={state.heatingType}
-            onValueChange={(value) => dispatch({ type: "UPDATE_FIELD", field: "heatingType", value })}
-            className="space-y-2"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="central" id="central" />
-              <Label htmlFor="central">Chauffage central</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="individual" id="individual" />
-              <Label htmlFor="individual">Chauffage individuel</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="none" id="none" />
-              <Label htmlFor="none">Pas de chauffage</Label>
-            </div>
-          </RadioGroup>
-        </div>
       </div>
 
       <div className="flex gap-3">
@@ -162,17 +110,11 @@ export function EnergyStep() {
           Retour
         </Button>
         <Button
-          onClick={handleCalculate}
-          disabled={!state.energyClass || state.isLoading}
+          onClick={handleContinue}
+          disabled={!state.energyClass}
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
-          {state.isLoading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" /> Calcul en cours...
-            </span>
-          ) : (
-            "Calculer le loyer"
-          )}
+          Continuer
         </Button>
       </div>
     </div>

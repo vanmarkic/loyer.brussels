@@ -53,6 +53,12 @@ export interface FormState {
   isLoading: boolean
   error: string | null
   errorCode: string | null
+  hasCentralHeating: boolean | null
+  hasThermalRegulation: boolean | null
+  hasDoubleGlazing: boolean | null
+  hasSecondBathroom: boolean | null
+  hasRecreationalSpaces: boolean | null
+  hasStorageSpaces: boolean | null
 }
 
 type FormAction =
@@ -111,6 +117,12 @@ const initialState: FormState = {
   isLoading: false,
   error: null,
   errorCode: null,
+  hasCentralHeating: null,
+  hasThermalRegulation: null,
+  hasDoubleGlazing: null,
+  hasSecondBathroom: null,
+  hasRecreationalSpaces: null,
+  hasStorageSpaces: null,
 }
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
@@ -269,6 +281,16 @@ const calculateRent = (
   if (state.hasBalcony && state.balconySize) adjustedRent += Math.min(state.balconySize * 5, 50)
   if (state.hasTerrace && state.terraceSize) adjustedRent += Math.min(state.terraceSize * 7, 100)
   if (state.hasGarden && state.gardenSize) adjustedRent += Math.min(state.gardenSize * 3, 150)
+
+  // Apply adjustments for heating and insulation
+  if (state.hasCentralHeating) adjustedRent += 50
+  if (state.hasThermalRegulation) adjustedRent += 30
+  if (state.hasDoubleGlazing) adjustedRent += 40
+
+  // Apply adjustments for additional rooms and spaces
+  if (state.hasSecondBathroom) adjustedRent += 70
+  if (state.hasRecreationalSpaces) adjustedRent += 60
+  if (state.hasStorageSpaces) adjustedRent += 30
 
   // Calculate min and max rent (±20% as per Brussels regulations)
   const minRent = Math.round(adjustedRent * 0.8)

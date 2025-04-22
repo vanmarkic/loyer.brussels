@@ -333,7 +333,7 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       // Use the server action to fetch the difficulty index
-      const result = await fetchDifficultyIndexAction(1080, "Liberté", 120)
+      const result = await fetchDifficultyIndexAction(1080, "Avenue de la Liberté", "120")
 
       if (!result.success) {
         dispatch({

@@ -20,7 +20,7 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
 
   try {
     // Query the addresses table to find the matching address
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from("addresses")
       .select('*')
       .eq("postcode", parseFloat(postalCode))

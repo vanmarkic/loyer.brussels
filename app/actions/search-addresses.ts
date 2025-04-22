@@ -27,6 +27,36 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
     }
   }
 
+  // Check if Supabase environment variables are available
+  const hasSupabaseCredentials =
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY && process.env.SERVICE_KEY
+
+  if (!hasSupabaseCredentials) {
+    console.warn("Supabase credentials not configured. Using mock address data.")
+    // Return mock address data for testing
+    return {
+      success: true,
+      data: [
+        {
+          id: "mock-1",
+          postcode: "1000",
+          streetname_fr: "Rue de la Loi",
+          house_number: "16",
+          indice_synth_difficulte: 0.5,
+        },
+        {
+          id: "mock-2",
+          postcode: "1050",
+          streetname_fr: "Avenue Louise",
+          house_number: "143",
+          indice_synth_difficulte: 0.3,
+        },
+      ],
+      error: null,
+      code: "SUCCESS",
+    }
+  }
+
   try {
     // Split the query to search for postal code and street name separately
     const parts = query.trim().split(/\s+/)

@@ -1,19 +1,19 @@
 "use client"
 
-import { useForm, type PropertyState } from "@/app/context/form-context"
+import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { MinusCircle, PlusCircle } from "lucide-react"
 
 export function PropertyDetailsStep() {
   const { state, dispatch } = useForm()
 
+  // Update the handleContinue function to remove propertyState check
   const handleContinue = () => {
-    if (state.size > 0 && state.propertyType && state.propertyState) {
+    if (state.size > 0 && state.propertyType) {
       dispatch({ type: "NEXT_STEP" })
     }
   }
@@ -22,8 +22,11 @@ export function PropertyDetailsStep() {
     dispatch({ type: "PREV_STEP" })
   }
 
+  // Update the incrementBedrooms function to limit to 4
   const incrementBedrooms = () => {
-    dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms + 1 })
+    if (state.bedrooms < 4) {
+      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms + 1 })
+    }
   }
 
   const decrementBedrooms = () => {
@@ -42,6 +45,7 @@ export function PropertyDetailsStep() {
     }
   }
 
+  // Replace the entire return statement with updated JSX
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -50,52 +54,6 @@ export function PropertyDetailsStep() {
       </div>
 
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="propertyType">Type de bien</Label>
-          <Select
-            value={state.propertyType}
-            onValueChange={(value) => dispatch({ type: "UPDATE_FIELD", field: "propertyType", value })}
-          >
-            <SelectTrigger id="propertyType">
-              <SelectValue placeholder="Sélectionnez un type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="apartment">Appartement</SelectItem>
-              <SelectItem value="house">Maison</SelectItem>
-              <SelectItem value="studio">Studio</SelectItem>
-              <SelectItem value="other">Autre</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label className="mb-2 block">État du bien</Label>
-          <RadioGroup
-            value={state.propertyState?.toString() || ""}
-            onValueChange={(value) =>
-              dispatch({
-                type: "UPDATE_FIELD",
-                field: "propertyState",
-                value: value ? (Number.parseInt(value) as PropertyState) : null,
-              })
-            }
-            className="space-y-2"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="1" id="state-1" />
-              <Label htmlFor="state-1">Mauvais état</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id="state-2" />
-              <Label htmlFor="state-2">Bon état</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="3" id="state-3" />
-              <Label htmlFor="state-3">Excellent état</Label>
-            </div>
-          </RadioGroup>
-        </div>
-
         <div>
           <Label htmlFor="size">Surface habitable totale (m²)</Label>
           <Input
@@ -122,8 +80,14 @@ export function PropertyDetailsStep() {
             >
               <MinusCircle className="h-4 w-4" />
             </Button>
-            <span className="text-xl font-medium">{state.bedrooms}</span>
-            <Button type="button" variant="outline" size="icon" onClick={incrementBedrooms}>
+            <span className="text-xl font-medium">{state.bedrooms === 4 ? "4 et plus" : state.bedrooms}</span>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={incrementBedrooms}
+              disabled={state.bedrooms >= 4}
+            >
               <PlusCircle className="h-4 w-4" />
             </Button>
           </div>
@@ -201,7 +165,7 @@ export function PropertyDetailsStep() {
         </Button>
         <Button
           onClick={handleContinue}
-          disabled={state.size <= 0 || !state.propertyType || !state.propertyState}
+          disabled={state.size <= 0 || !state.propertyType}
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
           Continuer

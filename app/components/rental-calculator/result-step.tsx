@@ -20,12 +20,6 @@ export function ResultStep() {
     other: "Autre",
   }
 
-  const propertyStateLabels: Record<number, string> = {
-    1: "Mauvais état",
-    2: "Bon état",
-    3: "Excellent état",
-  }
-
   const kitchenTypeLabels: Record<string, string> = {
     open: "Cuisine ouverte",
     closed: "Cuisine fermée",
@@ -87,14 +81,16 @@ export function ResultStep() {
             <div className="text-muted-foreground">Type de bien:</div>
             <div className="font-medium">{propertyTypeLabels[state.propertyType] || "-"}</div>
 
-            <div className="text-muted-foreground">État du bien:</div>
-            <div className="font-medium">{state.propertyState ? propertyStateLabels[state.propertyState] : "-"}</div>
+            <div className="text-muted-foreground">Adresse:</div>
+            <div className="font-medium">
+              {state.streetNumber} {state.streetName}, {state.postalCode} Bruxelles
+            </div>
 
             <div className="text-muted-foreground">Surface:</div>
             <div className="font-medium">{state.size} m²</div>
 
             <div className="text-muted-foreground">Chambres:</div>
-            <div className="font-medium">{state.bedrooms}</div>
+            <div className="font-medium">{state.bedrooms === 4 ? "4 et plus" : state.bedrooms}</div>
 
             <div className="text-muted-foreground">Salles de bain:</div>
             <div className="font-medium">{state.bathrooms}</div>

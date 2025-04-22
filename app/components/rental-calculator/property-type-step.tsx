@@ -6,7 +6,7 @@ import { useForm, type PropertyType } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { Building, Home, Hotel, Warehouse } from "lucide-react"
+import { Building, Home, Hotel } from "lucide-react"
 
 export function PropertyTypeStep() {
   const { state, dispatch } = useForm()
@@ -21,7 +21,6 @@ export function PropertyTypeStep() {
     { value: "apartment", label: "Appartement", icon: <Building className="h-6 w-6" /> },
     { value: "house", label: "Maison", icon: <Home className="h-6 w-6" /> },
     { value: "studio", label: "Studio", icon: <Hotel className="h-6 w-6" /> },
-    { value: "other", label: "Autre", icon: <Warehouse className="h-6 w-6" /> },
   ]
 
   return (

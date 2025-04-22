@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { AlertCircle, RefreshCw } from "lucide-react"
+import { AlertCircle, RefreshCw, Info } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Loader2 } from "lucide-react"
 
@@ -89,12 +89,26 @@ export function EnergyStep() {
     }
   }
 
+  // Check if Supabase environment variables are available
+  const hasSupabaseCredentials =
+    typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold">Énergie et chauffage</h2>
         <p className="text-muted-foreground mt-2">Informations sur la performance énergétique</p>
       </div>
+
+      {!hasSupabaseCredentials && (
+        <Alert className="mb-4 bg-amber-50 border-amber-200">
+          <Info className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-800">
+            Mode démo: Les données d'adresse ne sont pas disponibles. Un indice de difficulté par défaut sera utilisé
+            pour le calcul.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {renderErrorMessage()}
 

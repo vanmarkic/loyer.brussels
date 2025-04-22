@@ -64,7 +64,6 @@ export function AddressAutocomplete({
 
           // Show a message if no results were found
           if (response.data.length === 0 && debouncedQuery.length >= 3) {
-          console.log(response)
             setError("Aucune adresse trouvée. Veuillez essayer une autre recherche.")
           }
         }
@@ -82,7 +81,21 @@ export function AddressAutocomplete({
 
   const handleSelect = (address: AddressResult) => {
     onAddressSelect(address)
-    setQuery(`${address.streetname_fr} ${address.house_number} ${address.postcode}`)
+    setQuery(`${address.streetname_fr} ${address.house_number}, ${address.postcode} Bruxelles`)
+    setIsOpen(false)
+    setError(null)
+  }
+
+  const handleManualEntry = () => {
+    // Create a mock address result for manual entry
+    const manualAddress: AddressResult = {
+      id: "manual",
+      postcode: "",
+      streetname_fr: "",
+      house_number: "",
+      indice_synth_difficulte: 0.5, // Default difficulty index
+    }
+    onAddressSelect(manualAddress)
     setIsOpen(false)
     setError(null)
   }
@@ -113,7 +126,14 @@ export function AddressAutocomplete({
       {error && (
         <Alert variant="destructive" className="mt-2">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription className="flex justify-between items-center">
+            <span>{error}</span>
+            {error.includes("Aucune adresse trouvée") && (
+              <button onClick={handleManualEntry} className="text-xs underline hover:no-underline">
+                Saisir manuellement
+              </button>
+            )}
+          </AlertDescription>
         </Alert>
       )}
 
@@ -128,7 +148,7 @@ export function AddressAutocomplete({
               >
                 <MapPin className="mr-2 h-4 w-4 text-[#f18240]" />
                 <span>
-                  {address.streetname_fr} {address.house_number} {address.postcode}
+                  {address.streetname_fr} {address.house_number}, {address.postcode} Bruxelles
                 </span>
               </li>
             ))}

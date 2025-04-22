@@ -4,7 +4,7 @@ import type React from "react"
 import { createContext, useContext, useReducer, type ReactNode } from "react"
 import { fetchDifficultyIndexAction } from "../actions/fetch-difficulty-index"
 
-export type PropertyType = "apartment" | "house" | "studio" | "other"
+export type PropertyType = "apartment" | "house" | "studio"
 export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G"
 export type PropertyState = 1 | 2 | 3 // 1: Mauvais état, 2: Bon état, 3: Excellent état
 export type Neighborhood = "center" | "north" | "south" | "east" | "west"
@@ -17,7 +17,6 @@ export interface FormState {
   streetNumber: string
   // Property details
   propertyType: PropertyType | ""
-  propertyState: PropertyState | null
   size: number
   bedrooms: number
   bathrooms: number
@@ -76,7 +75,6 @@ const initialState: FormState = {
   streetNumber: "",
   // Property details
   propertyType: "",
-  propertyState: null,
   size: 0,
   bedrooms: 1,
   bathrooms: 1,
@@ -177,7 +175,6 @@ const calculateRent = (
   const BASE_CONSTANT = 0.1758082
   const MULTIPLIER = 1.0207648
   const STATE_2_ADJUSTMENT = 0.2490667
-  const STATE_3_ADJUSTMENT = 1.042853
   const DIFFICULTY_MULTIPLIER = -0.6455585
 
   // Default to 0 if no difficulty index is available
@@ -237,13 +234,8 @@ const calculateRent = (
   // Calculate the inverse surface term
   const inverseSurfaceTerm = state.size > 0 ? inverseSurfaceMultiplier / state.size : 0
 
-  // Calculate the state adjustment
-  let stateAdjustment = 0
-  if (state.propertyState === 2) {
-    stateAdjustment = STATE_2_ADJUSTMENT
-  } else if (state.propertyState === 3) {
-    stateAdjustment = STATE_3_ADJUSTMENT
-  }
+  // Always use the good condition adjustment (STATE_2_ADJUSTMENT)
+  const stateAdjustment = STATE_2_ADJUSTMENT
 
   // Apply the formula: loyer = (BASE_CONSTANT + MULTIPLIER * (formulaConstant + inverseSurfaceTerm) + stateAdjustment - DIFFICULTY_MULTIPLIER * difficultyIndex) * surface
   const pricePerSqm =

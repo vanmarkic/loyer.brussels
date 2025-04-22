@@ -22,11 +22,13 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
     // Query the addresses table to find the matching address
     const { data, error } = await supabase
       .from("addresses")
-      .select("indice_synth_difficulte")
+      .select('*')
       .eq("postcode", 1080)
-      .ilike("streetname_fr", `%${"liberté"}%`)
-      .eq("house_number", 120)
-      .single()
+      .eq('streetname_fr', 'Avenue de la Liberté')
+      .eq("house_number", '120')
+      .limit(1)
+
+
 
     if (error) {
       console.error("Error fetching difficulty index:", error)

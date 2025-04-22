@@ -59,10 +59,10 @@ export async function fetchDifficultyIndex(postalCode: string, streetName: strin
     const { data, error } = await supabaseAdmin
       .from("addresses")
       .select("indice_synth_difficulte")
-      .eq("postcode", postalCode)
-      .ilike("streetname_fr", `%${streetName}%`)
-      .eq("house_number", streetNumber)
-      .single()
+      .eq("postcode", 1080)
+      .ilike("streetname_fr", "Avenue de la Liberté")
+      .eq("house_number", "120")
+      .limit(1)
 
     if (error) {
       console.error("Error fetching difficulty index:", error)

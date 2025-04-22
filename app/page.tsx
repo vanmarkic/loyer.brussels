@@ -1,7 +1,11 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Facebook, Menu, Twitter } from "lucide-react"
-import { Button } from "@/components/ui/button"
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Facebook, Menu, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { supabaseAdmin } from "./lib/supabase";
 
 export default function Home() {
   return (
@@ -9,7 +13,13 @@ export default function Home() {
       {/* Top header */}
       <header className="bg-white py-2 px-4 flex items-center border-b">
         <div className="flex items-center gap-2">
-          <Image src="/logo-small.svg" alt="Bruxelles Logement Logo" width={24} height={24} className="h-6 w-auto" />
+          <Image
+            src="/logo-small.svg"
+            alt="Bruxelles Logement Logo"
+            width={24}
+            height={24}
+            className="h-6 w-auto"
+          />
           <span className="text-xs font-medium uppercase">
             SERVICE PUBLIC RÉGIONAL DE BRUXELLES - BRUXELLES LOGEMENT
           </span>
@@ -19,10 +29,18 @@ export default function Home() {
       {/* Main navigation */}
       <nav className="bg-[#f18240] py-4 px-6 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <Image src="/logo.svg" alt="Bruxelles Logement Logo" width={40} height={40} className="h-10 w-auto" />
+          <Image
+            src="/logo.svg"
+            alt="Bruxelles Logement Logo"
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
           <div className="text-white uppercase">
             <div className="font-bold text-lg leading-tight">BRUXELLES LOGEMENT</div>
-            <div className="text-xs leading-tight">SERVICE PUBLIC RÉGIONAL DE BRUXELLES</div>
+            <div className="text-xs leading-tight">
+              SERVICE PUBLIC RÉGIONAL DE BRUXELLES
+            </div>
           </div>
         </div>
         <button className="text-white flex items-center gap-2 uppercase font-medium">
@@ -43,25 +61,31 @@ export default function Home() {
               <div className="space-y-4">
                 <h2 className="text-2xl font-medium">Faites le test !</h2>
                 <p className="text-sm md:text-base">
-                  Que vous soyez locataire ou bailleur, actuel ou futur, ce site vous permettra de connaître le loyer
-                  indicatif de référence pour le bien que vous louez ou envisagez de louer en prenant en compte sa
-                  localisation et ses caractéristiques principales.
+                  Que vous soyez locataire ou bailleur, actuel ou futur, ce site vous
+                  permettra de connaître le loyer indicatif de référence pour le bien que
+                  vous louez ou envisagez de louer en prenant en compte sa localisation et
+                  ses caractéristiques principales.
                 </p>
               </div>
 
               <div className="bg-white text-gray-700 p-4 rounded-md text-sm">
                 <p>
-                  Le site de la grille des loyers a été adapté afin de rendre plus transparent le calcul du loyer de
-                  référence.
+                  Le site de la grille des loyers a été adapté afin de rendre plus
+                  transparent le calcul du loyer de référence.
                 </p>
-                <Button variant="default" className="mt-4 bg-[#e05c6d] hover:bg-[#d04c5d]">
+                <Button
+                  variant="default"
+                  className="mt-4 bg-[#e05c6d] hover:bg-[#d04c5d]"
+                >
                   En savoir plus
                 </Button>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <Link href="/calculateur">
-                  <Button className="bg-[#e05c6d] hover:bg-[#d04c5d] rounded-full px-8">Démarrer</Button>
+                  <Button className="bg-[#e05c6d] hover:bg-[#d04c5d] rounded-full px-8">
+                    Démarrer
+                  </Button>
                 </Link>
 
                 <div className="flex items-center gap-3">
@@ -96,7 +120,9 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-[#d04c5d] text-white p-6 rounded-t-lg relative">
-              <h3 className="text-xl font-bold uppercase">À PROPOS DES LOYERS DE RÉFÉRENCE</h3>
+              <h3 className="text-xl font-bold uppercase">
+                À PROPOS DES LOYERS DE RÉFÉRENCE
+              </h3>
               <div className="absolute -bottom-6 right-6 w-12 h-12 bg-white rounded-full"></div>
             </div>
 
@@ -113,5 +139,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }

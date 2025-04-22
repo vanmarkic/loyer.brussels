@@ -1,43 +1,36 @@
-"use client"
+"use client";
 
-import { useForm } from "@/app/context/form-context"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, Download, Share2, Info, Calculator } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useForm } from "@/app/context/form-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Download, Share2, Info, Calculator } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function ResultStep() {
-  const { state, dispatch } = useForm()
+  const { state, dispatch } = useForm();
 
   const handleReset = () => {
-    dispatch({ type: "RESET_FORM" })
-  }
+    dispatch({ type: "RESET_FORM" });
+  };
 
   const propertyTypeLabels: Record<string, string> = {
     apartment: "Appartement",
     house: "Maison",
     studio: "Studio",
-    other: "Autre",
-  }
-
-  const kitchenTypeLabels: Record<string, string> = {
-    open: "Cuisine ouverte",
-    closed: "Cuisine fermée",
-    american: "Cuisine américaine",
-    none: "Pas de cuisine",
-  }
-
-  const heatingTypeLabels: Record<string, string> = {
-    central: "Chauffage central",
-    individual: "Chauffage individuel",
-    none: "Pas de chauffage",
-  }
+  };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold">Résultat de l'estimation</h2>
-        <p className="text-muted-foreground mt-2">Voici le loyer indicatif pour ce bien</p>
+        <p className="text-muted-foreground mt-2">
+          Voici le loyer indicatif pour ce bien
+        </p>
       </div>
 
       <Card className="bg-gradient-to-r from-[#f18240] to-[#e05c6d] text-white">
@@ -57,7 +50,10 @@ export function ResultStep() {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Selon la législation bruxelloise, le loyer de référence peut varier de ±20%</p>
+                    <p>
+                      Selon la législation bruxelloise, le loyer de référence peut varier
+                      de ±20%
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -79,7 +75,9 @@ export function ResultStep() {
 
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="text-muted-foreground">Type de bien:</div>
-            <div className="font-medium">{propertyTypeLabels[state.propertyType] || "-"}</div>
+            <div className="font-medium">
+              {propertyTypeLabels[state.propertyType] || "-"}
+            </div>
 
             <div className="text-muted-foreground">Adresse:</div>
             <div className="font-medium">
@@ -90,38 +88,15 @@ export function ResultStep() {
             <div className="font-medium">{state.size} m²</div>
 
             <div className="text-muted-foreground">Chambres:</div>
-            <div className="font-medium">{state.bedrooms === 4 ? "4 et plus" : state.bedrooms}</div>
+            <div className="font-medium">
+              {state.bedrooms === 4 ? "4 et plus" : state.bedrooms}
+            </div>
 
             <div className="text-muted-foreground">Salles de bain:</div>
             <div className="font-medium">{state.bathrooms}</div>
 
-            <div className="text-muted-foreground">Cuisine:</div>
-            <div className="font-medium">
-              {kitchenTypeLabels[state.kitchenType] || "-"}
-              {state.kitchenEquipped ? " (équipée)" : ""}
-            </div>
-
-            <div className="text-muted-foreground">Étage:</div>
-            <div className="font-medium">
-              {state.floor} / {state.totalFloors}
-            </div>
-
             <div className="text-muted-foreground">Classe énergétique:</div>
             <div className="font-medium">{state.energyClass}</div>
-
-            <div className="text-muted-foreground">Chauffage:</div>
-            <div className="font-medium">{heatingTypeLabels[state.heatingType] || "-"}</div>
-
-            <div className="text-muted-foreground">Extérieurs:</div>
-            <div className="font-medium">
-              {[
-                state.hasBalcony ? `Balcon${state.balconySize ? ` (${state.balconySize} m²)` : ""}` : null,
-                state.hasTerrace ? `Terrasse${state.terraceSize ? ` (${state.terraceSize} m²)` : ""}` : null,
-                state.hasGarden ? `Jardin${state.gardenSize ? ` (${state.gardenSize} m²)` : ""}` : null,
-              ]
-                .filter(Boolean)
-                .join(", ") || "Aucun"}
-            </div>
 
             <div className="text-muted-foreground">Équipements:</div>
             <div className="font-medium">
@@ -132,11 +107,6 @@ export function ResultStep() {
                 state.hasSecondBathroom ? "2ème salle de bain" : null,
                 state.hasRecreationalSpaces ? "Espaces récréatifs" : null,
                 state.hasStorageSpaces ? "Espaces de rangement" : null,
-                state.hasElevator ? "Ascenseur" : null,
-                state.hasParking ? "Parking" : null,
-                state.hasGarage ? "Garage" : null,
-                state.hasBasement ? "Cave" : null,
-                state.hasAttic ? "Grenier" : null,
               ]
                 .filter(Boolean)
                 .join(", ") || "Aucun"}
@@ -151,9 +121,9 @@ export function ResultStep() {
           <div>
             <p className="font-medium text-blue-800">Méthode de calcul</p>
             <p className="mt-1 text-blue-700">
-              Le loyer de référence est calculé selon la formule officielle de la Région de Bruxelles-Capitale, qui
-              prend en compte le type de bien, sa surface, le nombre de chambres, l'état du bien et l'indice de
-              difficulté du quartier.
+              Le loyer de référence est calculé selon la formule officielle de la Région
+              de Bruxelles-Capitale, qui prend en compte le type de bien, sa surface, le
+              nombre de chambres, l'état du bien et l'indice de difficulté du quartier.
             </p>
           </div>
         </div>
@@ -162,12 +132,13 @@ export function ResultStep() {
       <div className="bg-amber-50 p-4 rounded-lg text-sm">
         <p className="font-medium text-amber-800">Information importante</p>
         <p className="mt-1 text-amber-700">
-          Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires particuliers, le montant du
-          loyer est déterminé librement par le bailleur sur le marché privé.
+          Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires
+          particuliers, le montant du loyer est déterminé librement par le bailleur sur le
+          marché privé.
         </p>
         <p className="mt-2 text-amber-700">
-          Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du loyer réel dans les baux
-          d'habitation en Région de Bruxelles Capitale.
+          Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du
+          loyer réel dans les baux d'habitation en Région de Bruxelles Capitale.
         </p>
       </div>
 
@@ -185,5 +156,5 @@ export function ResultStep() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

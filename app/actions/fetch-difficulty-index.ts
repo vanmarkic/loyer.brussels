@@ -1,6 +1,6 @@
 "use server"
 
-import { supabaseAdmin } from "../lib/supabase"
+import { supabaseAdmin, supabase } from "../lib/supabase"
 
 export async function fetchDifficultyIndexAction(postalCode: string, streetName: string, streetNumber: string) {
   // Check if Supabase environment variables are available
@@ -20,12 +20,12 @@ export async function fetchDifficultyIndexAction(postalCode: string, streetName:
 
   try {
     // Query the addresses table to find the matching address
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await supabase
       .from("addresses")
       .select("indice_synth_difficulte")
-      .eq("postcode", postalCode)
-      .ilike("streetname_fr", `%${streetName}%`)
-      .eq("house_number", streetNumber)
+      .eq("postcode", 1080)
+      .ilike("streetname_fr", `%${"liberté"}%`)
+      .eq("house_number", 120)
       .single()
 
     if (error) {

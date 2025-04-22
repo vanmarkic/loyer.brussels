@@ -100,6 +100,10 @@ export function AddressAutocomplete({
     setError(null)
   }
 
+  // Check if Supabase environment variables are available
+  const hasSupabaseCredentials =
+    typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
   return (
     <div className="relative" ref={dropdownRef}>
       <Label htmlFor="address-autocomplete">{label}</Label>
@@ -133,6 +137,15 @@ export function AddressAutocomplete({
                 Saisir manuellement
               </button>
             )}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {!hasSupabaseCredentials && (
+        <Alert className="mt-2 bg-amber-50 border-amber-200">
+          <AlertCircle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-800">
+            Mode démo: Utilisez l'option "Saisir manuellement" pour entrer une adresse.
           </AlertDescription>
         </Alert>
       )}

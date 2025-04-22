@@ -4,7 +4,7 @@ import { useForm } from "@/app/context/form-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, Loader2 } from "lucide-react"
+import { AlertCircle, Loader2, Info } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AddressAutocomplete } from "./address-autocomplete"
 import type { AddressResult } from "@/app/actions/search-addresses"
@@ -50,6 +50,16 @@ export function AddressStep() {
         <h2 className="text-2xl font-bold">Adresse du bien</h2>
         <p className="text-muted-foreground mt-2">Indiquez l'adresse complète du bien à Bruxelles</p>
       </div>
+
+      {!hasSupabaseCredentials && (
+        <Alert className="mb-4 bg-amber-50 border-amber-200">
+          <Info className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-800">
+            Mode démo: Les données d'adresse ne sont pas disponibles. Un indice de difficulté par défaut sera utilisé
+            pour le calcul.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="space-y-4">
         <AddressAutocomplete

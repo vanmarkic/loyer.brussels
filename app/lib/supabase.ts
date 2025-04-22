@@ -58,7 +58,7 @@ export async function fetchDifficultyIndex(postalCode: string, streetName: strin
     // Query the addresses table to find the matching address
     const { data, error } = await supabaseAdmin
       .from("addresses")
-      .select("indice_synth_difficulte")
+      .select("*")
       .eq("postcode", 1080)
       .ilike("streetname_fr", "Avenue de la Liberté")
       .eq("house_number", "120")
@@ -68,9 +68,9 @@ export async function fetchDifficultyIndex(postalCode: string, streetName: strin
       console.error("Error fetching difficulty index:", error)
       return 0.5 // Return a default difficulty index on error
     }
-
+    console.log(data)
     // Return the difficulty index from the address record
-    return data?.indice_synth_difficulte || 0.5
+    return data.indice_synth_difficulte
   } catch (error) {
     console.error("Error in fetchDifficultyIndex:", error)
     return 0.5 // Return a default difficulty index on error

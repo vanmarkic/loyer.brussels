@@ -30,7 +30,8 @@ export async function fetchDifficultyIndexAction(
       .from("addresses")
       .select("*")
       .eq("postcode", postalCode)
-      .eq("streetname_fr", "Avenue de la Liberté")
+      .eq("streetname_fr", streetName)
+      .or(`streetname_fr.ilike.${streetName}, streetname_fr.eq.${streetName}`)
       .eq("house_number", String(streetNumber))
       .limit(1);
 

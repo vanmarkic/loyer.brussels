@@ -195,7 +195,7 @@ const calculateRent = (
   const DIFFICULTY_MULTIPLIER = -0.6455585;
 
   // Default to 0 if no difficulty index is available
-  const difficultyIndex = parseFloat(state.difficultyIndex);
+  const difficultyIndex = state.difficultyIndex;
 
   // Get the appropriate formula based on property type and number of bedrooms
   let formulaConstant = 0;

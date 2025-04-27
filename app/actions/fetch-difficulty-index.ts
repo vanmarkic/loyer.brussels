@@ -70,8 +70,8 @@ export async function fetchDifficultyIndexAction(
       };
     }
 
-    // If maybeSingle() didn't find a match, data will be null
-    if (!data) {
+    // Check if data is null or an empty array (no match found)
+    if (!data || data.length === 0) {
       return {
         success: false,
         error: `Adresse non trouvée: ${streetNumber} ${streetName}, ${postalCode}. Veuillez vérifier l'adresse.`,

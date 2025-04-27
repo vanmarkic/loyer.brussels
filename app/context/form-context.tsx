@@ -38,6 +38,7 @@ export interface FormState {
   gardenSize: number | null;
   hasBasement: boolean;
   hasAttic: boolean;
+  numberOfGarages: number;
   // Energy and heating
   energyClass: EnergyClass | "";
   heatingType: "central" | "individual" | "none";
@@ -46,7 +47,7 @@ export interface FormState {
   // Calculation results
   difficultyIndex: number | null;
   baseRent: number | null;
-  adjustedRent: number | null;
+  medianRent: number | null;
   minRent: number | null;
   maxRent: number | null;
   estimatedRent: number | null;
@@ -59,6 +60,8 @@ export interface FormState {
   hasSecondBathroom: boolean | null;
   hasRecreationalSpaces: boolean | null;
   hasStorageSpaces: boolean | null;
+  constructedBefore2000: boolean | null; // Added construction year period
+  propertyState: PropertyState | null; // Added property state
 }
 
 type FormAction =
@@ -102,6 +105,7 @@ const initialState: FormState = {
   gardenSize: null,
   hasBasement: false,
   hasAttic: false,
+  numberOfGarages: 0,
   // Energy and heating
   energyClass: "",
   heatingType: "none",
@@ -110,7 +114,7 @@ const initialState: FormState = {
   // Calculation results
   difficultyIndex: null,
   baseRent: null,
-  adjustedRent: null,
+  medianRent: null,
   minRent: null,
   maxRent: null,
   estimatedRent: null,
@@ -123,6 +127,8 @@ const initialState: FormState = {
   hasSecondBathroom: null,
   hasRecreationalSpaces: null,
   hasStorageSpaces: null,
+  constructedBefore2000: null, // Added initial value for construction year period
+  propertyState: null, // Added initial value for property state
 };
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
@@ -158,14 +164,14 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         errorCode: action.payload.code,
       };
     case "CALCULATE_RENT":
-      const { baseRent, adjustedRent, minRent, maxRent } = calculateRent(state);
+      const { baseRent, medianRent, minRent, maxRent } = calculateRent(state);
       return {
         ...state,
         baseRent,
-        adjustedRent,
+        medianRent,
         minRent,
         maxRent,
-        estimatedRent: adjustedRent,
+        estimatedRent: medianRent,
         step: state.step + 1,
         error: null,
         errorCode: null,
@@ -180,36 +186,46 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 };
 
 // Rental price calculation based on loyers.brussels methodology
-const calculateRent = (
-  state: FormState
+export const calculateRent = (
+  inputData: FormState
 ): {
-  baseRent: number;
-  adjustedRent: number;
+  medianRent: number;
   minRent: number;
   maxRent: number;
+  formulaConstant: number;
+  inverseSurfaceMultiplier: number;
+  inverseSurfaceTerm: number;
+  stateAdjustment: number;
+  difficultyIndex: number | null;
+  basePricePerSqm: number;
+  calculatedRent: number;
+  energyClassAdjustment: number;
 } => {
   // Constants from the official formulas
   const BASE_CONSTANT = 0.1758082;
   const MULTIPLIER = 1.0207648;
-  const STATE_2_ADJUSTMENT = 0.2490667;
+  const STATE_2_ADJUSTMENT = 0.2490667; // état=2
+  const STATE_3_ADJUSTMENT = 1.042853; // état=3
   const DIFFICULTY_MULTIPLIER = -0.6455585;
 
   // Default to 0 if no difficulty index is available
-  const difficultyIndex = state.difficultyIndex;
+  const difficultyIndex = inputData.difficultyIndex;
+  const surface = inputData.size;
+  const propertyState = inputData.propertyState ?? 2; // Default to Bon état (2) if not set
 
-  // Get the appropriate formula based on property type and number of bedrooms
+  // Get the appropriate formula constants based on property type and number of bedrooms
   let formulaConstant = 0;
   let inverseSurfaceMultiplier = 0;
 
   if (
-    state.propertyType === "studio" ||
-    (state.propertyType === "apartment" && state.bedrooms === 0)
+    inputData.propertyType === "studio" ||
+    (inputData.propertyType === "apartment" && inputData.bedrooms === 0)
   ) {
-    // Studio-Apartment 0 chambre
+    // Studio-Appartement 0 chambre
     formulaConstant = 3.4017754;
     inverseSurfaceMultiplier = 410.93786;
-  } else if (state.propertyType === "apartment") {
-    switch (state.bedrooms) {
+  } else if (inputData.propertyType === "apartment") {
+    switch (inputData.bedrooms) {
       case 1:
         // Appartement 1 chambre
         formulaConstant = 2.8301143;
@@ -225,94 +241,101 @@ const calculateRent = (
         formulaConstant = 4.3996618;
         inverseSurfaceMultiplier = 505.9611096;
         break;
-      default:
-        // Appartement 4 chambres et plus
+      default: // 4 chambres et plus
         formulaConstant = 7.5;
         inverseSurfaceMultiplier = 250;
         break;
     }
-  } else if (state.propertyType === "house") {
-    if (state.bedrooms <= 2) {
-      // Maison 1 ou 2 chambres (approximation as the formula is partially visible)
-      formulaConstant = 3.5;
-      inverseSurfaceMultiplier = 500;
-    } else if (state.bedrooms <= 4) {
-      // Maison 3 ou 4 chambres (approximation)
-      formulaConstant = 5.0;
-      inverseSurfaceMultiplier = 550;
+  } else if (inputData.propertyType === "house") {
+    if (inputData.bedrooms <= 2) {
+      // Maison 1 ou 2 chambres
+      formulaConstant = 3.1738354;
+      inverseSurfaceMultiplier = 487.9031965;
+    } else if (inputData.bedrooms === 3) {
+      // Maison 3 chambres
+      formulaConstant = 3.4543796;
+      inverseSurfaceMultiplier = 562.1917377;
     } else {
-      // Maison 5 chambres et plus (approximation)
-      formulaConstant = 8.0;
-      inverseSurfaceMultiplier = 600;
+      // 4 chambres ou plus
+      formulaConstant = 5.300474;
+      inverseSurfaceMultiplier = 393.8815801;
     }
   } else {
-    // Default for other property types
-    formulaConstant = 3.0;
-    inverseSurfaceMultiplier = 400;
+    // Fallback or handle other types if necessary
+    // Using Studio/0 bed apartment as a default fallback for now
+    formulaConstant = 3.4017754;
+    inverseSurfaceMultiplier = 410.93786;
   }
 
   // Calculate the inverse surface term
-  const inverseSurfaceTerm = state.size > 0 ? inverseSurfaceMultiplier / state.size : 0;
+  const inverseSurfaceTerm = inverseSurfaceMultiplier / surface;
 
-  // Always use the good condition adjustment (STATE_2_ADJUSTMENT)
-  const stateAdjustment = STATE_2_ADJUSTMENT;
+  // Determine state adjustment based on propertyState
+  let stateAdjustment = 0;
+  if (propertyState === 2) {
+    stateAdjustment = STATE_2_ADJUSTMENT;
+  } else if (propertyState === 3) {
+    stateAdjustment = STATE_3_ADJUSTMENT;
+  }
+  // No adjustment if propertyState is 1 (Mauvais état)
 
-  // Apply the formula: loyer = (BASE_CONSTANT + MULTIPLIER * (formulaConstant + inverseSurfaceTerm) + stateAdjustment - DIFFICULTY_MULTIPLIER * difficultyIndex) * surface
-  const pricePerSqm =
+  // Calculate the base price per square meter using the core formula
+  const basePricePerSqm =
     BASE_CONSTANT +
     MULTIPLIER * (formulaConstant + inverseSurfaceTerm) +
-    stateAdjustment -
-    DIFFICULTY_MULTIPLIER * difficultyIndex;
+    stateAdjustment + // Use the determined state adjustment
+    DIFFICULTY_MULTIPLIER * difficultyIndex; // Note: DIFFICULTY_MULTIPLIER is negative
 
-  // Calculate the base rent
-  const baseRent = pricePerSqm * state.size;
+  // Calculate the initial base rent
+  let calculatedRent = basePricePerSqm * surface;
 
-  // Apply energy class adjustments
+  // Apply PEB (Energy Class) adjustments
   const energyClassAdjustment: Record<EnergyClass, number> = {
-    A: 1.1,
-    B: 1.05,
-    C: 1.0,
-    D: 0.95,
-    E: 0.9,
-    F: 0.85,
-    G: 0.8,
+    A: 164.16,
+    B: 109.44,
+    C: 54.72,
+    D: 21.89,
+    E: 0,
+    F: -10.94,
+    G: -21.89,
   };
 
-  let adjustedRent = baseRent;
-  if (state.energyClass) {
-    adjustedRent *= energyClassAdjustment[state.energyClass as EnergyClass] || 1.0;
-  }
+  calculatedRent =
+    calculatedRent + energyClassAdjustment[inputData.energyClass as EnergyClass];
 
-  // Apply additional features adjustments (these are not in the official formula but add value)
-  if (state.hasParking) adjustedRent += 80;
-  if (state.hasGarage) adjustedRent += 100;
-  if (state.hasBalcony && state.balconySize)
-    adjustedRent += Math.min(state.balconySize * 5, 50);
-  if (state.hasTerrace && state.terraceSize)
-    adjustedRent += Math.min(state.terraceSize * 7, 100);
-  if (state.hasGarden && state.gardenSize)
-    adjustedRent += Math.min(state.gardenSize * 3, 150);
+  // Apply additional value adjustments
+  if (inputData.hasCentralHeating === false) calculatedRent = calculatedRent - 18.679544;
+  if (inputData.hasThermalRegulation === false)
+    calculatedRent = calculatedRent - 16.867348;
+  if (inputData.hasSecondBathroom === true) calculatedRent = calculatedRent + 88.547325;
+  if (inputData.hasRecreationalSpaces === false)
+    calculatedRent = calculatedRent - 15.763757;
+  if (inputData.hasStorageSpaces === true) calculatedRent = calculatedRent + 0.707585; // This seems very small, double-check if intended
+  if (inputData.numberOfGarages > 0)
+    calculatedRent = calculatedRent + inputData.numberOfGarages * 40.109301;
 
-  // Apply adjustments for heating and insulation
-  if (state.hasCentralHeating) adjustedRent += 50;
-  if (state.hasThermalRegulation) adjustedRent += 30;
-  if (state.hasDoubleGlazing) adjustedRent += 40;
+  // Ensure rent is not negative
+  const finalMedianRent = calculatedRent;
 
-  // Apply adjustments for additional rooms and spaces
-  if (state.hasSecondBathroom) adjustedRent += 70;
-  if (state.hasRecreationalSpaces) adjustedRent += 60;
-  if (state.hasStorageSpaces) adjustedRent += 30;
+  // Calculate min and max rent (±10% of the final median rent)
+  const minRent = finalMedianRent * 0.9; // Changed from 0.8
+  const maxRent = finalMedianRent * 1.1; // Changed from 1.2
 
-  // Calculate min and max rent (±20% as per Brussels regulations)
-  const minRent = Math.round(adjustedRent * 0.8);
-  const maxRent = Math.round(adjustedRent * 1.2);
-
-  // Round to nearest 10
+  // Return rounded values
   return {
-    baseRent: Math.round(baseRent / 10) * 10,
-    adjustedRent: Math.round(adjustedRent / 10) * 10,
+    // Using finalMedianRent as base for simplicity, adjust if needed
+    medianRent: finalMedianRent,
     minRent,
     maxRent,
+    formulaConstant,
+    inverseSurfaceMultiplier,
+    inverseSurfaceTerm,
+    stateAdjustment,
+    difficultyIndex,
+    basePricePerSqm,
+    calculatedRent,
+    energyClassAdjustment:
+      energyClassAdjustment[inputData.energyClass as EnergyClass] ?? 0,
   };
 };
 

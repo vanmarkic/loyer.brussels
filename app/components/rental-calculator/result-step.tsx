@@ -17,6 +17,9 @@ export function ResultStep() {
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
   };
+  const handleEdit = () => {
+    dispatch({ type: "GO_TO_STEP", payload: 0 });
+  };
 
   const propertyTypeLabels: Record<string, string> = {
     apartment: "Appartement",
@@ -151,6 +154,9 @@ export function ResultStep() {
             <Share2 className="h-4 w-4" /> Partager
           </Button>
         </div>
+        <Button onClick={handleEdit} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
+          Modifier l'estimation <ArrowRight className="h-4 w-4" />
+        </Button>
         <Button onClick={handleReset} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
           Nouvelle estimation <ArrowRight className="h-4 w-4" />
         </Button>

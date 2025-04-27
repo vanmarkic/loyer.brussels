@@ -61,34 +61,85 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
 
   try {
     // Split the query to search for postal code and street name separately
-    const parts = query.trim().split(/\s+/);
-    let postalCodeQuery = "";
-    let streetQuery = "";
+    // --- Improved Address Parsing Logic ---
 
-    // Check if the first part looks like a postal code (4 digits)
-    if (parts[0] && /^\d{4}$/.test(parts[0])) {
-      postalCodeQuery = parts[0];
-      streetQuery = parts.slice(1).join(" ");
-    } else {
-      streetQuery = query;
+    const cleanedQuery = query.trim();
+    let postalCode: string | null = null;
+    let houseNumber: string | null = null;
+    let streetQuery: string = "";
+
+    // Regex to find a 4-digit Brussels postal code (starts with '1')
+    const postalCodeRegex = /\b(1\d{3})\b/;
+    // Regex to find potential house numbers (digits possibly followed by letters)
+    const houseNumberRegex = /\b(\d+[a-zA-Z]*)\b/g; // Global flag to find all
+
+    // 1. Extract Postal Code
+    const postalCodeMatch = cleanedQuery.match(postalCodeRegex);
+    if (postalCodeMatch) {
+      postalCode = postalCodeMatch[1];
     }
 
+    // 2. Extract Potential House Numbers (excluding the postal code if found)
+    const potentialHouseNumbers = [...cleanedQuery.matchAll(houseNumberRegex)]
+      .map((m) => m[1])
+      .filter((num) => num !== postalCode); // Don't treat postcode as house number
+
+    // Assume the first number found (that's not a postcode) is the house number.
+    // This is a heuristic and might need refinement based on common address formats.
+    if (potentialHouseNumbers.length > 0) {
+      houseNumber = potentialHouseNumbers[0];
+    }
+
+    // 3. Determine Street Query
+    // Remove postal code and house number from the query to get the street parts
+    let remainingQuery = cleanedQuery;
+    if (postalCode) {
+      // Replace the specific postal code found to avoid accidental replacements elsewhere
+      remainingQuery = remainingQuery.replace(postalCode, "");
+    }
+    if (houseNumber) {
+      // Replace only the first occurrence assumed to be the house number
+      // This avoids removing numbers if they are part of the street name itself
+      remainingQuery = remainingQuery.replace(houseNumber, "");
+    }
+    // Clean up remaining string to form the street query
+    streetQuery = remainingQuery.replace(/\s+/g, " ").trim();
+
+    // --- Build and Execute Supabase Query ---
+
+    // Check if we have both a valid Brussels postal code and a street query part
+    if (!postalCode || !streetQuery) {
+      // If postal code or street name is missing, return empty success result
+      // as per the requirement to not query without both.
+      return {
+        success: true,
+        data: [],
+        error: null,
+        code: "INSUFFICIENT_QUERY", // Indicate why no results were fetched
+      };
+    }
+
+    // Proceed with query construction and execution only if both parts are present
     let supabaseQuery = supabase
       .from("addresses")
       .select("id, postcode, streetname_fr, house_number, indice_synth_difficulte")
-      .limit(1);
+      .limit(10); // Increased limit slightly for more options
 
-    // Add filters based on the parsed query
-    if (postalCodeQuery) {
-      supabaseQuery = supabaseQuery.eq("postcode", postalCodeQuery);
+    // Add mandatory filters
+    supabaseQuery = supabaseQuery.eq("postcode", postalCode);
+    supabaseQuery = supabaseQuery.ilike("streetname_fr", `%${streetQuery}%`);
+
+    // Add optional house number filter if found
+    if (houseNumber) {
+      // Use `ilike` for house number for flexibility (e.g., '12A', '12bis')
+      // Adjust if exact match is strictly required and DB format is consistent.
+      supabaseQuery = supabaseQuery.ilike("house_number", `${houseNumber}%`);
     }
 
-    if (streetQuery) {
-      supabaseQuery = supabaseQuery.ilike("streetname_fr", `%${streetQuery}%`);
-    }
-
+    // Execute the query
     const { data, error } = await supabaseQuery;
 
+    // Handle potential database errors
     if (error) {
       console.error("Error searching addresses:", error);
       return {
@@ -99,13 +150,15 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
       };
     }
 
+    // Return successful result with data
     return {
       success: true,
-      data: data as AddressResult[],
+      data: data || [], // Ensure data is always an array
       error: null,
       code: "SUCCESS",
     };
   } catch (error: any) {
+    // Catch errors from parsing or unexpected issues
     console.error("Error in searchAddresses:", error);
     return {
       success: false,

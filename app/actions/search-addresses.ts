@@ -1,6 +1,6 @@
 "use server";
 
-import { supabaseAdmin } from "../lib/supabase";
+import { supabase, supabaseAdmin } from "../lib/supabase";
 
 export interface AddressResult {
   id: string;
@@ -73,7 +73,7 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
       streetQuery = query;
     }
 
-    let supabaseQuery = supabaseAdmin
+    let supabaseQuery = supabase
       .from("addresses")
       .select("id, postcode, streetname_fr, house_number, indice_synth_difficulte")
       .limit(1);

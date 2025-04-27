@@ -158,7 +158,10 @@ export function AddressAutocomplete({
       )}
 
       {isOpen && results.length > 0 && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+        <div
+          data-testid="address-results-dropdown"
+          className="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
+        >
           <ul className="max-h-60 overflow-auto py-1 text-sm">
             {results.map((address: any, index: number) => (
               <li

@@ -189,17 +189,10 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 export const calculateRent = (
   inputData: FormState
 ): {
+  baseRent: number;
   medianRent: number;
   minRent: number;
   maxRent: number;
-  formulaConstant: number;
-  inverseSurfaceMultiplier: number;
-  inverseSurfaceTerm: number;
-  stateAdjustment: number;
-  difficultyIndex: number | null;
-  basePricePerSqm: number;
-  calculatedRent: number;
-  energyClassAdjustment: number;
 } => {
   // Constants from the official formulas
   const BASE_CONSTANT = 0.1758082;
@@ -212,6 +205,11 @@ export const calculateRent = (
   const difficultyIndex = inputData.difficultyIndex;
   const surface = inputData.size;
   const propertyState = inputData.propertyState ?? 2; // Default to Bon état (2) if not set
+
+  if (surface <= 0) {
+    // Avoid division by zero and nonsensical calculations
+    return { baseRent: 0, medianRent: 0, minRent: 0, maxRent: 0 };
+  }
 
   // Get the appropriate formula constants based on property type and number of bedrooms
   let formulaConstant = 0;
@@ -289,8 +287,17 @@ export const calculateRent = (
   // Calculate the initial base rent
   let calculatedRent = basePricePerSqm * surface;
 
+  // Apply additional value adjustments
+  if (inputData.hasCentralHeating === false) calculatedRent -= 18.679544;
+  if (inputData.hasThermalRegulation === false) calculatedRent -= 16.867348;
+  if (inputData.hasSecondBathroom === true) calculatedRent += 88.547325;
+  if (inputData.hasRecreationalSpaces === false) calculatedRent -= 15.763757;
+  if (inputData.hasStorageSpaces === true) calculatedRent += 0.707585; // This seems very small, double-check if intended
+  if (inputData.numberOfGarages > 0)
+    calculatedRent += inputData.numberOfGarages * 40.109301;
+
   // Apply PEB (Energy Class) adjustments
-  const energyClassAdjustment: Record<EnergyClass, number> = {
+  const energyClassAdjustment: Partial<Record<EnergyClass, number>> = {
     A: 164.16,
     B: 109.44,
     C: 54.72,
@@ -300,42 +307,23 @@ export const calculateRent = (
     G: -21.89,
   };
 
-  calculatedRent =
-    calculatedRent + energyClassAdjustment[inputData.energyClass as EnergyClass];
-
-  // Apply additional value adjustments
-  if (inputData.hasCentralHeating === false) calculatedRent = calculatedRent - 18.679544;
-  if (inputData.hasThermalRegulation === false)
-    calculatedRent = calculatedRent - 16.867348;
-  if (inputData.hasSecondBathroom === true) calculatedRent = calculatedRent + 88.547325;
-  if (inputData.hasRecreationalSpaces === false)
-    calculatedRent = calculatedRent - 15.763757;
-  if (inputData.hasStorageSpaces === true) calculatedRent = calculatedRent + 0.707585; // This seems very small, double-check if intended
-  if (inputData.numberOfGarages > 0)
-    calculatedRent = calculatedRent + inputData.numberOfGarages * 40.109301;
+  if (inputData.energyClass && inputData.energyClass in energyClassAdjustment) {
+    calculatedRent += energyClassAdjustment[inputData.energyClass as EnergyClass] ?? 0;
+  }
 
   // Ensure rent is not negative
-  const finalMedianRent = calculatedRent;
+  const finalMedianRent = Math.max(0, calculatedRent);
 
   // Calculate min and max rent (±10% of the final median rent)
-  const minRent = finalMedianRent * 0.9; // Changed from 0.8
-  const maxRent = finalMedianRent * 1.1; // Changed from 1.2
+  const minRent = Math.round(finalMedianRent * 0.9); // Changed from 0.8
+  const maxRent = Math.round(finalMedianRent * 1.1); // Changed from 1.2
 
   // Return rounded values
   return {
-    // Using finalMedianRent as base for simplicity, adjust if needed
-    medianRent: finalMedianRent,
+    baseRent: Math.round(finalMedianRent / 10) * 10, // Using finalMedianRent as base for simplicity, adjust if needed
+    medianRent: Math.round(finalMedianRent / 10) * 10,
     minRent,
     maxRent,
-    formulaConstant,
-    inverseSurfaceMultiplier,
-    inverseSurfaceTerm,
-    stateAdjustment,
-    difficultyIndex,
-    basePricePerSqm,
-    calculatedRent,
-    energyClassAdjustment:
-      energyClassAdjustment[inputData.energyClass as EnergyClass] ?? 0,
   };
 };
 

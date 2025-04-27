@@ -61,7 +61,9 @@ export function AddressAutocomplete({
         } else {
           setResults(response.data);
           setIsOpen(response.data.length > 0);
-
+          if (response.data.length === 0 && response.code === "INSUFFICIENT_QUERY") {
+            setError("Veuillez entrer au moins le nom de la rue");
+          }
           // Show a message if no results were found
           if (response.data.length === 0 && debouncedQuery.length >= 3) {
             setError("Aucune adresse trouvée. Veuillez essayer une autre recherche.");
@@ -81,9 +83,9 @@ export function AddressAutocomplete({
 
   const handleSelect = (address: AddressResult) => {
     onAddressSelect(address);
-    setQuery(
-      `${address.streetname_fr} ${address.house_number}, ${address.postcode} Bruxelles`
-    );
+    // setQuery(
+    //   `${address.streetname_fr} ${address.house_number}, ${address.postcode} Bruxelles`
+    // );
     setIsOpen(false);
     setError(null);
   };

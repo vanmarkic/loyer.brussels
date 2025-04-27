@@ -108,7 +108,7 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
     // --- Build and Execute Supabase Query ---
 
     // Check if we have both a valid Brussels postal code and a street query part
-    if (!postalCode || !streetQuery) {
+    if (!streetQuery) {
       // If postal code or street name is missing, return empty success result
       // as per the requirement to not query without both.
       return {
@@ -126,7 +126,9 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
       .limit(10); // Increased limit slightly for more options
 
     // Add mandatory filters
-    supabaseQuery = supabaseQuery.eq("postcode", postalCode);
+    if (postalCode) {
+      supabaseQuery = supabaseQuery.eq("postcode", postalCode);
+    }
     supabaseQuery = supabaseQuery.ilike("streetname_fr", `%${streetQuery}%`);
 
     // Add optional house number filter if found
@@ -138,6 +140,8 @@ export async function searchAddresses(query: string): Promise<SearchAddressesRes
 
     // Execute the query
     const { data, error } = await supabaseQuery;
+
+    console.log("Supabase query result:", data, error);
 
     // Handle potential database errors
     if (error) {

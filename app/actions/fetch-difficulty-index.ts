@@ -26,14 +26,15 @@ export async function fetchDifficultyIndexAction(
 
   try {
     // Query the addresses table to find the matching address
-    const { data, error } = await supabaseAdmin
+
+    // Query the addresses table for a case-insensitive street name match
+    const { data, error } = await supabase
       .from("addresses")
-      .select("*")
+      .select("indice_synth_difficulte") // 2. Performance: Select only the required column
       .eq("postcode", postalCode)
-      .eq("streetname_fr", streetName)
-      .or(`streetname_fr.ilike.${streetName}, streetname_fr.eq.${streetName}`)
+      .ilike("streetname_fr", streetName) // 1. Readability & Best Practice: Use ilike for case-insensitive search
       .eq("house_number", String(streetNumber))
-      .limit(1);
+      .limit(1); // 3. Best Practice: Use maybeSingle() for clarity when expecting 0 or 1 result
 
     console.log("data", data);
     console.log("error", error);
@@ -69,6 +70,7 @@ export async function fetchDifficultyIndexAction(
       };
     }
 
+    // If maybeSingle() didn't find a match, data will be null
     if (!data) {
       return {
         success: false,
@@ -78,6 +80,7 @@ export async function fetchDifficultyIndexAction(
       };
     }
 
+    // Access the selected column directly from the data object
     return {
       success: true,
       data: data[0].indice_synth_difficulte,

@@ -18,7 +18,7 @@ export function ResultStep() {
     dispatch({ type: "RESET_FORM" });
   };
   const handleEdit = () => {
-    dispatch({ type: "GO_TO_STEP", payload: 0 });
+    dispatch({ type: "GO_TO_STEP", payload: 1 });
   };
 
   const propertyTypeLabels: Record<string, string> = {

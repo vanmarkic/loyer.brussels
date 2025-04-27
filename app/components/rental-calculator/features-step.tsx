@@ -63,51 +63,26 @@ export function FeaturesStep() {
               dispatch({
                 type: "UPDATE_FIELD",
                 field,
-                value:
-                  field === "constructedBefore2000"
-                    ? val // Store the string value directly
-                    : val === "true"
-                    ? true
-                    : val === "false"
-                    ? false
-                    : null,
+                value: val === "true" ? true : false,
               })
             }
             className="flex items-center space-x-4"
           >
-            {field === "constructedBefore2000" ? (
-              <>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="true" id={`${field}-true`} />
-                  <Label htmlFor={`${field}-true`} className="text-sm">
-                    Oui
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="false" id={`${field}-false`} />
-                  <Label htmlFor={`${field}-false`} className="text-sm">
-                    Non
-                  </Label>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="true" id={`${field}-true`} />
-                  <Label htmlFor={`${field}-true`} className="text-sm">
-                    Oui
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <RadioGroupItem value="false" id={`${field}-false`} />
-                  <Label htmlFor={`${field}-false`} className="text-sm">
-                    Non
-                  </Label>
-                </div>
-              </>
-            )}
-          </RadioGroup>{" "}
-          {/* Correct closing tag placement */}
+            <>
+              <div className="flex items-center space-x-1">
+                <RadioGroupItem value="true" id={`${field}-true`} />
+                <Label htmlFor={`${field}-true`} className="text-sm">
+                  Oui
+                </Label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <RadioGroupItem value="false" id={`${field}-false`} />
+                <Label htmlFor={`${field}-false`} className="text-sm">
+                  Non
+                </Label>
+              </div>
+            </>
+          </RadioGroup>
         </div>
       </div>
     );

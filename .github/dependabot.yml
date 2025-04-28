@@ -1,0 +1,20 @@
+# .github/dependabot.yml
+# Basic Dependabot configuration for pnpm
+
+version: 2
+updates:
+  # Maintain dependencies for pnpm
+  - package-ecosystem: "npm"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "monthly" # Check for updates weekly
+    # Group updates for @radix-ui packages
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+    # Add reviewers or assignees if desired
+    # reviewers:
+    #   - "your-github-username"
+    # assignees:
+    #   - "your-github-username"

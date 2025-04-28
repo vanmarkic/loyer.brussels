@@ -236,7 +236,7 @@ export const calculateRent = (
     BASE_CONSTANT +
     MULTIPLIER * (formulaConstant + inverseSurfaceTerm) +
     stateAdjustment + // Use the determined state adjustment
-    DIFFICULTY_MULTIPLIER * difficultyIndex; // Note: DIFFICULTY_MULTIPLIER is negative
+    DIFFICULTY_MULTIPLIER * (difficultyIndex ?? 0); // Note: DIFFICULTY_MULTIPLIER is negative
 
   // Calculate the initial base rent
   let calculatedRent = basePricePerSqm * surface;

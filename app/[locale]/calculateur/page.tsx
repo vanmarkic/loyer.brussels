@@ -1,5 +1,5 @@
-import { FormProvider } from "../context/form-context";
-import { RentalCalculator } from "../components/rental-calculator/calculator";
+import { FormProvider } from "../../context/form-context";
+import { RentalCalculator } from "../../components/rental-calculator/calculator";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";

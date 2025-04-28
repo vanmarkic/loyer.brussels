@@ -2,7 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server"; // Import setRequestLocale
 import { locales } from "@/src/i18n/request"; // Updated import path
 import "../globals.css";
 
@@ -25,9 +25,13 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const { locale } = params;
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   // Fetch messages asynchronously
   const messages = await getMessages();
-  const { locale } = params;
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>

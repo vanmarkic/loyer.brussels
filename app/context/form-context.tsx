@@ -129,10 +129,10 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         errorCode: action.payload.code,
       };
     case "CALCULATE_RENT":
-      const { baseRent, medianRent, minRent, maxRent } = calculateRent(state);
+      const { medianRent, minRent, maxRent } = calculateRent(state);
       return {
         ...state,
-        baseRent,
+
         medianRent,
         minRent,
         maxRent,
@@ -154,7 +154,6 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 export const calculateRent = (
   inputData: FormState
 ): {
-  baseRent: number;
   medianRent: number;
   minRent: number;
   maxRent: number;
@@ -173,7 +172,7 @@ export const calculateRent = (
 
   if (surface <= 0) {
     // Avoid division by zero and nonsensical calculations
-    return { baseRent: 0, medianRent: 0, minRent: 0, maxRent: 0 };
+    return { medianRent: 0, minRent: 0, maxRent: 0 };
   }
 
   // Get the appropriate formula constants based on property type and number of bedrooms
@@ -276,19 +275,19 @@ export const calculateRent = (
     calculatedRent += energyClassAdjustment[inputData.energyClass as EnergyClass] ?? 0;
   }
 
+  const indexationRatio = 133.73000000000047 / 112.74000000000039;
+
   // Ensure rent is not negative
-  const finalMedianRent = Math.max(0, calculatedRent);
+  const finalMedianRent = Math.max(0, calculatedRent) * indexationRatio;
 
   // Calculate min and max rent (±10% of the final median rent)
-  const minRent = Math.round(finalMedianRent * 0.9); // Changed from 0.8
-  const maxRent = Math.round(finalMedianRent * 1.1); // Changed from 1.2
 
   // Return rounded values
   return {
-    baseRent: Math.round(finalMedianRent / 10) * 10, // Using finalMedianRent as base for simplicity, adjust if needed
-    medianRent: Math.round(finalMedianRent / 10) * 10,
-    minRent,
-    maxRent,
+    // Using finalMedianRent as base for simplicity, adjust if needed
+    medianRent: parseFloat(finalMedianRent.toFixed(2)),
+    minRent: parseFloat((finalMedianRent * 0.9).toFixed(2)),
+    maxRent: parseFloat((finalMedianRent * 1.1).toFixed(2)),
   };
 };
 

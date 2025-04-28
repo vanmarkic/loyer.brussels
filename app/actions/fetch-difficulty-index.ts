@@ -1,6 +1,6 @@
 "use server";
 
-import { supabaseAdmin, supabase } from "../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 export async function fetchDifficultyIndexAction(
   postalCode: number,
@@ -12,7 +12,7 @@ export async function fetchDifficultyIndexAction(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
     process.env.NEXT_PUBLIC_SERVICE_KEY;
-  console.log("hasSupabaseCredentials", hasSupabaseCredentials);
+
   if (!hasSupabaseCredentials) {
     console.warn("Supabase credentials not configured. Using mock difficulty index.");
     // Return a mock success response with a default difficulty index
@@ -35,9 +35,6 @@ export async function fetchDifficultyIndexAction(
       .ilike("streetname_fr", streetName) // 1. Readability & Best Practice: Use ilike for case-insensitive search
       .eq("house_number", String(streetNumber))
       .limit(1); // 3. Best Practice: Use maybeSingle() for clarity when expecting 0 or 1 result
-
-    console.log("data", data);
-    console.log("error", error);
 
     if (error) {
       console.error("Error fetching difficulty index:", error);

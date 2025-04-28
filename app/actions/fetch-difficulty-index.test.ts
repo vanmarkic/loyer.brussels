@@ -18,7 +18,7 @@ describe("fetchDifficultyIndex integration tests", () => {
     const streetName = "rue kEssels"; // Testing case insensitivity
     const streetNumber = "18"; // Must be a string
 
-    const expectedDifficultyIndex = "1.91343466063764";
+    const expectedDifficultyIndex = 1.91343466063764;
 
     const result = await fetchDifficultyIndexAction(postalCode, streetName, streetNumber);
 

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { searchAddresses, type AddressResult } from "./search-addresses"; // Assuming AddressResult is exported or defined
+import { searchAddresses } from "./search-addresses";
+import type { AddressResult } from "../data/types"; // Import type from new location relative to actions dir
 
 // Ensure environment variables for Supabase are loaded if needed for testing
 // (e.g., via a .env file and dotenv, or Vitest's env setup)

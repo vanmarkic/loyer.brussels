@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl"; // Add this import
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, MapPin, AlertCircle } from "lucide-react";
-import { searchAddresses, type AddressResult } from "@/app/actions/search-addresses";
+import { searchAddresses } from "@/app/actions/search-addresses";
+import type { AddressResult } from "@/app/data/types"; // Import type from new location
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -57,19 +58,27 @@ export function AddressAutocomplete({
       try {
         const response = await searchAddresses(debouncedQuery);
 
-        if (!response.success) {
+        // Handle the response based on the SearchServiceResponse structure
+        if (response.success) {
+          const data = response.data || []; // Default to empty array if data is null
+          setResults(data);
+          setIsOpen(data.length > 0);
+          setError(null); // Clear previous errors on success
+
+          // Set specific messages based on results and query length
+          if (data.length === 0 && debouncedQuery.length >= 3) {
+            if (response.code === "INSUFFICIENT_QUERY") {
+              // Don't show an error, just no results for short query
+            } else {
+              setError(t("error.noResults")); // No results found for a valid query
+            }
+          }
+        } else {
+          // Handle failure case
+          console.error("Search error:", response.error, "Code:", response.code);
           setError(response.error || t("error.searchError"));
           setResults([]);
-        } else {
-          setResults(response.data);
-          setIsOpen(response.data.length > 0);
-          if (response.data.length === 0 && response.code === "INSUFFICIENT_QUERY") {
-            setError(t("error.insufficientQuery"));
-          }
-          // Show a message if no results were found
-          if (response.data.length === 0 && debouncedQuery.length >= 3) {
-            setError(t("error.noResults"));
-          }
+          setIsOpen(false);
         }
       } catch (error: any) {
         console.error("Error fetching addresses:", error);

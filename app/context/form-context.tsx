@@ -334,15 +334,31 @@ export const FormProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return;
       }
 
-      console.log(result);
+      console.log("Difficulty index fetch result:", result);
 
-      dispatch({
-        type: "FETCH_DIFFICULTY_INDEX_SUCCESS",
-        payload: parseFloat(result.data),
-      });
+      // Ensure data is a valid number before dispatching success
+      if (typeof result.data === "number") {
+        dispatch({
+          type: "FETCH_DIFFICULTY_INDEX_SUCCESS",
+          payload: result.data, // Pass the number directly
+        });
 
-      // Calculate rent after fetching the difficulty index
-      dispatch({ type: "CALCULATE_RENT" });
+        // Calculate rent only after successfully fetching the difficulty index
+        dispatch({ type: "CALCULATE_RENT" });
+      } else {
+        // Handle unexpected case where success is true but data is not a number
+        console.error(
+          "Unexpected state: fetchDifficultyIndexAction succeeded but returned invalid data:",
+          result.data
+        );
+        dispatch({
+          type: "FETCH_DIFFICULTY_INDEX_ERROR",
+          payload: {
+            message: "Données d'indice de difficulté invalides reçues.",
+            code: "SYSTEM_ERROR",
+          },
+        });
+      }
     } catch (error: any) {
       dispatch({
         type: "FETCH_DIFFICULTY_INDEX_ERROR",

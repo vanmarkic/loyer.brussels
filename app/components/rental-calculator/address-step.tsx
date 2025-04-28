@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, Loader2, Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AddressAutocomplete } from "./address-autocomplete";
-import type { AddressResult } from "@/app/actions/search-addresses";
+import type { AddressResult } from "@/app/data/types"; // Import type from new location
 
 export function AddressStep() {
   const { state, dispatch, fetchDifficultyIndexAndCalculate, clearError } = useForm();

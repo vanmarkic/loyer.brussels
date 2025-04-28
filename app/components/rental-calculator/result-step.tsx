@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react"; // Added useState, useEffect
+import { useState, useEffect } from "react";
 import { useForm } from "@/app/context/form-context";
-import { useTranslations } from "next-intl"; // Add this import
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input"; // Added Input
-import { Label } from "@/components/ui/label"; // Added Label
-import { supabase } from "@/app/lib/supabase"; // Added supabase client
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+// Removed direct supabase import: import { supabase } from "@/app/lib/supabase";
+import { rentRecordRepository } from "@/app/data/repositories"; // Import the repository
+import type { UserInputs, RentRecordInput, RentRecordUpdate } from "@/app/data/types"; // Import types
 import {
   ArrowRight,
   Download,
@@ -16,7 +18,7 @@ import {
   Calculator,
   CheckCircle,
   XCircle,
-} from "lucide-react"; // Added icons
+} from "lucide-react";
 
 import {
   Tooltip,
@@ -28,16 +30,16 @@ import { handlePDF, propertyTypeLabels } from "@/lib/utils";
 
 export function ResultStep() {
   const { state, dispatch } = useForm();
-  const t = useTranslations("ResultStep"); // Add this hook
-  const tFeatures = useTranslations("FeaturesStep"); // Hook for feature names
-  const tDetails = useTranslations("PropertyDetailsStep"); // Hook for bedroom count max
+  const t = useTranslations("ResultStep");
+  const tFeatures = useTranslations("FeaturesStep");
+  const tDetails = useTranslations("PropertyDetailsStep");
   const [actualRent, setActualRent] = useState<string>("");
-  const [recordId, setRecordId] = useState<number | null>(null); // State for record ID
-  const [isUpdating, setIsUpdating] = useState<boolean>(false); // State for update operation
-  const [updateStatus, setUpdateStatus] = useState<"idle" | "success" | "error">("idle"); // State for update status
-  const [initialInsertError, setInitialInsertError] = useState<string | null>(null); // State for initial insert error
-  const [email, setEmail] = useState<string>(""); // State for email
-  const [phoneNumber, setPhoneNumber] = useState<string>(""); // State for phone number
+  const [recordId, setRecordId] = useState<number | null>(null);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [updateStatus, setUpdateStatus] = useState<"idle" | "success" | "error">("idle");
+  const [initialInsertError, setInitialInsertError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
 
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
@@ -46,90 +48,86 @@ export function ResultStep() {
     dispatch({ type: "GO_TO_STEP", payload: 1 });
   };
 
-  // Generates a dynamic formula string in French based on used constants and variables
+  const handleDownloadPdf = handlePDF(state);
 
-  const handleDownloadPdf = handlePDF(state); // Keep only one declaration
+  // Helper function to get user inputs from state matching UserInputs type
+  const getUserInputs = (): UserInputs => {
+    let propertyStateString: string;
+    switch (state.propertyState) {
+      case 1:
+        propertyStateString = "bad";
+        break; // Mauvais état
+      case 2:
+        propertyStateString = "good";
+        break; // Bon état
+      case 3:
+        propertyStateString = "excellent";
+        break; // Excellent état
+      default:
+        propertyStateString = "good"; // Default to 'good' if null or unexpected
+    }
 
-  // Helper function to get user inputs from state
-  const getUserInputs = () => ({
-    propertyType: state.propertyType,
-    size: state.size,
-    bedrooms: state.bedrooms,
-    bathrooms: state.bathrooms,
-    energyClass: state.energyClass,
-    hasCentralHeating: state.hasCentralHeating,
-    hasThermalRegulation: state.hasThermalRegulation,
-    hasDoubleGlazing: state.hasDoubleGlazing,
-    hasSecondBathroom: state.hasSecondBathroom,
-    hasRecreationalSpaces: state.hasRecreationalSpaces,
-    hasStorageSpaces: state.hasStorageSpaces,
-    streetNumber: state.streetNumber,
-    streetName: state.streetName,
-    postalCode: state.postalCode,
-    difficultyIndex: state.difficultyIndex,
-    // Add other relevant fields from FormState here if needed
-    constructedBefore2000: state.constructedBefore2000,
-    propertyState: state.propertyState,
-    numberOfGarages: state.numberOfGarages,
-  });
+    return {
+      propertyType: state.propertyType || "studio", // Provide default if empty
+      size: state.size || 0,
+      bedrooms: state.bedrooms || 0,
+      bathrooms: state.bathrooms || 1,
+      energyClass: state.energyClass || "G", // Provide default if empty
+      hasCentralHeating: state.hasCentralHeating ?? false, // Default to false if null
+      hasThermalRegulation: state.hasThermalRegulation ?? false,
+      hasDoubleGlazing: state.hasDoubleGlazing ?? false,
+      hasSecondBathroom: state.hasSecondBathroom ?? false,
+      hasRecreationalSpaces: state.hasRecreationalSpaces ?? false,
+      hasStorageSpaces: state.hasStorageSpaces ?? false,
+      streetNumber: state.streetNumber || "",
+      streetName: state.streetName || "",
+      postalCode: state.postalCode || 0,
+      difficultyIndex: state.difficultyIndex, // Can be null
+      constructedBefore2000: state.constructedBefore2000 ?? false,
+      propertyState: propertyStateString, // Assign the mapped string value
+      numberOfGarages: state.numberOfGarages || 0,
+    };
+  };
 
-  // Effect to insert initial record when component mounts and rent is estimated
+  // Effect to insert initial record using the repository
   useEffect(() => {
     const insertInitialRecord = async () => {
-      // Only run if medianRent is available, we don't have an ID yet, and no previous error occurred
       if (state.medianRent && !recordId && !initialInsertError) {
-        // Use medianRent
         const userInputs = getUserInputs();
-        const initialRecord = {
+        const initialRecord: RentRecordInput = {
           user_inputs: userInputs,
-          median_rent: state.medianRent, // Use medianRent
+          median_rent: state.medianRent,
           created_at: new Date().toISOString(),
-          // actual_rent is initially null or omitted
         };
 
         try {
-          console.log("Attempting initial insert:", initialRecord);
-          // Insert and select the id of the new record
-          const { data, error } = await supabase
-            .from("rent_records")
-            .insert([initialRecord])
-            .select("id")
-            .single(); // Use single() to get the object directly
-
-          if (error) {
-            console.error("Supabase insert error:", error);
-            throw error;
-          }
-
-          if (data && data.id) {
-            setRecordId(data.id); // Store the returned ID
-            console.log("Initial record inserted with ID:", data.id);
-            setInitialInsertError(null); // Clear any previous error state on success
-          } else {
-            console.error("Failed to retrieve ID after insert, data:", data);
-            throw new Error("Failed to retrieve ID after insert.");
-          }
+          console.log("Attempting initial insert via repository:", initialRecord);
+          // Use the repository to create the record
+          const newId = await rentRecordRepository.create(initialRecord);
+          setRecordId(newId);
+          console.log("Initial record inserted via repository with ID:", newId);
+          setInitialInsertError(null);
         } catch (error) {
-          console.error("Error inserting initial rent record:", error);
+          console.error("Error inserting initial rent record via repository:", error);
           const errorMessage =
             error instanceof Error
               ? error.message
               : "An unknown error occurred during initial insert.";
           setInitialInsertError(errorMessage);
-          setRecordId(null); // Ensure recordId is null on error
+          setRecordId(null);
         }
       }
     };
 
     insertInitialRecord();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.medianRent, recordId, initialInsertError]); // Dependencies: Use medianRent
+  }, [state.medianRent, recordId, initialInsertError]); // Dependencies remain similar
 
-  // Function to handle the UPDATE of actual rent
+  // Function to handle the UPDATE using the repository
   const handleActualRentUpdate = async () => {
     if (!recordId) {
       console.error("Cannot update rent, initial record ID not found or insert failed.");
-      setUpdateStatus("error"); // Show error if no record ID
+      setUpdateStatus("error");
       return;
     }
 
@@ -145,7 +143,7 @@ export function ResultStep() {
     }
 
     try {
-      const updateData: { actual_rent: number; email?: string; phone_number?: string } = {
+      const updateData: RentRecordUpdate = {
         actual_rent: rentValue,
       };
       if (email.trim()) {
@@ -155,29 +153,26 @@ export function ResultStep() {
         updateData.phone_number = phoneNumber.trim();
       }
 
-      console.log(`Attempting to update record ID: ${recordId} with data:`, updateData);
-      const { error } = await supabase
-        .from("rent_records")
-        .update(updateData) // Update with actual_rent, email, and phone_number
-        .eq("id", recordId); // Match the specific record ID
-
-      if (error) {
-        console.error("Supabase update error:", error);
-        throw error;
-      }
-      console.log(`Record ID: ${recordId} updated successfully.`);
+      console.log(
+        `Attempting to update record ID: ${recordId} via repository with data:`,
+        updateData
+      );
+      // Use the repository to update the record
+      await rentRecordRepository.update(recordId, updateData);
+      console.log(`Record ID: ${recordId} updated successfully via repository.`);
       setUpdateStatus("success");
     } catch (error) {
-      console.error("Error updating rent record:", error);
+      console.error("Error updating rent record via repository:", error);
       setUpdateStatus("error");
     } finally {
       setIsUpdating(false);
     }
   };
 
+  // --- JSX remains largely the same ---
   return (
     <div className="space-y-6">
-      {initialInsertError && ( // Display error if initial insert failed
+      {initialInsertError && (
         <div
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
           role="alert"
@@ -199,7 +194,6 @@ export function ResultStep() {
           <div className="text-center">
             <p className="text-lg font-medium">{t("estimatedRentLabel")}</p>
             <p className="text-5xl font-bold mt-2">{state.medianRent ?? "..."} €</p>
-            {/* Use medianRent */}
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm opacity-80">
                 {t("priceRangeLabel")}: {state.minRent ?? "N/A"} € -{" "}
@@ -221,6 +215,7 @@ export function ResultStep() {
           </div>
         </CardContent>
       </Card>
+
       {/* Actual Rent Input Section */}
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
         <h3 className="font-medium">{t("actualRentSection.title")}</h3>
@@ -240,7 +235,7 @@ export function ResultStep() {
               updateStatus === "success" ||
               !recordId ||
               !!initialInsertError
-            } // Disable if updating, success, no recordId, or initial error
+            }
             min="0"
             step="1"
           />
@@ -280,28 +275,28 @@ export function ResultStep() {
           />
         </div>
         <Button
-          onClick={handleActualRentUpdate} // Use the update handler
+          onClick={handleActualRentUpdate}
           disabled={
             isUpdating ||
             updateStatus === "success" ||
             actualRent.trim() === "" ||
-            !recordId || // Also disable if recordId is missing
-            !!initialInsertError // Or if initial insert failed
+            !recordId ||
+            !!initialInsertError
           }
           className="w-full"
         >
-          {isUpdating // Use isUpdating state
+          {isUpdating
             ? t("actualRentSection.updatingButton")
-            : updateStatus === "success" // Use updateStatus state
+            : updateStatus === "success"
             ? t("actualRentSection.updatedButton")
             : t("actualRentSection.confirmButton")}
         </Button>
-        {updateStatus === "success" && ( // Use updateStatus state
+        {updateStatus === "success" && (
           <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
             <CheckCircle className="h-4 w-4" /> {t("actualRentSection.successMessage")}
           </p>
         )}
-        {updateStatus === "error" && ( // Use updateStatus state
+        {updateStatus === "error" && (
           <p className="text-sm text-red-600 flex items-center gap-1 mt-2">
             <XCircle className="h-4 w-4" /> {t("actualRentSection.errorMessage")}
           </p>
@@ -309,9 +304,9 @@ export function ResultStep() {
       </div>
       {/* End Actual Rent Input Section */}
 
+      {/* Summary Section */}
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
         <h3 className="font-medium">{t("summary.title")}</h3>
-
         <div className="space-y-3">
           <div>
             <h4 className="text-sm font-medium text-gray-500">
@@ -322,33 +317,24 @@ export function ResultStep() {
               {t("summary.city")}
             </p>
           </div>
-
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="text-muted-foreground">{t("summary.propertyTypeLabel")}:</div>
             <div className="font-medium">
-              {propertyTypeLabels[state.propertyType] || "-"}
+              {propertyTypeLabels[state.propertyType || "studio"] || "-"}{" "}
+              {/* Handle empty string */}
             </div>
-
-            <div className="text-muted-foreground">{t("summary.addressLabel")}:</div>
-            <div className="font-medium">
-              {state.streetNumber} {state.streetName}, {state.postalCode}{" "}
-              {t("summary.city")}
-            </div>
-
+            {/* Removed duplicate address display */}
             <div className="text-muted-foreground">{t("summary.sizeLabel")}:</div>
             <div className="font-medium">{state.size} m²</div>
-
             <div className="text-muted-foreground">{t("summary.bedroomsLabel")}:</div>
             <div className="font-medium">
               {state.bedrooms === 4 ? tDetails("bedroomsCountMax") : state.bedrooms}
             </div>
-
             <div className="text-muted-foreground">{t("summary.bathroomsLabel")}:</div>
             <div className="font-medium">{state.bathrooms}</div>
-
             <div className="text-muted-foreground">{t("summary.energyClassLabel")}:</div>
-            <div className="font-medium">{state.energyClass}</div>
-
+            <div className="font-medium">{state.energyClass || "-"}</div>{" "}
+            {/* Handle empty string */}
             <div className="text-muted-foreground">{t("summary.featuresLabel")}:</div>
             <div className="font-medium">
               {[
@@ -370,6 +356,7 @@ export function ResultStep() {
         </div>
       </div>
 
+      {/* Calculation Method Section */}
       <div className="bg-blue-50 p-4 rounded-lg text-sm">
         <div className="flex items-start gap-2">
           <Calculator className="h-5 w-5 text-blue-700 mt-0.5 flex-shrink-0" />
@@ -380,12 +367,14 @@ export function ResultStep() {
         </div>
       </div>
 
+      {/* Important Info Section */}
       <div className="bg-amber-50 p-4 rounded-lg text-sm">
         <p className="font-medium text-amber-800">{t("importantInfo.title")}</p>
         <p className="mt-1 text-amber-700">{t("importantInfo.description1")}</p>
         <p className="mt-2 text-amber-700">{t("importantInfo.description2")}</p>
       </div>
 
+      {/* Action Buttons */}
       <div className="flex flex-col gap-3">
         <div className="flex gap-3">
           <Button variant="outline" className="flex-1 gap-2" onClick={handleDownloadPdf}>

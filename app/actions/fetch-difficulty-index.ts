@@ -1,93 +1,39 @@
-import { supabase } from "../lib/supabase";
+"use server"; // Mark as server action
 
+import { addressRepository } from "@/app/data/repositories"; // Import the repository instance
+import { SearchServiceResponse } from "@/app/data/types"; // Import shared types
+
+/**
+ * Server action to fetch the difficulty index for a specific address
+ * using the configured address repository.
+ *
+ * @param postalCode - The postal code.
+ * @param streetName - The name of the street.
+ * @param streetNumber - The house number.
+ * @returns A promise resolving to a SearchServiceResponse containing the difficulty index (number) or an error.
+ */
 export async function fetchDifficultyIndexAction(
   postalCode: number,
   streetName: string,
   streetNumber: string
-) {
-  // Check if Supabase environment variables are available
-  const hasSupabaseCredentials =
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-    process.env.NEXT_PUBLIC_SERVICE_KEY;
-
-  if (!hasSupabaseCredentials) {
-    console.warn("Supabase credentials not configured. Using mock difficulty index.");
-    // Return a mock success response with a default difficulty index
-    return {
-      success: true,
-      data: 0.5, // Default difficulty index
-      error: null,
-      code: "SUCCESS",
-    };
-  }
+): Promise<SearchServiceResponse<number>> {
+  // Basic validation could be added here if needed (e.g., check postal code range)
 
   try {
-    // Query the addresses table to find the matching address
-
-    // Query the addresses table for a case-insensitive street name match
-    const { data, error } = await supabase
-      .from("addresses")
-      .select("indice_synth_difficulte") // 2. Performance: Select only the required column
-      .eq("postcode", postalCode)
-      .ilike("streetname_fr", streetName) // 1. Readability & Best Practice: Use ilike for case-insensitive search
-      .eq("house_number", String(streetNumber))
-      .limit(1); // 3. Best Practice: Use maybeSingle() for clarity when expecting 0 or 1 result
-
-    if (error) {
-      console.error("Error fetching difficulty index:", error);
-
-      // Return specific error messages based on the error code
-      if (error.code === "PGRST116") {
-        return {
-          success: false,
-          error: `Adresse non trouvée: ${streetNumber} ${streetName}, ${postalCode}. Veuillez vérifier l'adresse ou essayer une autre adresse.`,
-          data: null,
-          code: "NOT_FOUND",
-        };
-      }
-
-      if (error.code === "PGRST310") {
-        return {
-          success: false,
-          error:
-            "Plusieurs adresses correspondent à votre recherche. Veuillez préciser davantage.",
-          data: null,
-          code: "MULTIPLE_RESULTS",
-        };
-      }
-
-      return {
-        success: false,
-        error: `Erreur de base de données: ${error.message || "Erreur inconnue"}`,
-        data: null,
-        code: "DATABASE_ERROR",
-      };
-    }
-
-    // Check if data is null or an empty array (no match found)
-    if (!data || data.length === 0) {
-      return {
-        success: false,
-        error: `Adresse non trouvée: ${streetNumber} ${streetName}, ${postalCode}. Veuillez vérifier l'adresse.`,
-        data: null,
-        code: "NOT_FOUND",
-      };
-    }
-
-    // Access the selected column directly from the data object
-    return {
-      success: true,
-      data: data[0].indice_synth_difficulte,
-      error: null,
-      code: "SUCCESS",
-    };
+    // Delegate the actual fetching logic to the repository
+    const result = await addressRepository.fetchDifficultyIndex(
+      postalCode,
+      streetName,
+      streetNumber
+    );
+    return result;
   } catch (error: any) {
-    console.error("Error in fetchDifficultyIndexAction:", error);
+    // Catch unexpected errors during repository interaction
+    console.error("Error in fetchDifficultyIndexAction calling repository:", error);
     return {
       success: false,
-      error: `Erreur système: ${error.message || "Une erreur inattendue s'est produite"}`,
       data: null,
+      error: `Erreur système inattendue: ${error.message || "Erreur inconnue"}`,
       code: "SYSTEM_ERROR",
     };
   }

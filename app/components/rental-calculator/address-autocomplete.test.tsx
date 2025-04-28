@@ -2,7 +2,8 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AddressAutocomplete } from "./address-autocomplete";
-import { searchAddresses, type AddressResult } from "@/app/actions/search-addresses";
+import { searchAddresses } from "@/app/actions/search-addresses";
+import type { AddressResult } from "@/app/data/types"; // Import type from new location
 
 // Mock the server action
 vi.mock("@/app/actions/search-addresses", () => ({

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Menu, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl"; // Import useTranslations from next-intl
+import { useLocale, useTranslations } from "next-intl"; // Import useTranslations from next-intl
 // No longer need useEffect or supabaseAdmin here unless used elsewhere
 import LanguageSwitcher from "@/app/components/language-switcher"; // Keep LanguageSwitcher import
 
@@ -13,6 +13,7 @@ export default function Home() {
   // If you structure messages/xx.json with namespaces like { "common": { ... } },
   // you would use const t = useTranslations('common');
   const t = useTranslations();
+  const currentLocale = useLocale();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -82,7 +83,7 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 {/* Note: Links might need locale prefixing depending on middleware config */}
-                <Link href="/calculateur">
+                <Link href={currentLocale + "/calculateur"}>
                   <Button className="bg-[#e05c6d] hover:bg-[#d04c5d] rounded-full px-8">
                     {t("start_button")}
                   </Button>

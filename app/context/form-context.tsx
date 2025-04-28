@@ -20,24 +20,7 @@ export interface FormState {
   size: number;
   bedrooms: number;
   bathrooms: number;
-  separateToilet: boolean;
-  livingRoomSize: number | null;
-  kitchenType: "open" | "closed" | "american" | "none";
-  kitchenEquipped: boolean;
   // Additional features
-  floor: number;
-  totalFloors: number;
-  hasElevator: boolean;
-  hasParking: boolean;
-  hasGarage: boolean;
-  hasBalcony: boolean;
-  balconySize: number | null;
-  hasTerrace: boolean;
-  terraceSize: number | null;
-  hasGarden: boolean;
-  gardenSize: number | null;
-  hasBasement: boolean;
-  hasAttic: boolean;
   numberOfGarages: number;
   // Energy and heating
   energyClass: EnergyClass | "";
@@ -87,24 +70,6 @@ const initialState: FormState = {
   size: 0,
   bedrooms: 1,
   bathrooms: 1,
-  separateToilet: false,
-  livingRoomSize: null,
-  kitchenType: "none",
-  kitchenEquipped: false,
-  // Additional features
-  floor: 0,
-  totalFloors: 0,
-  hasElevator: false,
-  hasParking: false,
-  hasGarage: false,
-  hasBalcony: false,
-  balconySize: null,
-  hasTerrace: false,
-  terraceSize: null,
-  hasGarden: false,
-  gardenSize: null,
-  hasBasement: false,
-  hasAttic: false,
   numberOfGarages: 0,
   // Energy and heating
   energyClass: "",

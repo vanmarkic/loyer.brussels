@@ -1,4 +1,4 @@
-"use server";
+"use client";
 
 import { supabase, supabaseAdmin } from "../lib/supabase";
 

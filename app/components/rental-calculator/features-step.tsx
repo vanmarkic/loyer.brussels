@@ -1,13 +1,15 @@
 "use client";
 
 import { useForm } from "@/app/context/form-context";
+import { useTranslations } from "next-intl"; // Add this import
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; // <-- Add Input import
+import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
 export function FeaturesStep() {
   const { state, dispatch } = useForm();
+  const t = useTranslations("FeaturesStep"); // Add this hook
 
   const handleContinue = () => {
     // Check if all options have been selected
@@ -72,13 +74,13 @@ export function FeaturesStep() {
               <div className="flex items-center space-x-1">
                 <RadioGroupItem value="true" id={`${field}-true`} />
                 <Label htmlFor={`${field}-true`} className="text-sm">
-                  Oui
+                  {t("yes")}
                 </Label>
               </div>
               <div className="flex items-center space-x-1">
                 <RadioGroupItem value="false" id={`${field}-false`} />
                 <Label htmlFor={`${field}-false`} className="text-sm">
-                  Non
+                  {t("no")}
                 </Label>
               </div>
             </>
@@ -91,35 +93,30 @@ export function FeaturesStep() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">Caractéristiques supplémentaires</h2>
-        <p className="text-muted-foreground mt-2">
-          Sélectionnez les équipements disponibles
-        </p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       <div className="border rounded-md overflow-hidden">
         <div className="grid grid-cols-[2fr,1fr,1fr] bg-gray-50 py-2 px-3 border-b border-gray-200">
-          <div className="font-semibold">Option</div>
-          <div className="text-center font-semibold">Oui</div>
-          <div className="text-center font-semibold">Non</div>
+          <div className="font-semibold">{t("tableHeaders.option")}</div>
+          <div className="text-center font-semibold">{t("tableHeaders.yes")}</div>
+          <div className="text-center font-semibold">{t("tableHeaders.no")}</div>
         </div>
 
         <div className="px-3">
-          {createRadioOption("hasCentralHeating", "Chauffage central")}
-          {createRadioOption("hasThermalRegulation", "Régulation thermique")}
-          {createRadioOption("hasDoubleGlazing", "Double-vitrages")}
-          {createRadioOption("hasSecondBathroom", "2ème salle de bain")}
-          {createRadioOption("hasRecreationalSpaces", "Espaces récréatifs")}
-          {createRadioOption("hasStorageSpaces", "Espaces de rangement")}
-          {createRadioOption(
-            "constructedBefore2000",
-            "Année de construction avant 2000 ?"
-          )}
+          {createRadioOption("hasCentralHeating", t("options.centralHeating"))}
+          {createRadioOption("hasThermalRegulation", t("options.thermalRegulation"))}
+          {createRadioOption("hasDoubleGlazing", t("options.doubleGlazing"))}
+          {createRadioOption("hasSecondBathroom", t("options.secondBathroom"))}
+          {createRadioOption("hasRecreationalSpaces", t("options.recreationalSpaces"))}
+          {createRadioOption("hasStorageSpaces", t("options.storageSpaces"))}
+          {createRadioOption("constructedBefore2000", t("options.constructedBefore2000"))}
 
           {/* Add Garage Input Section */}
           <div className="grid grid-cols-[2fr,2fr] items-center py-3 border-t border-gray-100">
             <Label htmlFor="numberOfGarages" className="font-medium">
-              Nombre de garages
+              {t("garageLabel")}
             </Label>
             <Input
               id="numberOfGarages"
@@ -141,7 +138,7 @@ export function FeaturesStep() {
 
       <div className="flex gap-3">
         <Button onClick={handleBack} variant="outline" className="flex-1">
-          Retour
+          {t("backButton")}
         </Button>
         <Button
           onClick={handleContinue}
@@ -156,7 +153,7 @@ export function FeaturesStep() {
           }
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
-          Continuer
+          {t("continueButton")}
         </Button>
       </div>
     </div>

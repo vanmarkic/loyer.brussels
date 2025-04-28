@@ -1,13 +1,160 @@
-  {
-    "greeting": "Hallo!",
-    "main_title": "HOEVEEL KOST HET OM EEN WONING TE HUREN IN BRUSSEL?",
-    "start_button": "Start",
-    "test_subtitle": "Doe de test!",
-    "test_description": "Of u nu een huidige of toekomstige huurder of verhuurder bent, deze site stelt u in staat de indicatieve referentiehuurprijs te kennen voor de woning die u huurt of van plan bent te huren, rekening houdend met de locatie en de belangrijkste kenmerken.",
-    "info_box_text": "De website van het huurprijzenrooster is aangepast om de berekening van de referentiehuurprijs transparanter te maken.",
-    "learn_more_button": "Meer weten",
-    "share_text": "Deel de site",
-    "about_ref_rents_title": "OVER REFERENTIEHUURPRIJZEN",
-    "legal_basis_title": "WETTELIJKE BASIS",
-    "faq_title": "VEELGESTELDE VRAGEN"
+{
+  "greeting": "Hallo!",
+  "main_title": "HOEVEEL KOST HET OM EEN WONING TE HUREN IN BRUSSEL?",
+  "start_button": "Start",
+  "test_subtitle": "Doe de test!",
+  "test_description": "Of u nu een huidige of toekomstige huurder of verhuurder bent, deze site stelt u in staat de indicatieve referentiehuurprijs te kennen voor de woning die u huurt of van plan bent te huren, rekening houdend met de locatie en de belangrijkste kenmerken.",
+  "info_box_text": "De website van het huurprijzenrooster is aangepast om de berekening van de referentiehuurprijs transparanter te maken.",
+  "learn_more_button": "Meer weten",
+  "share_text": "Deel de site",
+  "about_ref_rents_title": "OVER REFERENTIEHUURPRIJZEN",
+  "legal_basis_title": "WETTELIJKE BASIS",
+  "faq_title": "VEELGESTELDE VRAGEN",
+  "CalculatorPage": {
+    "regionalService": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL - BRUSSEL HUISVESTING",
+    "agencyName": "BRUSSEL HUISVESTING",
+    "regionalServiceShort": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL",
+    "backButton": "Terug",
+    "title": "Indicatieve huurcalculator",
+    "description": "Schat de referentiehuurprijs voor een woning in Brussel op basis van de kenmerken",
+    "footer": "© 2023 Gewestelijke Overheidsdienst Brussel - Brussel Huisvesting. Alle rechten voorbehouden."
+  },
+  "RentalCalculator": {
+    "stepProgress": "Stap {currentStep} van {totalSteps}"
+  },
+  "PropertyTypeStep": {
+    "title": "Welk type woning wilt u huren?",
+    "description": "Selecteer het type woning",
+    "types": {
+      "apartment": "Appartement",
+      "house": "Huis",
+      "studio": "Studio"
+    },
+    "continueButton": "Doorgaan"
+  },
+  "PropertyDetailsStep": {
+    "title": "Kenmerken van de woning",
+    "description": "Geef de details van uw woning op",
+    "sizeLabel": "Totale bewoonbare oppervlakte (m²)",
+    "bedroomsLabel": "Aantal slaapkamers",
+    "bedroomsCountMax": "4 en meer",
+    "backButton": "Terug",
+    "continueButton": "Doorgaan"
+  },
+  "FeaturesStep": {
+    "title": "Extra kenmerken",
+    "description": "Selecteer de beschikbare voorzieningen",
+    "yes": "Ja",
+    "no": "Nee",
+    "tableHeaders": {
+      "option": "Optie",
+      "yes": "Ja",
+      "no": "Nee"
+    },
+    "options": {
+      "centralHeating": "Centrale verwarming",
+      "thermalRegulation": "Thermische regeling",
+      "doubleGlazing": "Dubbele beglazing",
+      "secondBathroom": "2e badkamer",
+      "recreationalSpaces": "Recreatieruimtes",
+      "storageSpaces": "Opbergruimtes",
+      "constructedBefore2000": "Bouwjaar voor 2000?"
+    },
+    "garageLabel": "Aantal garages",
+    "backButton": "Terug",
+    "continueButton": "Doorgaan"
+  },
+  "EnergyStep": {
+    "title": "Energie en verwarming",
+    "description": "Informatie over energieprestaties",
+    "error": {
+      "databaseErrorTitle": "Databasefout",
+      "retryButton": "Opnieuw proberen"
+    },
+    "demoModeAlert": "Demomodus: Adresgegevens zijn niet beschikbaar. Een standaard moeilijkheidsindex wordt gebruikt voor de berekening.",
+    "energyClassLabel": "Energieklasse (EPB)",
+    "energyClassPlaceholder": "Selecteer een energieklasse",
+    "backButton": "Terug",
+    "continueButton": "Doorgaan"
+  },
+  "AddressStep": {
+    "title": "Adres van de woning",
+    "description": "Geef het volledige adres van de woning in Brussel op",
+    "demoModeAlert": "Demomodus: Adresgegevens zijn niet beschikbaar. Een standaard moeilijkheidsindex wordt gebruikt voor de berekening.",
+    "autocompleteLabel": "Zoek een adres",
+    "autocompletePlaceholder": "Bv: 1000 Wetstraat 16",
+    "manualEntryInstruction": "Of voer het adres handmatig in:",
+    "postalCodeLabel": "Postcode",
+    "postalCodePlaceholder": "1000",
+    "streetNameLabel": "Straatnaam",
+    "streetNamePlaceholder": "Wetstraat",
+    "streetNumberLabel": "Huisnummer",
+    "streetNumberPlaceholder": "16",
+    "backButton": "Terug",
+    "calculatingButton": "Berekenen...",
+    "calculateButton": "Huurprijs berekenen"
+  },
+  "ResultStep": {
+    "initialInsertError": {
+      "title": "Fout:",
+      "message": "Kan de initiële schatting niet opslaan. Probeer het later opnieuw. ({error})"
+    },
+    "title": "Resultaat van de schatting",
+    "description": "Hier is de indicatieve huurprijs voor deze woning",
+    "estimatedRentLabel": "Geschatte maandelijkse huurprijs",
+    "priceRangeLabel": "Prijsvork",
+    "priceRangeTooltip": "Volgens de Brusselse wetgeving kan de referentiehuurprijs ±20% variëren",
+    "actualRentSection": {
+      "title": "Bevestig uw huidige huurprijs",
+      "description": "Help ons onze schattingen te verbeteren en contact met u op te nemen indien nodig door uw huidige huurprijs en contactgegevens te delen (optioneel).",
+      "rentLabel": "Uw huidige maandelijkse huurprijs (€) *",
+      "rentPlaceholder": "Bv: 950",
+      "emailLabel": "Uw e-mailadres (Optioneel)",
+      "emailPlaceholder": "Bv: voorbeeld@domein.com",
+      "phoneLabel": "Uw telefoonnummer (Optioneel)",
+      "phonePlaceholder": "Bv: 04XX XX XX XX",
+      "updatingButton": "Bijwerken...",
+      "updatedButton": "Huurprijs bijgewerkt!",
+      "confirmButton": "Bevestig en sla mijn huurprijs op",
+      "successMessage": "Bedankt voor uw bijdrage!",
+      "errorMessage": "Fout bij het bijwerken. Controleer het bedrag en probeer opnieuw."
+    },
+    "summary": {
+      "title": "Samenvatting van de woning",
+      "addressLabel": "Adres",
+      "city": "Brussel",
+      "propertyTypeLabel": "Type woning",
+      "sizeLabel": "Oppervlakte",
+      "bedroomsLabel": "Slaapkamers",
+      "bathroomsLabel": "Badkamers",
+      "energyClassLabel": "Energieklasse",
+      "featuresLabel": "Voorzieningen",
+      "featuresNone": "Geen"
+    },
+    "calculationMethod": {
+      "title": "Berekeningsmethode",
+      "description": "De referentiehuurprijs wordt berekend volgens de officiële formule van het Brussels Hoofdstedelijk Gewest, die rekening houdt met het type woning, de oppervlakte, het aantal slaapkamers, de staat van de woning en de moeilijkheidsindex van de wijk."
+    },
+    "importantInfo": {
+      "title": "Belangrijke informatie",
+      "description1": "De referentiehuurprijs is niet bindend. Buiten specifieke regelgevende kaders wordt de huurprijs vrij bepaald door de verhuurder op de private markt.",
+      "description2": "De referentiehuurprijs moet echter verplicht vermeld worden naast de werkelijke huurprijs in huurovereenkomsten voor woningen in het Brussels Hoofdstedelijk Gewest."
+    },
+    "downloadPdfButton": "Download PDF",
+    "shareButton": "Delen",
+    "modifyButton": "Schatting wijzigen",
+    "newEstimationButton": "Nieuwe schatting"
+  },
+  "AddressAutocomplete": {
+    "error": {
+      "searchError": "Fout bij het zoeken naar adressen",
+      "insufficientQuery": "Voer ten minste de straatnaam in",
+      "noResults": "Geen adressen gevonden. Probeer een andere zoekopdracht.",
+      "genericError": "Fout: {message}",
+      "unknownError": "Er is een fout opgetreden"
+    },
+    "manualEntryButton": "Handmatig invoeren",
+    "demoModeAlert": "Demomodus: Gebruik de optie \"Handmatig invoeren\" om een adres in te voeren.",
+    "city": "Brussel"
   }
+}

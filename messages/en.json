@@ -9,5 +9,152 @@
   "share_text": "Share the site",
   "about_ref_rents_title": "ABOUT REFERENCE RENTS",
   "legal_basis_title": "LEGAL BASIS",
-  "faq_title": "FAQ"
+  "faq_title": "FAQ",
+  "CalculatorPage": {
+    "regionalService": "BRUSSELS REGIONAL PUBLIC SERVICE - BRUSSELS HOUSING",
+    "agencyName": "BRUSSELS HOUSING",
+    "regionalServiceShort": "BRUSSELS REGIONAL PUBLIC SERVICE",
+    "backButton": "Back",
+    "title": "Indicative Rent Calculator",
+    "description": "Estimate the reference rent for a property in Brussels based on its characteristics",
+    "footer": "© 2023 Brussels Regional Public Service - Brussels Housing. All rights reserved."
+  },
+  "RentalCalculator": {
+    "stepProgress": "Step {currentStep} of {totalSteps}"
+  },
+  "PropertyTypeStep": {
+    "title": "What type of property do you want to rent?",
+    "description": "Select the property type",
+    "types": {
+      "apartment": "Apartment",
+      "house": "House",
+      "studio": "Studio"
+    },
+    "continueButton": "Continue"
+  },
+  "PropertyDetailsStep": {
+    "title": "Property Characteristics",
+    "description": "Indicate the details of your property",
+    "sizeLabel": "Total living area (m²)",
+    "bedroomsLabel": "Number of bedrooms",
+    "bedroomsCountMax": "4 and more",
+    "backButton": "Back",
+    "continueButton": "Continue"
+  },
+  "FeaturesStep": {
+    "title": "Additional Features",
+    "description": "Select the available amenities",
+    "yes": "Yes",
+    "no": "No",
+    "tableHeaders": {
+      "option": "Option",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "options": {
+      "centralHeating": "Central heating",
+      "thermalRegulation": "Thermal regulation",
+      "doubleGlazing": "Double glazing",
+      "secondBathroom": "2nd bathroom",
+      "recreationalSpaces": "Recreational spaces",
+      "storageSpaces": "Storage spaces",
+      "constructedBefore2000": "Built before 2000?"
+    },
+    "garageLabel": "Number of garages",
+    "backButton": "Back",
+    "continueButton": "Continue"
+  },
+  "EnergyStep": {
+    "title": "Energy and Heating",
+    "description": "Information on energy performance",
+    "error": {
+      "databaseErrorTitle": "Database Error",
+      "retryButton": "Retry"
+    },
+    "demoModeAlert": "Demo mode: Address data is not available. A default difficulty index will be used for the calculation.",
+    "energyClassLabel": "Energy class (PEB)",
+    "energyClassPlaceholder": "Select an energy class",
+    "backButton": "Back",
+    "continueButton": "Continue"
+  },
+  "AddressStep": {
+    "title": "Property Address",
+    "description": "Enter the full address of the property in Brussels",
+    "demoModeAlert": "Demo mode: Address data is not available. A default difficulty index will be used for the calculation.",
+    "autocompleteLabel": "Search for an address",
+    "autocompletePlaceholder": "Ex: 1000 Rue de la Loi 16",
+    "manualEntryInstruction": "Or enter the address manually:",
+    "postalCodeLabel": "Postal Code",
+    "postalCodePlaceholder": "1000",
+    "streetNameLabel": "Street Name",
+    "streetNamePlaceholder": "Rue de la Loi",
+    "streetNumberLabel": "Number",
+    "streetNumberPlaceholder": "16",
+    "backButton": "Back",
+    "calculatingButton": "Calculating...",
+    "calculateButton": "Calculate Rent"
+  },
+  "ResultStep": {
+    "initialInsertError": {
+      "title": "Error:",
+      "message": " Could not save the initial estimate. Please try again later. ({error})"
+    },
+    "title": "Estimation Result",
+    "description": "Here is the indicative rent for this property",
+    "estimatedRentLabel": "Estimated monthly rent",
+    "priceRangeLabel": "Price range",
+    "priceRangeTooltip": "According to Brussels legislation, the reference rent can vary by ±20%",
+    "actualRentSection": {
+      "title": "Confirm your current rent",
+      "description": "Help us improve our estimates and contact you if needed by sharing your current rent and contact details (optional).",
+      "rentLabel": "Your current monthly rent (€) *",
+      "rentPlaceholder": "Ex: 950",
+      "emailLabel": "Your email address (Optional)",
+      "emailPlaceholder": "Ex: example@domain.com",
+      "phoneLabel": "Your phone number (Optional)",
+      "phonePlaceholder": "Ex: 04XX XX XX XX",
+      "updatingButton": "Updating...",
+      "updatedButton": "Rent updated!",
+      "confirmButton": "Confirm and save my rent",
+      "successMessage": "Thank you for your contribution!",
+      "errorMessage": "Error during update. Please check the amount and try again."
+    },
+    "summary": {
+      "title": "Property Summary",
+      "addressLabel": "Address",
+      "city": "Brussels",
+      "propertyTypeLabel": "Property type",
+      "sizeLabel": "Surface",
+      "bedroomsLabel": "Bedrooms",
+      "bathroomsLabel": "Bathrooms",
+      "energyClassLabel": "Energy class",
+      "featuresLabel": "Features",
+      "featuresNone": "None"
+    },
+    "calculationMethod": {
+      "title": "Calculation Method",
+      "description": "The reference rent is calculated according to the official formula of the Brussels-Capital Region, which takes into account the type of property, its surface area, the number of bedrooms, the condition of the property, and the neighborhood difficulty index."
+    },
+    "importantInfo": {
+      "title": "Important Information",
+      "description1": "The reference rent is not binding. Outside of specific regulatory frameworks, the rent amount is freely determined by the landlord on the private market.",
+      "description2": "However, the reference rent must be mentioned in addition to the actual rent in residential leases in the Brussels-Capital Region."
+    },
+    "downloadPdfButton": "Download PDF",
+    "shareButton": "Share",
+    "modifyButton": "Modify estimation",
+    "newEstimationButton": "New estimation"
+  },
+  "AddressAutocomplete": {
+    "error": {
+      "searchError": "Error searching for addresses",
+      "insufficientQuery": "Please enter at least the street name",
+      "noResults": "No address found. Please try another search.",
+      "genericError": "Error: {message}",
+      "unknownError": "An unknown error occurred"
+    },
+    "manualEntryButton": "Enter manually",
+    "demoModeAlert": "Demo mode: Use the 'Enter manually' option to enter an address.",
+    "city": "Brussels"
+  }
 }

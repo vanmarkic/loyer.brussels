@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"; // Added useState, useEffect
 import { useForm } from "@/app/context/form-context";
+import { useTranslations } from "next-intl"; // Add this import
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input"; // Added Input
@@ -27,6 +28,9 @@ import { handlePDF, propertyTypeLabels } from "@/lib/utils";
 
 export function ResultStep() {
   const { state, dispatch } = useForm();
+  const t = useTranslations("ResultStep"); // Add this hook
+  const tFeatures = useTranslations("FeaturesStep"); // Hook for feature names
+  const tDetails = useTranslations("PropertyDetailsStep"); // Hook for bedroom count max
   const [actualRent, setActualRent] = useState<string>("");
   const [recordId, setRecordId] = useState<number | null>(null); // State for record ID
   const [isUpdating, setIsUpdating] = useState<boolean>(false); // State for update operation
@@ -178,30 +182,28 @@ export function ResultStep() {
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
           role="alert"
         >
-          <strong className="font-bold">Erreur:</strong>
+          <strong className="font-bold">{t("initialInsertError.title")}</strong>
           <span className="block sm:inline">
             {" "}
-            Impossible d'enregistrer l'estimation initiale. Veuillez réessayer plus tard.
-            ({initialInsertError})
+            {t("initialInsertError.message", { error: initialInsertError })}
           </span>
         </div>
       )}
       <div className="text-center">
-        <h2 className="text-2xl font-bold">Résultat de l'estimation</h2>
-        <p className="text-muted-foreground mt-2">
-          Voici le loyer indicatif pour ce bien
-        </p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       <Card className="bg-gradient-to-r from-[#f18240] to-[#e05c6d] text-white">
         <CardContent className="p-6">
           <div className="text-center">
-            <p className="text-lg font-medium">Loyer mensuel estimé</p>
+            <p className="text-lg font-medium">{t("estimatedRentLabel")}</p>
             <p className="text-5xl font-bold mt-2">{state.medianRent ?? "..."} €</p>
             {/* Use medianRent */}
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm opacity-80">
-                Fourchette de prix: {state.minRent ?? "N/A"} € - {state.maxRent ?? "N/A"}€
+                {t("priceRangeLabel")}: {state.minRent ?? "N/A"} € -{" "}
+                {state.maxRent ?? "N/A"}€
               </p>
               <TooltipProvider>
                 <Tooltip>
@@ -211,10 +213,7 @@ export function ResultStep() {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>
-                      Selon la législation bruxelloise, le loyer de référence peut varier
-                      de ±20%
-                    </p>
+                    <p>{t("priceRangeTooltip")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -224,17 +223,16 @@ export function ResultStep() {
       </Card>
       {/* Actual Rent Input Section */}
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-medium">Confirmer votre loyer actuel</h3>
+        <h3 className="font-medium">{t("actualRentSection.title")}</h3>
         <p className="text-sm text-muted-foreground">
-          Aidez-nous à améliorer nos estimations et à vous contacter si besoin en
-          partageant votre loyer actuel et vos coordonnées (optionnel).
+          {t("actualRentSection.description")}
         </p>
         <div className="space-y-2">
-          <Label htmlFor="actualRent">Votre loyer mensuel actuel (€) *</Label>
+          <Label htmlFor="actualRent">{t("actualRentSection.rentLabel")}</Label>
           <Input
             id="actualRent"
             type="number"
-            placeholder="Ex: 950"
+            placeholder={t("actualRentSection.rentPlaceholder")}
             value={actualRent}
             onChange={(e) => setActualRent(e.target.value)}
             disabled={
@@ -249,11 +247,11 @@ export function ResultStep() {
         </div>
         {/* Email Input */}
         <div className="space-y-2">
-          <Label htmlFor="email">Votre adresse e-mail (Optionnel)</Label>
+          <Label htmlFor="email">{t("actualRentSection.emailLabel")}</Label>
           <Input
             id="email"
             type="email"
-            placeholder="Ex: exemple@domaine.com"
+            placeholder={t("actualRentSection.emailPlaceholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={
@@ -266,11 +264,11 @@ export function ResultStep() {
         </div>
         {/* Phone Number Input */}
         <div className="space-y-2">
-          <Label htmlFor="phoneNumber">Votre numéro de téléphone (Optionnel)</Label>
+          <Label htmlFor="phoneNumber">{t("actualRentSection.phoneLabel")}</Label>
           <Input
             id="phoneNumber"
             type="tel"
-            placeholder="Ex: 04XX XX XX XX"
+            placeholder={t("actualRentSection.phonePlaceholder")}
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             disabled={
@@ -293,73 +291,80 @@ export function ResultStep() {
           className="w-full"
         >
           {isUpdating // Use isUpdating state
-            ? "Mise à jour..."
+            ? t("actualRentSection.updatingButton")
             : updateStatus === "success" // Use updateStatus state
-            ? "Loyer mis à jour !"
-            : "Confirmer et enregistrer mon loyer"}
+            ? t("actualRentSection.updatedButton")
+            : t("actualRentSection.confirmButton")}
         </Button>
         {updateStatus === "success" && ( // Use updateStatus state
           <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
-            <CheckCircle className="h-4 w-4" /> Merci pour votre contribution !
+            <CheckCircle className="h-4 w-4" /> {t("actualRentSection.successMessage")}
           </p>
         )}
         {updateStatus === "error" && ( // Use updateStatus state
           <p className="text-sm text-red-600 flex items-center gap-1 mt-2">
-            <XCircle className="h-4 w-4" /> Erreur lors de la mise à jour. Veuillez
-            vérifier le montant et réessayer.
+            <XCircle className="h-4 w-4" /> {t("actualRentSection.errorMessage")}
           </p>
         )}
       </div>
       {/* End Actual Rent Input Section */}
 
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-medium">Récapitulatif du bien</h3>
+        <h3 className="font-medium">{t("summary.title")}</h3>
 
         <div className="space-y-3">
           <div>
-            <h4 className="text-sm font-medium text-gray-500">Adresse</h4>
+            <h4 className="text-sm font-medium text-gray-500">
+              {t("summary.addressLabel")}
+            </h4>
             <p>
-              {state.streetNumber} {state.streetName}, {state.postalCode} Bruxelles
+              {state.streetNumber} {state.streetName}, {state.postalCode}{" "}
+              {t("summary.city")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="text-muted-foreground">Type de bien:</div>
+            <div className="text-muted-foreground">{t("summary.propertyTypeLabel")}:</div>
             <div className="font-medium">
               {propertyTypeLabels[state.propertyType] || "-"}
             </div>
 
-            <div className="text-muted-foreground">Adresse:</div>
+            <div className="text-muted-foreground">{t("summary.addressLabel")}:</div>
             <div className="font-medium">
-              {state.streetNumber} {state.streetName}, {state.postalCode} Bruxelles
+              {state.streetNumber} {state.streetName}, {state.postalCode}{" "}
+              {t("summary.city")}
             </div>
 
-            <div className="text-muted-foreground">Surface:</div>
+            <div className="text-muted-foreground">{t("summary.sizeLabel")}:</div>
             <div className="font-medium">{state.size} m²</div>
 
-            <div className="text-muted-foreground">Chambres:</div>
+            <div className="text-muted-foreground">{t("summary.bedroomsLabel")}:</div>
             <div className="font-medium">
-              {state.bedrooms === 4 ? "4 et plus" : state.bedrooms}
+              {state.bedrooms === 4 ? tDetails("bedroomsCountMax") : state.bedrooms}
             </div>
 
-            <div className="text-muted-foreground">Salles de bain:</div>
+            <div className="text-muted-foreground">{t("summary.bathroomsLabel")}:</div>
             <div className="font-medium">{state.bathrooms}</div>
 
-            <div className="text-muted-foreground">Classe énergétique:</div>
+            <div className="text-muted-foreground">{t("summary.energyClassLabel")}:</div>
             <div className="font-medium">{state.energyClass}</div>
 
-            <div className="text-muted-foreground">Équipements:</div>
+            <div className="text-muted-foreground">{t("summary.featuresLabel")}:</div>
             <div className="font-medium">
               {[
-                state.hasCentralHeating ? "Chauffage central" : null,
-                state.hasThermalRegulation ? "Régulation thermique" : null,
-                state.hasDoubleGlazing ? "Double-vitrages" : null,
-                state.hasSecondBathroom ? "2ème salle de bain" : null,
-                state.hasRecreationalSpaces ? "Espaces récréatifs" : null,
-                state.hasStorageSpaces ? "Espaces de rangement" : null,
+                state.hasCentralHeating ? tFeatures("options.centralHeating") : null,
+                state.hasThermalRegulation
+                  ? tFeatures("options.thermalRegulation")
+                  : null,
+                state.hasDoubleGlazing ? tFeatures("options.doubleGlazing") : null,
+                state.hasSecondBathroom ? tFeatures("options.secondBathroom") : null,
+                state.hasRecreationalSpaces
+                  ? tFeatures("options.recreationalSpaces")
+                  : null,
+                state.hasStorageSpaces ? tFeatures("options.storageSpaces") : null,
               ]
                 .filter(Boolean)
-                .join(", ") || "Aucun"}
+                .join(", ") || t("summary.featuresNone")}
             </div>
           </div>
         </div>
@@ -369,43 +374,32 @@ export function ResultStep() {
         <div className="flex items-start gap-2">
           <Calculator className="h-5 w-5 text-blue-700 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-medium text-blue-800">Méthode de calcul</p>
-            <p className="mt-1 text-blue-700">
-              Le loyer de référence est calculé selon la formule officielle de la Région
-              de Bruxelles-Capitale, qui prend en compte le type de bien, sa surface, le
-              nombre de chambres, l'état du bien et l'indice de difficulté du quartier.
-            </p>
+            <p className="font-medium text-blue-800">{t("calculationMethod.title")}</p>
+            <p className="mt-1 text-blue-700">{t("calculationMethod.description")}</p>
           </div>
         </div>
       </div>
 
       <div className="bg-amber-50 p-4 rounded-lg text-sm">
-        <p className="font-medium text-amber-800">Information importante</p>
-        <p className="mt-1 text-amber-700">
-          Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires
-          particuliers, le montant du loyer est déterminé librement par le bailleur sur le
-          marché privé.
-        </p>
-        <p className="mt-2 text-amber-700">
-          Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du
-          loyer réel dans les baux d'habitation en Région de Bruxelles Capitale.
-        </p>
+        <p className="font-medium text-amber-800">{t("importantInfo.title")}</p>
+        <p className="mt-1 text-amber-700">{t("importantInfo.description1")}</p>
+        <p className="mt-2 text-amber-700">{t("importantInfo.description2")}</p>
       </div>
 
       <div className="flex flex-col gap-3">
         <div className="flex gap-3">
           <Button variant="outline" className="flex-1 gap-2" onClick={handleDownloadPdf}>
-            <Download className="h-4 w-4" /> Télécharger PDF
+            <Download className="h-4 w-4" /> {t("downloadPdfButton")}
           </Button>
           <Button variant="outline" className="flex-1 gap-2">
-            <Share2 className="h-4 w-4" /> Partager
+            <Share2 className="h-4 w-4" /> {t("shareButton")}
           </Button>
         </div>
         <Button onClick={handleEdit} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
-          Modifier l'estimation <ArrowRight className="h-4 w-4" />
+          {t("modifyButton")} <ArrowRight className="h-4 w-4" />
         </Button>
         <Button onClick={handleReset} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
-          Nouvelle estimation <ArrowRight className="h-4 w-4" />
+          {t("newEstimationButton")} <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
     </div>

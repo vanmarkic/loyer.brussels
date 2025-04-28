@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl"; // Add this import
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, MapPin, AlertCircle } from "lucide-react";
@@ -16,9 +17,10 @@ interface AddressAutocompleteProps {
 
 export function AddressAutocomplete({
   onAddressSelect,
-  label = "Adresse",
-  placeholder = "Entrez une adresse à Bruxelles...",
+  label, // Remove default value
+  placeholder, // Remove default value
 }: AddressAutocompleteProps) {
+  const t = useTranslations("AddressAutocomplete"); // Add this hook
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<AddressResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,22 +58,24 @@ export function AddressAutocomplete({
         const response = await searchAddresses(debouncedQuery);
 
         if (!response.success) {
-          setError(response.error || "Erreur lors de la recherche d'adresses");
+          setError(response.error || t("error.searchError"));
           setResults([]);
         } else {
           setResults(response.data);
           setIsOpen(response.data.length > 0);
           if (response.data.length === 0 && response.code === "INSUFFICIENT_QUERY") {
-            setError("Veuillez entrer au moins le nom de la rue");
+            setError(t("error.insufficientQuery"));
           }
           // Show a message if no results were found
           if (response.data.length === 0 && debouncedQuery.length >= 3) {
-            setError("Aucune adresse trouvée. Veuillez essayer une autre recherche.");
+            setError(t("error.noResults"));
           }
         }
       } catch (error: any) {
         console.error("Error fetching addresses:", error);
-        setError(`Erreur: ${error.message || "Une erreur s'est produite"}`);
+        setError(
+          t("error.genericError", { message: error.message || t("error.unknownError") })
+        );
         setResults([]);
       } finally {
         setIsLoading(false);
@@ -143,7 +147,7 @@ export function AddressAutocomplete({
                 onClick={handleManualEntry}
                 className="text-xs underline hover:no-underline"
               >
-                Saisir manuellement
+                {t("manualEntryButton")}
               </button>
             )}
           </AlertDescription>
@@ -154,7 +158,7 @@ export function AddressAutocomplete({
         <Alert className="mt-2 bg-amber-50 border-amber-200">
           <AlertCircle className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            Mode démo: Utilisez l'option "Saisir manuellement" pour entrer une adresse.
+            {t("demoModeAlert")}
           </AlertDescription>
         </Alert>
       )}
@@ -174,7 +178,7 @@ export function AddressAutocomplete({
                 <MapPin className="mr-2 h-4 w-4 text-[#f18240]" />
                 <span>
                   {address.streetname_fr} {address.house_number}, {address.postcode}{" "}
-                  Bruxelles
+                  {t("city")}
                 </span>
               </li>
             ))}

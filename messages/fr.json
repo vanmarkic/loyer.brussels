@@ -9,5 +9,152 @@
   "share_text": "Partagez le site",
   "about_ref_rents_title": "À PROPOS DES LOYERS DE RÉFÉRENCE",
   "legal_basis_title": "BASE LÉGALE",
-  "faq_title": "QUESTIONS RÉPONSES"
+  "faq_title": "QUESTIONS RÉPONSES",
+  "CalculatorPage": {
+    "regionalService": "SERVICE PUBLIC RÉGIONAL DE BRUXELLES - BRUXELLES LOGEMENT",
+    "agencyName": "BRUXELLES LOGEMENT",
+    "regionalServiceShort": "SERVICE PUBLIC RÉGIONAL DE BRUXELLES",
+    "backButton": "Retour",
+    "title": "Calculateur de loyer indicatif",
+    "description": "Estimez le loyer de référence pour un bien à Bruxelles en fonction de ses caractéristiques",
+    "footer": "© 2023 Service Public Régional de Bruxelles - Bruxelles Logement. Tous droits réservés."
+  },
+  "RentalCalculator": {
+    "stepProgress": "Étape {currentStep} sur {totalSteps}"
+  },
+  "PropertyTypeStep": {
+    "title": "Quel type de bien souhaitez-vous louer?",
+    "description": "Sélectionnez le type de propriété",
+    "types": {
+      "apartment": "Appartement",
+      "house": "Maison",
+      "studio": "Studio"
+    },
+    "continueButton": "Continuer"
+  },
+  "PropertyDetailsStep": {
+    "title": "Caractéristiques du bien",
+    "description": "Indiquez les détails de votre propriété",
+    "sizeLabel": "Surface habitable totale (m²)",
+    "bedroomsLabel": "Nombre de chambres",
+    "bedroomsCountMax": "4 et plus",
+    "backButton": "Retour",
+    "continueButton": "Continuer"
+  },
+  "FeaturesStep": {
+    "title": "Caractéristiques supplémentaires",
+    "description": "Sélectionnez les équipements disponibles",
+    "yes": "Oui",
+    "no": "Non",
+    "tableHeaders": {
+      "option": "Option",
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "options": {
+      "centralHeating": "Chauffage central",
+      "thermalRegulation": "Régulation thermique",
+      "doubleGlazing": "Double-vitrages",
+      "secondBathroom": "2ème salle de bain",
+      "recreationalSpaces": "Espaces récréatifs",
+      "storageSpaces": "Espaces de rangement",
+      "constructedBefore2000": "Année de construction avant 2000 ?"
+    },
+    "garageLabel": "Nombre de garages",
+    "backButton": "Retour",
+    "continueButton": "Continuer"
+  },
+  "EnergyStep": {
+    "title": "Énergie et chauffage",
+    "description": "Informations sur la performance énergétique",
+    "error": {
+      "databaseErrorTitle": "Erreur de base de données",
+      "retryButton": "Réessayer"
+    },
+    "demoModeAlert": "Mode démo: Les données d'adresse ne sont pas disponibles. Un indice de difficulté par défaut sera utilisé pour le calcul.",
+    "energyClassLabel": "Classe énergétique (PEB)",
+    "energyClassPlaceholder": "Sélectionnez une classe énergétique",
+    "backButton": "Retour",
+    "continueButton": "Continuer"
+  },
+  "AddressStep": {
+    "title": "Adresse du bien",
+    "description": "Indiquez l'adresse complète du bien à Bruxelles",
+    "demoModeAlert": "Mode démo: Les données d'adresse ne sont pas disponibles. Un indice de difficulté par défaut sera utilisé pour le calcul.",
+    "autocompleteLabel": "Rechercher une adresse",
+    "autocompletePlaceholder": "Ex: 1000 Rue de la Loi 16",
+    "manualEntryInstruction": "Ou saisissez l'adresse manuellement:",
+    "postalCodeLabel": "Code postal",
+    "postalCodePlaceholder": "1000",
+    "streetNameLabel": "Nom de rue",
+    "streetNamePlaceholder": "Rue de la Loi",
+    "streetNumberLabel": "Numéro",
+    "streetNumberPlaceholder": "16",
+    "backButton": "Retour",
+    "calculatingButton": "Calcul en cours...",
+    "calculateButton": "Calculer le loyer"
+  },
+  "ResultStep": {
+    "initialInsertError": {
+      "title": "Erreur:",
+      "message": " Impossible d'enregistrer l'estimation initiale. Veuillez réessayer plus tard. ({error})"
+    },
+    "title": "Résultat de l'estimation",
+    "description": "Voici le loyer indicatif pour ce bien",
+    "estimatedRentLabel": "Loyer mensuel estimé",
+    "priceRangeLabel": "Fourchette de prix",
+    "priceRangeTooltip": "Selon la législation bruxelloise, le loyer de référence peut varier de ±20%",
+    "actualRentSection": {
+      "title": "Confirmer votre loyer actuel",
+      "description": "Aidez-nous à améliorer nos estimations et à vous contacter si besoin en partageant votre loyer actuel et vos coordonnées (optionnel).",
+      "rentLabel": "Votre loyer mensuel actuel (€) *",
+      "rentPlaceholder": "Ex: 950",
+      "emailLabel": "Votre adresse e-mail (Optionnel)",
+      "emailPlaceholder": "Ex: exemple@domaine.com",
+      "phoneLabel": "Votre numéro de téléphone (Optionnel)",
+      "phonePlaceholder": "Ex: 04XX XX XX XX",
+      "updatingButton": "Mise à jour...",
+      "updatedButton": "Loyer mis à jour !",
+      "confirmButton": "Confirmer et enregistrer mon loyer",
+      "successMessage": "Merci pour votre contribution !",
+      "errorMessage": "Erreur lors de la mise à jour. Veuillez vérifier le montant et réessayer."
+    },
+    "summary": {
+      "title": "Récapitulatif du bien",
+      "addressLabel": "Adresse",
+      "city": "Bruxelles",
+      "propertyTypeLabel": "Type de bien",
+      "sizeLabel": "Surface",
+      "bedroomsLabel": "Chambres",
+      "bathroomsLabel": "Salles de bain",
+      "energyClassLabel": "Classe énergétique",
+      "featuresLabel": "Équipements",
+      "featuresNone": "Aucun"
+    },
+    "calculationMethod": {
+      "title": "Méthode de calcul",
+      "description": "Le loyer de référence est calculé selon la formule officielle de la Région de Bruxelles-Capitale, qui prend en compte le type de bien, sa surface, le nombre de chambres, l'état du bien et l'indice de difficulté du quartier."
+    },
+    "importantInfo": {
+      "title": "Information importante",
+      "description1": "Le loyer de référence n'est pas contraignant. En dehors de cadres réglementaires particuliers, le montant du loyer est déterminé librement par le bailleur sur le marché privé.",
+      "description2": "Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du loyer réel dans les baux d'habitation en Région de Bruxelles Capitale."
+    },
+    "downloadPdfButton": "Télécharger PDF",
+    "shareButton": "Partager",
+    "modifyButton": "Modifier l'estimation",
+    "newEstimationButton": "Nouvelle estimation"
+  },
+  "AddressAutocomplete": {
+    "error": {
+      "searchError": "Erreur lors de la recherche d'adresses",
+      "insufficientQuery": "Veuillez entrer au moins le nom de la rue",
+      "noResults": "Aucune adresse trouvée. Veuillez essayer une autre recherche.",
+      "genericError": "Erreur: {message}",
+      "unknownError": "Une erreur s'est produite"
+    },
+    "manualEntryButton": "Saisir manuellement",
+    "demoModeAlert": "Mode démo: Utilisez l'option \"Saisir manuellement\" pour entrer une adresse.",
+    "city": "Bruxelles"
+  }
 }

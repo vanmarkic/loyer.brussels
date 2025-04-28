@@ -1,28 +1,36 @@
-"use client"
+"use client";
 
-import { useForm } from "@/app/context/form-context"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle, RefreshCw, Info } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useForm } from "@/app/context/form-context";
+import { useTranslations } from "next-intl"; // Add this import
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AlertCircle, RefreshCw, Info } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function EnergyStep() {
-  const { state, dispatch, clearError } = useForm()
+  const { state, dispatch, clearError } = useForm();
+  const t = useTranslations("EnergyStep"); // Add this hook
 
   const handleBack = () => {
-    dispatch({ type: "PREV_STEP" })
-  }
+    dispatch({ type: "PREV_STEP" });
+  };
 
   const handleContinue = () => {
     if (state.energyClass) {
-      dispatch({ type: "NEXT_STEP" })
+      dispatch({ type: "NEXT_STEP" });
     }
-  }
+  };
 
   // Function to render appropriate error message with action buttons
   const renderErrorMessage = () => {
-    if (!state.error) return null
+    if (!state.error) return null;
 
     // Different error types might need different actions
     switch (state.errorCode) {
@@ -30,7 +38,7 @@ export function EnergyStep() {
         return (
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Erreur de base de données</AlertTitle>
+            <AlertTitle>{t("error.databaseErrorTitle")}</AlertTitle>
             <AlertDescription className="space-y-2">
               <p>{state.error}</p>
               <div className="flex justify-end mt-2">
@@ -38,16 +46,16 @@ export function EnergyStep() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    clearError()
+                    clearError();
                   }}
                   className="text-xs flex items-center gap-1"
                 >
-                  <RefreshCw className="h-3 w-3" /> Réessayer
+                  <RefreshCw className="h-3 w-3" /> {t("error.retryButton")}
                 </Button>
               </div>
             </AlertDescription>
           </Alert>
-        )
+        );
 
       default:
         return (
@@ -55,27 +63,28 @@ export function EnergyStep() {
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{state.error}</AlertDescription>
           </Alert>
-        )
+        );
     }
-  }
+  };
 
   // Check if Supabase environment variables are available
   const hasSupabaseCredentials =
-    typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    typeof window !== "undefined" &&
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">Énergie et chauffage</h2>
-        <p className="text-muted-foreground mt-2">Informations sur la performance énergétique</p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       {!hasSupabaseCredentials && (
         <Alert className="mb-4 bg-amber-50 border-amber-200">
           <Info className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            Mode démo: Les données d'adresse ne sont pas disponibles. Un indice de difficulté par défaut sera utilisé
-            pour le calcul.
+            {t("demoModeAlert")}
           </AlertDescription>
         </Alert>
       )}
@@ -84,13 +93,15 @@ export function EnergyStep() {
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="energyClass">Classe énergétique (PEB)</Label>
+          <Label htmlFor="energyClass">{t("energyClassLabel")}</Label>
           <Select
             value={state.energyClass}
-            onValueChange={(value) => dispatch({ type: "UPDATE_FIELD", field: "energyClass", value })}
+            onValueChange={(value) =>
+              dispatch({ type: "UPDATE_FIELD", field: "energyClass", value })
+            }
           >
             <SelectTrigger id="energyClass">
-              <SelectValue placeholder="Sélectionnez une classe énergétique" />
+              <SelectValue placeholder={t("energyClassPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="A">A</SelectItem>
@@ -107,16 +118,16 @@ export function EnergyStep() {
 
       <div className="flex gap-3">
         <Button onClick={handleBack} variant="outline" className="flex-1">
-          Retour
+          {t("backButton")}
         </Button>
         <Button
           onClick={handleContinue}
           disabled={!state.energyClass}
           className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
         >
-          Continuer
+          {t("continueButton")}
         </Button>
       </div>
     </div>
-  )
+  );
 }

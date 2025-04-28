@@ -32,6 +32,8 @@ export function ResultStep() {
   const [isUpdating, setIsUpdating] = useState<boolean>(false); // State for update operation
   const [updateStatus, setUpdateStatus] = useState<"idle" | "success" | "error">("idle"); // State for update status
   const [initialInsertError, setInitialInsertError] = useState<string | null>(null); // State for initial insert error
+  const [email, setEmail] = useState<string>(""); // State for email
+  const [phoneNumber, setPhoneNumber] = useState<string>(""); // State for phone number
 
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
@@ -139,12 +141,20 @@ export function ResultStep() {
     }
 
     try {
-      console.log(
-        `Attempting to update record ID: ${recordId} with actual_rent: ${rentValue}`
-      );
+      const updateData: { actual_rent: number; email?: string; phone_number?: string } = {
+        actual_rent: rentValue,
+      };
+      if (email.trim()) {
+        updateData.email = email.trim();
+      }
+      if (phoneNumber.trim()) {
+        updateData.phone_number = phoneNumber.trim();
+      }
+
+      console.log(`Attempting to update record ID: ${recordId} with data:`, updateData);
       const { error } = await supabase
         .from("rent_records")
-        .update({ actual_rent: rentValue }) // Update only the actual_rent field
+        .update(updateData) // Update with actual_rent, email, and phone_number
         .eq("id", recordId); // Match the specific record ID
 
       if (error) {
@@ -216,10 +226,11 @@ export function ResultStep() {
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
         <h3 className="font-medium">Confirmer votre loyer actuel</h3>
         <p className="text-sm text-muted-foreground">
-          Aidez-nous à améliorer nos estimations en partageant votre loyer actuel.
+          Aidez-nous à améliorer nos estimations et à vous contacter si besoin en
+          partageant votre loyer actuel et vos coordonnées (optionnel).
         </p>
         <div className="space-y-2">
-          <Label htmlFor="actualRent">Votre loyer mensuel actuel (€)</Label>
+          <Label htmlFor="actualRent">Votre loyer mensuel actuel (€) *</Label>
           <Input
             id="actualRent"
             type="number"
@@ -234,6 +245,40 @@ export function ResultStep() {
             } // Disable if updating, success, no recordId, or initial error
             min="0"
             step="1"
+          />
+        </div>
+        {/* Email Input */}
+        <div className="space-y-2">
+          <Label htmlFor="email">Votre adresse e-mail (Optionnel)</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Ex: exemple@domaine.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={
+              isUpdating ||
+              updateStatus === "success" ||
+              !recordId ||
+              !!initialInsertError
+            }
+          />
+        </div>
+        {/* Phone Number Input */}
+        <div className="space-y-2">
+          <Label htmlFor="phoneNumber">Votre numéro de téléphone (Optionnel)</Label>
+          <Input
+            id="phoneNumber"
+            type="tel"
+            placeholder="Ex: 04XX XX XX XX"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            disabled={
+              isUpdating ||
+              updateStatus === "success" ||
+              !recordId ||
+              !!initialInsertError
+            }
           />
         </div>
         <Button

@@ -7,7 +7,6 @@ import { fetchDifficultyIndexAction } from "../actions/fetch-difficulty-index";
 export type PropertyType = "apartment" | "house" | "studio";
 export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G";
 export type PropertyState = 1 | 2 | 3; // 1: Mauvais état, 2: Bon état, 3: Excellent état
-export type Neighborhood = "center" | "north" | "south" | "east" | "west";
 
 export interface FormState {
   step: number;
@@ -24,16 +23,12 @@ export interface FormState {
   numberOfGarages: number;
   // Energy and heating
   energyClass: EnergyClass | "";
-  heatingType: "central" | "individual" | "none";
   // Location
-  neighborhood: Neighborhood | "";
   // Calculation results
   difficultyIndex: number | null;
-  baseRent: number | null;
   medianRent: number | null;
   minRent: number | null;
   maxRent: number | null;
-  estimatedRent: number | null;
   isLoading: boolean;
   error: string | null;
   errorCode: string | null;
@@ -73,16 +68,12 @@ const initialState: FormState = {
   numberOfGarages: 0,
   // Energy and heating
   energyClass: "",
-  heatingType: "none",
   // Location
-  neighborhood: "",
   // Calculation results
   difficultyIndex: null,
-  baseRent: null,
   medianRent: null,
   minRent: null,
   maxRent: null,
-  estimatedRent: null,
   isLoading: false,
   error: null,
   errorCode: null,
@@ -136,7 +127,6 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         medianRent,
         minRent,
         maxRent,
-        estimatedRent: medianRent,
         step: state.step + 1,
         error: null,
         errorCode: null,

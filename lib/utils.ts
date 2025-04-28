@@ -153,8 +153,6 @@ export function handlePDF(state: FormState) {
       maxRent,
       // Property Details
       bathrooms,
-      // Energy & Heating
-      heatingType, // Note: Only hasCentralHeating is used in formula
       hasDoubleGlazing, // Note: Not used in current formula, but good to show user input
       constructedBefore2000, // Note: Not used directly, but influences propertyState logic
     } = state;
@@ -212,7 +210,6 @@ export function handlePDF(state: FormState) {
 
       // Energy & Heating
       ["Classe PEB", energyClass || "Non spécifié"],
-      ["Type de chauffage", heatingTypeLabels[heatingType] || heatingType],
       ["Chauffage central", formatBoolean(hasCentralHeating)], // Already included
       ["Régulation thermique", formatBoolean(hasThermalRegulation)], // Already included
       ["Double vitrage", formatBoolean(hasDoubleGlazing)],

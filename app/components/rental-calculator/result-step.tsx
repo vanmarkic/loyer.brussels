@@ -1,9 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react"; // Added useState, useEffect
 import { useForm } from "@/app/context/form-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Download, Share2, Info, Calculator } from "lucide-react";
+import { Input } from "@/components/ui/input"; // Added Input
+import { Label } from "@/components/ui/label"; // Added Label
+import { supabase } from "@/app/lib/supabase"; // Added supabase client
+import {
+  ArrowRight,
+  Download,
+  Share2,
+  Info,
+  Calculator,
+  CheckCircle,
+  XCircle,
+} from "lucide-react"; // Added icons
 
 import {
   Tooltip,
@@ -15,6 +27,11 @@ import { handlePDF, propertyTypeLabels } from "@/lib/utils";
 
 export function ResultStep() {
   const { state, dispatch } = useForm();
+  const [actualRent, setActualRent] = useState<string>("");
+  const [recordId, setRecordId] = useState<number | null>(null); // State for record ID
+  const [isUpdating, setIsUpdating] = useState<boolean>(false); // State for update operation
+  const [updateStatus, setUpdateStatus] = useState<"idle" | "success" | "error">("idle"); // State for update status
+  const [initialInsertError, setInitialInsertError] = useState<string | null>(null); // State for initial insert error
 
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
@@ -25,10 +42,140 @@ export function ResultStep() {
 
   // Generates a dynamic formula string in French based on used constants and variables
 
-  const handleDownloadPdf = handlePDF(state);
+  const handleDownloadPdf = handlePDF(state); // Keep only one declaration
+
+  // Helper function to get user inputs from state
+  const getUserInputs = () => ({
+    propertyType: state.propertyType,
+    size: state.size,
+    bedrooms: state.bedrooms,
+    bathrooms: state.bathrooms,
+    energyClass: state.energyClass,
+    hasCentralHeating: state.hasCentralHeating,
+    hasThermalRegulation: state.hasThermalRegulation,
+    hasDoubleGlazing: state.hasDoubleGlazing,
+    hasSecondBathroom: state.hasSecondBathroom,
+    hasRecreationalSpaces: state.hasRecreationalSpaces,
+    hasStorageSpaces: state.hasStorageSpaces,
+    streetNumber: state.streetNumber,
+    streetName: state.streetName,
+    postalCode: state.postalCode,
+    difficultyIndex: state.difficultyIndex,
+    // Add other relevant fields from FormState here if needed
+    constructedBefore2000: state.constructedBefore2000,
+    propertyState: state.propertyState,
+    numberOfGarages: state.numberOfGarages,
+  });
+
+  // Effect to insert initial record when component mounts and rent is estimated
+  useEffect(() => {
+    const insertInitialRecord = async () => {
+      // Only run if medianRent is available, we don't have an ID yet, and no previous error occurred
+      if (state.medianRent && !recordId && !initialInsertError) {
+        // Use medianRent
+        const userInputs = getUserInputs();
+        const initialRecord = {
+          user_inputs: userInputs,
+          median_rent: state.medianRent, // Use medianRent
+          created_at: new Date().toISOString(),
+          // actual_rent is initially null or omitted
+        };
+
+        try {
+          console.log("Attempting initial insert:", initialRecord);
+          // Insert and select the id of the new record
+          const { data, error } = await supabase
+            .from("rent_records")
+            .insert([initialRecord])
+            .select("id")
+            .single(); // Use single() to get the object directly
+
+          if (error) {
+            console.error("Supabase insert error:", error);
+            throw error;
+          }
+
+          if (data && data.id) {
+            setRecordId(data.id); // Store the returned ID
+            console.log("Initial record inserted with ID:", data.id);
+            setInitialInsertError(null); // Clear any previous error state on success
+          } else {
+            console.error("Failed to retrieve ID after insert, data:", data);
+            throw new Error("Failed to retrieve ID after insert.");
+          }
+        } catch (error) {
+          console.error("Error inserting initial rent record:", error);
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred during initial insert.";
+          setInitialInsertError(errorMessage);
+          setRecordId(null); // Ensure recordId is null on error
+        }
+      }
+    };
+
+    insertInitialRecord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.medianRent, recordId, initialInsertError]); // Dependencies: Use medianRent
+
+  // Function to handle the UPDATE of actual rent
+  const handleActualRentUpdate = async () => {
+    if (!recordId) {
+      console.error("Cannot update rent, initial record ID not found or insert failed.");
+      setUpdateStatus("error"); // Show error if no record ID
+      return;
+    }
+
+    setIsUpdating(true);
+    setUpdateStatus("idle");
+
+    const rentValue = parseFloat(actualRent);
+    if (isNaN(rentValue) || rentValue <= 0) {
+      console.error("Invalid actual rent value:", actualRent);
+      setUpdateStatus("error");
+      setIsUpdating(false);
+      return;
+    }
+
+    try {
+      console.log(
+        `Attempting to update record ID: ${recordId} with actual_rent: ${rentValue}`
+      );
+      const { error } = await supabase
+        .from("rent_records")
+        .update({ actual_rent: rentValue }) // Update only the actual_rent field
+        .eq("id", recordId); // Match the specific record ID
+
+      if (error) {
+        console.error("Supabase update error:", error);
+        throw error;
+      }
+      console.log(`Record ID: ${recordId} updated successfully.`);
+      setUpdateStatus("success");
+    } catch (error) {
+      console.error("Error updating rent record:", error);
+      setUpdateStatus("error");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
+      {initialInsertError && ( // Display error if initial insert failed
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+          role="alert"
+        >
+          <strong className="font-bold">Erreur:</strong>
+          <span className="block sm:inline">
+            {" "}
+            Impossible d'enregistrer l'estimation initiale. Veuillez réessayer plus tard.
+            ({initialInsertError})
+          </span>
+        </div>
+      )}
       <div className="text-center">
         <h2 className="text-2xl font-bold">Résultat de l'estimation</h2>
         <p className="text-muted-foreground mt-2">
@@ -40,10 +187,11 @@ export function ResultStep() {
         <CardContent className="p-6">
           <div className="text-center">
             <p className="text-lg font-medium">Loyer mensuel estimé</p>
-            <p className="text-5xl font-bold mt-2">{state.estimatedRent} €</p>
+            <p className="text-5xl font-bold mt-2">{state.medianRent ?? "..."} €</p>
+            {/* Use medianRent */}
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm opacity-80">
-                Fourchette de prix: {state.minRent} € - {state.maxRent} €
+                Fourchette de prix: {state.minRent ?? "N/A"} € - {state.maxRent ?? "N/A"}€
               </p>
               <TooltipProvider>
                 <Tooltip>
@@ -64,6 +212,60 @@ export function ResultStep() {
           </div>
         </CardContent>
       </Card>
+      {/* Actual Rent Input Section */}
+      <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+        <h3 className="font-medium">Confirmer votre loyer actuel</h3>
+        <p className="text-sm text-muted-foreground">
+          Aidez-nous à améliorer nos estimations en partageant votre loyer actuel.
+        </p>
+        <div className="space-y-2">
+          <Label htmlFor="actualRent">Votre loyer mensuel actuel (€)</Label>
+          <Input
+            id="actualRent"
+            type="number"
+            placeholder="Ex: 950"
+            value={actualRent}
+            onChange={(e) => setActualRent(e.target.value)}
+            disabled={
+              isUpdating ||
+              updateStatus === "success" ||
+              !recordId ||
+              !!initialInsertError
+            } // Disable if updating, success, no recordId, or initial error
+            min="0"
+            step="1"
+          />
+        </div>
+        <Button
+          onClick={handleActualRentUpdate} // Use the update handler
+          disabled={
+            isUpdating ||
+            updateStatus === "success" ||
+            actualRent.trim() === "" ||
+            !recordId || // Also disable if recordId is missing
+            !!initialInsertError // Or if initial insert failed
+          }
+          className="w-full"
+        >
+          {isUpdating // Use isUpdating state
+            ? "Mise à jour..."
+            : updateStatus === "success" // Use updateStatus state
+            ? "Loyer mis à jour !"
+            : "Confirmer et enregistrer mon loyer"}
+        </Button>
+        {updateStatus === "success" && ( // Use updateStatus state
+          <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
+            <CheckCircle className="h-4 w-4" /> Merci pour votre contribution !
+          </p>
+        )}
+        {updateStatus === "error" && ( // Use updateStatus state
+          <p className="text-sm text-red-600 flex items-center gap-1 mt-2">
+            <XCircle className="h-4 w-4" /> Erreur lors de la mise à jour. Veuillez
+            vérifier le montant et réessayer.
+          </p>
+        )}
+      </div>
+      {/* End Actual Rent Input Section */}
 
       <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
         <h3 className="font-medium">Récapitulatif du bien</h3>

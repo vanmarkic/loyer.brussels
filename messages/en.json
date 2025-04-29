@@ -156,5 +156,9 @@
     "manualEntryButton": "Enter manually",
     "demoModeAlert": "Demo mode: Use the 'Enter manually' option to enter an address.",
     "city": "Brussels"
+  },
+  "Metadata": {
+    "title": "Brussels Housing - How much does it cost to rent a property in Brussels?",
+    "description": "Brussels Regional Public Service - Brussels Housing. Estimate the indicative reference rent for a property in Brussels."
   }
 }

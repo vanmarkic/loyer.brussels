@@ -2,18 +2,27 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server"; // Import setRequestLocale
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"; // Import setRequestLocale and getTranslations
 import { locales } from "@/src/i18n/request"; // Updated import path
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Metadata can potentially be dynamic based on locale
-export const metadata: Metadata = {
-  title: "Bruxelles Logement - À combien se loue un logement à Bruxelles?",
-  description: "Service public régional de Bruxelles - Bruxelles Logement",
-  generator: "v0.dev",
-};
+// Generate dynamic metadata based on locale
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    // You can add more metadata fields here if needed
+    // generator: "v0.dev", // Keep or remove as needed
+  };
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

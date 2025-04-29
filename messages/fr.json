@@ -156,5 +156,9 @@
     "manualEntryButton": "Saisir manuellement",
     "demoModeAlert": "Mode démo: Utilisez l'option \"Saisir manuellement\" pour entrer une adresse.",
     "city": "Bruxelles"
+  },
+  "Metadata": {
+    "title": "Bruxelles Logement - À combien se loue un logement à Bruxelles?",
+    "description": "Service public régional de Bruxelles - Bruxelles Logement. Estimez le loyer indicatif de référence pour un bien à Bruxelles."
   }
 }

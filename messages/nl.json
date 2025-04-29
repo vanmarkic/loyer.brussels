@@ -156,5 +156,9 @@
     "manualEntryButton": "Handmatig invoeren",
     "demoModeAlert": "Demomodus: Gebruik de optie \"Handmatig invoeren\" om een adres in te voeren.",
     "city": "Brussel"
+  },
+  "Metadata": {
+    "title": "Brussel Huisvesting - Hoeveel kost het om een woning te huren in Brussel?",
+    "description": "Gewestelijke Overheidsdienst Brussel - Brussel Huisvesting. Schat de indicatieve referentiehuurprijs voor een woning in Brussel."
   }
 }

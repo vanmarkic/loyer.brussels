@@ -38,7 +38,9 @@ export function RentalCalculator() {
   const progressPercentage = (Math.min(state.step, totalSteps) / totalSteps) * 100;
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+    <div
+      className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 transition-all duration-1000 min-h-[400px]" // Set a minimum height to prevent height changes
+    >
       {state.step < totalSteps && (
         <div className="mb-6">
           <div className="flex justify-between text-sm mb-1">

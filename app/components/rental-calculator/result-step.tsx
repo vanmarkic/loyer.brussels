@@ -26,7 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { handlePDF, propertyTypeLabels } from "@/lib/utils";
+import { propertyTypeLabels } from "@/lib/utils"; // Keep propertyTypeLabels if needed elsewhere, remove handlePDF
 
 export function ResultStep() {
   const { state, dispatch } = useForm();
@@ -40,6 +40,7 @@ export function ResultStep() {
   const [initialInsertError, setInitialInsertError] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false); // Add loading state
 
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
@@ -48,7 +49,23 @@ export function ResultStep() {
     dispatch({ type: "GO_TO_STEP", payload: 1 });
   };
 
-  const handleDownloadPdf = handlePDF(state);
+  // Removed: const handleDownloadPdf = handlePDF(state);
+
+  // Async function to handle dynamic import and PDF generation
+  const triggerPdfDownload = async () => {
+    setIsDownloadingPdf(true);
+    try {
+      // Dynamically import the handlePDF function
+      const { handlePDF } = await import("@/lib/utils");
+      // Execute the PDF generation
+      handlePDF(state)(); // Call the returned function
+    } catch (error) {
+      console.error("Error loading or generating PDF:", error);
+      // Optionally show an error message to the user
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
 
   // Helper function to get user inputs from state matching UserInputs type
   const getUserInputs = (): UserInputs => {
@@ -377,10 +394,22 @@ export function ResultStep() {
       {/* Action Buttons */}
       <div className="flex flex-col gap-3">
         <div className="flex gap-3">
-          <Button variant="outline" className="flex-1 gap-2" onClick={handleDownloadPdf}>
-            <Download className="h-4 w-4" /> {t("downloadPdfButton")}
+          <Button
+            variant="outline"
+            className="flex-1 gap-2"
+            onClick={triggerPdfDownload}
+            disabled={isDownloadingPdf}
+          >
+            {isDownloadingPdf ? (
+              <span className="animate-spin h-4 w-4 border-b-2 border-current rounded-full inline-block"></span>
+            ) : (
+              <Download className="h-4 w-4" />
+            )}
+            {isDownloadingPdf ? t("downloadingPdfButton") : t("downloadPdfButton")}
           </Button>
-          <Button variant="outline" className="flex-1 gap-2">
+          <Button variant="outline" className="flex-1 gap-2" disabled={isDownloadingPdf}>
+            {" "}
+            {/* Optionally disable share too */}
             <Share2 className="h-4 w-4" /> {t("shareButton")}
           </Button>
         </div>

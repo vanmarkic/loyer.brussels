@@ -2,13 +2,32 @@
 
 import { useForm } from "@/app/context/form-context";
 import { useTranslations } from "next-intl"; // Add this import
-import { PropertyTypeStep } from "./property-type-step";
-import { PropertyDetailsStep } from "./property-details-step";
-import { AddressStep } from "./address-step";
-import { FeaturesStep } from "./features-step";
-import { EnergyStep } from "./energy-step";
-import { ResultStep } from "./result-step";
 import { Progress } from "@/components/ui/progress";
+import dynamic from "next/dynamic";
+
+// Dynamically import step components
+const PropertyTypeStep = dynamic(
+  () => import("./property-type-step").then((mod) => mod.PropertyTypeStep),
+  { ssr: false }
+);
+const PropertyDetailsStep = dynamic(
+  () => import("./property-details-step").then((mod) => mod.PropertyDetailsStep),
+  { ssr: false }
+);
+const FeaturesStep = dynamic(
+  () => import("./features-step").then((mod) => mod.FeaturesStep),
+  { ssr: false }
+);
+const EnergyStep = dynamic(() => import("./energy-step").then((mod) => mod.EnergyStep), {
+  ssr: false,
+});
+const AddressStep = dynamic(
+  () => import("./address-step").then((mod) => mod.AddressStep),
+  { ssr: false }
+);
+const ResultStep = dynamic(() => import("./result-step").then((mod) => mod.ResultStep), {
+  ssr: false,
+});
 
 export function RentalCalculator() {
   const { state } = useForm();
@@ -32,6 +51,7 @@ export function RentalCalculator() {
         </div>
       )}
 
+      {/* Render dynamic components */}
       {state.step === 1 && <PropertyTypeStep />}
       {state.step === 2 && <PropertyDetailsStep />}
       {state.step === 3 && <FeaturesStep />}

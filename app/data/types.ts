@@ -1,3 +1,8 @@
+// Core Domain Types for Rental Calculation
+export type PropertyType = "apartment" | "house" | "studio";
+export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G";
+export type PropertyState = 1 | 2 | 3; // 1: Mauvais état, 2: Bon état, 3: Excellent état
+
 /**
  * Represents the result of an address search.
  */

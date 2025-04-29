@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { calculateRent, type FormState, type EnergyClass } from "./form-context"; // Assuming types are exported
+import { type FormState } from "./form-context"; // Keep FormState import
+import { calculateRent, type CalculateRentInput } from "../lib/rent-calculator"; // Import calculateRent and its input type
+import type { EnergyClass, PropertyType, PropertyState } from "../data/types"; // Import necessary types
 
 describe("calculateRent", () => {
   const createMockState = (overrides: Partial<FormState> = {}): FormState => {
@@ -58,7 +60,23 @@ describe("calculateRent", () => {
       streetNumber: "18",
     });
 
-    const result = calculateRent(state);
+    // Create the specific input object for the calculateRent function
+    const calculationInput: CalculateRentInput = {
+      difficultyIndex: state.difficultyIndex,
+      size: state.size,
+      propertyState: state.propertyState,
+      propertyType: state.propertyType,
+      bedrooms: state.bedrooms,
+      hasCentralHeating: state.hasCentralHeating,
+      hasThermalRegulation: state.hasThermalRegulation,
+      hasSecondBathroom: state.hasSecondBathroom,
+      hasRecreationalSpaces: state.hasRecreationalSpaces,
+      hasStorageSpaces: state.hasStorageSpaces,
+      numberOfGarages: state.numberOfGarages,
+      energyClass: state.energyClass,
+    };
+
+    const result = calculateRent(calculationInput); // Pass the correct input object
     console.log("Result:", result);
 
     console.log("Calculated Rent:", result.medianRent); // Expected: ~1440 based on calculation

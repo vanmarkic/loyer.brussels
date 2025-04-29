@@ -2,7 +2,8 @@
 
 import type React from "react";
 
-import { useForm, type PropertyType } from "@/app/context/form-context";
+import { useForm } from "@/app/context/form-context";
+import type { PropertyType } from "@/app/data/types"; // Import PropertyType from its new location
 import { useTranslations } from "next-intl"; // Add this import
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";

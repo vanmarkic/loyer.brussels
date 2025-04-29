@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
+import { vi, Mock } from "vitest";
 import { AddressAutocomplete } from "./address-autocomplete";
 import { searchAddresses } from "@/app/actions/search-addresses";
 import type { AddressResult } from "@/app/data/types"; // Import type from new location
@@ -29,7 +30,7 @@ describe.skip("AddressAutocomplete Integration Test", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Setup the mock implementation for searchAddresses
-    (searchAddresses as vi.Mock).mockImplementation(async (query: string) => {
+    (searchAddresses as Mock).mockImplementation(async (query: string) => {
       if (query.toLowerCase().includes("rue kessels 18")) {
         return { success: true, data: [mockAddress] };
       }

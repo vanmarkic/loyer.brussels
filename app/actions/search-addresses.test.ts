@@ -20,7 +20,7 @@ describe.skip("searchAddresses Integration Test", () => {
     expect(result.success).toBe(true);
     expect(result.error).toBeNull();
     expect(Array.isArray(result.data)).toBe(true);
-    expect(result.data.length).toBeGreaterThan(0); // Expect at least one result
+    expect(result.data && result.data.length).toBeGreaterThan(0); // Expect at least one result
 
     // Check if the target address is among the results
     expect(result.data).toEqual(

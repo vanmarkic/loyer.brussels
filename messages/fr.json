@@ -141,6 +141,7 @@
       "description2": "Toutefois, le loyer de référence doit obligatoirement être mentionné en plus du loyer réel dans les baux d'habitation en Région de Bruxelles Capitale."
     },
     "downloadPdfButton": "Télécharger PDF",
+    "downloadingPdfButton": "Téléchargement...",
     "shareButton": "Partager",
     "modifyButton": "Modifier l'estimation",
     "newEstimationButton": "Nouvelle estimation"
@@ -160,5 +161,361 @@
   "Metadata": {
     "title": "Bruxelles Logement - À combien se loue un logement à Bruxelles?",
     "description": "Service public régional de Bruxelles - Bruxelles Logement. Estimez le loyer indicatif de référence pour un bien à Bruxelles."
+  },
+  "BruxellesPage": {
+    "header": {
+      "backToRegion": "Retour au choix de région",
+      "title": "Évaluation Bruxelles"
+    },
+    "housingType": {
+      "title": "Type de logement",
+      "description": "Dans quel type de logement habitez-vous ou souhaitez-vous habiter ?",
+      "privateMarket": {
+        "title": "Marché privé",
+        "description": "Location directe avec un propriétaire privé",
+        "status": "Encadrement applicable"
+      },
+      "aisHousing": {
+        "title": "Logement AIS",
+        "description": "Agence Immobilière Sociale",
+        "status": "Encadrement non applicable"
+      },
+      "socialHousing": {
+        "title": "Logement social",
+        "description": "CPAS, SLSP ou autres organismes publics",
+        "status": "Encadrement non applicable"
+      },
+      "infoBox": {
+        "title": "Information importante",
+        "description": "L'encadrement des loyers à Bruxelles ne s'applique qu'aux logements du marché privé. Les logements sociaux et AIS ont leurs propres régulations spécifiques."
+      },
+      "alert": "L'encadrement des loyers ne s'applique pas aux logements AIS ou logements sociaux."
+    },
+    "userType": {
+      "title": "Bienvenue dans l'outil d'évaluation",
+      "description": "Qui êtes-vous ?",
+      "dataProtection": {
+        "title": "Vos données sont protégées",
+        "description": "Cet outil vous aide à évaluer si votre loyer respecte l'encadrement légal. Toutes vos données restent anonymes et confidentielles.",
+        "consent": "J'accepte que mes données anonymisées soient utilisées à des fins de recherche pour améliorer les politiques de logement.",
+        "consentRequired": "Veuillez accepter l'utilisation des données pour continuer"
+      },
+      "tenant": {
+        "title": "Locataire",
+        "description": "Je loue ou souhaite louer un logement"
+      },
+      "landlord": {
+        "title": "Bailleur",
+        "description": "Je loue ou souhaite louer mon bien"
+      },
+      "other": {
+        "title": "Autre",
+        "description": "Curieux, étudiant, professionnel..."
+      }
+    },
+    "calculator": {
+      "header": "COLLECTIF WUUNE - ÉVALUATION DU LOYER",
+      "navigation": {
+        "title": "ÉVALUATION LOCATAIRE",
+        "subtitle": "RÉGION DE BRUXELLES-CAPITALE",
+        "back": "Retour"
+      },
+      "title": "Évaluez votre loyer",
+      "description": "Découvrez si votre loyer respecte l'encadrement légal bruxellois",
+      "footer": "© 2024 Collectif Wuune. Outil d'évaluation des loyers."
+    }
+  },
+  "CalculatorRegionPage": {
+    "header": {
+      "backToHome": "Retour à l'accueil",
+      "title": "Évaluation du loyer"
+    },
+    "title": "Évaluez votre loyer",
+    "description": "Dans quelle région se situe votre logement ?",
+    "regions": {
+      "brussels": {
+        "title": "Bruxelles",
+        "description": "Région de Bruxelles-Capitale",
+        "status": "Encadrement en vigueur"
+      },
+      "wallonia": {
+        "title": "Wallonie",
+        "description": "Région wallonne",
+        "status": "Évaluation disponible"
+      },
+      "flanders": {
+        "title": "Flandres",
+        "description": "Région flamande",
+        "status": "En cours d'évaluation"
+      }
+    },
+    "brusselsInfo": {
+      "title": "Région de Bruxelles-Capitale",
+      "activeFramework": {
+        "title": "Encadrement des loyers en vigueur",
+        "description": "À Bruxelles, les loyers sont encadrés par une grille de référence légale. Notre outil vous permet d'évaluer si votre loyer respecte cette grille."
+      },
+      "dataProtection": {
+        "title": "Vos données sont protégées",
+        "description": "Toutes les informations que vous fournirez restent anonymes et confidentielles. Elles ne seront utilisées que pour calculer votre évaluation."
+      },
+      "continueButton": "Continuer l'évaluation"
+    },
+    "walloniaInfo": {
+      "title": "Région wallonne",
+      "warning": {
+        "title": "Encadrement non encore appliqué",
+        "description": "L'encadrement des loyers n'est pas encore en vigueur en Wallonie, mais vous pouvez tout de même évaluer votre situation pour vous préparer aux évolutions futures.",
+        "note": "Cette évaluation vous donnera une indication sur le caractère équitable de votre loyer selon les standards en cours de développement."
+      },
+      "continueButton": "Continuer l'évaluation (indicative)",
+      "changeRegionButton": "Changer de région"
+    },
+    "flandersInfo": {
+      "title": "Région flamande",
+      "inDevelopment": {
+        "title": "Outil en cours d'évaluation",
+        "description": "Nous travaillons actuellement sur l'adaptation de notre outil pour la région flamande. Cette fonctionnalité sera bientôt disponible.",
+        "note": "En attendant, vous pouvez nous contacter pour toute question concernant votre situation locative."
+      },
+      "contactButton": "Nous contacter",
+      "changeRegionButton": "Changer de région"
+    }
+  },
+  "ContactPage": {
+    "header": {
+      "backToHome": "Retour à l'accueil",
+      "title": "WUUNE"
+    },
+    "hero": {
+      "title": "Contactez-nous",
+      "description": "Une question ? Besoin d'aide ? Envie de nous rejoindre ? Nous sommes là pour vous accompagner."
+    },
+    "contactInfo": {
+      "email": {
+        "title": "Email",
+        "description": "Écrivez-nous à :",
+        "address": "contact@wuune.be"
+      },
+      "assemblies": {
+        "title": "Assemblées locales",
+        "description": "Participez à nos rencontres :",
+        "schedule": "Tous les premiers mardis du mois",
+        "time": "19h - Lieu variable"
+      },
+      "newsletter": {
+        "title": "Newsletter",
+        "description": "Restez informé(e) :",
+        "action": "Inscrivez-vous ci-dessous",
+        "content": "Actualités et événements"
+      }
+    },
+    "form": {
+      "title": "Envoyez-nous un message",
+      "description": "Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.",
+      "fields": {
+        "name": {
+          "label": "Nom complet *",
+          "placeholder": "Votre nom et prénom"
+        },
+        "email": {
+          "label": "Email *",
+          "placeholder": "votre.email@exemple.com"
+        },
+        "subject": {
+          "label": "Sujet *",
+          "placeholder": "L'objet de votre message"
+        },
+        "message": {
+          "label": "Message *",
+          "placeholder": "Décrivez votre demande, votre question ou votre situation..."
+        }
+      },
+      "checkboxes": {
+        "newsletter": "Je souhaite recevoir la newsletter de WUUNE",
+        "assembly": "Je souhaite être informé(e) des assemblées locales"
+      },
+      "urgentInfo": {
+        "title": "Situation d'urgence ?",
+        "description": "Si vous êtes dans une situation d'urgence (menace d'expulsion, loyer abusif, etc.), contactez-nous directement par téléphone ou email pour une réponse prioritaire."
+      },
+      "submitButton": "Envoyer le message",
+      "successMessage": "Votre message a été envoyé ! Nous vous répondrons dans les plus brefs délais."
+    },
+    "resources": {
+      "title": "Ressources utiles",
+      "links": {
+        "legalAid": "Aide juridique gratuite",
+        "tenantRights": "Droits des locataires",
+        "rentControl": "Guide de l'encadrement des loyers",
+        "mediation": "Services de médiation"
+      }
+    }
+  },
+  "QuestionnairePage": {
+    "maintenance": {
+      "boilerMaintenance": "J'effectue l'entretien annuel de la chaudière (si applicable)",
+      "fireInsurance": "J'ai une assurance incendie en cours de validité"
+    },
+    "problems": {
+      "title": "Problèmes éventuels du logement",
+      "description": "Ces défauts peuvent justifier une réduction de loyer",
+      "healthIssues": {
+        "title": "Problèmes de salubrité ou de santé",
+        "items": [
+          "Humidité excessive ou moisissures",
+          "Problèmes de chauffage ou d'isolation",
+          "Nuisances sonores importantes",
+          "Problèmes d'électricité ou de plomberie",
+          "Infestation (rats, cafards, etc.)",
+          "Absence de ventilation adéquate"
+        ]
+      },
+      "majorDefects": {
+        "title": "Défauts importants du logement",
+        "items": [
+          "Fenêtres ou portes défectueuses",
+          "Revêtements de sol en mauvais état",
+          "Peinture écaillée ou papier peint décollé",
+          "Équipements de cuisine défaillants",
+          "Problèmes de salle de bain (carrelage, robinetterie)",
+          "Éclairage insuffisant",
+          "Espaces de rangement insuffisants"
+        ]
+      },
+      "warningMessage": "Plus votre logement présente de défauts, plus vous aurez d'arguments pour négocier une réduction de loyer."
+    }
+  },
+  "PDF": {
+    "title": "Estimation Loyer Indicatif",
+    "headers": {
+      "userInputs": "Paramètre Entré",
+      "value": "Valeur",
+      "constants": "Constante / Ajustement Appliqué",
+      "appliedFormula": "Formule Appliquée (pour ce bien)",
+      "results": "Résultats"
+    },
+    "labels": {
+      "address": "Adresse",
+      "propertyType": "Type de bien",
+      "bedrooms": "Nombre de chambres",
+      "bedroomsMax": "4 et plus",
+      "surface": "Surface",
+      "propertyState": "État du logement",
+      "constructedBefore2000": "Construit avant 2000",
+      "bathrooms": "Salles de bain",
+      "garages": "Garage(s)",
+      "energyClass": "Classe PEB",
+      "centralHeating": "Chauffage central",
+      "thermalRegulation": "Régulation thermique",
+      "doubleGlazing": "Double vitrage",
+      "secondBathroom": "2ème salle de bain",
+      "recreationalSpaces": "Espaces récréatifs",
+      "storageSpaces": "Espaces de rangement",
+      "difficultyIndex": "Indice synth. de difficulté",
+      "estimatedRent": "Loyer Médian Estimé",
+      "priceRange": "Fourchette Indicative (±10%)"
+    },
+    "propertyStates": {
+      "bad": "Mauvais état",
+      "good": "Bon état",
+      "excellent": "Excellent état",
+      "default": "Non spécifié (défaut: Bon état)"
+    },
+    "propertyTypes": {
+      "apartment": "Appartement",
+      "house": "Maison",
+      "studio": "Studio"
+    },
+    "adjustments": {
+      "baseConstant": "Constante de Base",
+      "multiplier": "Multiplicateur",
+      "difficultyMultiplier": "Multiplicateur Difficulté",
+      "stateGood": "Ajustement État (Bon)",
+      "stateExcellent": "Ajustement État (Excellent)",
+      "pebA": "Ajustement PEB A",
+      "pebB": "Ajustement PEB B",
+      "pebC": "Ajustement PEB C",
+      "pebD": "Ajustement PEB D",
+      "pebF": "Ajustement PEB F",
+      "pebG": "Ajustement PEB G",
+      "noCentralHeating": "Ajustement Absence Chauffage Central",
+      "noThermalRegulation": "Ajustement Absence Régulation Thermique",
+      "secondBathroom": "Ajustement Présence 2ème Salle de Bain",
+      "noRecreationalSpaces": "Ajustement Absence Espaces Récréatifs",
+      "storageSpaces": "Ajustement Présence Espaces Rangement",
+      "garage": "Ajustement Garage"
+    },
+    "formatters": {
+      "notSpecified": "Non spécifié",
+      "yes": "Oui",
+      "no": "Non",
+      "notAvailable": "N/A"
+    }
+  },
+  "HomePage": {
+    "header": {
+      "collectiveTitle": "COLLECTIF WUUNE - ENSEMBLE CONTRE LES LOYERS ABUSIFS"
+    },
+    "navigation": {
+      "collective": "COLLECTIF CONTRE LES LOYERS ABUSIFS",
+      "home": "Accueil",
+      "about": "Wuune",
+      "campaign": "Notre campagne",
+      "contact": "Contact",
+      "menu": "MENU"
+    },
+    "hero": {
+      "title": "BAISSE MON LOYER",
+      "subtitle": "Ensemble, luttons contre les loyers abusifs !",
+      "description": "Rejoignez le collectif Wuune et faites entendre votre voix. Votre logement est-il trop cher ? Découvrez-le et agissez !",
+      "startButton": "Commencer",
+      "shareText": "Partagez la lutte",
+      "imageAlt": "Personnes chaleureuses manifestant pour des loyers équitables"
+    },
+    "aboutUs": {
+      "title": "Qui sommes-nous ?",
+      "description1": "Wuune est un collectif citoyen engagé dans la lutte contre les loyers abusifs. Nous croyons que le logement est un droit fondamental et que chacun mérite un toit à un prix équitable.",
+      "description2": "Ensemble, nous nous mobilisons pour faire respecter les droits des locataires, sensibiliser l'opinion publique et porter nos revendications auprès des autorités compétentes.",
+      "learnMoreButton": "En savoir plus sur Wuune",
+      "imageAlt": "Manifestation à ambiance chaleureuse et collective"
+    },
+    "callToAction": {
+      "joinCampaign": {
+        "title": "Rejoignez notre campagne",
+        "description": "Ensemble, nous pouvons faire la différence contre les loyers abusifs.",
+        "button": "En savoir plus"
+      },
+      "evaluateRent": {
+        "title": "Évaluez votre loyer",
+        "description": "Découvrez si votre loyer respecte les grilles légales en vigueur.",
+        "button": "Faire le test"
+      },
+      "contactUs": {
+        "title": "Contactez-nous",
+        "description": "Une question ? Besoin d'aide ? Nous sommes là pour vous accompagner.",
+        "button": "Nous contacter"
+      }
+    },
+    "footer": {
+      "description": "Collectif citoyen pour des loyers équitables à Bruxelles.",
+      "usefulLinks": "Liens utiles",
+      "aboutLink": "À propos de Wuune",
+      "campaignLink": "Notre campagne",
+      "contactLink": "Contact",
+      "followUs": "Suivez-nous",
+      "copyright": "© 2024 Collectif Wuune. Tous droits réservés."
+    }
+  },
+  "Navigation": {
+    "menu": "MENU",
+    "serviceTitle": "SERVICE PUBLIC RÉGIONAL DE BRUXELLES - BRUXELLES LOGEMENT",
+    "agencyTitle": "BRUXELLES LOGEMENT"
+  },
+  "Errors": {
+    "difficultyIndex": "Une erreur s'est produite lors de la récupération de l'indice de difficulté",
+    "invalidData": "Données d'indice de difficulté invalides reçues.",
+    "systemError": "Erreur système",
+    "formSubmission": "Une erreur s'est produite lors de l'envoi du formulaire"
   }
 }

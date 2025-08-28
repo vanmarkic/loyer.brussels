@@ -28,6 +28,12 @@ const AddressStep = dynamic(
 const ResultStep = dynamic(() => import("./result-step").then((mod) => mod.ResultStep), {
   ssr: false,
 });
+const WuuneResultStep = dynamic(
+  () => import("./wuune-result-step").then((mod) => mod.WuuneResultStep),
+  {
+    ssr: false,
+  }
+);
 
 export function RentalCalculator() {
   const { state } = useForm();
@@ -59,7 +65,7 @@ export function RentalCalculator() {
       {state.step === 3 && <FeaturesStep />}
       {state.step === 4 && <EnergyStep />}
       {state.step === 5 && <AddressStep />}
-      {state.step === 6 && <ResultStep />}
+      {state.step === 6 && <WuuneResultStep />}
     </div>
   );
 }

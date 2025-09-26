@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "@/app/context/form-context";
+import { useGlobalForm } from "@/app/context/global-form-context";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,12 +24,28 @@ import {
 
 export function WuuneResultStep() {
   const { state } = useForm();
+  const globalForm = useGlobalForm();
   const currentLocale = useLocale();
-  const [actualRent, setActualRent] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [joinNewsletter, setJoinNewsletter] = useState(false);
-  const [joinAssembly, setJoinAssembly] = useState(false);
+  
+  // Get existing data to avoid re-asking
+  const existingRent = globalForm.getActualRent();
+  const contactInfo = globalForm.getContactInfo();
+  
+  // Local state for new inputs only
+  const [actualRent, setActualRent] = useState<string>(existingRent || "");
+  const [email, setEmail] = useState<string>(contactInfo.email || "");
+  const [phone, setPhone] = useState<string>(contactInfo.phone || "");
+  const [joinNewsletter, setJoinNewsletter] = useState(globalForm.state.userProfile.joinNewsletter);
+  const [joinAssembly, setJoinAssembly] = useState(globalForm.state.userProfile.joinAssembly);
+
+  // Update global state when local values change
+  useEffect(() => {
+    globalForm.updateRentalInfo({ actualRent });
+  }, [actualRent]);
+
+  useEffect(() => {
+    globalForm.updateUserProfile({ email, phone, joinNewsletter, joinAssembly });
+  }, [email, phone, joinNewsletter, joinAssembly]);
 
   // Calculer la différence entre le loyer réel et le loyer de référence
   const rentDifference = actualRent
@@ -136,18 +153,30 @@ export function WuuneResultStep() {
       {/* Saisie du loyer actuel */}
       <Card>
         <CardContent className="p-6">
-          <h3 className="text-xl font-semibold mb-4">Quel est votre loyer actuel ?</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-semibold">Quel est votre loyer actuel ?</h3>
+            {existingRent && (
+              <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
+                ✓ Déjà renseigné
+              </span>
+            )}
+          </div>
           <div className="space-y-4">
             <div>
               <Label htmlFor="actual-rent">Loyer mensuel (hors charges)</Label>
               <Input
                 id="actual-rent"
                 type="number"
-                placeholder="Ex: 850"
+                placeholder={existingRent ? `Actuellement: ${existingRent}€` : "Ex: 850"}
                 value={actualRent}
                 onChange={(e) => setActualRent(e.target.value)}
                 className="text-xl font-semibold"
               />
+              {existingRent && !actualRent && (
+                <p className="text-sm text-gray-600 mt-1">
+                  Vous pouvez modifier ce montant si nécessaire
+                </p>
+              )}
             </div>
 
             {actualRent && (
@@ -203,22 +232,26 @@ export function WuuneResultStep() {
 
           <div className="space-y-4 max-w-md mx-auto">
             <div>
-              <Label htmlFor="email">Email (optionnel)</Label>
+              <Label htmlFor="email">
+                Email {contactInfo.email && "(déjà renseigné)"}
+              </Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="votre.email@exemple.com"
+                placeholder={contactInfo.email || "votre.email@exemple.com"}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div>
-              <Label htmlFor="phone">Téléphone (optionnel)</Label>
+              <Label htmlFor="phone">
+                Téléphone {contactInfo.phone && "(déjà renseigné)"}
+              </Label>
               <Input
                 id="phone"
                 type="tel"
-                placeholder="0X XX XX XX XX"
+                placeholder={contactInfo.phone || "0X XX XX XX XX"}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />

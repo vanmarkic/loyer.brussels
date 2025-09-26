@@ -7,6 +7,7 @@ import { ArrowLeft, Shield, Info, User, Home, Building } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocale } from 'next-intl';
 import { FormProvider } from '../../../context/form-context';
+import { GlobalFormProvider } from '../../../context/global-form-context';
 import { RentalCalculator } from '../../../components/rental-calculator/calculator';
 import { UnifiedCalculatorLayout } from '../../../components/layouts/unified-calculator-layout';
 
@@ -250,9 +251,11 @@ export default function BruxellesCalculatorPage() {
           </p>
         </div>
 
-        <FormProvider>
-          <RentalCalculator />
-        </FormProvider>
+        <GlobalFormProvider>
+          <FormProvider>
+            <RentalCalculator />
+          </FormProvider>
+        </GlobalFormProvider>
       </div>
     </UnifiedCalculatorLayout>
   );

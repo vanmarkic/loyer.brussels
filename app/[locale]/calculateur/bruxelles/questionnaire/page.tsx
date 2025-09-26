@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -18,12 +18,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocale } from "next-intl";
+import { GlobalFormProvider, useGlobalForm } from "../../../../context/global-form-context";
 
 interface QuestionnaireData {
-  // Données de base
-  rentAmount: string;
-  livingSpace: string;
-
+  // Note: rentAmount and livingSpace are now pulled from global context
   // Section 1: Situation personnelle et du bail
   leaseType: string;
   leaseStartDate: string;
@@ -36,7 +34,7 @@ interface QuestionnaireData {
   boilerMaintenance: boolean;
   fireInsurance: boolean;
 
-  // Section 2: Problèmes du logement
+  // Section 2: Problèmes du logement  
   healthIssues: string[];
   majorDefects: string[];
 
@@ -47,33 +45,64 @@ interface QuestionnaireData {
   additionalComments: string;
 }
 
-export default function DetailedQuestionnairePage() {
+function DetailedQuestionnaireContent() {
   const currentLocale = useLocale();
+  const globalForm = useGlobalForm();
   const [currentSection, setCurrentSection] = useState(0);
+  
+  // Get pre-filled data from global context
+  const existingRent = globalForm.getActualRent();
+  const existingSpace = globalForm.getLivingSpace();
+  const contactInfo = globalForm.getContactInfo();
+
   const [data, setData] = useState<QuestionnaireData>({
-    rentAmount: "",
-    livingSpace: "",
-    leaseType: "",
-    leaseStartDate: "",
-    monthlyIncome: "",
-    householdComposition: "",
-    rentIndexation: "",
-    paymentDelays: "",
-    evictionThreats: "",
-    mediationAttempts: "",
-    boilerMaintenance: false,
-    fireInsurance: false,
-    healthIssues: [],
-    majorDefects: [],
-    positiveAspects: [],
-    additionalComments: "",
+    leaseType: globalForm.state.rentalInfo.leaseType || "",
+    leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || "",
+    monthlyIncome: globalForm.state.householdInfo.monthlyIncome || "",
+    householdComposition: globalForm.state.householdInfo.householdComposition || "",
+    rentIndexation: globalForm.state.rentalInfo.rentIndexation || "",
+    paymentDelays: globalForm.state.householdInfo.paymentDelays || "",
+    evictionThreats: globalForm.state.householdInfo.evictionThreats || "",
+    mediationAttempts: globalForm.state.householdInfo.mediationAttempts || "",
+    boilerMaintenance: globalForm.state.rentalInfo.boilerMaintenance,
+    fireInsurance: globalForm.state.rentalInfo.fireInsurance,
+    healthIssues: globalForm.state.propertyIssues.healthIssues || [],
+    majorDefects: globalForm.state.propertyIssues.majorDefects || [],
+    positiveAspects: globalForm.state.propertyIssues.positiveAspects || [],
+    additionalComments: globalForm.state.propertyIssues.additionalComments || "",
   });
 
+  // Update global context when data changes
+  useEffect(() => {
+    globalForm.updateRentalInfo({
+      leaseType: data.leaseType,
+      leaseStartDate: data.leaseStartDate,
+      rentIndexation: data.rentIndexation,
+      boilerMaintenance: data.boilerMaintenance,
+      fireInsurance: data.fireInsurance,
+    });
+    
+    globalForm.updateHouseholdInfo({
+      monthlyIncome: data.monthlyIncome,
+      householdComposition: data.householdComposition,
+      paymentDelays: data.paymentDelays,
+      evictionThreats: data.evictionThreats,
+      mediationAttempts: data.mediationAttempts,
+    });
+    
+    globalForm.updatePropertyIssues({
+      healthIssues: data.healthIssues,
+      majorDefects: data.majorDefects,
+      positiveAspects: data.positiveAspects,
+      additionalComments: data.additionalComments,
+    });
+  }, [data]);
+
   const sections = [
-    "Informations de base",
+    "Informations récupérées",
     "Situation personnelle et du bail",
     "Problèmes du logement",
-    "Points positifs du logement",
+    "Points positifs du logement", 
     "Résultat personnalisé",
   ];
 
@@ -109,48 +138,51 @@ export default function DetailedQuestionnairePage() {
           <div className="space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Questionnaire rapide
+                Questionnaire détaillé
               </h2>
               <p className="text-gray-600">
-                Commençons par quelques informations de base sur votre logement
+                Nous utilisons les informations déjà collectées de votre évaluation
               </p>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="rentAmount">
-                  Montant actuel de votre loyer (€/mois, hors charges)
-                </Label>
-                <Input
-                  id="rentAmount"
-                  type="number"
-                  placeholder="Ex: 850"
-                  value={data.rentAmount}
-                  onChange={(e) =>
-                    setData((prev) => ({ ...prev, rentAmount: e.target.value }))
-                  }
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="livingSpace">Surface habitable totale (m²)</Label>
-                <Input
-                  id="livingSpace"
-                  type="number"
-                  placeholder="Ex: 75"
-                  value={data.livingSpace}
-                  onChange={(e) =>
-                    setData((prev) => ({ ...prev, livingSpace: e.target.value }))
-                  }
-                />
+            {/* Show pre-filled data */}
+            <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+              <h3 className="font-semibold text-green-800 mb-3">
+                ✓ Informations déjà collectées
+              </h3>
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-green-700 font-medium">Loyer actuel :</span>
+                  <span className="ml-2">
+                    {existingRent ? `${existingRent}€/mois` : "Non renseigné"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-green-700 font-medium">Surface habitable :</span>
+                  <span className="ml-2">
+                    {existingSpace ? `${existingSpace}m²` : "Non renseignée"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-green-700 font-medium">Email :</span>
+                  <span className="ml-2">
+                    {contactInfo.email || "Non renseigné"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-green-700 font-medium">Téléphone :</span>
+                  <span className="ml-2">
+                    {contactInfo.phone || "Non renseigné"}
+                  </span>
+                </div>
               </div>
             </div>
 
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
               <p className="text-sm text-blue-800">
                 <Info className="h-4 w-4 inline mr-2" />
-                Ces informations nous permettront d'évaluer si une contestation de loyer
-                pourrait être pertinente dans votre cas.
+                Ce questionnaire approfondi nous permettra de mieux comprendre votre situation
+                et de vous donner des conseils plus précis. Aucune donnée ne sera redemandée !
               </p>
             </div>
           </div>
@@ -596,5 +628,14 @@ export default function DetailedQuestionnairePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Wrapper component with GlobalFormProvider
+export default function DetailedQuestionnairePage() {
+  return (
+    <GlobalFormProvider>
+      <DetailedQuestionnaireContent />
+    </GlobalFormProvider>
   );
 }

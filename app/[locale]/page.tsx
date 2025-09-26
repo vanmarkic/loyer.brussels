@@ -20,7 +20,7 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <Users className="h-6 w-6 text-red-600" />
           <span className="text-xs font-medium uppercase text-gray-700">
-            {t('HomePage.header.collectiveTitle')}
+            {t("HomePage.header.collectiveTitle")}
           </span>
         </div>
         <LanguageSwitcher />
@@ -33,29 +33,29 @@ export default function Home() {
           <div className="text-white uppercase">
             <div className="font-bold text-lg leading-tight">WUUNE</div>
             <div className="text-xs leading-tight">
-              {t('HomePage.navigation.collective')}
+              {t("HomePage.navigation.collective")}
             </div>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-6 text-white">
           <Link href={`/${currentLocale}`} className="hover:underline">
-            {t('HomePage.navigation.home')}
+            {t("HomePage.navigation.home")}
           </Link>
           <Link href={`/${currentLocale}/wuune`} className="hover:underline">
-            {t('HomePage.navigation.about')}
+            {t("HomePage.navigation.about")}
           </Link>
           <Link href={`/${currentLocale}/campagne`} className="hover:underline">
-            {t('HomePage.navigation.campaign')}
+            {t("HomePage.navigation.campaign")}
           </Link>
           <Link href={`/${currentLocale}/contact`} className="hover:underline">
-            {t('HomePage.navigation.contact')}
+            {t("HomePage.navigation.contact")}
           </Link>
         </div>
         <button
           className="text-white flex items-center gap-2 uppercase font-medium md:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" />
+          {t("HomePage.navigation.menu")} <Menu className="h-5 w-5" />
         </button>
       </nav>
 
@@ -64,16 +64,16 @@ export default function Home() {
         <div className="md:hidden bg-red-700 py-4 px-6">
           <div className="flex flex-col gap-4 text-white">
             <Link href={`/${currentLocale}`} className="hover:underline">
-              {t('HomePage.navigation.home')}
+              {t("HomePage.navigation.home")}
             </Link>
             <Link href={`/${currentLocale}/wuune`} className="hover:underline">
-              {t('HomePage.navigation.about')}
+              {t("HomePage.navigation.about")}
             </Link>
             <Link href={`/${currentLocale}/campagne`} className="hover:underline">
-              {t('HomePage.navigation.campaign')}
+              {t("HomePage.navigation.campaign")}
             </Link>
             <Link href={`/${currentLocale}/contact`} className="hover:underline">
-              {t('HomePage.navigation.contact')}
+              {t("HomePage.navigation.contact")}
             </Link>
           </div>
         </div>
@@ -86,27 +86,29 @@ export default function Home() {
             {/* Left content */}
             <div className="text-white space-y-8">
               <h1 className="text-5xl md:text-7xl font-bold uppercase leading-tight text-shadow-lg">
-                {t('HomePage.hero.title')}
+                {t("HomePage.hero.title")}
               </h1>
 
               <div className="space-y-6">
                 <h2 className="text-2xl md:text-3xl font-semibold">
-                  {t('HomePage.hero.subtitle')}
+                  {t("HomePage.hero.subtitle")}
                 </h2>
                 <p className="text-lg md:text-xl leading-relaxed">
-                  {t('HomePage.hero.description')}
+                  {t("HomePage.hero.description")}
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                 <Link href={`/${currentLocale}/calculateur`}>
                   <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-10 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all">
-                    {t('HomePage.hero.startButton')}
+                    {t("HomePage.hero.startButton")}
                   </Button>
                 </Link>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-sm uppercase font-medium">{t('HomePage.hero.shareText')}</span>
+                  <span className="text-sm uppercase font-medium">
+                    {t("HomePage.hero.shareText")}
+                  </span>
                   <Link
                     href="#"
                     className="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors"
@@ -128,7 +130,7 @@ export default function Home() {
               <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
                 <Image
                   src="/hero-manifestation.svg"
-                  alt={t('HomePage.hero.imageAlt')}
+                  alt={t("HomePage.hero.imageAlt")}
                   fill
                   className="object-cover"
                 />
@@ -144,17 +146,17 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-                {t('HomePage.aboutUs.title')}
+                {t("HomePage.aboutUs.title")}
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                {t('HomePage.aboutUs.description1')}
+                {t("HomePage.aboutUs.description1")}
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                {t('HomePage.aboutUs.description2')}
+                {t("HomePage.aboutUs.description2")}
               </p>
               <Link href={`/${currentLocale}/wuune`}>
                 <Button className="bg-red-600 text-white hover:bg-red-700 px-6 py-3">
-                  {t('HomePage.aboutUs.learnMoreButton')}
+                  {t("HomePage.aboutUs.learnMoreButton")}
                 </Button>
               </Link>
             </div>
@@ -162,7 +164,7 @@ export default function Home() {
               <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
                 <Image
                   src="/community-warmth.svg"
-                  alt={t('HomePage.aboutUs.imageAlt')}
+                  alt={t("HomePage.aboutUs.imageAlt")}
                   fill
                   className="object-cover"
                 />
@@ -179,40 +181,44 @@ export default function Home() {
             <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
               <Users className="h-12 w-12 text-red-600 mx-auto mb-4" />
               <h3 className="text-xl font-bold uppercase mb-4">
-                {t('HomePage.callToAction.joinCampaign.title')}
+                {t("HomePage.callToAction.joinCampaign.title")}
               </h3>
               <p className="text-gray-600 mb-6">
-                {t('HomePage.callToAction.joinCampaign.description')}
+                {t("HomePage.callToAction.joinCampaign.description")}
               </p>
               <Link href={`/${currentLocale}/campagne`}>
                 <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t('HomePage.callToAction.joinCampaign.button')}
+                  {t("HomePage.callToAction.joinCampaign.button")}
                 </Button>
               </Link>
             </div>
 
             <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
               <Heart className="h-12 w-12 text-red-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold uppercase mb-4">{t('HomePage.callToAction.evaluateRent.title')}</h3>
+              <h3 className="text-xl font-bold uppercase mb-4">
+                {t("HomePage.callToAction.evaluateRent.title")}
+              </h3>
               <p className="text-gray-600 mb-6">
-                {t('HomePage.callToAction.evaluateRent.description')}
+                {t("HomePage.callToAction.evaluateRent.description")}
               </p>
               <Link href={`/${currentLocale}/calculateur`}>
                 <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t('HomePage.callToAction.evaluateRent.button')}
+                  {t("HomePage.callToAction.evaluateRent.button")}
                 </Button>
               </Link>
             </div>
 
             <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
               <Mail className="h-12 w-12 text-red-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold uppercase mb-4">{t('HomePage.callToAction.contactUs.title')}</h3>
+              <h3 className="text-xl font-bold uppercase mb-4">
+                {t("HomePage.callToAction.contactUs.title")}
+              </h3>
               <p className="text-gray-600 mb-6">
-                {t('HomePage.callToAction.contactUs.description')}
+                {t("HomePage.callToAction.contactUs.description")}
               </p>
               <Link href={`/${currentLocale}/contact`}>
                 <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t('HomePage.callToAction.contactUs.button')}
+                  {t("HomePage.callToAction.contactUs.button")}
                 </Button>
               </Link>
             </div>
@@ -229,35 +235,33 @@ export default function Home() {
                 <Heart className="h-6 w-6 text-red-500" />
                 <span className="font-bold text-lg">WUUNE</span>
               </div>
-              <p className="text-gray-300 text-sm">
-                {t('HomePage.footer.description')}
-              </p>
+              <p className="text-gray-300 text-sm">{t("HomePage.footer.description")}</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">{t('HomePage.footer.usefulLinks')}</h4>
+              <h4 className="font-semibold mb-4">{t("HomePage.footer.usefulLinks")}</h4>
               <div className="space-y-2 text-sm">
                 <Link
                   href={`/${currentLocale}/wuune`}
                   className="block text-gray-300 hover:text-white"
                 >
-                  {t('HomePage.footer.aboutLink')}
+                  {t("HomePage.footer.aboutLink")}
                 </Link>
                 <Link
                   href={`/${currentLocale}/campagne`}
                   className="block text-gray-300 hover:text-white"
                 >
-                  {t('HomePage.footer.campaignLink')}
+                  {t("HomePage.footer.campaignLink")}
                 </Link>
                 <Link
                   href={`/${currentLocale}/contact`}
                   className="block text-gray-300 hover:text-white"
                 >
-                  {t('HomePage.footer.contactLink')}
+                  {t("HomePage.footer.contactLink")}
                 </Link>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">{t('HomePage.footer.followUs')}</h4>
+              <h4 className="font-semibold mb-4">{t("HomePage.footer.followUs")}</h4>
               <div className="flex gap-3">
                 <Link href="#" className="bg-blue-600 p-2 rounded hover:bg-blue-700">
                   <Facebook className="h-4 w-4" />
@@ -269,7 +273,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 {t('HomePage.footer.copyright')}</p>
+            <p>&copy; 2024 {t("HomePage.footer.copyright")}</p>
           </div>
         </div>
       </footer>

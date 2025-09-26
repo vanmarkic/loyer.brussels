@@ -59,11 +59,11 @@ export default function ContactPage() {
               className="flex items-center gap-2 text-red-600 hover:text-red-700"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>{t('ContactPage.header.backToHome')}</span>
+              <span>{t("ContactPage.header.backToHome")}</span>
             </Link>
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-red-600" />
-              <span className="font-bold text-xl">{t('ContactPage.header.title')}</span>
+              <span className="font-bold text-xl">{t("ContactPage.header.title")}</span>
             </div>
           </div>
         </div>
@@ -73,9 +73,11 @@ export default function ContactPage() {
       <section className="bg-gradient-to-r from-red-600 to-red-500 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{t('ContactPage.hero.title')}</h1>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              {t("ContactPage.hero.title")}
+            </h1>
             <p className="text-xl md:text-2xl leading-relaxed">
-              {t('ContactPage.hero.description')}
+              {t("ContactPage.hero.description")}
             </p>
           </div>
         </div>
@@ -242,10 +244,7 @@ export default function ContactPage() {
 
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600">
-                  En soumettant ce formulaire, vous acceptez que vos données soient
-                  utilisées pour répondre à votre demande. Nous nous engageons à respecter
-                  votre vie privée et ne transmettrons jamais vos informations à des
-                  tiers.
+                  {t("ContactPage.form.privacyDisclaimer")}
                 </p>
               </div>
 
@@ -266,7 +265,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-              Comment pouvons-nous vous aider ?
+              {t("ContactPage.additionalInfo.heading")}
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8">

@@ -340,7 +340,8 @@
         "description": "Si vous êtes dans une situation d'urgence (menace d'expulsion, loyer abusif, etc.), contactez-nous directement par téléphone ou email pour une réponse prioritaire."
       },
       "submitButton": "Envoyer le message",
-      "successMessage": "Votre message a été envoyé ! Nous vous répondrons dans les plus brefs délais."
+      "successMessage": "Votre message a été envoyé ! Nous vous répondrons dans les plus brefs délais.",
+      "privacyDisclaimer": "En soumettant ce formulaire, vous acceptez que vos données soient utilisées pour répondre à votre demande. Nous nous engageons à respecter votre vie privée et ne transmettrons jamais vos informations à des tiers."
     },
     "resources": {
       "title": "Ressources utiles",
@@ -350,6 +351,9 @@
         "rentControl": "Guide de l'encadrement des loyers",
         "mediation": "Services de médiation"
       }
+    },
+    "additionalInfo": {
+      "heading": "Comment pouvons-nous vous aider ?"
     }
   },
   "QuestionnairePage": {

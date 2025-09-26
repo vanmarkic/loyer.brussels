@@ -340,7 +340,8 @@
         "description": "If you are in an emergency situation (threat of eviction, abusive rent, etc.), contact us directly by phone or email for priority response."
       },
       "submitButton": "Send message",
-      "successMessage": "Your message has been sent! We will respond as soon as possible."
+      "successMessage": "Your message has been sent! We will respond as soon as possible.",
+      "privacyDisclaimer": "By submitting this form, you agree that your data will be used to respond to your request. We are committed to respecting your privacy and will never share your information with third parties."
     },
     "resources": {
       "title": "Useful Resources",
@@ -350,6 +351,9 @@
         "rentControl": "Rent control guide",
         "mediation": "Mediation services"
       }
+    },
+    "additionalInfo": {
+      "heading": "How can we help you?"
     }
   },
   "QuestionnairePage": {

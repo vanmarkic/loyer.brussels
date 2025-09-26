@@ -340,7 +340,8 @@
         "description": "Als u zich in een noodsituatie bevindt (dreiging van uitzetting, misbruikelijke huurprijs, enz.), neem dan direct contact met ons op per telefoon of email voor een prioritaire reactie."
       },
       "submitButton": "Bericht verzenden",
-      "successMessage": "Uw bericht is verzonden! We zullen zo snel mogelijk reageren."
+      "successMessage": "Uw bericht is verzonden! We zullen zo snel mogelijk reageren.",
+      "privacyDisclaimer": "Door dit formulier in te dienen, gaat u ermee akkoord dat uw gegevens worden gebruikt om op uw verzoek te reageren. Wij verbinden ons ertoe uw privacy te respecteren en zullen uw informatie nooit met derden delen."
     },
     "resources": {
       "title": "Nuttige Bronnen",
@@ -350,6 +351,9 @@
         "rentControl": "Huurprijsbeheersing gids",
         "mediation": "Bemiddelingsdiensten"
       }
+    },
+    "additionalInfo": {
+      "heading": "Hoe kunnen wij u helpen?"
     }
   },
   "QuestionnairePage": {

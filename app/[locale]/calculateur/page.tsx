@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft, MapPin, AlertTriangle, Info } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLocale } from "next-intl";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowLeft, MapPin, AlertTriangle, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLocale } from 'next-intl';
 
 export default function CalculatorPage() {
   const currentLocale = useLocale();
-  const [selectedRegion, setSelectedRegion] = useState<string>("");
-  const [housingType, setHousingType] = useState<string>("");
-  const [userType, setUserType] = useState<string>("");
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
+  const [housingType, setHousingType] = useState<string>('');
+  const [userType, setUserType] = useState<string>('');
   const [showRegionInfo, setShowRegionInfo] = useState(false);
 
   const handleRegionSelect = (region: string) => {
@@ -20,7 +20,7 @@ export default function CalculatorPage() {
   };
 
   const handleContinue = () => {
-    if (selectedRegion === "bruxelles") {
+    if (selectedRegion === 'bruxelles') {
       // Rediriger vers le calculateur Bruxelles
       window.location.href = `/${currentLocale}/calculateur/bruxelles`;
     }
@@ -29,19 +29,19 @@ export default function CalculatorPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link
               href={`/${currentLocale}`}
-              className="flex items-center gap-2 text-red-600 hover:text-red-700"
+              className="flex items-center gap-2 text-red-600 hover:text-red-700 transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
               <span>Retour à l'accueil</span>
             </Link>
             <div className="flex items-center gap-2">
               <MapPin className="h-6 w-6 text-red-600" />
-              <span className="font-bold text-xl">Évaluation du loyer</span>
+              <span className="font-bold text-xl text-gray-800">Évaluation du loyer</span>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function CalculatorPage() {
                 <div className="grid md:grid-cols-3 gap-8">
                   <div
                     className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-red-500"
-                    onClick={() => handleRegionSelect("bruxelles")}
+                    onClick={() => handleRegionSelect('bruxelles')}
                   >
                     <div className="text-center">
                       <MapPin className="h-16 w-16 text-red-600 mx-auto mb-4" />
@@ -78,7 +78,7 @@ export default function CalculatorPage() {
 
                   <div
                     className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-orange-500"
-                    onClick={() => handleRegionSelect("wallonie")}
+                    onClick={() => handleRegionSelect('wallonie')}
                   >
                     <div className="text-center">
                       <MapPin className="h-16 w-16 text-orange-600 mx-auto mb-4" />
@@ -92,7 +92,7 @@ export default function CalculatorPage() {
 
                   <div
                     className="bg-white rounded-lg shadow-lg p-8 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-gray-400"
-                    onClick={() => handleRegionSelect("flandres")}
+                    onClick={() => handleRegionSelect('flandres')}
                   >
                     <div className="text-center">
                       <MapPin className="h-16 w-16 text-gray-600 mx-auto mb-4" />
@@ -110,7 +110,7 @@ export default function CalculatorPage() {
             {/* Informations sur la région sélectionnée */}
             {showRegionInfo && (
               <div className="max-w-2xl mx-auto">
-                {selectedRegion === "bruxelles" && (
+                {selectedRegion === 'bruxelles' && (
                   <div className="bg-white rounded-lg shadow-lg p-8 text-center">
                     <div className="mb-6">
                       <MapPin className="h-16 w-16 text-red-600 mx-auto mb-4" />
@@ -164,7 +164,7 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                {selectedRegion === "wallonie" && (
+                {selectedRegion === 'wallonie' && (
                   <div className="bg-white rounded-lg shadow-lg p-8 text-center">
                     <div className="mb-6">
                       <MapPin className="h-16 w-16 text-orange-600 mx-auto mb-4" />
@@ -200,7 +200,7 @@ export default function CalculatorPage() {
                       </Button>
                       <Button
                         variant="outline"
-                        onClick={() => setSelectedRegion("")}
+                        onClick={() => setSelectedRegion('')}
                         className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 w-full"
                       >
                         Changer de région
@@ -209,7 +209,7 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
-                {selectedRegion === "flandres" && (
+                {selectedRegion === 'flandres' && (
                   <div className="bg-white rounded-lg shadow-lg p-8 text-center">
                     <div className="mb-6">
                       <MapPin className="h-16 w-16 text-gray-600 mx-auto mb-4" />
@@ -246,7 +246,7 @@ export default function CalculatorPage() {
                       </Link>
                       <Button
                         variant="outline"
-                        onClick={() => setSelectedRegion("")}
+                        onClick={() => setSelectedRegion('')}
                         className="border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 w-full"
                       >
                         Changer de région
@@ -259,6 +259,15 @@ export default function CalculatorPage() {
           </div>
         </div>
       </main>
+
+      {/* Unified Footer */}
+      <footer className="bg-white border-t py-4 px-4">
+        <div className="container mx-auto text-center">
+          <p className="text-sm text-gray-600">
+            © 2024 Collectif Wuune - Outil d'évaluation des loyers
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

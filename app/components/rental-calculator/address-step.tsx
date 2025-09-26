@@ -68,70 +68,80 @@ export function AddressStep() {
         </Alert>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-6 sm:space-y-4">
         <AddressAutocomplete
           onAddressSelect={handleAddressSelect}
           label={t("autocompleteLabel")}
           placeholder={t("autocompletePlaceholder")}
         />
 
-        <div className="pt-2 border-t border-gray-200">
-          <p className="text-sm text-muted-foreground mb-3">
+        <div className="pt-4 border-t border-gray-200">
+          <p className="text-base sm:text-sm text-muted-foreground mb-4 sm:mb-3">
             {t("manualEntryInstruction")}
           </p>
 
-          <div>
-            <Label htmlFor="postalCode">{t("postalCodeLabel")}</Label>
-            <Input
-              id="postalCode"
-              value={state.postalCode}
-              onChange={(e) => {
-                clearError();
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "postalCode",
-                  value: e.target.value,
-                });
-              }}
-              placeholder={t("postalCodePlaceholder")}
-              className="mt-1"
-            />
-          </div>
+          <div className="space-y-4 sm:space-y-3">
+            <div>
+              <Label htmlFor="postalCode" className="text-base sm:text-sm font-medium">
+                {t("postalCodeLabel")}
+              </Label>
+              <Input
+                id="postalCode"
+                value={state.postalCode}
+                onChange={(e) => {
+                  clearError();
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    field: "postalCode",
+                    value: e.target.value,
+                  });
+                }}
+                placeholder={t("postalCodePlaceholder")}
+                className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+                inputMode="numeric"
+              />
+            </div>
 
-          <div className="mt-3">
-            <Label htmlFor="streetName">{t("streetNameLabel")}</Label>
-            <Input
-              id="streetName"
-              value={state.streetName}
-              onChange={(e) => {
-                clearError();
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "streetName",
-                  value: e.target.value,
-                });
-              }}
-              placeholder={t("streetNamePlaceholder")}
-              className="mt-1"
-            />
-          </div>
+            <div>
+              <Label htmlFor="streetName" className="text-base sm:text-sm font-medium">
+                {t("streetNameLabel")}
+              </Label>
+              <Input
+                id="streetName"
+                value={state.streetName}
+                onChange={(e) => {
+                  clearError();
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    field: "streetName",
+                    value: e.target.value,
+                  });
+                }}
+                placeholder={t("streetNamePlaceholder")}
+                className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+              />
+            </div>
 
-          <div className="mt-3">
-            <Label htmlFor="streetNumber">{t("streetNumberLabel")}</Label>
-            <Input
-              id="streetNumber"
-              value={state.streetNumber}
-              onChange={(e) => {
-                clearError();
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "streetNumber",
-                  value: e.target.value,
-                });
-              }}
-              placeholder={t("streetNumberPlaceholder")}
-              className="mt-1"
-            />
+            <div>
+              <Label htmlFor="streetNumber" className="text-base sm:text-sm font-medium">
+                {t("streetNumberLabel")}
+              </Label>
+              <Input
+                id="streetNumber"
+                value={state.streetNumber}
+                onChange={(e) => {
+                  clearError();
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    field: "streetNumber",
+                    value: e.target.value,
+                  });
+                }}
+                placeholder={t("streetNumberPlaceholder")}
+                className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+                inputMode="numeric"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -143,8 +153,8 @@ export function AddressStep() {
         </Alert>
       )}
 
-      <div className="flex gap-3">
-        <Button onClick={handleBack} variant="outline" className="flex-1">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button onClick={handleBack} variant="outline" className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation">
           {t("backButton")}
         </Button>
         <Button
@@ -155,11 +165,11 @@ export function AddressStep() {
             !state.streetNumber ||
             state.isLoading
           }
-          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
         >
           {state.isLoading ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" /> {t("calculatingButton")}
+              <Loader2 className="h-5 w-5 sm:h-4 sm:w-4 animate-spin" /> {t("calculatingButton")}
             </span>
           ) : (
             t("calculateButton")

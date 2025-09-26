@@ -41,9 +41,11 @@ export function PropertyDetailsStep() {
         <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6 sm:space-y-4">
         <div>
-          <Label htmlFor="size">{t("sizeLabel")}</Label>
+          <Label htmlFor="size" className="text-base sm:text-sm font-medium">
+            {t("sizeLabel")}
+          </Label>
           <Input
             id="size"
             type="number"
@@ -56,23 +58,26 @@ export function PropertyDetailsStep() {
                 value: Number.parseInt(e.target.value) || 0,
               })
             }
-            className="mt-1"
+            className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+            inputMode="numeric"
+            placeholder="Ex: 75"
           />
         </div>
 
         <div>
-          <Label>{t("bedroomsLabel")}</Label>
-          <div className="flex items-center justify-between mt-1">
+          <Label className="text-base sm:text-sm font-medium">{t("bedroomsLabel")}</Label>
+          <div className="flex items-center justify-between mt-2 sm:mt-1 bg-gray-50 rounded-lg p-2">
             <Button
               type="button"
               variant="outline"
               size="icon"
               onClick={decrementBedrooms}
               disabled={state.bedrooms === 0}
+              className="h-12 w-12 sm:h-10 sm:w-10 touch-manipulation"
             >
-              <MinusCircle className="h-4 w-4" />
+              <MinusCircle className="h-6 w-6 sm:h-4 sm:w-4" />
             </Button>
-            <span className="text-xl font-medium">
+            <span className="text-2xl sm:text-xl font-medium px-4">
               {state.bedrooms === 4 ? t("bedroomsCountMax") : state.bedrooms}
             </span>
             <Button
@@ -81,21 +86,22 @@ export function PropertyDetailsStep() {
               size="icon"
               onClick={incrementBedrooms}
               disabled={state.bedrooms >= 4}
+              className="h-12 w-12 sm:h-10 sm:w-10 touch-manipulation"
             >
-              <PlusCircle className="h-4 w-4" />
+              <PlusCircle className="h-6 w-6 sm:h-4 sm:w-4" />
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <Button onClick={handleBack} variant="outline" className="flex-1">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button onClick={handleBack} variant="outline" className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation">
           {t("backButton")}
         </Button>
         <Button
           onClick={handleContinue}
           disabled={state.size <= 0 || !state.propertyType}
-          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
         >
           {t("continueButton")}
         </Button>

@@ -42,19 +42,19 @@ export function PropertyTypeStep() {
         onValueChange={(value) =>
           dispatch({ type: "UPDATE_FIELD", field: "propertyType", value })
         }
-        className="grid grid-cols-2 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
       >
         {propertyTypes.map((type) => (
           <div key={type.value}>
             <RadioGroupItem value={type.value} id={type.value} className="peer sr-only" />
             <Label
               htmlFor={type.value}
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-white p-4 hover:bg-gray-50 hover:border-gray-300 peer-data-[state=checked]:border-[#f18240] peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-[#f18240] [&:has([data-state=checked])]:bg-orange-50"
+              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-white p-6 hover:bg-gray-50 hover:border-gray-300 peer-data-[state=checked]:border-[#f18240] peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-[#f18240] [&:has([data-state=checked])]:bg-orange-50 cursor-pointer min-h-[120px] touch-manipulation"
             >
-              <div className="mb-3 rounded-full bg-orange-100 p-3 text-[#f18240]">
+              <div className="mb-3 rounded-full bg-orange-100 p-4 text-[#f18240]">
                 {type.icon}
               </div>
-              <div className="font-medium">{type.label}</div>
+              <div className="font-medium text-center text-base sm:text-sm">{type.label}</div>
             </Label>
           </div>
         ))}
@@ -63,7 +63,7 @@ export function PropertyTypeStep() {
       <Button
         onClick={handleContinue}
         disabled={!state.propertyType}
-        className="w-full bg-[#e05c6d] hover:bg-[#d04c5d]"
+        className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-12 text-lg font-medium touch-manipulation"
       >
         {t("continueButton")}
       </Button>

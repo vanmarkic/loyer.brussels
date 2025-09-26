@@ -91,39 +91,44 @@ export function EnergyStep() {
 
       {renderErrorMessage()}
 
-      <div className="space-y-4">
+      <div className="space-y-6 sm:space-y-4">
         <div>
-          <Label htmlFor="energyClass">{t("energyClassLabel")}</Label>
+          <Label htmlFor="energyClass" className="text-base sm:text-sm font-medium">
+            {t("energyClassLabel")}
+          </Label>
           <Select
             value={state.energyClass}
             onValueChange={(value) =>
               dispatch({ type: "UPDATE_FIELD", field: "energyClass", value })
             }
           >
-            <SelectTrigger id="energyClass">
+            <SelectTrigger 
+              id="energyClass" 
+              className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+            >
               <SelectValue placeholder={t("energyClassPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="A">A</SelectItem>
-              <SelectItem value="B">B</SelectItem>
-              <SelectItem value="C">C</SelectItem>
-              <SelectItem value="D">D</SelectItem>
-              <SelectItem value="E">E</SelectItem>
-              <SelectItem value="F">F</SelectItem>
-              <SelectItem value="G">G</SelectItem>
+              <SelectItem value="A" className="text-lg sm:text-base py-3 sm:py-2">A</SelectItem>
+              <SelectItem value="B" className="text-lg sm:text-base py-3 sm:py-2">B</SelectItem>
+              <SelectItem value="C" className="text-lg sm:text-base py-3 sm:py-2">C</SelectItem>
+              <SelectItem value="D" className="text-lg sm:text-base py-3 sm:py-2">D</SelectItem>
+              <SelectItem value="E" className="text-lg sm:text-base py-3 sm:py-2">E</SelectItem>
+              <SelectItem value="F" className="text-lg sm:text-base py-3 sm:py-2">F</SelectItem>
+              <SelectItem value="G" className="text-lg sm:text-base py-3 sm:py-2">G</SelectItem>
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <Button onClick={handleBack} variant="outline" className="flex-1">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button onClick={handleBack} variant="outline" className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation">
           {t("backButton")}
         </Button>
         <Button
           onClick={handleContinue}
           disabled={!state.energyClass}
-          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
         >
           {t("continueButton")}
         </Button>

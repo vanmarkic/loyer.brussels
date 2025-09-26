@@ -45,10 +45,10 @@ export function RentalCalculator() {
 
   return (
     <div
-      className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 transition-all duration-1000 min-h-[400px]" // Set a minimum height to prevent height changes
+      className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]" // Responsive padding and height
     >
       {state.step < totalSteps && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="flex justify-between text-sm mb-1">
             <span>
               {t("stepProgress", { currentStep: state.step, totalSteps: totalSteps - 1 })}

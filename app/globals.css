@@ -123,3 +123,78 @@ body {
 .bg-wuune-gradient-soft {
   background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%);
 }
+
+/* Mobile-First Optimizations */
+@media (max-width: 640px) {
+  /* Ensure proper touch targets (minimum 44px) */
+  button,
+  [role="button"],
+  .touch-manipulation {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve text readability on mobile */
+  body {
+    font-size: 16px; /* Prevents iOS zoom on input focus */
+    line-height: 1.5;
+  }
+  
+  /* Better tap targets for form elements */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+    min-height: 48px;
+  }
+  
+  /* Improve radio/checkbox touch targets */
+  input[type="radio"],
+  input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 4px;
+  }
+  
+  /* Reduce excessive padding on mobile */
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  /* Optimize button text for readability */
+  button {
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+}
+
+/* Performance Optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .smooth-transition,
+  .hover-scale,
+  .card-hover {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* High contrast improvements for accessibility */
+@media (prefers-contrast: high) {
+  .border-gray-200 {
+    border-color: #000;
+  }
+  
+  .text-gray-600 {
+    color: #000;
+  }
+}

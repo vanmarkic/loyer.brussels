@@ -31,7 +31,7 @@ export function FeaturesStep() {
     dispatch({ type: "PREV_STEP" });
   };
 
-  // Helper function to create radio options
+  // Helper function to create radio options with mobile-optimized layout
   const createRadioOption = (
     field:
       | "hasCentralHeating"
@@ -56,9 +56,9 @@ export function FeaturesStep() {
     }
 
     return (
-      <div className="grid grid-cols-[2fr,1fr,1fr] items-center py-3 border-b border-gray-100">
-        <div className="font-medium">{label}</div>
-        <div className="flex items-center justify-center">
+      <div className="flex flex-col sm:grid sm:grid-cols-[2fr,1fr,1fr] sm:items-center py-4 px-2 border-b border-gray-100 gap-3 sm:gap-0">
+        <div className="font-medium text-base sm:text-sm text-gray-800">{label}</div>
+        <div className="flex items-center justify-start sm:justify-center">
           <RadioGroup
             value={radioGroupValue} // Use the pre-calculated value
             onValueChange={(val) =>
@@ -68,18 +68,26 @@ export function FeaturesStep() {
                 value: val === "true" ? true : false,
               })
             }
-            className="flex items-center space-x-4"
+            className="flex items-center space-x-6 sm:space-x-4"
           >
             <>
-              <div className="flex items-center space-x-1">
-                <RadioGroupItem value="true" id={`${field}-true`} />
-                <Label htmlFor={`${field}-true`} className="text-sm">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem 
+                  value="true" 
+                  id={`${field}-true`} 
+                  className="h-5 w-5 sm:h-4 sm:w-4 touch-manipulation"
+                />
+                <Label htmlFor={`${field}-true`} className="text-base sm:text-sm font-medium cursor-pointer">
                   {t("yes")}
                 </Label>
               </div>
-              <div className="flex items-center space-x-1">
-                <RadioGroupItem value="false" id={`${field}-false`} />
-                <Label htmlFor={`${field}-false`} className="text-sm">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem 
+                  value="false" 
+                  id={`${field}-false`}
+                  className="h-5 w-5 sm:h-4 sm:w-4 touch-manipulation"
+                />
+                <Label htmlFor={`${field}-false`} className="text-base sm:text-sm font-medium cursor-pointer">
                   {t("no")}
                 </Label>
               </div>
@@ -98,13 +106,14 @@ export function FeaturesStep() {
       </div>
 
       <div className="border rounded-md overflow-hidden">
-        <div className="grid grid-cols-[2fr,1fr,1fr] bg-gray-50 py-2 px-3 border-b border-gray-200">
+        {/* Desktop table headers - hidden on mobile */}
+        <div className="hidden sm:grid sm:grid-cols-[2fr,1fr,1fr] bg-gray-50 py-2 px-3 border-b border-gray-200">
           <div className="font-semibold">{t("tableHeaders.option")}</div>
           <div className="text-center font-semibold">{t("tableHeaders.yes")}</div>
           <div className="text-center font-semibold">{t("tableHeaders.no")}</div>
         </div>
 
-        <div className="px-3">
+        <div className="px-1 sm:px-3">
           {createRadioOption("hasCentralHeating", t("options.centralHeating"))}
           {createRadioOption("hasThermalRegulation", t("options.thermalRegulation"))}
           {createRadioOption("hasDoubleGlazing", t("options.doubleGlazing"))}
@@ -113,31 +122,34 @@ export function FeaturesStep() {
           {createRadioOption("hasStorageSpaces", t("options.storageSpaces"))}
           {createRadioOption("constructedBefore2000", t("options.constructedBefore2000"))}
 
-          {/* Add Garage Input Section */}
-          <div className="grid grid-cols-[2fr,2fr] items-center py-3 border-t border-gray-100">
-            <Label htmlFor="numberOfGarages" className="font-medium">
+          {/* Mobile-optimized Garage Input Section */}
+          <div className="flex flex-col sm:grid sm:grid-cols-[2fr,2fr] sm:items-center py-4 px-2 border-t border-gray-100 gap-3 sm:gap-0">
+            <Label htmlFor="numberOfGarages" className="font-medium text-base sm:text-sm text-gray-800">
               {t("garageLabel")}
             </Label>
-            <Input
-              id="numberOfGarages"
-              type="number"
-              min="0"
-              value={state.numberOfGarages}
-              onChange={(e) =>
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "numberOfGarages",
-                  value: parseInt(e.target.value, 10) || 0, // Ensure it's a number, default to 0
-                })
-              }
-              className="w-20 justify-self-center" // Adjust width and alignment as needed
-            />
+            <div className="flex items-center sm:justify-center">
+              <Input
+                id="numberOfGarages"
+                type="number"
+                min="0"
+                value={state.numberOfGarages}
+                onChange={(e) =>
+                  dispatch({
+                    type: "UPDATE_FIELD",
+                    field: "numberOfGarages",
+                    value: parseInt(e.target.value, 10) || 0, // Ensure it's a number, default to 0
+                  })
+                }
+                className="w-24 h-12 sm:h-10 sm:w-20 text-center text-lg sm:text-base touch-manipulation"
+                inputMode="numeric"
+              />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <Button onClick={handleBack} variant="outline" className="flex-1">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Button onClick={handleBack} variant="outline" className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation">
           {t("backButton")}
         </Button>
         <Button
@@ -151,7 +163,7 @@ export function FeaturesStep() {
             state.hasStorageSpaces === null ||
             state.constructedBefore2000 === null // Add check for construction year
           }
-          className="flex-1 bg-[#e05c6d] hover:bg-[#d04c5d]"
+          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
         >
           {t("continueButton")}
         </Button>

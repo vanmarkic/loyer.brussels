@@ -141,6 +141,7 @@
       "description2": "De referentiehuurprijs moet echter verplicht vermeld worden naast de werkelijke huurprijs in huurovereenkomsten voor woningen in het Brussels Hoofdstedelijk Gewest."
     },
     "downloadPdfButton": "Download PDF",
+    "downloadingPdfButton": "Downloaden...",
     "shareButton": "Delen",
     "modifyButton": "Schatting wijzigen",
     "newEstimationButton": "Nieuwe schatting"
@@ -160,5 +161,365 @@
   "Metadata": {
     "title": "Brussel Huisvesting - Hoeveel kost het om een woning te huren in Brussel?",
     "description": "Gewestelijke Overheidsdienst Brussel - Brussel Huisvesting. Schat de indicatieve referentiehuurprijs voor een woning in Brussel."
+  },
+  "BruxellesPage": {
+    "header": {
+      "backToRegion": "Terug naar regioselectie",
+      "title": "Brussel Evaluatie"
+    },
+    "housingType": {
+      "title": "Type woning",
+      "description": "In welk type woning woont u of wilt u wonen?",
+      "privateMarket": {
+        "title": "Private markt",
+        "description": "Directe verhuur met een private verhuurder",
+        "status": "Huurprijsbeheersing van toepassing"
+      },
+      "aisHousing": {
+        "title": "SIK Woning",
+        "description": "Sociaal Verhuurkantoor",
+        "status": "Huurprijsbeheersing niet van toepassing"
+      },
+      "socialHousing": {
+        "title": "Sociale woning",
+        "description": "OCMW, SLSP of andere publieke organisaties",
+        "status": "Huurprijsbeheersing niet van toepassing"
+      },
+      "infoBox": {
+        "title": "Belangrijke informatie",
+        "description": "Huurprijsbeheersing in Brussel geldt alleen voor woningen op de private markt. Sociale woningen en SIK hebben hun eigen specifieke regelgeving."
+      },
+      "alert": "Huurprijsbeheersing is niet van toepassing op SIK of sociale woningen."
+    },
+    "userType": {
+      "title": "Welkom bij de evaluatietool",
+      "description": "Wie bent u?",
+      "dataProtection": {
+        "title": "Uw gegevens zijn beschermd",
+        "description": "Deze tool helpt u te evalueren of uw huurprijs voldoet aan de wettelijke regelgeving. Al uw gegevens blijven anoniem en vertrouwelijk.",
+        "consent": "Ik ga ermee akkoord dat mijn geanonimiseerde gegevens kunnen worden gebruikt voor onderzoeksdoeleinden om het huisvestingsbeleid te verbeteren.",
+        "consentRequired": "Gelieve het gebruik van gegevens te accepteren om verder te gaan"
+      },
+      "tenant": {
+        "title": "Huurder",
+        "description": "Ik huur of wil een woning huren"
+      },
+      "landlord": {
+        "title": "Verhuurder",
+        "description": "Ik verhuur of wil mijn woning verhuren"
+      },
+      "other": {
+        "title": "Andere",
+        "description": "Nieuwsgierig, student, professional..."
+      }
+    },
+    "calculator": {
+      "header": "WUUNE COLLECTIEF - HUUREVALUATIE",
+      "navigation": {
+        "title": "HUURDER EVALUATIE",
+        "subtitle": "BRUSSELS HOOFDSTEDELIJK GEWEST",
+        "back": "Terug"
+      },
+      "title": "Evalueer uw huurprijs",
+      "description": "Ontdek of uw huurprijs voldoet aan het Brusselse wettelijke kader",
+      "footer": "© 2024 Wuune Collectief. Huurevaluatietool."
+    }
+  },
+  "CalculatorRegionPage": {
+    "header": {
+      "backToHome": "Terug naar home",
+      "title": "Huurevaluatie"
+    },
+    "title": "Evalueer uw huurprijs",
+    "description": "In welk gewest bevindt uw woning zich?",
+    "regions": {
+      "brussels": {
+        "title": "Brussel",
+        "description": "Brussels Hoofdstedelijk Gewest",
+        "status": "Huurprijsbeheersing van kracht"
+      },
+      "wallonia": {
+        "title": "Wallonië",
+        "description": "Waals Gewest",
+        "status": "Evaluatie beschikbaar"
+      },
+      "flanders": {
+        "title": "Vlaanderen",
+        "description": "Vlaams Gewest",
+        "status": "In evaluatie"
+      }
+    },
+    "brusselsInfo": {
+      "title": "Brussels Hoofdstedelijk Gewest",
+      "activeFramework": {
+        "title": "Huurprijsbeheersing van kracht",
+        "description": "In Brussel worden huurprijzen gereguleerd door een wettelijk referentierooster. Onze tool stelt u in staat te evalueren of uw huurprijs voldoet aan dit rooster."
+      },
+      "dataProtection": {
+        "title": "Uw gegevens zijn beschermd",
+        "description": "Alle informatie die u verstrekt blijft anoniem en vertrouwelijk. Het wordt alleen gebruikt om uw evaluatie te berekenen."
+      },
+      "continueButton": "Evaluatie voortzetten"
+    },
+    "walloniaInfo": {
+      "title": "Waals Gewest",
+      "warning": {
+        "title": "Huurprijsbeheersing nog niet geïmplementeerd",
+        "description": "Huurprijsbeheersing is nog niet van kracht in Wallonië, maar u kunt nog steeds uw situatie evalueren om u voor te bereiden op toekomstige ontwikkelingen.",
+        "note": "Deze evaluatie geeft u een indicatie van de eerlijkheid van uw huurprijs volgens normen die in ontwikkeling zijn."
+      },
+      "continueButton": "Evaluatie voortzetten (indicatief)",
+      "changeRegionButton": "Van gewest veranderen"
+    },
+    "flandersInfo": {
+      "title": "Vlaams Gewest",
+      "inDevelopment": {
+        "title": "Tool in evaluatie",
+        "description": "We werken momenteel aan de aanpassing van onze tool voor het Vlaams Gewest. Deze functionaliteit zal binnenkort beschikbaar zijn.",
+        "note": "In de tussentijd kunt u contact met ons opnemen voor vragen betreffende uw huursituatie."
+      },
+      "contactButton": "Contact opnemen",
+      "changeRegionButton": "Van gewest veranderen"
+    }
+  },
+  "ContactPage": {
+    "header": {
+      "backToHome": "Terug naar home",
+      "title": "WUUNE"
+    },
+    "hero": {
+      "title": "Contacteer ons",
+      "description": "Een vraag? Hulp nodig? Wilt u zich bij ons aansluiten? We zijn er om u te ondersteunen."
+    },
+    "contactInfo": {
+      "email": {
+        "title": "Email",
+        "description": "Schrijf ons op:",
+        "address": "contact@wuune.be"
+      },
+      "assemblies": {
+        "title": "Lokale Vergaderingen",
+        "description": "Neem deel aan onze bijeenkomsten:",
+        "schedule": "Elke eerste dinsdag van de maand",
+        "time": "19u - Wisselende locatie"
+      },
+      "newsletter": {
+        "title": "Nieuwsbrief",
+        "description": "Blijf op de hoogte:",
+        "action": "Schrijf u hieronder in",
+        "content": "Nieuws en evenementen"
+      }
+    },
+    "form": {
+      "title": "Stuur ons een bericht",
+      "description": "Vul het onderstaande formulier in en we zullen zo snel mogelijk reageren.",
+      "fields": {
+        "name": {
+          "label": "Volledige naam *",
+          "placeholder": "Uw voor- en achternaam"
+        },
+        "email": {
+          "label": "Email *",
+          "placeholder": "uw.email@voorbeeld.com"
+        },
+        "subject": {
+          "label": "Onderwerp *",
+          "placeholder": "Het onderwerp van uw bericht"
+        },
+        "message": {
+          "label": "Bericht *",
+          "placeholder": "Beschrijf uw verzoek, vraag of situatie..."
+        }
+      },
+      "checkboxes": {
+        "newsletter": "Ik wil de WUUNE nieuwsbrief ontvangen",
+        "assembly": "Ik wil geïnformeerd worden over lokale vergaderingen"
+      },
+      "urgentInfo": {
+        "title": "Noodsituatie?",
+        "description": "Als u zich in een noodsituatie bevindt (dreiging van uitzetting, misbruikelijke huurprijs, enz.), neem dan direct contact met ons op per telefoon of email voor een prioritaire reactie."
+      },
+      "submitButton": "Bericht verzenden",
+      "successMessage": "Uw bericht is verzonden! We zullen zo snel mogelijk reageren.",
+      "privacyDisclaimer": "Door dit formulier in te dienen, gaat u ermee akkoord dat uw gegevens worden gebruikt om op uw verzoek te reageren. Wij verbinden ons ertoe uw privacy te respecteren en zullen uw informatie nooit met derden delen."
+    },
+    "resources": {
+      "title": "Nuttige Bronnen",
+      "links": {
+        "legalAid": "Gratis juridische hulp",
+        "tenantRights": "Rechten van huurders",
+        "rentControl": "Huurprijsbeheersing gids",
+        "mediation": "Bemiddelingsdiensten"
+      }
+    },
+    "additionalInfo": {
+      "heading": "Hoe kunnen wij u helpen?"
+    }
+  },
+  "QuestionnairePage": {
+    "maintenance": {
+      "boilerMaintenance": "Ik voer jaarlijks ketelonderhoud uit (indien van toepassing)",
+      "fireInsurance": "Ik heb een geldige brandverzekering"
+    },
+    "problems": {
+      "title": "Mogelijke woningproblemen",
+      "description": "Deze gebreken kunnen een huurvermindering rechtvaardigen",
+      "healthIssues": {
+        "title": "Gezondheids- of sanitaire problemen",
+        "items": [
+          "Overmatige vochtigheid of schimmel",
+          "Verwarmings- of isolatieproblemen",
+          "Belangrijke geluidshinder",
+          "Elektrische of loodgietersproblemen",
+          "Ongedierteplaag (ratten, kakkerlakken, etc.)",
+          "Afwezigheid van adequate ventilatie"
+        ]
+      },
+      "majorDefects": {
+        "title": "Belangrijke woninggebreken",
+        "items": [
+          "Defecte ramen of deuren",
+          "Vloerbedekking in slechte staat",
+          "Afbladderende verf of behang",
+          "Defecte keukenapparatuur",
+          "Badkamerproblemen (tegels, kranen)",
+          "Onvoldoende verlichting",
+          "Onvoldoende opbergruimte"
+        ]
+      },
+      "warningMessage": "Hoe meer gebreken uw woning heeft, hoe meer argumenten u hebt om een huurvermindering te onderhandelen."
+    }
+  },
+  "PDF": {
+    "title": "Indicatieve Huurschatting",
+    "headers": {
+      "userInputs": "Invoerparameter",
+      "value": "Waarde",
+      "constants": "Toegepaste Constante / Aanpassing",
+      "appliedFormula": "Toegepaste Formule (voor deze woning)",
+      "results": "Resultaten"
+    },
+    "labels": {
+      "address": "Adres",
+      "propertyType": "Type woning",
+      "bedrooms": "Aantal slaapkamers",
+      "bedroomsMax": "4 en meer",
+      "surface": "Oppervlakte",
+      "propertyState": "Staat van de woning",
+      "constructedBefore2000": "Gebouwd voor 2000",
+      "bathrooms": "Badkamers",
+      "garages": "Garage(s)",
+      "energyClass": "Energieklasse",
+      "centralHeating": "Centrale verwarming",
+      "thermalRegulation": "Thermische regeling",
+      "doubleGlazing": "Dubbele beglazing",
+      "secondBathroom": "2e badkamer",
+      "recreationalSpaces": "Recreatieruimtes",
+      "storageSpaces": "Opbergruimtes",
+      "difficultyIndex": "Moeilijkheidsindex",
+      "estimatedRent": "Geschatte Mediane Huurprijs",
+      "priceRange": "Indicatieve Marge (±10%)"
+    },
+    "propertyStates": {
+      "bad": "Slechte staat",
+      "good": "Goede staat",
+      "excellent": "Uitstekende staat",
+      "default": "Niet gespecificeerd (standaard: Goede staat)"
+    },
+    "propertyTypes": {
+      "apartment": "Appartement",
+      "house": "Huis",
+      "studio": "Studio"
+    },
+    "adjustments": {
+      "baseConstant": "Basisconstante",
+      "multiplier": "Vermenigvuldiger",
+      "difficultyMultiplier": "Moeilijkheidsvermenigvuldiger",
+      "stateGood": "Staatscorrectie (Goed)",
+      "stateExcellent": "Staatscorrectie (Uitstekend)",
+      "pebA": "Energieklasse A Correctie",
+      "pebB": "Energieklasse B Correctie",
+      "pebC": "Energieklasse C Correctie",
+      "pebD": "Energieklasse D Correctie",
+      "pebF": "Energieklasse F Correctie",
+      "pebG": "Energieklasse G Correctie",
+      "noCentralHeating": "Geen Centrale Verwarming Correctie",
+      "noThermalRegulation": "Geen Thermische Regeling Correctie",
+      "secondBathroom": "Tweede Badkamer Correctie",
+      "noRecreationalSpaces": "Geen Recreatieruimtes Correctie",
+      "storageSpaces": "Opbergruimtes Correctie",
+      "garage": "Garage Correctie"
+    },
+    "formatters": {
+      "notSpecified": "Niet gespecificeerd",
+      "yes": "Ja",
+      "no": "Nee",
+      "notAvailable": "N.v.t."
+    }
+  },
+  "HomePage": {
+    "header": {
+      "collectiveTitle": "WUUNE COLLECTIEF - SAMEN TEGEN MISBRUIKELIJKE HUURPRIJZEN"
+    },
+    "navigation": {
+      "collective": "COLLECTIEF TEGEN MISBRUIKELIJKE HUURPRIJZEN",
+      "home": "Home",
+      "about": "Wuune",
+      "campaign": "Onze campagne",
+      "contact": "Contact",
+      "menu": "MENU"
+    },
+    "hero": {
+      "title": "VERLAAG MIJN HUURPRIJS",
+      "subtitle": "Samen vechten we tegen misbruikelijke huurprijzen!",
+      "description": "Sluit je aan bij het Wuune collectief en laat je stem horen. Is jouw huisvesting te duur? Kom erachter en onderneem actie!",
+      "startButton": "Beginnen",
+      "shareText": "Deel de strijd",
+      "imageAlt": "Warme mensen die demonstreren voor eerlijke huurprijzen"
+    },
+    "aboutUs": {
+      "title": "Wie zijn wij?",
+      "description1": "Wuune is een burgercollectief dat zich inzet in de strijd tegen misbruikelijke huurprijzen. Wij geloven dat huisvesting een fundamenteel recht is en dat iedereen een dak boven het hoofd verdient tegen een eerlijke prijs.",
+      "description2": "Samen mobiliseren we om huurderrechten af te dwingen, het publieke bewustzijn te vergroten en onze eisen over te brengen aan de bevoegde autoriteiten.",
+      "learnMoreButton": "Meer weten over Wuune",
+      "imageAlt": "Demonstratie met warme en collectieve sfeer"
+    },
+    "callToAction": {
+      "joinCampaign": {
+        "title": "Doe mee aan onze campagne",
+        "description": "Samen kunnen we het verschil maken tegen misbruikelijke huurprijzen.",
+        "button": "Meer weten"
+      },
+      "evaluateRent": {
+        "title": "Evalueer uw huurprijs",
+        "description": "Ontdek of uw huurprijs voldoet aan de geldende wettelijke roosters.",
+        "button": "Doe de test"
+      },
+      "contactUs": {
+        "title": "Contacteer ons",
+        "description": "Een vraag? Hulp nodig? We zijn er om je te ondersteunen.",
+        "button": "Contact opnemen"
+      }
+    },
+    "footer": {
+      "description": "Burgercollectief voor eerlijke huurprijzen in Brussel.",
+      "usefulLinks": "Nuttige links",
+      "aboutLink": "Over Wuune",
+      "campaignLink": "Onze campagne",
+      "contactLink": "Contact",
+      "followUs": "Volg ons",
+      "copyright": "© 2024 Wuune Collectief. Alle rechten voorbehouden."
+    }
+  },
+  "Navigation": {
+    "menu": "MENU",
+    "serviceTitle": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL - BRUSSEL HUISVESTING",
+    "agencyTitle": "BRUSSEL HUISVESTING"
+  },
+  "Errors": {
+    "difficultyIndex": "Er is een fout opgetreden bij het ophalen van de moeilijkheidsindex",
+    "invalidData": "Ongeldige moeilijkheidsindex gegevens ontvangen.",
+    "systemError": "Systeemfout",
+    "formSubmission": "Er is een fout opgetreden bij het indienen van het formulier"
   }
 }

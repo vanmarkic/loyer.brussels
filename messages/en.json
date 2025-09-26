@@ -141,6 +141,7 @@
       "description2": "However, the reference rent must be mentioned in addition to the actual rent in residential leases in the Brussels-Capital Region."
     },
     "downloadPdfButton": "Download PDF",
+    "downloadingPdfButton": "Downloading...",
     "shareButton": "Share",
     "modifyButton": "Modify estimation",
     "newEstimationButton": "New estimation"
@@ -160,5 +161,365 @@
   "Metadata": {
     "title": "Brussels Housing - How much does it cost to rent a property in Brussels?",
     "description": "Brussels Regional Public Service - Brussels Housing. Estimate the indicative reference rent for a property in Brussels."
+  },
+  "BruxellesPage": {
+    "header": {
+      "backToRegion": "Back to region selection",
+      "title": "Brussels Evaluation"
+    },
+    "housingType": {
+      "title": "Housing Type",
+      "description": "What type of housing do you live in or wish to live in?",
+      "privateMarket": {
+        "title": "Private Market",
+        "description": "Direct rental with a private landlord",
+        "status": "Rent control applicable"
+      },
+      "aisHousing": {
+        "title": "AIS Housing",
+        "description": "Social Real Estate Agency",
+        "status": "Rent control not applicable"
+      },
+      "socialHousing": {
+        "title": "Social Housing",
+        "description": "CPAS, SLSP or other public organizations",
+        "status": "Rent control not applicable"
+      },
+      "infoBox": {
+        "title": "Important Information",
+        "description": "Rent control in Brussels only applies to private market housing. Social housing and AIS have their own specific regulations."
+      },
+      "alert": "Rent control does not apply to AIS or social housing."
+    },
+    "userType": {
+      "title": "Welcome to the evaluation tool",
+      "description": "Who are you?",
+      "dataProtection": {
+        "title": "Your data is protected",
+        "description": "This tool helps you evaluate whether your rent complies with legal regulations. All your data remains anonymous and confidential.",
+        "consent": "I agree that my anonymized data may be used for research purposes to improve housing policies.",
+        "consentRequired": "Please accept the use of data to continue"
+      },
+      "tenant": {
+        "title": "Tenant",
+        "description": "I rent or wish to rent a property"
+      },
+      "landlord": {
+        "title": "Landlord",
+        "description": "I rent out or wish to rent out my property"
+      },
+      "other": {
+        "title": "Other",
+        "description": "Curious, student, professional..."
+      }
+    },
+    "calculator": {
+      "header": "WUUNE COLLECTIVE - RENT EVALUATION",
+      "navigation": {
+        "title": "TENANT EVALUATION",
+        "subtitle": "BRUSSELS-CAPITAL REGION",
+        "back": "Back"
+      },
+      "title": "Evaluate your rent",
+      "description": "Discover if your rent complies with Brussels legal framework",
+      "footer": "© 2024 Wuune Collective. Rent evaluation tool."
+    }
+  },
+  "CalculatorRegionPage": {
+    "header": {
+      "backToHome": "Back to home",
+      "title": "Rent Evaluation"
+    },
+    "title": "Evaluate your rent",
+    "description": "In which region is your housing located?",
+    "regions": {
+      "brussels": {
+        "title": "Brussels",
+        "description": "Brussels-Capital Region",
+        "status": "Rent control in effect"
+      },
+      "wallonia": {
+        "title": "Wallonia",
+        "description": "Walloon Region",
+        "status": "Evaluation available"
+      },
+      "flanders": {
+        "title": "Flanders",
+        "description": "Flemish Region",
+        "status": "Under evaluation"
+      }
+    },
+    "brusselsInfo": {
+      "title": "Brussels-Capital Region",
+      "activeFramework": {
+        "title": "Rent control in effect",
+        "description": "In Brussels, rents are regulated by a legal reference grid. Our tool allows you to evaluate whether your rent complies with this grid."
+      },
+      "dataProtection": {
+        "title": "Your data is protected",
+        "description": "All information you provide remains anonymous and confidential. It will only be used to calculate your evaluation."
+      },
+      "continueButton": "Continue evaluation"
+    },
+    "walloniaInfo": {
+      "title": "Walloon Region",
+      "warning": {
+        "title": "Rent control not yet implemented",
+        "description": "Rent control is not yet in effect in Wallonia, but you can still evaluate your situation to prepare for future developments.",
+        "note": "This evaluation will give you an indication of the fairness of your rent according to standards under development."
+      },
+      "continueButton": "Continue evaluation (indicative)",
+      "changeRegionButton": "Change region"
+    },
+    "flandersInfo": {
+      "title": "Flemish Region",
+      "inDevelopment": {
+        "title": "Tool under evaluation",
+        "description": "We are currently working on adapting our tool for the Flemish region. This functionality will be available soon.",
+        "note": "In the meantime, you can contact us for any questions regarding your rental situation."
+      },
+      "contactButton": "Contact us",
+      "changeRegionButton": "Change region"
+    }
+  },
+  "ContactPage": {
+    "header": {
+      "backToHome": "Back to home",
+      "title": "WUUNE"
+    },
+    "hero": {
+      "title": "Contact us",
+      "description": "A question? Need help? Want to join us? We are here to support you."
+    },
+    "contactInfo": {
+      "email": {
+        "title": "Email",
+        "description": "Write to us at:",
+        "address": "contact@wuune.be"
+      },
+      "assemblies": {
+        "title": "Local Assemblies",
+        "description": "Participate in our meetings:",
+        "schedule": "Every first Tuesday of the month",
+        "time": "7 PM - Variable location"
+      },
+      "newsletter": {
+        "title": "Newsletter",
+        "description": "Stay informed:",
+        "action": "Subscribe below",
+        "content": "News and events"
+      }
+    },
+    "form": {
+      "title": "Send us a message",
+      "description": "Fill out the form below and we will respond as soon as possible.",
+      "fields": {
+        "name": {
+          "label": "Full name *",
+          "placeholder": "Your first and last name"
+        },
+        "email": {
+          "label": "Email *",
+          "placeholder": "your.email@example.com"
+        },
+        "subject": {
+          "label": "Subject *",
+          "placeholder": "The subject of your message"
+        },
+        "message": {
+          "label": "Message *",
+          "placeholder": "Describe your request, question or situation..."
+        }
+      },
+      "checkboxes": {
+        "newsletter": "I would like to receive the WUUNE newsletter",
+        "assembly": "I would like to be informed about local assemblies"
+      },
+      "urgentInfo": {
+        "title": "Emergency situation?",
+        "description": "If you are in an emergency situation (threat of eviction, abusive rent, etc.), contact us directly by phone or email for priority response."
+      },
+      "submitButton": "Send message",
+      "successMessage": "Your message has been sent! We will respond as soon as possible.",
+      "privacyDisclaimer": "By submitting this form, you agree that your data will be used to respond to your request. We are committed to respecting your privacy and will never share your information with third parties."
+    },
+    "resources": {
+      "title": "Useful Resources",
+      "links": {
+        "legalAid": "Free legal aid",
+        "tenantRights": "Tenant rights",
+        "rentControl": "Rent control guide",
+        "mediation": "Mediation services"
+      }
+    },
+    "additionalInfo": {
+      "heading": "How can we help you?"
+    }
+  },
+  "QuestionnairePage": {
+    "maintenance": {
+      "boilerMaintenance": "I perform annual boiler maintenance (if applicable)",
+      "fireInsurance": "I have valid fire insurance"
+    },
+    "problems": {
+      "title": "Potential housing problems",
+      "description": "These defects may justify a rent reduction",
+      "healthIssues": {
+        "title": "Health or sanitation problems",
+        "items": [
+          "Excessive humidity or mold",
+          "Heating or insulation problems",
+          "Significant noise nuisances",
+          "Electrical or plumbing problems",
+          "Infestation (rats, cockroaches, etc.)",
+          "Absence of adequate ventilation"
+        ]
+      },
+      "majorDefects": {
+        "title": "Major housing defects",
+        "items": [
+          "Defective windows or doors",
+          "Poor condition flooring",
+          "Peeling paint or wallpaper",
+          "Faulty kitchen equipment",
+          "Bathroom problems (tiles, fixtures)",
+          "Insufficient lighting",
+          "Insufficient storage space"
+        ]
+      },
+      "warningMessage": "The more defects your housing has, the more arguments you will have to negotiate a rent reduction."
+    }
+  },
+  "PDF": {
+    "title": "Indicative Rent Estimate",
+    "headers": {
+      "userInputs": "Input Parameter",
+      "value": "Value",
+      "constants": "Applied Constant / Adjustment",
+      "appliedFormula": "Applied Formula (for this property)",
+      "results": "Results"
+    },
+    "labels": {
+      "address": "Address",
+      "propertyType": "Property type",
+      "bedrooms": "Number of bedrooms",
+      "bedroomsMax": "4 and more",
+      "surface": "Surface",
+      "propertyState": "Property condition",
+      "constructedBefore2000": "Built before 2000",
+      "bathrooms": "Bathrooms",
+      "garages": "Garage(s)",
+      "energyClass": "Energy class",
+      "centralHeating": "Central heating",
+      "thermalRegulation": "Thermal regulation",
+      "doubleGlazing": "Double glazing",
+      "secondBathroom": "2nd bathroom",
+      "recreationalSpaces": "Recreational spaces",
+      "storageSpaces": "Storage spaces",
+      "difficultyIndex": "Difficulty index",
+      "estimatedRent": "Estimated Median Rent",
+      "priceRange": "Indicative Range (±10%)"
+    },
+    "propertyStates": {
+      "bad": "Poor condition",
+      "good": "Good condition",
+      "excellent": "Excellent condition",
+      "default": "Not specified (default: Good condition)"
+    },
+    "propertyTypes": {
+      "apartment": "Apartment",
+      "house": "House",
+      "studio": "Studio"
+    },
+    "adjustments": {
+      "baseConstant": "Base Constant",
+      "multiplier": "Multiplier",
+      "difficultyMultiplier": "Difficulty Multiplier",
+      "stateGood": "State Adjustment (Good)",
+      "stateExcellent": "State Adjustment (Excellent)",
+      "pebA": "Energy Class A Adjustment",
+      "pebB": "Energy Class B Adjustment",
+      "pebC": "Energy Class C Adjustment",
+      "pebD": "Energy Class D Adjustment",
+      "pebF": "Energy Class F Adjustment",
+      "pebG": "Energy Class G Adjustment",
+      "noCentralHeating": "No Central Heating Adjustment",
+      "noThermalRegulation": "No Thermal Regulation Adjustment",
+      "secondBathroom": "Second Bathroom Adjustment",
+      "noRecreationalSpaces": "No Recreational Spaces Adjustment",
+      "storageSpaces": "Storage Spaces Adjustment",
+      "garage": "Garage Adjustment"
+    },
+    "formatters": {
+      "notSpecified": "Not specified",
+      "yes": "Yes",
+      "no": "No",
+      "notAvailable": "N/A"
+    }
+  },
+  "HomePage": {
+    "header": {
+      "collectiveTitle": "WUUNE COLLECTIVE - TOGETHER AGAINST ABUSIVE RENTS"
+    },
+    "navigation": {
+      "collective": "COLLECTIVE AGAINST ABUSIVE RENTS",
+      "home": "Home",
+      "about": "Wuune",
+      "campaign": "Our campaign",
+      "contact": "Contact",
+      "menu": "MENU"
+    },
+    "hero": {
+      "title": "LOWER MY RENT",
+      "subtitle": "Together, let's fight against abusive rents!",
+      "description": "Join the Wuune collective and make your voice heard. Is your housing too expensive? Find out and take action!",
+      "startButton": "Get Started",
+      "shareText": "Share the fight",
+      "imageAlt": "Warm people demonstrating for fair rents"
+    },
+    "aboutUs": {
+      "title": "Who are we?",
+      "description1": "Wuune is a citizen collective engaged in the fight against abusive rents. We believe that housing is a fundamental right and that everyone deserves a roof at a fair price.",
+      "description2": "Together, we mobilize to enforce tenant rights, raise public awareness, and bring our demands to the competent authorities.",
+      "learnMoreButton": "Learn more about Wuune",
+      "imageAlt": "Demonstration with warm and collective atmosphere"
+    },
+    "callToAction": {
+      "joinCampaign": {
+        "title": "Join our campaign",
+        "description": "Together, we can make a difference against abusive rents.",
+        "button": "Learn more"
+      },
+      "evaluateRent": {
+        "title": "Evaluate your rent",
+        "description": "Discover if your rent complies with legal grids in force.",
+        "button": "Take the test"
+      },
+      "contactUs": {
+        "title": "Contact us",
+        "description": "A question? Need help? We are here to support you.",
+        "button": "Contact us"
+      }
+    },
+    "footer": {
+      "description": "Citizen collective for fair rents in Brussels.",
+      "usefulLinks": "Useful links",
+      "aboutLink": "About Wuune",
+      "campaignLink": "Our campaign",
+      "contactLink": "Contact",
+      "followUs": "Follow us",
+      "copyright": "© 2024 Wuune Collective. All rights reserved."
+    }
+  },
+  "Navigation": {
+    "menu": "MENU",
+    "serviceTitle": "BRUSSELS REGIONAL PUBLIC SERVICE - BRUSSELS HOUSING",
+    "agencyTitle": "BRUSSELS HOUSING"
+  },
+  "Errors": {
+    "difficultyIndex": "An error occurred while retrieving the difficulty index",
+    "invalidData": "Invalid difficulty index data received.",
+    "systemError": "System error",
+    "formSubmission": "An error occurred while submitting the form"
   }
 }

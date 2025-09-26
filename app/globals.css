@@ -128,42 +128,42 @@ body {
 @media (max-width: 640px) {
   /* Ensure proper touch targets (minimum 44px) */
   button,
-  [role="button"],
+  [role='button'],
   .touch-manipulation {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* Improve text readability on mobile */
   body {
     font-size: 16px; /* Prevents iOS zoom on input focus */
     line-height: 1.5;
   }
-  
+
   /* Better tap targets for form elements */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='number'],
   select,
   textarea {
     font-size: 16px; /* Prevents iOS zoom */
     min-height: 48px;
   }
-  
+
   /* Improve radio/checkbox touch targets */
-  input[type="radio"],
-  input[type="checkbox"] {
+  input[type='radio'],
+  input[type='checkbox'] {
     transform: scale(1.2);
     margin: 4px;
   }
-  
+
   /* Reduce excessive padding on mobile */
   .container {
     padding-left: 12px;
     padding-right: 12px;
   }
-  
+
   /* Optimize button text for readability */
   button {
     font-weight: 500;
@@ -193,7 +193,7 @@ body {
   .border-gray-200 {
     border-color: #000;
   }
-  
+
   .text-gray-600 {
     color: #000;
   }

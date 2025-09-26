@@ -1,46 +1,46 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useForm } from "@/app/context/form-context";
-import type { PropertyType } from "@/app/data/types"; // Import PropertyType from its new location
-import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Building, Home, Hotel } from "lucide-react";
+import { useForm } from '@/app/context/form-context';
+import type { PropertyType } from '@/app/data/types'; // Import PropertyType from its new location
+import { useTranslations } from 'next-intl'; // Add this import
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Building, Home, Hotel } from 'lucide-react';
 
 export function PropertyTypeStep() {
   const { state, dispatch } = useForm();
-  const t = useTranslations("PropertyTypeStep"); // Add this hook
+  const t = useTranslations('PropertyTypeStep'); // Add this hook
 
   const handleContinue = () => {
     if (state.propertyType) {
-      dispatch({ type: "NEXT_STEP" });
+      dispatch({ type: 'NEXT_STEP' });
     }
   };
 
   const propertyTypes: { value: PropertyType; label: string; icon: React.ReactNode }[] = [
     {
-      value: "apartment",
-      label: t("types.apartment"),
+      value: 'apartment',
+      label: t('types.apartment'),
       icon: <Building className="h-6 w-6" />,
     },
-    { value: "house", label: t("types.house"), icon: <Home className="h-6 w-6" /> },
-    { value: "studio", label: t("types.studio"), icon: <Hotel className="h-6 w-6" /> },
+    { value: 'house', label: t('types.house'), icon: <Home className="h-6 w-6" /> },
+    { value: 'studio', label: t('types.studio'), icon: <Hotel className="h-6 w-6" /> },
   ];
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">{t("title")}</h2>
-        <p className="text-muted-foreground mt-2">{t("description")}</p>
+        <h2 className="text-2xl font-bold">{t('title')}</h2>
+        <p className="text-muted-foreground mt-2">{t('description')}</p>
       </div>
 
       <RadioGroup
         value={state.propertyType}
         onValueChange={(value) =>
-          dispatch({ type: "UPDATE_FIELD", field: "propertyType", value })
+          dispatch({ type: 'UPDATE_FIELD', field: 'propertyType', value })
         }
         className="grid grid-cols-1 sm:grid-cols-2 gap-4"
       >
@@ -54,7 +54,9 @@ export function PropertyTypeStep() {
               <div className="mb-3 rounded-full bg-orange-100 p-4 text-[#f18240]">
                 {type.icon}
               </div>
-              <div className="font-medium text-center text-base sm:text-sm">{type.label}</div>
+              <div className="font-medium text-center text-base sm:text-sm">
+                {type.label}
+              </div>
             </Label>
           </div>
         ))}
@@ -65,7 +67,7 @@ export function PropertyTypeStep() {
         disabled={!state.propertyType}
         className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-12 text-lg font-medium touch-manipulation"
       >
-        {t("continueButton")}
+        {t('continueButton')}
       </Button>
     </div>
   );

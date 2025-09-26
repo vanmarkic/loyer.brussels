@@ -1,60 +1,60 @@
-"use client";
+'use client';
 
-import { useForm } from "@/app/context/form-context";
-import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { MinusCircle, PlusCircle } from "lucide-react";
+import { useForm } from '@/app/context/form-context';
+import { useTranslations } from 'next-intl'; // Add this import
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { MinusCircle, PlusCircle } from 'lucide-react';
 
 export function PropertyDetailsStep() {
   const { state, dispatch } = useForm();
-  const t = useTranslations("PropertyDetailsStep"); // Add this hook
+  const t = useTranslations('PropertyDetailsStep'); // Add this hook
 
   const handleContinue = () => {
     if (state.size > 0 && state.propertyType) {
-      dispatch({ type: "NEXT_STEP" });
+      dispatch({ type: 'NEXT_STEP' });
     }
   };
 
   const handleBack = () => {
-    dispatch({ type: "PREV_STEP" });
+    dispatch({ type: 'PREV_STEP' });
   };
 
   // Update the incrementBedrooms function to limit to 4
   const incrementBedrooms = () => {
     if (state.bedrooms < 4) {
-      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms + 1 });
+      dispatch({ type: 'UPDATE_FIELD', field: 'bedrooms', value: state.bedrooms + 1 });
     }
   };
 
   const decrementBedrooms = () => {
     if (state.bedrooms > 0) {
-      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms - 1 });
+      dispatch({ type: 'UPDATE_FIELD', field: 'bedrooms', value: state.bedrooms - 1 });
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">{t("title")}</h2>
-        <p className="text-muted-foreground mt-2">{t("description")}</p>
+        <h2 className="text-2xl font-bold">{t('title')}</h2>
+        <p className="text-muted-foreground mt-2">{t('description')}</p>
       </div>
 
       <div className="space-y-6 sm:space-y-4">
         <div>
           <Label htmlFor="size" className="text-base sm:text-sm font-medium">
-            {t("sizeLabel")}
+            {t('sizeLabel')}
           </Label>
           <Input
             id="size"
             type="number"
             min="1"
-            value={state.size || ""}
+            value={state.size || ''}
             onChange={(e) =>
               dispatch({
-                type: "UPDATE_FIELD",
-                field: "size",
+                type: 'UPDATE_FIELD',
+                field: 'size',
                 value: Number.parseInt(e.target.value) || 0,
               })
             }
@@ -65,7 +65,7 @@ export function PropertyDetailsStep() {
         </div>
 
         <div>
-          <Label className="text-base sm:text-sm font-medium">{t("bedroomsLabel")}</Label>
+          <Label className="text-base sm:text-sm font-medium">{t('bedroomsLabel')}</Label>
           <div className="flex items-center justify-between mt-2 sm:mt-1 bg-gray-50 rounded-lg p-2">
             <Button
               type="button"
@@ -78,7 +78,7 @@ export function PropertyDetailsStep() {
               <MinusCircle className="h-6 w-6 sm:h-4 sm:w-4" />
             </Button>
             <span className="text-2xl sm:text-xl font-medium px-4">
-              {state.bedrooms === 4 ? t("bedroomsCountMax") : state.bedrooms}
+              {state.bedrooms === 4 ? t('bedroomsCountMax') : state.bedrooms}
             </span>
             <Button
               type="button"
@@ -95,15 +95,19 @@ export function PropertyDetailsStep() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
-        <Button onClick={handleBack} variant="outline" className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation">
-          {t("backButton")}
+        <Button
+          onClick={handleBack}
+          variant="outline"
+          className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+        >
+          {t('backButton')}
         </Button>
         <Button
           onClick={handleContinue}
           disabled={state.size <= 0 || !state.propertyType}
           className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
         >
-          {t("continueButton")}
+          {t('continueButton')}
         </Button>
       </div>
     </div>

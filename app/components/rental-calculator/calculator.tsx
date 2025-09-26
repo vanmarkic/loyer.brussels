@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import { useForm } from "@/app/context/form-context";
-import { useTranslations } from "next-intl"; // Add this import
-import { Progress } from "@/components/ui/progress";
-import dynamic from "next/dynamic";
+import { useForm } from '@/app/context/form-context';
+import { useTranslations } from 'next-intl'; // Add this import
+import { Progress } from '@/components/ui/progress';
+import dynamic from 'next/dynamic';
 
 // Dynamically import step components
 const PropertyTypeStep = dynamic(
-  () => import("./property-type-step").then((mod) => mod.PropertyTypeStep),
+  () => import('./property-type-step').then((mod) => mod.PropertyTypeStep),
   { ssr: false }
 );
 const PropertyDetailsStep = dynamic(
-  () => import("./property-details-step").then((mod) => mod.PropertyDetailsStep),
+  () => import('./property-details-step').then((mod) => mod.PropertyDetailsStep),
   { ssr: false }
 );
 const FeaturesStep = dynamic(
-  () => import("./features-step").then((mod) => mod.FeaturesStep),
+  () => import('./features-step').then((mod) => mod.FeaturesStep),
   { ssr: false }
 );
-const EnergyStep = dynamic(() => import("./energy-step").then((mod) => mod.EnergyStep), {
+const EnergyStep = dynamic(() => import('./energy-step').then((mod) => mod.EnergyStep), {
   ssr: false,
 });
 const AddressStep = dynamic(
-  () => import("./address-step").then((mod) => mod.AddressStep),
+  () => import('./address-step').then((mod) => mod.AddressStep),
   { ssr: false }
 );
-const ResultStep = dynamic(() => import("./result-step").then((mod) => mod.ResultStep), {
+const ResultStep = dynamic(() => import('./result-step').then((mod) => mod.ResultStep), {
   ssr: false,
 });
 const WuuneResultStep = dynamic(
-  () => import("./wuune-result-step").then((mod) => mod.WuuneResultStep),
+  () => import('./wuune-result-step').then((mod) => mod.WuuneResultStep),
   {
     ssr: false,
   }
@@ -37,7 +37,7 @@ const WuuneResultStep = dynamic(
 
 export function RentalCalculator() {
   const { state } = useForm();
-  const t = useTranslations("RentalCalculator"); // Add this hook
+  const t = useTranslations('RentalCalculator'); // Add this hook
 
   // Calculate progress percentage
   const totalSteps = 6;
@@ -51,7 +51,7 @@ export function RentalCalculator() {
         <div className="mb-4 sm:mb-6">
           <div className="flex justify-between text-sm mb-1">
             <span>
-              {t("stepProgress", { currentStep: state.step, totalSteps: totalSteps - 1 })}
+              {t('stepProgress', { currentStep: state.step, totalSteps: totalSteps - 1 })}
             </span>
             <span>{Math.round(progressPercentage)}%</span>
           </div>

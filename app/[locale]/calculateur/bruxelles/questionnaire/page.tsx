@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,16 +9,19 @@ import {
   AlertCircle,
   Info,
   Heart,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useLocale } from "next-intl";
-import { GlobalFormProvider, useGlobalForm } from "../../../../context/global-form-context";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useLocale } from 'next-intl';
+import {
+  GlobalFormProvider,
+  useGlobalForm,
+} from '../../../../context/global-form-context';
 
 interface QuestionnaireData {
   // Note: rentAmount and livingSpace are now pulled from global context
@@ -34,7 +37,7 @@ interface QuestionnaireData {
   boilerMaintenance: boolean;
   fireInsurance: boolean;
 
-  // Section 2: Problèmes du logement  
+  // Section 2: Problèmes du logement
   healthIssues: string[];
   majorDefects: string[];
 
@@ -49,27 +52,27 @@ function DetailedQuestionnaireContent() {
   const currentLocale = useLocale();
   const globalForm = useGlobalForm();
   const [currentSection, setCurrentSection] = useState(0);
-  
+
   // Get pre-filled data from global context
   const existingRent = globalForm.getActualRent();
   const existingSpace = globalForm.getLivingSpace();
   const contactInfo = globalForm.getContactInfo();
 
   const [data, setData] = useState<QuestionnaireData>({
-    leaseType: globalForm.state.rentalInfo.leaseType || "",
-    leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || "",
-    monthlyIncome: globalForm.state.householdInfo.monthlyIncome || "",
-    householdComposition: globalForm.state.householdInfo.householdComposition || "",
-    rentIndexation: globalForm.state.rentalInfo.rentIndexation || "",
-    paymentDelays: globalForm.state.householdInfo.paymentDelays || "",
-    evictionThreats: globalForm.state.householdInfo.evictionThreats || "",
-    mediationAttempts: globalForm.state.householdInfo.mediationAttempts || "",
+    leaseType: globalForm.state.rentalInfo.leaseType || '',
+    leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || '',
+    monthlyIncome: globalForm.state.householdInfo.monthlyIncome || '',
+    householdComposition: globalForm.state.householdInfo.householdComposition || '',
+    rentIndexation: globalForm.state.rentalInfo.rentIndexation || '',
+    paymentDelays: globalForm.state.householdInfo.paymentDelays || '',
+    evictionThreats: globalForm.state.householdInfo.evictionThreats || '',
+    mediationAttempts: globalForm.state.householdInfo.mediationAttempts || '',
     boilerMaintenance: globalForm.state.rentalInfo.boilerMaintenance,
     fireInsurance: globalForm.state.rentalInfo.fireInsurance,
     healthIssues: globalForm.state.propertyIssues.healthIssues || [],
     majorDefects: globalForm.state.propertyIssues.majorDefects || [],
     positiveAspects: globalForm.state.propertyIssues.positiveAspects || [],
-    additionalComments: globalForm.state.propertyIssues.additionalComments || "",
+    additionalComments: globalForm.state.propertyIssues.additionalComments || '',
   });
 
   // Update global context when data changes
@@ -81,7 +84,7 @@ function DetailedQuestionnaireContent() {
       boilerMaintenance: data.boilerMaintenance,
       fireInsurance: data.fireInsurance,
     });
-    
+
     globalForm.updateHouseholdInfo({
       monthlyIncome: data.monthlyIncome,
       householdComposition: data.householdComposition,
@@ -89,7 +92,7 @@ function DetailedQuestionnaireContent() {
       evictionThreats: data.evictionThreats,
       mediationAttempts: data.mediationAttempts,
     });
-    
+
     globalForm.updatePropertyIssues({
       healthIssues: data.healthIssues,
       majorDefects: data.majorDefects,
@@ -99,11 +102,11 @@ function DetailedQuestionnaireContent() {
   }, [data]);
 
   const sections = [
-    "Informations récupérées",
-    "Situation personnelle et du bail",
-    "Problèmes du logement",
-    "Points positifs du logement", 
-    "Résultat personnalisé",
+    'Informations récupérées',
+    'Situation personnelle et du bail',
+    'Problèmes du logement',
+    'Points positifs du logement',
+    'Résultat personnalisé',
   ];
 
   const handleNext = () => {
@@ -154,26 +157,22 @@ function DetailedQuestionnaireContent() {
                 <div>
                   <span className="text-green-700 font-medium">Loyer actuel :</span>
                   <span className="ml-2">
-                    {existingRent ? `${existingRent}€/mois` : "Non renseigné"}
+                    {existingRent ? `${existingRent}€/mois` : 'Non renseigné'}
                   </span>
                 </div>
                 <div>
                   <span className="text-green-700 font-medium">Surface habitable :</span>
                   <span className="ml-2">
-                    {existingSpace ? `${existingSpace}m²` : "Non renseignée"}
+                    {existingSpace ? `${existingSpace}m²` : 'Non renseignée'}
                   </span>
                 </div>
                 <div>
                   <span className="text-green-700 font-medium">Email :</span>
-                  <span className="ml-2">
-                    {contactInfo.email || "Non renseigné"}
-                  </span>
+                  <span className="ml-2">{contactInfo.email || 'Non renseigné'}</span>
                 </div>
                 <div>
                   <span className="text-green-700 font-medium">Téléphone :</span>
-                  <span className="ml-2">
-                    {contactInfo.phone || "Non renseigné"}
-                  </span>
+                  <span className="ml-2">{contactInfo.phone || 'Non renseigné'}</span>
                 </div>
               </div>
             </div>
@@ -181,8 +180,9 @@ function DetailedQuestionnaireContent() {
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
               <p className="text-sm text-blue-800">
                 <Info className="h-4 w-4 inline mr-2" />
-                Ce questionnaire approfondi nous permettra de mieux comprendre votre situation
-                et de vous donner des conseils plus précis. Aucune donnée ne sera redemandée !
+                Ce questionnaire approfondi nous permettra de mieux comprendre votre
+                situation et de vous donner des conseils plus précis. Aucune donnée ne
+                sera redemandée !
               </p>
             </div>
           </div>
@@ -362,19 +362,19 @@ function DetailedQuestionnaireContent() {
                 </Label>
                 <div className="space-y-2 mt-2">
                   {[
-                    "Humidité excessive ou moisissures",
+                    'Humidité excessive ou moisissures',
                     "Problèmes de chauffage ou d'isolation",
-                    "Nuisances sonores importantes",
+                    'Nuisances sonores importantes',
                     "Problèmes d'électricité ou de plomberie",
-                    "Infestation (rats, cafards, etc.)",
-                    "Absence de ventilation adéquate",
+                    'Infestation (rats, cafards, etc.)',
+                    'Absence de ventilation adéquate',
                   ].map((issue) => (
                     <div key={issue} className="flex items-center space-x-2">
                       <Checkbox
                         id={issue}
                         checked={data.healthIssues.includes(issue)}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange("healthIssues", issue, checked as boolean)
+                          handleCheckboxChange('healthIssues', issue, checked as boolean)
                         }
                       />
                       <label htmlFor={issue} className="text-sm">
@@ -391,20 +391,20 @@ function DetailedQuestionnaireContent() {
                 </Label>
                 <div className="space-y-2 mt-2">
                   {[
-                    "Fenêtres ou portes défectueuses",
-                    "Revêtements de sol en mauvais état",
-                    "Peinture écaillée ou papier peint décollé",
-                    "Équipements de cuisine défaillants",
-                    "Problèmes de salle de bain (carrelage, robinetterie)",
-                    "Éclairage insuffisant",
-                    "Espaces de rangement insuffisants",
+                    'Fenêtres ou portes défectueuses',
+                    'Revêtements de sol en mauvais état',
+                    'Peinture écaillée ou papier peint décollé',
+                    'Équipements de cuisine défaillants',
+                    'Problèmes de salle de bain (carrelage, robinetterie)',
+                    'Éclairage insuffisant',
+                    'Espaces de rangement insuffisants',
                   ].map((defect) => (
                     <div key={defect} className="flex items-center space-x-2">
                       <Checkbox
                         id={defect}
                         checked={data.majorDefects.includes(defect)}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange("majorDefects", defect, checked as boolean)
+                          handleCheckboxChange('majorDefects', defect, checked as boolean)
                         }
                       />
                       <label htmlFor={defect} className="text-sm">
@@ -442,16 +442,16 @@ function DetailedQuestionnaireContent() {
               <Label className="text-lg font-semibold">Avantages et équipements</Label>
               <div className="space-y-2 mt-2">
                 {[
-                  "Logement récemment rénové",
-                  "Balcon, terrasse ou jardin",
-                  "Parking ou garage inclus",
+                  'Logement récemment rénové',
+                  'Balcon, terrasse ou jardin',
+                  'Parking ou garage inclus',
                   "Ascenseur dans l'immeuble",
-                  "Quartier très bien desservi",
-                  "Vue exceptionnelle",
-                  "Équipements haut de gamme",
-                  "Isolation thermique excellente",
-                  "Système de sécurité",
-                  "Cave ou débarras inclus",
+                  'Quartier très bien desservi',
+                  'Vue exceptionnelle',
+                  'Équipements haut de gamme',
+                  'Isolation thermique excellente',
+                  'Système de sécurité',
+                  'Cave ou débarras inclus',
                 ].map((aspect) => (
                   <div key={aspect} className="flex items-center space-x-2">
                     <Checkbox
@@ -459,7 +459,7 @@ function DetailedQuestionnaireContent() {
                       checked={data.positiveAspects.includes(aspect)}
                       onCheckedChange={(checked) =>
                         handleCheckboxChange(
-                          "positiveAspects",
+                          'positiveAspects',
                           aspect,
                           checked as boolean
                         )

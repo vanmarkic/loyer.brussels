@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import type { 
-  GlobalFormState, 
-  UserProfile, 
-  PropertyInformation, 
-  RentalInformation, 
-  HouseholdInformation, 
-  PropertyIssues, 
-  CalculationResults 
+import type {
+  GlobalFormState,
+  UserProfile,
+  PropertyInformation,
+  RentalInformation,
+  HouseholdInformation,
+  PropertyIssues,
+  CalculationResults,
 } from '../data/global-form-types';
 
 // Session storage key
@@ -108,79 +108,82 @@ type GlobalFormAction =
   | { type: 'AUTO_SAVE' };
 
 // Reducer
-const globalFormReducer = (state: GlobalFormState, action: GlobalFormAction): GlobalFormState => {
+const globalFormReducer = (
+  state: GlobalFormState,
+  action: GlobalFormAction
+): GlobalFormState => {
   const newState = (() => {
     switch (action.type) {
       case 'RESTORE_SESSION':
         return { ...action.payload, lastUpdated: Date.now() };
-        
+
       case 'UPDATE_USER_PROFILE':
         return {
           ...state,
           userProfile: { ...state.userProfile, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'UPDATE_PROPERTY_INFO':
         return {
           ...state,
           propertyInfo: { ...state.propertyInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'UPDATE_RENTAL_INFO':
         return {
           ...state,
           rentalInfo: { ...state.rentalInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'UPDATE_HOUSEHOLD_INFO':
         return {
           ...state,
           householdInfo: { ...state.householdInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'UPDATE_PROPERTY_ISSUES':
         return {
           ...state,
           propertyIssues: { ...state.propertyIssues, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'UPDATE_CALCULATION_RESULTS':
         return {
           ...state,
           calculationResults: { ...state.calculationResults, ...action.payload },
           lastUpdated: Date.now(),
         };
-        
+
       case 'SET_CURRENT_STEP':
         return {
           ...state,
           currentStep: action.payload,
           lastUpdated: Date.now(),
         };
-        
+
       case 'SET_CURRENT_PAGE':
         return {
           ...state,
           currentPage: action.payload,
           lastUpdated: Date.now(),
         };
-        
+
       case 'RESET_FORM':
         return { ...initialGlobalState, sessionId: generateSessionId() };
-        
+
       case 'AUTO_SAVE':
         return { ...state, lastUpdated: Date.now() };
-        
+
       default:
         return state;
     }
   })();
-  
+
   return newState;
 };
 
@@ -188,7 +191,7 @@ const globalFormReducer = (state: GlobalFormState, action: GlobalFormAction): Gl
 interface GlobalFormContextType {
   state: GlobalFormState;
   dispatch: React.Dispatch<GlobalFormAction>;
-  
+
   // Convenience methods
   updateUserProfile: (updates: Partial<UserProfile>) => void;
   updatePropertyInfo: (updates: Partial<PropertyInformation>) => void;
@@ -196,12 +199,12 @@ interface GlobalFormContextType {
   updateHouseholdInfo: (updates: Partial<HouseholdInformation>) => void;
   updatePropertyIssues: (updates: Partial<PropertyIssues>) => void;
   updateCalculationResults: (updates: Partial<CalculationResults>) => void;
-  
+
   // Session management
   saveSession: () => void;
   loadSession: () => void;
   clearSession: () => void;
-  
+
   // Data getters to replace duplicate requests
   getActualRent: () => string;
   getLivingSpace: () => number;
@@ -212,7 +215,9 @@ interface GlobalFormContextType {
 const GlobalFormContext = createContext<GlobalFormContextType | undefined>(undefined);
 
 // Provider
-export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(globalFormReducer, initialGlobalState);
 
   // Load session on mount
@@ -250,7 +255,7 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           // Only restore if session is less than 24 hours old
           const sessionAge = Date.now() - parsedState.lastUpdated;
           const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-          
+
           if (sessionAge < maxAge) {
             dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
             console.log('Session restored:', parsedState.sessionId);
@@ -350,7 +355,7 @@ export const useGlobalForm = (): GlobalFormContextType => {
 // Legacy compatibility - maps old form context to new global form context
 export const useForm = () => {
   const globalForm = useGlobalForm();
-  
+
   // Create a compatibility layer for the old FormState interface
   const legacyState = {
     step: globalForm.state.currentStep,
@@ -384,10 +389,16 @@ export const useForm = () => {
     // Map legacy actions to new actions
     switch (action.type) {
       case 'NEXT_STEP':
-        globalForm.dispatch({ type: 'SET_CURRENT_STEP', payload: globalForm.state.currentStep + 1 });
+        globalForm.dispatch({
+          type: 'SET_CURRENT_STEP',
+          payload: globalForm.state.currentStep + 1,
+        });
         break;
       case 'PREV_STEP':
-        globalForm.dispatch({ type: 'SET_CURRENT_STEP', payload: Math.max(1, globalForm.state.currentStep - 1) });
+        globalForm.dispatch({
+          type: 'SET_CURRENT_STEP',
+          payload: Math.max(1, globalForm.state.currentStep - 1),
+        });
         break;
       case 'GO_TO_STEP':
         globalForm.dispatch({ type: 'SET_CURRENT_STEP', payload: action.payload });
@@ -396,22 +407,56 @@ export const useForm = () => {
         // Map field updates to appropriate sections
         const field = action.field;
         const value = action.value;
-        
-        if (['postalCode', 'streetName', 'streetNumber', 'propertyType', 'size', 'bedrooms', 'bathrooms', 'numberOfGarages', 'energyClass', 'constructedBefore2000', 'propertyState', 'hasCentralHeating', 'hasThermalRegulation', 'hasDoubleGlazing', 'hasSecondBathroom', 'hasRecreationalSpaces', 'hasStorageSpaces'].includes(field)) {
+
+        if (
+          [
+            'postalCode',
+            'streetName',
+            'streetNumber',
+            'propertyType',
+            'size',
+            'bedrooms',
+            'bathrooms',
+            'numberOfGarages',
+            'energyClass',
+            'constructedBefore2000',
+            'propertyState',
+            'hasCentralHeating',
+            'hasThermalRegulation',
+            'hasDoubleGlazing',
+            'hasSecondBathroom',
+            'hasRecreationalSpaces',
+            'hasStorageSpaces',
+          ].includes(field)
+        ) {
           globalForm.updatePropertyInfo({ [field]: value });
-        } else if (['difficultyIndex', 'medianRent', 'minRent', 'maxRent', 'isLoading', 'error', 'errorCode'].includes(field)) {
+        } else if (
+          [
+            'difficultyIndex',
+            'medianRent',
+            'minRent',
+            'maxRent',
+            'isLoading',
+            'error',
+            'errorCode',
+          ].includes(field)
+        ) {
           globalForm.updateCalculationResults({ [field]: value });
         }
         break;
       case 'FETCH_DIFFICULTY_INDEX_START':
-        globalForm.updateCalculationResults({ isLoading: true, error: null, errorCode: null });
+        globalForm.updateCalculationResults({
+          isLoading: true,
+          error: null,
+          errorCode: null,
+        });
         break;
       case 'FETCH_DIFFICULTY_INDEX_SUCCESS':
-        globalForm.updateCalculationResults({ 
-          difficultyIndex: action.payload, 
-          isLoading: false, 
-          error: null, 
-          errorCode: null 
+        globalForm.updateCalculationResults({
+          difficultyIndex: action.payload,
+          isLoading: false,
+          error: null,
+          errorCode: null,
         });
         break;
       case 'FETCH_DIFFICULTY_INDEX_ERROR':
@@ -437,7 +482,9 @@ export const useForm = () => {
     dispatch: legacyDispatch,
     fetchDifficultyIndexAndCalculate: async () => {
       // This would need to be implemented in the consuming component
-      console.warn('fetchDifficultyIndexAndCalculate needs to be implemented in the consuming component');
+      console.warn(
+        'fetchDifficultyIndexAndCalculate needs to be implemented in the consuming component'
+      );
     },
     clearError: () => {
       globalForm.updateCalculationResults({ error: null, errorCode: null });

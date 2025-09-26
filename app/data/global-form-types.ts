@@ -3,7 +3,7 @@ export interface UserProfile {
   // Contact information
   email: string;
   phone: string;
-  
+
   // Preferences
   joinNewsletter: boolean;
   joinAssembly: boolean;
@@ -14,19 +14,19 @@ export interface PropertyInformation {
   postalCode: number;
   streetName: string;
   streetNumber: string;
-  
+
   // Basic property info
   propertyType: string;
   size: number; // Living space in m²
   bedrooms: number;
   bathrooms: number;
-  
+
   // Features
   numberOfGarages: number;
   energyClass: string;
   constructedBefore2000: boolean | null;
   propertyState: string | null;
-  
+
   // Amenities
   hasCentralHeating: boolean | null;
   hasThermalRegulation: boolean | null;
@@ -39,12 +39,12 @@ export interface PropertyInformation {
 export interface RentalInformation {
   // Current rent
   actualRent: string; // User's current rent
-  
+
   // Lease details
   leaseType: string;
   leaseStartDate: string;
   rentIndexation: string;
-  
+
   // Additional lease info
   boilerMaintenance: boolean;
   fireInsurance: boolean;
@@ -80,7 +80,7 @@ export interface GlobalFormState {
   // Flow control
   currentStep: number;
   currentPage: 'calculator' | 'results' | 'questionnaire';
-  
+
   // User information
   userProfile: UserProfile;
   propertyInfo: PropertyInformation;
@@ -88,7 +88,7 @@ export interface GlobalFormState {
   householdInfo: HouseholdInformation;
   propertyIssues: PropertyIssues;
   calculationResults: CalculationResults;
-  
+
   // Session management
   lastUpdated: number;
   sessionId: string;

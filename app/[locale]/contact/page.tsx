@@ -1,41 +1,70 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import {
-  Heart,
-  ArrowLeft,
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  Users,
-  FileText,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useLocale, useTranslations } from "next-intl";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { Heart, ArrowLeft, Mail, Send, Users, FileText, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useLocale, useTranslations } from 'next-intl';
+import { useGlobalForm, GlobalFormProvider } from '@/app/context/global-form-context';
 
-export default function ContactPage() {
+function ContactPageContent() {
   const currentLocale = useLocale();
   const t = useTranslations();
+  const searchParams = useSearchParams();
+  const globalForm = useGlobalForm();
+
+  // Check if user is coming from WUUNE join flow
+  const isJoiningWuune = searchParams.get('join') === 'true';
+  const situation = searchParams.get('situation');
+
+  // Get pre-filled data from global form
+  const contactInfo = globalForm.getContactInfo();
+  const userProfile = globalForm.state.userProfile;
+
+  // Function to get default message based on situation
+  function getDefaultMessageForSituation(situation: string | null): string {
+    switch (situation) {
+      case 'abusive':
+        return "Bonjour,\n\nJ'ai utilisé votre calculateur de loyer et il semblerait que mon loyer soit abusif. Je souhaite rejoindre le collectif Wuune pour obtenir de l'aide dans mes démarches.\n\nMerci de me recontacter.";
+      case 'high-but-legal':
+        return 'Bonjour,\n\nMon loyer est élevé mais reste dans les limites légales. Je souhaite rejoindre Wuune pour être accompagné(e) dans une éventuelle négociation avec mon propriétaire.\n\nMerci.';
+      case 'below-grid':
+      case 'fair':
+        return "Bonjour,\n\nJe souhaite rejoindre le collectif Wuune pour défendre le droit au logement et soutenir d'autres locataires dans leurs démarches.\n\nMerci.";
+      default:
+        return 'Bonjour,\n\nJe souhaite rejoindre le collectif Wuune.\n\nMerci.';
+    }
+  }
+
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    newsletter: false,
-    assembly: false,
+    name: '',
+    email: contactInfo.email || '',
+    subject: isJoiningWuune ? 'Adhésion au collectif Wuune' : '',
+    message: isJoiningWuune ? getDefaultMessageForSituation(situation) : '',
+    newsletter: userProfile.joinNewsletter,
+    assembly: userProfile.joinAssembly,
   });
+
+  // Update form data when global form data changes
+  useEffect(() => {
+    if (contactInfo.email && !formData.email) {
+      setFormData((prev) => ({
+        ...prev,
+        email: contactInfo.email,
+      }));
+    }
+  }, [contactInfo.email, formData.email]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Logique d'envoi du formulaire
-    console.log("Formulaire soumis:", formData);
+    console.log('Formulaire soumis:', formData);
     alert(
-      "Votre message a été envoyé ! Nous vous répondrons dans les plus brefs délais."
+      'Votre message a été envoyé ! Nous vous répondrons dans les plus brefs délais.'
     );
   };
 
@@ -59,11 +88,11 @@ export default function ContactPage() {
               className="flex items-center gap-2 text-red-600 hover:text-red-700"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>{t("ContactPage.header.backToHome")}</span>
+              <span>{t('ContactPage.header.backToHome')}</span>
             </Link>
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-red-600" />
-              <span className="font-bold text-xl">{t("ContactPage.header.title")}</span>
+              <span className="font-bold text-xl">{t('ContactPage.header.title')}</span>
             </div>
           </div>
         </div>
@@ -74,10 +103,10 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              {t("ContactPage.hero.title")}
+              {t('ContactPage.hero.title')}
             </h1>
             <p className="text-xl md:text-2xl leading-relaxed">
-              {t("ContactPage.hero.description")}
+              {t('ContactPage.hero.description')}
             </p>
           </div>
         </div>
@@ -126,12 +155,24 @@ export default function ContactPage() {
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                Envoyez-nous un message
+                {isJoiningWuune ? 'Finaliser votre adhésion' : 'Envoyez-nous un message'}
               </h2>
               <p className="text-gray-600">
-                Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus
-                brefs délais.
+                {isJoiningWuune
+                  ? 'Complétez les informations ci-dessous pour rejoindre le collectif Wuune.'
+                  : 'Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.'}
               </p>
+              {isJoiningWuune && contactInfo.email && (
+                <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 text-green-800">
+                    <CheckCircle className="h-5 w-5" />
+                    <span className="text-sm font-medium">
+                      Certaines informations ont été pré-remplies à partir de vos réponses
+                      précédentes
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -156,12 +197,19 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Email *
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Email *
+                    </label>
+                    {contactInfo.email && isJoiningWuune && (
+                      <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                        ✓ Pré-rempli
+                      </span>
+                    )}
+                  </div>
                   <Input
                     id="email"
                     name="email"
@@ -169,7 +217,11 @@ export default function ContactPage() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full"
+                    className={
+                      contactInfo.email && isJoiningWuune
+                        ? 'bg-green-50 border-green-200'
+                        : ''
+                    }
                     placeholder="votre.email@exemple.com"
                   />
                 </div>
@@ -214,37 +266,55 @@ export default function ContactPage() {
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-start space-x-2">
                   <Checkbox
                     id="newsletter"
                     checked={formData.newsletter}
                     onCheckedChange={(checked) =>
-                      handleCheckboxChange("newsletter", checked as boolean)
+                      handleCheckboxChange('newsletter', checked as boolean)
                     }
                   />
-                  <label htmlFor="newsletter" className="text-sm text-gray-700">
-                    Je souhaite m'inscrire à la newsletter pour recevoir les actualités du
-                    collectif
-                  </label>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="newsletter" className="text-sm text-gray-700">
+                        Je souhaite m&apos;inscrire à la newsletter pour recevoir les
+                        actualités du collectif
+                      </label>
+                      {isJoiningWuune && userProfile.joinNewsletter && (
+                        <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                          ✓ Pré-rempli
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-start space-x-2">
                   <Checkbox
                     id="assembly"
                     checked={formData.assembly}
                     onCheckedChange={(checked) =>
-                      handleCheckboxChange("assembly", checked as boolean)
+                      handleCheckboxChange('assembly', checked as boolean)
                     }
                   />
-                  <label htmlFor="assembly" className="text-sm text-gray-700">
-                    Je souhaite être invité(e) aux prochaines assemblées locales
-                  </label>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="assembly" className="text-sm text-gray-700">
+                        Je souhaite être invité(e) aux prochaines assemblées locales
+                      </label>
+                      {isJoiningWuune && userProfile.joinAssembly && (
+                        <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                          ✓ Pré-rempli
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600">
-                  {t("ContactPage.form.privacyDisclaimer")}
+                  {t('ContactPage.form.privacyDisclaimer')}
                 </p>
               </div>
 
@@ -265,7 +335,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-              {t("ContactPage.additionalInfo.heading")}
+              {t('ContactPage.additionalInfo.heading')}
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -301,9 +371,10 @@ export default function ContactPage() {
                 Urgence locative ?
               </h3>
               <p className="text-gray-700">
-                Si vous êtes dans une situation d'urgence (menace d'expulsion, loyer
-                abusif, logement insalubre), n'hésitez pas à nous contacter rapidement.
-                Nous ferons notre possible pour vous orienter vers les bonnes personnes.
+                Si vous êtes dans une situation d&apos;urgence (menace d&apos;expulsion,
+                loyer abusif, logement insalubre), n&apos;hésitez pas à nous contacter
+                rapidement. Nous ferons notre possible pour vous orienter vers les bonnes
+                personnes.
               </p>
             </div>
           </div>
@@ -313,7 +384,7 @@ export default function ContactPage() {
       {/* Call to action */}
       <section className="bg-red-600 text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Vous n'êtes pas seul(e) !</h2>
+          <h2 className="text-3xl font-bold mb-6">Vous n&apos;êtes pas seul(e) !</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Le collectif Wuune est là pour vous accompagner et défendre vos droits.
             Ensemble, nous sommes plus forts face aux abus.
@@ -336,5 +407,14 @@ export default function ContactPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+// Export the wrapped component with GlobalFormProvider
+export default function ContactPage() {
+  return (
+    <GlobalFormProvider>
+      <ContactPageContent />
+    </GlobalFormProvider>
   );
 }

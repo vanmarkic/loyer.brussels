@@ -1,6 +1,13 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react';
 import type {
   GlobalFormState,
   UserProfile,
@@ -220,6 +227,50 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(globalFormReducer, initialGlobalState);
 
+  // Session management functions - defined early to avoid hoisting issues
+  const saveSession = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        console.log('Session saved:', state.sessionId);
+      } catch (error) {
+        console.warn('Failed to save session:', error);
+      }
+    }
+  }, [state]);
+
+  const loadSession = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsedState = JSON.parse(saved);
+          // Only restore if session is less than 24 hours old
+          const sessionAge = Date.now() - parsedState.lastUpdated;
+          const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+
+          if (sessionAge < maxAge) {
+            dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
+            console.log('Session restored:', parsedState.sessionId);
+          } else {
+            // Session expired, clear it
+            sessionStorage.removeItem(STORAGE_KEY);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load session:', error);
+        sessionStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  }, []);
+
+  const clearSession = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+    dispatch({ type: 'RESET_FORM' });
+  }, []);
+
   // Load session on mount
   useEffect(() => {
     const loadSessionFromStorage = () => {
@@ -263,7 +314,7 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     loadSessionFromStorage();
-  }, []);
+  }, [loadSession]);
 
   // Auto-save on state changes (debounced)
   useEffect(() => {
@@ -272,109 +323,83 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     }, 1000); // Save 1 second after last change
 
     return () => clearTimeout(timeoutId);
-  }, [state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]); // Only depend on state, not saveSession to avoid circular dependency
 
-  // Session management functions
-  const saveSession = () => {
-    if (typeof window !== 'undefined') {
-      try {
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        console.log('Session saved:', state.sessionId);
-      } catch (error) {
-        console.warn('Failed to save session:', error);
-      }
-    }
-  };
-
-  const loadSession = () => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = sessionStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const parsedState = JSON.parse(saved);
-          // Only restore if session is less than 24 hours old
-          const sessionAge = Date.now() - parsedState.lastUpdated;
-          const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-
-          if (sessionAge < maxAge) {
-            dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
-            console.log('Session restored:', parsedState.sessionId);
-          } else {
-            // Session expired, clear it
-            sessionStorage.removeItem(STORAGE_KEY);
-          }
-        }
-      } catch (error) {
-        console.warn('Failed to load session:', error);
-        sessionStorage.removeItem(STORAGE_KEY);
-      }
-    }
-  };
-
-  const clearSession = () => {
-    if (typeof window !== 'undefined') {
-      sessionStorage.removeItem(STORAGE_KEY);
-    }
-    dispatch({ type: 'RESET_FORM' });
-  };
-
-  // Convenience methods
-  const updateUserProfile = (updates: Partial<UserProfile>) => {
+  // Convenience methods with useCallback to prevent unnecessary re-renders
+  const updateUserProfile = useCallback((updates: Partial<UserProfile>) => {
     dispatch({ type: 'UPDATE_USER_PROFILE', payload: updates });
-  };
+  }, []);
 
-  const updatePropertyInfo = (updates: Partial<PropertyInformation>) => {
+  const updatePropertyInfo = useCallback((updates: Partial<PropertyInformation>) => {
     dispatch({ type: 'UPDATE_PROPERTY_INFO', payload: updates });
-  };
+  }, []);
 
-  const updateRentalInfo = (updates: Partial<RentalInformation>) => {
+  const updateRentalInfo = useCallback((updates: Partial<RentalInformation>) => {
     dispatch({ type: 'UPDATE_RENTAL_INFO', payload: updates });
-  };
+  }, []);
 
-  const updateHouseholdInfo = (updates: Partial<HouseholdInformation>) => {
+  const updateHouseholdInfo = useCallback((updates: Partial<HouseholdInformation>) => {
     dispatch({ type: 'UPDATE_HOUSEHOLD_INFO', payload: updates });
-  };
+  }, []);
 
-  const updatePropertyIssues = (updates: Partial<PropertyIssues>) => {
+  const updatePropertyIssues = useCallback((updates: Partial<PropertyIssues>) => {
     dispatch({ type: 'UPDATE_PROPERTY_ISSUES', payload: updates });
-  };
+  }, []);
 
-  const updateCalculationResults = (updates: Partial<CalculationResults>) => {
+  const updateCalculationResults = useCallback((updates: Partial<CalculationResults>) => {
     dispatch({ type: 'UPDATE_CALCULATION_RESULTS', payload: updates });
-  };
+  }, []);
 
-  // Data getters - these eliminate the need for duplicate data requests
-  const getActualRent = (): string => {
+  // Data getters - stabilized with useCallback to prevent unnecessary re-renders
+  const getActualRent = useCallback((): string => {
     return state.rentalInfo.actualRent;
-  };
+  }, [state.rentalInfo.actualRent]);
 
-  const getLivingSpace = (): number => {
+  const getLivingSpace = useCallback((): number => {
     return state.propertyInfo.size;
-  };
+  }, [state.propertyInfo.size]);
 
-  const getContactInfo = (): { email: string; phone: string } => {
+  const getContactInfo = useCallback((): { email: string; phone: string } => {
     return {
       email: state.userProfile.email,
       phone: state.userProfile.phone,
     };
-  };
+  }, [state.userProfile.email, state.userProfile.phone]);
 
-  const contextValue: GlobalFormContextType = {
-    state,
-    dispatch,
-    updateUserProfile,
-    updatePropertyInfo,
-    updateRentalInfo,
-    updateHouseholdInfo,
-    updatePropertyIssues,
-    updateCalculationResults,
-    saveSession,
-    loadSession,
-    clearSession,
-    getActualRent,
-    getLivingSpace,
-    getContactInfo,
-  };
+  const contextValue: GlobalFormContextType = useMemo(
+    () => ({
+      state,
+      dispatch,
+      updateUserProfile,
+      updatePropertyInfo,
+      updateRentalInfo,
+      updateHouseholdInfo,
+      updatePropertyIssues,
+      updateCalculationResults,
+      saveSession,
+      loadSession,
+      clearSession,
+      getActualRent,
+      getLivingSpace,
+      getContactInfo,
+    }),
+    [
+      state,
+      updateUserProfile,
+      updatePropertyInfo,
+      updateRentalInfo,
+      updateHouseholdInfo,
+      updatePropertyIssues,
+      updateCalculationResults,
+      saveSession,
+      loadSession,
+      clearSession,
+      getActualRent,
+      getLivingSpace,
+      getContactInfo,
+    ]
+  );
 
   return (
     <GlobalFormContext.Provider value={contextValue}>
@@ -425,6 +450,7 @@ export const useForm = () => {
     errorCode: globalForm.state.calculationResults.errorCode,
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const legacyDispatch = (action: any) => {
     // Map legacy actions to new actions
     switch (action.type) {

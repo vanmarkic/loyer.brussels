@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm } from '@/app/context/form-context';
 import { useGlobalForm } from '@/app/context/global-form-context';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,6 @@ import {
   Phone,
   Shield,
   FileText,
-  ArrowRight,
 } from 'lucide-react';
 
 export function WuuneResultStep() {
@@ -31,25 +30,47 @@ export function WuuneResultStep() {
   const existingRent = globalForm.getActualRent();
   const contactInfo = globalForm.getContactInfo();
 
-  // Local state for new inputs only
-  const [actualRent, setActualRent] = useState<string>(existingRent || '');
-  const [email, setEmail] = useState<string>(contactInfo.email || '');
-  const [phone, setPhone] = useState<string>(contactInfo.phone || '');
+  // Local state for new inputs only - initialized once
+  const [actualRent, setActualRent] = useState<string>(() => existingRent || '');
+  const [email, setEmail] = useState<string>(() => contactInfo.email || '');
+  const [phone, setPhone] = useState<string>(() => contactInfo.phone || '');
   const [joinNewsletter, setJoinNewsletter] = useState(
-    globalForm.state.userProfile.joinNewsletter
+    () => globalForm.state.userProfile.joinNewsletter
   );
   const [joinAssembly, setJoinAssembly] = useState(
-    globalForm.state.userProfile.joinAssembly
+    () => globalForm.state.userProfile.joinAssembly
   );
 
-  // Update global state when local values change
-  useEffect(() => {
-    globalForm.updateRentalInfo({ actualRent });
-  }, [actualRent]);
+  // Handlers to update both local and global state
+  const handleActualRentChange = useCallback(
+    (value: string) => {
+      setActualRent(value);
+      globalForm.updateRentalInfo({ actualRent: value });
+    },
+    [globalForm]
+  );
 
-  useEffect(() => {
-    globalForm.updateUserProfile({ email, phone, joinNewsletter, joinAssembly });
-  }, [email, phone, joinNewsletter, joinAssembly]);
+  const handleContactInfoChange = useCallback(
+    (updates: {
+      email?: string;
+      phone?: string;
+      joinNewsletter?: boolean;
+      joinAssembly?: boolean;
+    }) => {
+      if (updates.email !== undefined) setEmail(updates.email);
+      if (updates.phone !== undefined) setPhone(updates.phone);
+      if (updates.joinNewsletter !== undefined) setJoinNewsletter(updates.joinNewsletter);
+      if (updates.joinAssembly !== undefined) setJoinAssembly(updates.joinAssembly);
+
+      globalForm.updateUserProfile({
+        email: updates.email ?? email,
+        phone: updates.phone ?? phone,
+        joinNewsletter: updates.joinNewsletter ?? joinNewsletter,
+        joinAssembly: updates.joinAssembly ?? joinAssembly,
+      });
+    },
+    [globalForm, email, phone, joinNewsletter, joinAssembly]
+  );
 
   // Calculer la différence entre le loyer réel et le loyer de référence
   const rentDifference = actualRent
@@ -139,7 +160,7 @@ export function WuuneResultStep() {
           Votre évaluation personnalisée
         </h2>
         <p className="text-gray-600">
-          Découvrez si votre loyer respecte l'encadrement légal
+          Découvrez si votre loyer respecte l&apos;encadrement légal
         </p>
       </div>
 
@@ -173,7 +194,7 @@ export function WuuneResultStep() {
                 type="number"
                 placeholder={existingRent ? `Actuellement: ${existingRent}€` : 'Ex: 850'}
                 value={actualRent}
-                onChange={(e) => setActualRent(e.target.value)}
+                onChange={(e) => handleActualRentChange(e.target.value)}
                 className="text-xl font-semibold"
               />
               {existingRent && !actualRent && (
@@ -235,31 +256,68 @@ export function WuuneResultStep() {
           </div>
 
           <div className="space-y-4 max-w-md mx-auto">
-            <div>
-              <Label htmlFor="email">
-                Email {contactInfo.email && '(déjà renseigné)'}
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder={contactInfo.email || 'votre.email@exemple.com'}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+            {/* Show collected contact info instead of asking again */}
+            {contactInfo.email || contactInfo.phone ? (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 text-green-800 mb-3">
+                  <CheckCircle className="h-5 w-5" />
+                  <span className="font-medium">Vos informations de contact :</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  {contactInfo.email && (
+                    <div className="flex items-center gap-2">
+                      <Mail className="h-4 w-4" />
+                      <span>{contactInfo.email}</span>
+                    </div>
+                  )}
+                  {contactInfo.phone && (
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      <span>{contactInfo.phone}</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-green-700 mt-2">
+                  Ces informations seront utilisées pour votre adhésion. Vous pourrez les
+                  modifier si nécessaire.
+                </p>
+              </div>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  Vous pourrez renseigner vos coordonnées lors de la finalisation de votre
+                  adhésion.
+                </p>
+              </div>
+            )}
 
-            <div>
-              <Label htmlFor="phone">
-                Téléphone {contactInfo.phone && '(déjà renseigné)'}
-              </Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder={contactInfo.phone || '0X XX XX XX XX'}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
+            {/* Only ask for email if not already provided */}
+            {!contactInfo.email && (
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="votre.email@exemple.com"
+                  value={email}
+                  onChange={(e) => handleContactInfoChange({ email: e.target.value })}
+                />
+              </div>
+            )}
+
+            {/* Only ask for phone if not already provided */}
+            {!contactInfo.phone && (
+              <div>
+                <Label htmlFor="phone">Téléphone (optionnel)</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="0X XX XX XX XX"
+                  value={phone}
+                  onChange={(e) => handleContactInfoChange({ phone: e.target.value })}
+                />
+              </div>
+            )}
 
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
@@ -267,7 +325,9 @@ export function WuuneResultStep() {
                   type="checkbox"
                   id="newsletter"
                   checked={joinNewsletter}
-                  onChange={(e) => setJoinNewsletter(e.target.checked)}
+                  onChange={(e) =>
+                    handleContactInfoChange({ joinNewsletter: e.target.checked })
+                  }
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
                 <label htmlFor="newsletter" className="text-sm text-gray-700">
@@ -280,7 +340,9 @@ export function WuuneResultStep() {
                   type="checkbox"
                   id="assembly"
                   checked={joinAssembly}
-                  onChange={(e) => setJoinAssembly(e.target.checked)}
+                  onChange={(e) =>
+                    handleContactInfoChange({ joinAssembly: e.target.checked })
+                  }
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
                 <label htmlFor="assembly" className="text-sm text-gray-700">
@@ -344,9 +406,9 @@ export function WuuneResultStep() {
         <Card className="hover:shadow-lg transition-shadow">
           <CardContent className="p-6 text-center">
             <Heart className="h-10 w-10 text-red-600 mx-auto mb-3" />
-            <h4 className="font-semibold mb-2">Partager l'outil</h4>
+            <h4 className="font-semibold mb-2">Partager l&apos;outil</h4>
             <p className="text-sm text-gray-600 mb-4">
-              Aidez d'autres locataires à connaître leurs droits
+              Aidez d&apos;autres locataires à connaître leurs droits
             </p>
             <Button variant="outline" className="w-full">
               Partager

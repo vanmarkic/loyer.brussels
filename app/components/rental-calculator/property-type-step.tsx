@@ -43,7 +43,7 @@ export function PropertyTypeStep() {
         onValueChange={(value) =>
           dispatch({ type: 'UPDATE_FIELD', field: 'propertyType', value })
         }
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         {propertyTypes.map((type) => (
           <div key={type.value}>

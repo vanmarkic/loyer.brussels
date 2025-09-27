@@ -105,7 +105,7 @@ export function RentalCalculator() {
   );
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]">
+    <div className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]">
       {state.step < totalSteps && (
         <div className="mb-4 sm:mb-6">
           <EnhancedProgress

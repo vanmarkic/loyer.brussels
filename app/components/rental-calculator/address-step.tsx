@@ -158,7 +158,7 @@ export function AddressStep() {
         <Button
           onClick={handleBack}
           variant="outline"
-          className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+          className="w-full sm:flex-1 h-12 sm:h-10 text-base sm:text-base touch-manipulation"
         >
           {t('backButton')}
         </Button>

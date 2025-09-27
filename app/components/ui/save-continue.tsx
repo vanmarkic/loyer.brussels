@@ -103,11 +103,11 @@ export function SaveContinue({
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="flex items-center gap-2 touch-manipulation"
+              className="flex items-center gap-2 touch-manipulation text-sm sm:text-base px-3 py-2 h-10 sm:h-auto whitespace-nowrap"
               type="button"
             >
-              <Save className="h-4 w-4" />
-              Sauvegarder pour plus tard
+              <Save className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">Sauvegarder pour plus tard</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
@@ -172,12 +172,12 @@ export function SaveContinue({
         <Button
           onClick={onContinue}
           disabled={disabled}
-          className={`flex items-center gap-2 touch-manipulation ${
+          className={`flex items-center gap-2 touch-manipulation text-sm sm:text-base px-4 py-2 h-10 sm:h-auto whitespace-nowrap ${
             isLastStep ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'
           }`}
         >
-          {continueText}
-          <ArrowRight className="h-4 w-4" />
+          <span className="truncate">{continueText}</span>
+          <ArrowRight className="h-4 w-4 flex-shrink-0" />
         </Button>
       </div>
     </div>

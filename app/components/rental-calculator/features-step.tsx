@@ -161,7 +161,7 @@ export function FeaturesStep() {
         <Button
           onClick={handleBack}
           variant="outline"
-          className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
+          className="w-full sm:flex-1 h-12 sm:h-10 text-base sm:text-base touch-manipulation"
         >
           {t('backButton')}
         </Button>
@@ -176,7 +176,7 @@ export function FeaturesStep() {
             state.hasStorageSpaces === null ||
             state.constructedBefore2000 === null // Add check for construction year
           }
-          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
+          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-base sm:text-base font-medium touch-manipulation"
         >
           {t('continueButton')}
         </Button>

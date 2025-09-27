@@ -180,16 +180,16 @@ export function NavigationControls({
       {/* Navigation buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch">
         {/* Back button */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {currentStep > 1 && (
             <Button
               onClick={handlePrevious}
               disabled={previousDisabled || isLoading}
               variant="outline"
-              className="flex items-center gap-2 touch-manipulation"
+              className="flex items-center gap-2 touch-manipulation text-sm px-3 py-2 h-10 whitespace-nowrap"
             >
-              <ArrowLeft className="h-4 w-4" />
-              {previousText}
+              <ArrowLeft className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">{previousText}</span>
             </Button>
           )}
 
@@ -198,15 +198,15 @@ export function NavigationControls({
             onClick={manualSave}
             variant="ghost"
             size="sm"
-            className="flex items-center gap-1 touch-manipulation"
+            className="flex items-center gap-1 touch-manipulation px-2 py-2 h-10 whitespace-nowrap"
             title="Sauvegarder manuellement"
           >
-            <Save className="h-4 w-4" />
+            <Save className="h-4 w-4 flex-shrink-0" />
           </Button>
         </div>
 
         {/* Next/Complete button */}
-        <div className="flex gap-2 sm:ml-auto">
+        <div className="flex gap-2 sm:ml-auto flex-wrap justify-end">
           {/* Reset button (only if progress exists) */}
           {currentStep > 1 && (
             <AlertDialog>
@@ -214,10 +214,10 @@ export function NavigationControls({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="flex items-center gap-1 touch-manipulation text-red-600 hover:text-red-700"
+                  className="flex items-center gap-1 touch-manipulation text-red-600 hover:text-red-700 px-3 py-2 h-10 whitespace-nowrap text-sm"
                 >
-                  <RotateCcw className="h-4 w-4" />
-                  Recommencer
+                  <RotateCcw className="h-4 w-4 flex-shrink-0" />
+                  <span className="hidden sm:inline">Recommencer</span>
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -246,10 +246,10 @@ export function NavigationControls({
             <Button
               onClick={handleNext}
               disabled={nextDisabled || isLoading}
-              className="flex items-center gap-2 touch-manipulation bg-red-600 hover:bg-red-700"
+              className="flex items-center gap-2 touch-manipulation bg-red-600 hover:bg-red-700 px-4 py-2 h-10 text-sm whitespace-nowrap"
             >
-              {nextText}
-              <ArrowRight className="h-4 w-4" />
+              <span className="truncate">{nextText}</span>
+              <ArrowRight className="h-4 w-4 flex-shrink-0" />
             </Button>
           )}
         </div>

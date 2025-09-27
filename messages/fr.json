@@ -363,6 +363,64 @@
     }
   },
   "QuestionnairePage": {
+    "sections": {
+      "retrievedInfo": "Informations récupérées",
+      "personalSituation": "Situation personnelle et du bail",
+      "housingProblems": "Problèmes du logement",
+      "positiveAspects": "Points positifs du logement",
+      "personalizedResult": "Résultat personnalisé"
+    },
+    "navigation": {
+      "back": "Retour",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "finish": "Terminer"
+    },
+    "header": {
+      "title": "Questionnaire détaillé",
+      "stepProgress": "Étape {currentStep} sur {totalSteps}",
+      "percentage": "{percentage}%"
+    },
+    "retrievedInfo": {
+      "title": "Questionnaire détaillé",
+      "description": "Nous utilisons les informations déjà collectées de votre évaluation",
+      "alreadyCollected": "✓ Informations déjà collectées",
+      "currentRent": "Loyer actuel :",
+      "livingSpace": "Surface habitable :",
+      "email": "Email :",
+      "phone": "Téléphone :",
+      "notProvided": "Non renseigné",
+      "notProvidedFeminine": "Non renseignée",
+      "infoMessage": "Ce questionnaire approfondi nous permettra de mieux comprendre votre situation et de vous donner des conseils plus précis. Aucune donnée ne sera redemandée !"
+    },
+    "personalSituation": {
+      "title": "Situation personnelle et du bail",
+      "description": "Ces informations nous aident à mieux comprendre votre situation",
+      "leaseType": "Type de bail",
+      "leaseStartDate": "Date de début du bail",
+      "monthlyIncome": "Revenu mensuel approximatif (optionnel)",
+      "monthlyIncomePlaceholder": "Ex: 2500",
+      "householdComposition": "Composition du foyer",
+      "rentIndexation": "Votre loyer a-t-il été indexé récemment ?"
+    },
+    "leaseTypes": {
+      "nineYears": "Bail de 9 ans (résidence principale)",
+      "threeYears": "Bail de 3 ans",
+      "lessThanYear": "Bail de moins d'un an",
+      "other": "Autre"
+    },
+    "householdTypes": {
+      "single": "Personne seule",
+      "couple": "Couple sans enfant",
+      "family": "Famille avec enfant(s)",
+      "shared": "Colocation"
+    },
+    "rentIndexation": {
+      "yesRecent": "Oui, dans les 12 derniers mois",
+      "yesOld": "Oui, mais il y a plus d'un an",
+      "no": "Non, jamais",
+      "unknown": "Je ne sais pas"
+    },
     "maintenance": {
       "boilerMaintenance": "J'effectue l'entretien annuel de la chaudière (si applicable)",
       "fireInsurance": "J'ai une assurance incendie en cours de validité"
@@ -393,7 +451,37 @@
           "Espaces de rangement insuffisants"
         ]
       },
-      "warningMessage": "Plus votre logement présente de défauts, plus vous aurez d'arguments pour négocier une réduction de loyer."
+      "warningMessage": "Plus votre logement présente de défauts, plus vous aurez d'arguments pour négocier une baisse de loyer."
+    },
+    "positiveAspects": {
+      "title": "Points positifs du logement",
+      "description": "Ces éléments peuvent justifier un loyer plus élevé",
+      "advantages": "Avantages et équipements",
+      "items": [
+        "Logement récemment rénové",
+        "Balcon, terrasse ou jardin",
+        "Parking ou garage inclus",
+        "Ascenseur dans l'immeuble",
+        "Quartier très bien desservi",
+        "Vue exceptionnelle",
+        "Équipements haut de gamme",
+        "Isolation thermique excellente",
+        "Système de sécurité",
+        "Cave ou débarras inclus"
+      ],
+      "additionalComments": "Commentaires supplémentaires",
+      "additionalCommentsPlaceholder": "Décrivez d'autres aspects particuliers de votre logement...",
+      "successMessage": "Ces informations nous permettront de vous donner une évaluation complète et personnalisée."
+    },
+    "personalizedResult": {
+      "title": "Votre situation personnalisée",
+      "description": "Voici notre évaluation basée sur vos réponses",
+      "wuune": {
+        "title": "Rejoignez Wuune !",
+        "description": "Quel que soit le résultat, ensemble nous sommes plus forts pour défendre vos droits.",
+        "joinCollective": "Rejoindre le collectif",
+        "newEvaluation": "Faire une nouvelle évaluation"
+      }
     }
   },
   "PDF": {

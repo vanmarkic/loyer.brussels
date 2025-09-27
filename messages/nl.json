@@ -357,6 +357,64 @@
     }
   },
   "QuestionnairePage": {
+    "sections": {
+      "retrievedInfo": "Opgehaalde Informatie",
+      "personalSituation": "Persoonlijke en huurovereenkomst situatie",
+      "housingProblems": "Woningproblemen",
+      "positiveAspects": "Positieve aspecten van de woning",
+      "personalizedResult": "Gepersonaliseerd resultaat"
+    },
+    "navigation": {
+      "back": "Terug",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "finish": "Voltooien"
+    },
+    "header": {
+      "title": "Gedetailleerde vragenlijst",
+      "stepProgress": "Stap {currentStep} van {totalSteps}",
+      "percentage": "{percentage}%"
+    },
+    "retrievedInfo": {
+      "title": "Gedetailleerde vragenlijst",
+      "description": "We gebruiken de informatie die al is verzameld uit uw evaluatie",
+      "alreadyCollected": "✓ Informatie al verzameld",
+      "currentRent": "Huidige huurprijs:",
+      "livingSpace": "Woonoppervlakte:",
+      "email": "Email:",
+      "phone": "Telefoon:",
+      "notProvided": "Niet opgegeven",
+      "notProvidedFeminine": "Niet opgegeven",
+      "infoMessage": "Deze gedetailleerde vragenlijst stelt ons in staat uw situatie beter te begrijpen en u preciezer advies te geven. Er worden geen gegevens opnieuw gevraagd!"
+    },
+    "personalSituation": {
+      "title": "Persoonlijke en huurovereenkomst situatie",
+      "description": "Deze informatie helpt ons uw situatie beter te begrijpen",
+      "leaseType": "Type huurovereenkomst",
+      "leaseStartDate": "Startdatum huurovereenkomst",
+      "monthlyIncome": "Geschat maandelijks inkomen (optioneel)",
+      "monthlyIncomePlaceholder": "Bijv: 2500",
+      "householdComposition": "Huishoudsamenstelling",
+      "rentIndexation": "Is uw huurprijs recent geïndexeerd?"
+    },
+    "leaseTypes": {
+      "nineYears": "9-jarige huurovereenkomst (hoofdverblijfplaats)",
+      "threeYears": "3-jarige huurovereenkomst",
+      "lessThanYear": "Huurovereenkomst van minder dan een jaar",
+      "other": "Andere"
+    },
+    "householdTypes": {
+      "single": "Alleenstaande",
+      "couple": "Koppel zonder kinderen",
+      "family": "Familie met kind(eren)",
+      "shared": "Gedeelde accommodatie"
+    },
+    "rentIndexation": {
+      "yesRecent": "Ja, in de laatste 12 maanden",
+      "yesOld": "Ja, maar meer dan een jaar geleden",
+      "no": "Nee, nooit",
+      "unknown": "Ik weet het niet"
+    },
     "maintenance": {
       "boilerMaintenance": "Ik voer jaarlijks ketelonderhoud uit (indien van toepassing)",
       "fireInsurance": "Ik heb een geldige brandverzekering"
@@ -388,6 +446,36 @@
         ]
       },
       "warningMessage": "Hoe meer gebreken uw woning heeft, hoe meer argumenten u hebt om een huurvermindering te onderhandelen."
+    },
+    "positiveAspects": {
+      "title": "Positieve aspecten van de woning",
+      "description": "Deze elementen kunnen een hogere huurprijs rechtvaardigen",
+      "advantages": "Voordelen en uitrusting",
+      "items": [
+        "Recent gerenoveerde woning",
+        "Balkon, terras of tuin",
+        "Parking of garage inbegrepen",
+        "Lift in het gebouw",
+        "Zeer goed bediende buurt",
+        "Uitzonderlijk uitzicht",
+        "Hoogwaardige uitrusting",
+        "Uitstekende thermische isolatie",
+        "Beveiligingssysteem",
+        "Kelder of berging inbegrepen"
+      ],
+      "additionalComments": "Aanvullende opmerkingen",
+      "additionalCommentsPlaceholder": "Beschrijf andere bijzondere aspecten van uw woning...",
+      "successMessage": "Deze informatie stelt ons in staat u een volledige en gepersonaliseerde evaluatie te geven."
+    },
+    "personalizedResult": {
+      "title": "Uw gepersonaliseerde situatie",
+      "description": "Hier is onze evaluatie gebaseerd op uw antwoorden",
+      "wuune": {
+        "title": "Sluit je aan bij Wuune!",
+        "description": "Wat het resultaat ook is, samen zijn we sterker om uw rechten te verdedigen.",
+        "joinCollective": "Sluit je aan bij het collectief",
+        "newEvaluation": "Maak een nieuwe evaluatie"
+      }
     }
   },
   "PDF": {

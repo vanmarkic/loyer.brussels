@@ -10,6 +10,7 @@ import { FormProvider } from '../../../context/form-context';
 import { GlobalFormProvider } from '../../../context/global-form-context';
 import { RentalCalculator } from '../../../components/rental-calculator/calculator';
 import { UnifiedCalculatorLayout } from '../../../components/layouts/unified-calculator-layout';
+import { SessionRestoration } from '../../../components/ui/session-restoration';
 
 export default function BruxellesCalculatorPage() {
   const currentLocale = useLocale();
@@ -253,6 +254,15 @@ export default function BruxellesCalculatorPage() {
 
         <GlobalFormProvider>
           <FormProvider>
+            <SessionRestoration
+              onSessionRestored={(wasRestored) => {
+                if (wasRestored) {
+                  console.log('Session restored successfully');
+                } else {
+                  console.log('Starting fresh session');
+                }
+              }}
+            />
             <RentalCalculator />
           </FormProvider>
         </GlobalFormProvider>

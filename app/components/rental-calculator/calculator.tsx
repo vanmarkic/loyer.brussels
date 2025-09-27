@@ -1,8 +1,9 @@
 'use client';
 
 import { useForm } from '@/app/context/form-context';
-import { useTranslations } from 'next-intl'; // Add this import
-import { Progress } from '@/components/ui/progress';
+import { useTranslations } from 'next-intl';
+import { EnhancedProgress } from '@/app/components/ui/enhanced-progress';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import step components
@@ -37,25 +38,84 @@ const WuuneResultStep = dynamic(
 
 export function RentalCalculator() {
   const { state } = useForm();
-  const t = useTranslations('RentalCalculator'); // Add this hook
+  const t = useTranslations('RentalCalculator');
+  const [startTime] = useState(Date.now());
+  const [elapsedMinutes, setElapsedMinutes] = useState(0);
 
-  // Calculate progress percentage
+  // Update elapsed time every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 60000);
+      setElapsedMinutes(elapsed);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
+  // Define calculator steps with time estimates
+  const calculatorSteps = [
+    {
+      id: 1,
+      name: 'Type de propriété',
+      estimatedMinutes: 1,
+      isCompleted: state.step > 1,
+      isActive: state.step === 1,
+    },
+    {
+      id: 2,
+      name: 'Détails du bien',
+      estimatedMinutes: 2,
+      isCompleted: state.step > 2,
+      isActive: state.step === 2,
+    },
+    {
+      id: 3,
+      name: 'Caractéristiques',
+      estimatedMinutes: 2,
+      isCompleted: state.step > 3,
+      isActive: state.step === 3,
+    },
+    {
+      id: 4,
+      name: 'Performance énergétique',
+      estimatedMinutes: 1,
+      isCompleted: state.step > 4,
+      isActive: state.step === 4,
+    },
+    {
+      id: 5,
+      name: 'Adresse',
+      estimatedMinutes: 2,
+      isCompleted: state.step > 5,
+      isActive: state.step === 5,
+    },
+    {
+      id: 6,
+      name: 'Résultats',
+      estimatedMinutes: 0,
+      isCompleted: state.step > 6,
+      isActive: state.step === 6,
+    },
+  ];
+
   const totalSteps = 6;
-  const progressPercentage = (Math.min(state.step, totalSteps) / totalSteps) * 100;
+  const totalTimeMinutes = calculatorSteps.reduce(
+    (sum, step) => sum + step.estimatedMinutes,
+    0
+  );
 
   return (
-    <div
-      className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]" // Responsive padding and height
-    >
+    <div className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]">
       {state.step < totalSteps && (
         <div className="mb-4 sm:mb-6">
-          <div className="flex justify-between text-sm mb-1">
-            <span>
-              {t('stepProgress', { currentStep: state.step, totalSteps: totalSteps - 1 })}
-            </span>
-            <span>{Math.round(progressPercentage)}%</span>
-          </div>
-          <Progress value={progressPercentage} className="h-2" />
+          <EnhancedProgress
+            steps={calculatorSteps}
+            currentStep={state.step}
+            totalTimeMinutes={totalTimeMinutes}
+            elapsedTimeMinutes={elapsedMinutes}
+            showTimeEstimate={true}
+            className="mb-4"
+          />
         </div>
       )}
 

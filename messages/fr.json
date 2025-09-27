@@ -20,7 +20,13 @@
     "footer": "© 2023 Service Public Régional de Bruxelles - Bruxelles Logement. Tous droits réservés."
   },
   "RentalCalculator": {
-    "stepProgress": "Étape {currentStep} sur {totalSteps}"
+    "stepProgress": "Étape {currentStep} sur {totalSteps}",
+    "saveForLater": "Sauvegarder pour plus tard",
+    "timeRemaining": "{time} min restantes",
+    "almostDone": "Presque terminé!",
+    "autoSaved": "Sauvegarde automatique",
+    "sessionRestored": "Session précédente restaurée",
+    "sessionCleared": "Nouvelle session démarrée"
   },
   "PropertyTypeStep": {
     "title": "Quel type de bien souhaitez-vous louer?",

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'; // Add this import
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { SaveContinue } from '@/app/components/ui/save-continue';
 import { Building, Home, Hotel } from 'lucide-react';
 
 export function PropertyTypeStep() {
@@ -62,13 +63,12 @@ export function PropertyTypeStep() {
         ))}
       </RadioGroup>
 
-      <Button
-        onClick={handleContinue}
+      <SaveContinue
+        onContinue={handleContinue}
+        continueText={t('continueButton')}
         disabled={!state.propertyType}
-        className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-12 text-lg font-medium touch-manipulation"
-      >
-        {t('continueButton')}
-      </Button>
+        autoSaveInterval={30}
+      />
     </div>
   );
 }

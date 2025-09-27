@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'; // Add this import
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { SaveContinue } from '@/app/components/ui/save-continue';
 import { AlertCircle, Loader2, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AddressAutocomplete } from './address-autocomplete';
@@ -161,25 +162,20 @@ export function AddressStep() {
         >
           {t('backButton')}
         </Button>
-        <Button
-          onClick={handleCalculate}
+        <SaveContinue
+          onContinue={handleCalculate}
+          continueText={
+            state.isLoading ? `${t('calculatingButton')}...` : t('calculateButton')
+          }
           disabled={
             !state.postalCode ||
             !state.streetName ||
             !state.streetNumber ||
             state.isLoading
           }
-          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
-        >
-          {state.isLoading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="h-5 w-5 sm:h-4 sm:w-4 animate-spin" />{' '}
-              {t('calculatingButton')}
-            </span>
-          ) : (
-            t('calculateButton')
-          )}
-        </Button>
+          isLastStep={true}
+          autoSaveInterval={30}
+        />
       </div>
     </div>
   );

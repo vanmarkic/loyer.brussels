@@ -11,6 +11,10 @@ import { GlobalFormProvider } from '../../../context/global-form-context';
 import { RentalCalculator } from '../../../components/rental-calculator/calculator';
 import { UnifiedCalculatorLayout } from '../../../components/layouts/unified-calculator-layout';
 import { SessionRestoration } from '../../../components/ui/session-restoration';
+import {
+  SessionManagerProvider,
+  SessionHealthIndicator,
+} from '../../../components/ui/session-manager';
 
 export default function BruxellesCalculatorPage() {
   const currentLocale = useLocale();
@@ -253,18 +257,23 @@ export default function BruxellesCalculatorPage() {
         </div>
 
         <GlobalFormProvider>
-          <FormProvider>
-            <SessionRestoration
-              onSessionRestored={(wasRestored) => {
-                if (wasRestored) {
-                  console.log('Session restored successfully');
-                } else {
-                  console.log('Starting fresh session');
-                }
-              }}
-            />
-            <RentalCalculator />
-          </FormProvider>
+          <SessionManagerProvider autoSaveInterval={30} maxSessionAge={24}>
+            <FormProvider>
+              <SessionRestoration
+                onSessionRestored={(wasRestored) => {
+                  if (wasRestored) {
+                    console.log('Session restored successfully');
+                  } else {
+                    console.log('Starting fresh session');
+                  }
+                }}
+              />
+              <div className="space-y-4">
+                <SessionHealthIndicator className="mb-4 p-2 bg-gray-50 rounded-lg" />
+                <RentalCalculator />
+              </div>
+            </FormProvider>
+          </SessionManagerProvider>
         </GlobalFormProvider>
       </div>
     </UnifiedCalculatorLayout>

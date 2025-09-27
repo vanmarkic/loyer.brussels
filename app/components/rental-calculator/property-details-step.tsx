@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'; // Add this import
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { NavigationControls } from '@/app/components/ui/navigation-controls';
 import { MinusCircle, PlusCircle } from 'lucide-react';
 
 export function PropertyDetailsStep() {
@@ -94,22 +95,17 @@ export function PropertyDetailsStep() {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          onClick={handleBack}
-          variant="outline"
-          className="w-full sm:flex-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
-        >
-          {t('backButton')}
-        </Button>
-        <Button
-          onClick={handleContinue}
-          disabled={state.size <= 0 || !state.propertyType}
-          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-lg sm:text-base font-medium touch-manipulation"
-        >
-          {t('continueButton')}
-        </Button>
-      </div>
+      <NavigationControls
+        currentStep={2}
+        totalSteps={6}
+        onNext={handleContinue}
+        onPrevious={handleBack}
+        nextDisabled={state.size <= 0 || !state.propertyType}
+        nextText={t('continueButton')}
+        previousText={t('backButton')}
+        autoSaveEnabled={true}
+        autoSaveInterval={30}
+      />
     </div>
   );
 }

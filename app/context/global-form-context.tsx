@@ -222,7 +222,47 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Load session on mount
   useEffect(() => {
-    loadSession();
+    const loadSessionFromStorage = () => {
+      // Check for session ID in URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionIdFromUrl = urlParams.get('session');
+
+      if (sessionIdFromUrl) {
+        // Try to load specific session by ID
+        const saved = sessionStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          try {
+            const parsedState = JSON.parse(saved);
+            if (parsedState.sessionId === sessionIdFromUrl) {
+              const sessionAge = Date.now() - parsedState.lastUpdated;
+              const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+
+              if (sessionAge < maxAge) {
+                dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
+                console.log('Session restored from URL:', parsedState.sessionId);
+
+                // Clean up URL after successful restore
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+                return;
+              }
+            }
+          } catch (error) {
+            console.warn('Failed to restore session from URL:', error);
+          }
+        }
+
+        // If URL session fails, show message and clean URL
+        console.warn('Session from URL not found or expired');
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+      }
+
+      // Fallback to regular session loading
+      loadSession();
+    };
+
+    loadSessionFromStorage();
   }, []);
 
   // Auto-save on state changes (debounced)

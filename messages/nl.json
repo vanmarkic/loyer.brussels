@@ -558,6 +558,7 @@
       "menu": "MENU"
     },
     "hero": {
+      "mainTitle": "GECONFRONTEERD MET HUISVESTINGSPROBLEMEN, BLIJF NIET ALLEEN EN DOE MET ONS MEE!",
       "title": "VERLAAG MIJN HUURPRIJS",
       "subtitle": "Samen vechten we tegen misbruikelijke huurprijzen!",
       "description": "Sluit je aan bij het Wuune collectief en laat je stem horen. Is jouw huisvesting te duur? Kom erachter en onderneem actie!",
@@ -567,10 +568,53 @@
     },
     "aboutUs": {
       "title": "Wie zijn wij?",
-      "description1": "Wuune is een burgercollectief dat zich inzet in de strijd tegen misbruikelijke huurprijzen. Wij geloven dat huisvesting een fundamenteel recht is en dat iedereen een dak boven het hoofd verdient tegen een eerlijke prijs.",
-      "description2": "Samen mobiliseren we om huurderrechten af te dwingen, het publieke bewustzijn te vergroten en onze eisen over te brengen aan de bevoegde autoriteiten.",
-      "learnMoreButton": "Meer weten over Wuune",
+      "description1": "Te veel van ons wonen in huisvesting die te duur is, van slechte kwaliteit en niet geschikt voor onze behoeften. En wanneer we ergens anders willen gaan wonen, of eruit worden geduwd, is het bijna onmogelijk om een nieuwe plek te vinden.",
+      "description2": "We moeten ons verdedigen tegen de nalatigheid van verhuurders en hun discriminerende praktijken, en tegen die van overheidsinstanties die huurprijzen laten stijgen of huisvesting ongezond laten worden.",
+      "description3": "Met Wuune willen we dit samen doen, door verenigd en georganiseerd te zijn, op de schaal van onze wijken en de stad. We verdedigen, door actie, ons recht op een leefbare stad en betaalbare huisvesting, van kwaliteit en aangepast aan onze behoeften, zonder discriminatie.",
+      "learnMoreButton": "DOE MEE MET WUUNE",
       "imageAlt": "Demonstratie met warme en collectieve sfeer"
+    },
+    "news": {
+      "title": "NIEUWS",
+      "viewAllButton": "Alle nieuws",
+      "items": {
+        "permanences": {
+          "title": "WEDERZIJDSE HULP SESSIES TUSSEN HUURDERS",
+          "date": "15/08/2025",
+          "excerpt": "Je hebt gehoord over de mogelijkheid voor een huurder..."
+        },
+        "abusiveRent": {
+          "title": "HUURPRIJS TE HOOG?",
+          "date": "30/06/2025",
+          "excerpt": "We leggen uit hoe het werkt en hoe Wuune je kan helpen..."
+        },
+        "manifesto": {
+          "title": "MINI-MANIFEST OM TE VERDEDIGEN TEGEN VERHUURDERS DIE HUURCONTROLE AANVALLEN",
+          "date": "04/05/2025",
+          "excerpt": "Mini-manifest om te verdedigen tegen verhuurders die huurcontrole aanvallen..."
+        },
+        "formation": {
+          "title": "ZATERDAG 24 MEI: TRAINING OVER TACTIEKEN EN HULPMIDDELEN VOOR HUURVERLAGING CAMPAGNES",
+          "date": "15/04/2025",
+          "excerpt": "De stemming van nieuwe verordening die verhuurders verbiedt om..."
+        }
+      }
+    },
+    "resources": {
+      "title": "Bronnen",
+      "links": {
+        "legalAid": "Gratis juridische hulp",
+        "tenantRights": "Huurderrechten",
+        "rentControl": "Huurcontrole gids",
+        "mediation": "Bemiddelingsdiensten"
+      }
+    },
+    "newsletter": {
+      "title": "Hou me op de hoogte",
+      "namePlaceholder": "Jouw naam",
+      "firstNamePlaceholder": "Jouw voornaam",
+      "emailPlaceholder": "Jouw e-mail",
+      "subscribeButton": "Inschrijven"
     },
     "callToAction": {
       "joinCampaign": {

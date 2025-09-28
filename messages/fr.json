@@ -564,6 +564,7 @@
       "menu": "MENU"
     },
     "hero": {
+      "mainTitle": "FACE AUX PROBLÈMES DE LOGEMENT, NE RESTE PAS SEUL.E ET REJOINS-NOUS !",
       "title": "BAISSE MON LOYER",
       "subtitle": "Ensemble, luttons contre les loyers abusifs !",
       "description": "Rejoignez le collectif Wuune et faites entendre votre voix. Votre logement est-il trop cher ? Découvrez-le et agissez !",
@@ -573,10 +574,53 @@
     },
     "aboutUs": {
       "title": "Qui sommes-nous ?",
-      "description1": "Wuune est un collectif citoyen engagé dans la lutte contre les loyers abusifs. Nous croyons que le logement est un droit fondamental et que chacun mérite un toit à un prix équitable.",
-      "description2": "Ensemble, nous nous mobilisons pour faire respecter les droits des locataires, sensibiliser l'opinion publique et porter nos revendications auprès des autorités compétentes.",
-      "learnMoreButton": "En savoir plus sur Wuune",
+      "description1": "Nous sommes trop nombreux·ses à habiter dans des logements trop chers, de mauvaise qualité et inadaptés à nos besoins. Et lorsque l'on souhaite s'installer ailleurs, ou qu'on est poussé·es dehors, il est quasi impossible de trouver à se reloger.",
+      "description2": "Nous devons nous défendre contre la négligence des propriétaires et leurs pratiques discriminantes, et contre celle des pouvoirs publics qui laissent les loyers flamber ou les logements insalubres.",
+      "description3": "Avec Wuune, nous voulons le faire ensemble, en étant solidaires et organisé·es, à l'échelle de nos quartiers et de la ville. Nous défendons, par l'action, notre droit à une ville habitable et à un logement abordable, de qualité et adapté à nos besoins, sans discrimination.",
+      "learnMoreButton": "REJOINDRE WUUNE",
       "imageAlt": "Manifestation à ambiance chaleureuse et collective"
+    },
+    "news": {
+      "title": "ACTUALITÉS",
+      "viewAllButton": "Toutes les actus",
+      "items": {
+        "permanences": {
+          "title": "PERMANENCES D'ENTRAIDE ENTRE LOCATAIRES",
+          "date": "15/08/2025",
+          "excerpt": "Tu as entendu parler de la possibilité pour un locataire..."
+        },
+        "abusiveRent": {
+          "title": "LOYER TROP CHER ?",
+          "date": "30/06/2025",
+          "excerpt": "On t'explique comment ça marche et comment Wuune peut t'aider..."
+        },
+        "manifesto": {
+          "title": "MINI-MANIFESTE POUR SE DÉFENDRE FACE AUX BAILLEURS QUI ATTAQUENT L'ENCADREMENT",
+          "date": "04/05/2025",
+          "excerpt": "Mini-manifeste pour se défendre face aux bailleurs qui attaquent l'encadrement..."
+        },
+        "formation": {
+          "title": "SAMEDI 24 MAI : FORMATION SUR LES TACTIQUES ET OUTILS DE CAMPAGNES AUTOUR DE LA BAISSE DE LOYERS",
+          "date": "15/04/2025",
+          "excerpt": "Le vote de nouvelle ordonnance qui interdit aux propriétaire de..."
+        }
+      }
+    },
+    "resources": {
+      "title": "Ressources",
+      "links": {
+        "legalAid": "Aide juridique gratuite",
+        "tenantRights": "Droits des locataires",
+        "rentControl": "Guide de l'encadrement des loyers",
+        "mediation": "Services de médiation"
+      }
+    },
+    "newsletter": {
+      "title": "Tenez moi au courant",
+      "namePlaceholder": "Votre nom",
+      "firstNamePlaceholder": "Votre prénom",
+      "emailPlaceholder": "Votre e-mail",
+      "subscribeButton": "S'inscrire"
     },
     "callToAction": {
       "joinCampaign": {

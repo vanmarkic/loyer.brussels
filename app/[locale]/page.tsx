@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { Facebook, Menu, Twitter, Users, Heart, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
-import LanguageSwitcher from "@/app/components/language-switcher";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Facebook, Menu, Twitter, Users, Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
+import LanguageSwitcher from '@/app/components/language-switcher';
 
 export default function Home() {
   const t = useTranslations();
@@ -15,266 +15,332 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Top header */}
-      <header className="bg-white py-2 px-4 flex items-center justify-between border-b">
-        <div className="flex items-center gap-2">
-          <Users className="h-6 w-6 text-red-600" />
-          <span className="text-xs font-medium uppercase text-gray-700">
-            {t("HomePage.header.collectiveTitle")}
-          </span>
+      {/* Top header - simplified like wuune.be */}
+      <header className="bg-white py-3 px-4 border-b border-gray-200">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Users className="h-5 w-5 text-red-600" />
+            <span className="text-sm font-bold uppercase text-gray-700 tracking-wider">
+              {t('HomePage.header.collectiveTitle')}
+            </span>
+          </div>
+          <LanguageSwitcher />
         </div>
-        <LanguageSwitcher />
       </header>
 
-      {/* Main navigation */}
-      <nav className="bg-red-600 py-4 px-6 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <Heart className="h-10 w-10 text-white" />
-          <div className="text-white uppercase">
-            <div className="font-bold text-lg leading-tight">WUUNE</div>
-            <div className="text-xs leading-tight">
-              {t("HomePage.navigation.collective")}
+      {/* Main navigation - bold style like wuune.be */}
+      <nav className="bg-red-600 py-3 px-6">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Heart className="h-8 w-8 text-white" />
+            <div className="text-white">
+              <div className="font-black text-xl leading-tight tracking-wide">WUUNE</div>
+              <div className="text-xs font-medium leading-tight opacity-90">
+                {t('HomePage.navigation.collective')}
+              </div>
             </div>
           </div>
+          <div className="hidden md:flex items-center gap-8 text-white">
+            <Link
+              href={`/${currentLocale}`}
+              className="wuune-nav hover:underline transition-all"
+            >
+              {t('HomePage.navigation.home')}
+            </Link>
+            <Link
+              href={`/${currentLocale}/wuune`}
+              className="wuune-nav hover:underline transition-all"
+            >
+              {t('HomePage.navigation.about')}
+            </Link>
+            <Link
+              href={`/${currentLocale}/campagne`}
+              className="wuune-nav hover:underline transition-all"
+            >
+              {t('HomePage.navigation.campaign')}
+            </Link>
+            <Link
+              href={`/${currentLocale}/contact`}
+              className="wuune-nav hover:underline transition-all"
+            >
+              {t('HomePage.navigation.contact')}
+            </Link>
+          </div>
+          <button
+            className="text-white flex items-center gap-2 wuune-nav md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" />
+          </button>
         </div>
-        <div className="hidden md:flex items-center gap-6 text-white">
-          <Link href={`/${currentLocale}`} className="hover:underline">
-            {t("HomePage.navigation.home")}
-          </Link>
-          <Link href={`/${currentLocale}/wuune`} className="hover:underline">
-            {t("HomePage.navigation.about")}
-          </Link>
-          <Link href={`/${currentLocale}/campagne`} className="hover:underline">
-            {t("HomePage.navigation.campaign")}
-          </Link>
-          <Link href={`/${currentLocale}/contact`} className="hover:underline">
-            {t("HomePage.navigation.contact")}
-          </Link>
-        </div>
-        <button
-          className="text-white flex items-center gap-2 uppercase font-medium md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {t("HomePage.navigation.menu")} <Menu className="h-5 w-5" />
-        </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - clean style */}
       {isMenuOpen && (
-        <div className="md:hidden bg-red-700 py-4 px-6">
+        <div className="md:hidden bg-red-700 py-4 px-6 border-t border-red-500">
           <div className="flex flex-col gap-4 text-white">
-            <Link href={`/${currentLocale}`} className="hover:underline">
-              {t("HomePage.navigation.home")}
+            <Link href={`/${currentLocale}`} className="wuune-nav hover:underline">
+              {t('HomePage.navigation.home')}
             </Link>
-            <Link href={`/${currentLocale}/wuune`} className="hover:underline">
-              {t("HomePage.navigation.about")}
+            <Link href={`/${currentLocale}/wuune`} className="wuune-nav hover:underline">
+              {t('HomePage.navigation.about')}
             </Link>
-            <Link href={`/${currentLocale}/campagne`} className="hover:underline">
-              {t("HomePage.navigation.campaign")}
+            <Link
+              href={`/${currentLocale}/campagne`}
+              className="wuune-nav hover:underline"
+            >
+              {t('HomePage.navigation.campaign')}
             </Link>
-            <Link href={`/${currentLocale}/contact`} className="hover:underline">
-              {t("HomePage.navigation.contact")}
+            <Link
+              href={`/${currentLocale}/contact`}
+              className="wuune-nav hover:underline"
+            >
+              {t('HomePage.navigation.contact')}
             </Link>
           </div>
         </div>
       )}
 
-      {/* Hero section with gradient background */}
+      {/* Hero section with gradient background - matching wuune.be style */}
       <main className="flex-1 bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
-        <div className="container mx-auto px-4 py-16 md:py-24 relative">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left content */}
-            <div className="text-white space-y-8">
-              <h1 className="text-5xl md:text-7xl font-bold uppercase leading-tight text-shadow-lg">
-                {t("HomePage.hero.title")}
+        <div className="container mx-auto px-4 py-20 md:py-32 relative">
+          <div className="text-center max-w-6xl mx-auto">
+            {/* Main hero content centered like wuune.be */}
+            <div className="text-white space-y-12">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase leading-tight text-shadow-lg tracking-wide">
+                {t('HomePage.hero.mainTitle')}
               </h1>
 
-              <div className="space-y-6">
-                <h2 className="text-2xl md:text-3xl font-semibold">
-                  {t("HomePage.hero.subtitle")}
+              <div className="flex justify-center mb-8">
+                <div className="aspect-video w-full max-w-md md:max-w-lg rounded-xl overflow-hidden shadow-2xl border-4 border-white/20">
+                  <Image
+                    src="/hero-manifestation.svg"
+                    alt={t('HomePage.hero.imageAlt')}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-8 max-w-4xl mx-auto">
+                <h2 className="text-2xl md:text-4xl font-bold">
+                  {t('HomePage.hero.subtitle')}
                 </h2>
-                <p className="text-lg md:text-xl leading-relaxed">
-                  {t("HomePage.hero.description")}
+                <p className="text-lg md:text-xl leading-relaxed font-medium">
+                  {t('HomePage.hero.description')}
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+              <div className="flex flex-col sm:flex-row gap-8 items-center justify-center pt-8">
                 <Link href={`/${currentLocale}/calculateur`}>
-                  <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-10 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all">
-                    {t("HomePage.hero.startButton")}
+                  <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-12 py-4 text-xl font-bold shadow-lg transform hover:scale-105 transition-all uppercase">
+                    {t('HomePage.hero.startButton')}
                   </Button>
                 </Link>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-sm uppercase font-medium">
-                    {t("HomePage.hero.shareText")}
+                  <span className="text-sm uppercase font-bold tracking-wide">
+                    {t('HomePage.hero.shareText')}
                   </span>
                   <Link
                     href="#"
-                    className="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors"
+                    className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors shadow-lg"
                   >
-                    <Facebook className="h-5 w-5 text-white" />
+                    <Facebook className="h-6 w-6 text-white" />
                   </Link>
                   <Link
                     href="#"
-                    className="bg-blue-400 p-2 rounded-full hover:bg-blue-500 transition-colors"
+                    className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 transition-colors shadow-lg"
                   >
-                    <Twitter className="h-5 w-5 text-white" />
+                    <Twitter className="h-6 w-6 text-white" />
                   </Link>
                 </div>
-              </div>
-            </div>
-
-            {/* Right content - hero image */}
-            <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
-                <Image
-                  src="/hero-manifestation.svg"
-                  alt={t("HomePage.hero.imageAlt")}
-                  fill
-                  className="object-cover"
-                />
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Qui sommes-nous section */}
-      <section className="bg-gray-50 py-16">
+      {/* Qui sommes-nous section - matching wuune.be content style */}
+      <section className="wuune-section bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-                {t("HomePage.aboutUs.title")}
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {t("HomePage.aboutUs.description1")}
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="wuune-section-title text-gray-800 mb-8">
+              {t('HomePage.aboutUs.title')}
+            </h2>
+            <div className="wuune-content-block">
+              <p className="text-lg text-gray-700 leading-relaxed mb-6 wuune-text-strong">
+                {t('HomePage.aboutUs.description1')}
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                {t("HomePage.aboutUs.description2")}
+              <p className="text-lg text-gray-700 leading-relaxed mb-6 wuune-text-strong">
+                {t('HomePage.aboutUs.description2')}
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-8 wuune-text-strong">
+                {t('HomePage.aboutUs.description3')}
               </p>
               <Link href={`/${currentLocale}/wuune`}>
-                <Button className="bg-red-600 text-white hover:bg-red-700 px-6 py-3">
-                  {t("HomePage.aboutUs.learnMoreButton")}
+                <Button className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 font-bold uppercase tracking-wide">
+                  {t('HomePage.aboutUs.learnMoreButton')}
                 </Button>
               </Link>
             </div>
-            <div className="relative">
-              <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
-                <Image
-                  src="/community-warmth.svg"
-                  alt={t("HomePage.aboutUs.imageAlt")}
-                  fill
-                  className="object-cover"
+          </div>
+        </div>
+      </section>
+
+      {/* Actualités section - matching wuune.be news style */}
+      <section className="wuune-section bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="wuune-section-title text-center text-gray-800 mb-12">
+            {t('HomePage.news.title')}
+          </h2>
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="wuune-news-item">
+                <div className="wuune-news-date">
+                  {t('HomePage.news.items.permanences.date')}
+                </div>
+                <h3 className="wuune-news-title">
+                  <Link href="#" className="hover:text-red-600">
+                    {t('HomePage.news.items.permanences.title')}
+                  </Link>
+                </h3>
+                <p className="wuune-news-excerpt">
+                  {t('HomePage.news.items.permanences.excerpt')}
+                </p>
+              </div>
+
+              <div className="wuune-news-item">
+                <div className="wuune-news-date">
+                  {t('HomePage.news.items.abusiveRent.date')}
+                </div>
+                <h3 className="wuune-news-title">
+                  <Link href="#" className="hover:text-red-600">
+                    {t('HomePage.news.items.abusiveRent.title')}
+                  </Link>
+                </h3>
+                <p className="wuune-news-excerpt">
+                  {t('HomePage.news.items.abusiveRent.excerpt')}
+                </p>
+              </div>
+
+              <div className="wuune-news-item">
+                <div className="wuune-news-date">
+                  {t('HomePage.news.items.manifesto.date')}
+                </div>
+                <h3 className="wuune-news-title">
+                  <Link href="#" className="hover:text-red-600">
+                    {t('HomePage.news.items.manifesto.title')}
+                  </Link>
+                </h3>
+                <p className="wuune-news-excerpt">
+                  {t('HomePage.news.items.manifesto.excerpt')}
+                </p>
+              </div>
+
+              <div className="wuune-news-item">
+                <div className="wuune-news-date">
+                  {t('HomePage.news.items.formation.date')}
+                </div>
+                <h3 className="wuune-news-title">
+                  <Link href="#" className="hover:text-red-600">
+                    {t('HomePage.news.items.formation.title')}
+                  </Link>
+                </h3>
+                <p className="wuune-news-excerpt">
+                  {t('HomePage.news.items.formation.excerpt')}
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <Link href={`/${currentLocale}/actualites`}>
+                <Button
+                  variant="outline"
+                  className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white font-bold"
+                >
+                  {t('HomePage.news.viewAllButton')}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Resources and newsletter section - matching wuune.be */}
+      <section className="wuune-section bg-gray-100">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="wuune-content-block">
+              <h3 className="wuune-heading-md text-gray-800 mb-6 uppercase">
+                {t('HomePage.resources.title')}
+              </h3>
+              <div className="space-y-4">
+                <Link
+                  href="#"
+                  className="block text-red-600 hover:text-red-700 font-semibold"
+                >
+                  {t('HomePage.resources.links.legalAid')}
+                </Link>
+                <Link
+                  href="#"
+                  className="block text-red-600 hover:text-red-700 font-semibold"
+                >
+                  {t('HomePage.resources.links.tenantRights')}
+                </Link>
+                <Link
+                  href="#"
+                  className="block text-red-600 hover:text-red-700 font-semibold"
+                >
+                  {t('HomePage.resources.links.rentControl')}
+                </Link>
+                <Link
+                  href="#"
+                  className="block text-red-600 hover:text-red-700 font-semibold"
+                >
+                  {t('HomePage.resources.links.mediation')}
+                </Link>
+              </div>
+            </div>
+
+            <div className="wuune-content-block">
+              <h3 className="wuune-heading-md text-gray-800 mb-6 uppercase">
+                {t('HomePage.newsletter.title')}
+              </h3>
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder={t('HomePage.newsletter.namePlaceholder')}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
                 />
-              </div>
+                <input
+                  type="text"
+                  placeholder={t('HomePage.newsletter.firstNamePlaceholder')}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
+                />
+                <input
+                  type="email"
+                  placeholder={t('HomePage.newsletter.emailPlaceholder')}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
+                />
+                <Button className="w-full bg-red-600 text-white hover:bg-red-700 py-3 font-bold uppercase tracking-wide">
+                  {t('HomePage.newsletter.subscribeButton')}
+                </Button>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to action sections */}
-      <section className="bg-red-600 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
-              <Users className="h-12 w-12 text-red-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold uppercase mb-4">
-                {t("HomePage.callToAction.joinCampaign.title")}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {t("HomePage.callToAction.joinCampaign.description")}
-              </p>
-              <Link href={`/${currentLocale}/campagne`}>
-                <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t("HomePage.callToAction.joinCampaign.button")}
-                </Button>
-              </Link>
-            </div>
-
-            <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
-              <Heart className="h-12 w-12 text-red-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold uppercase mb-4">
-                {t("HomePage.callToAction.evaluateRent.title")}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {t("HomePage.callToAction.evaluateRent.description")}
-              </p>
-              <Link href={`/${currentLocale}/calculateur`}>
-                <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t("HomePage.callToAction.evaluateRent.button")}
-                </Button>
-              </Link>
-            </div>
-
-            <div className="bg-white text-gray-800 p-8 rounded-lg shadow-lg text-center">
-              <Mail className="h-12 w-12 text-red-600 mx-auto mb-4" />
-              <h3 className="text-xl font-bold uppercase mb-4">
-                {t("HomePage.callToAction.contactUs.title")}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {t("HomePage.callToAction.contactUs.description")}
-              </p>
-              <Link href={`/${currentLocale}/contact`}>
-                <Button className="bg-red-600 text-white hover:bg-red-700 w-full">
-                  {t("HomePage.callToAction.contactUs.button")}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
+      {/* Footer - simplified like wuune.be */}
       <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Heart className="h-6 w-6 text-red-500" />
-                <span className="font-bold text-lg">WUUNE</span>
-              </div>
-              <p className="text-gray-300 text-sm">{t("HomePage.footer.description")}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t("HomePage.footer.usefulLinks")}</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  href={`/${currentLocale}/wuune`}
-                  className="block text-gray-300 hover:text-white"
-                >
-                  {t("HomePage.footer.aboutLink")}
-                </Link>
-                <Link
-                  href={`/${currentLocale}/campagne`}
-                  className="block text-gray-300 hover:text-white"
-                >
-                  {t("HomePage.footer.campaignLink")}
-                </Link>
-                <Link
-                  href={`/${currentLocale}/contact`}
-                  className="block text-gray-300 hover:text-white"
-                >
-                  {t("HomePage.footer.contactLink")}
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t("HomePage.footer.followUs")}</h4>
-              <div className="flex gap-3">
-                <Link href="#" className="bg-blue-600 p-2 rounded hover:bg-blue-700">
-                  <Facebook className="h-4 w-4" />
-                </Link>
-                <Link href="#" className="bg-blue-400 p-2 rounded hover:bg-blue-500">
-                  <Twitter className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Heart className="h-6 w-6 text-red-500" />
+            <span className="font-black text-xl tracking-wide">WUUNE</span>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 {t("HomePage.footer.copyright")}</p>
-          </div>
+          <p className="text-gray-300 text-sm mb-4">{t('HomePage.footer.description')}</p>
+          <p className="text-gray-400 text-xs">© 2025 {t('HomePage.footer.copyright')}</p>
         </div>
       </footer>
     </div>

@@ -186,7 +186,7 @@ export function NavigationControls({
               onClick={handlePrevious}
               disabled={previousDisabled || isLoading}
               variant="outline"
-              className="flex items-center gap-2 touch-manipulation text-sm px-3 py-2 h-10 whitespace-nowrap"
+              className="flex items-center gap-2 touch-manipulation text-sm px-4 py-3 min-h-[44px] whitespace-nowrap"
             >
               <ArrowLeft className="h-4 w-4 flex-shrink-0" />
               <span className="truncate">{previousText}</span>
@@ -197,9 +197,9 @@ export function NavigationControls({
           <Button
             onClick={manualSave}
             variant="ghost"
-            size="sm"
-            className="flex items-center gap-1 touch-manipulation px-2 py-2 h-10 whitespace-nowrap"
+            className="flex items-center gap-1 touch-manipulation px-3 py-3 min-h-[44px] whitespace-nowrap"
             title="Sauvegarder manuellement"
+            aria-label="Sauvegarder manuellement"
           >
             <Save className="h-4 w-4 flex-shrink-0" />
           </Button>
@@ -213,8 +213,7 @@ export function NavigationControls({
               <AlertDialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
-                  className="flex items-center gap-1 touch-manipulation text-red-600 hover:text-red-700 px-3 py-2 h-10 whitespace-nowrap text-sm"
+                  className="flex items-center gap-1 touch-manipulation text-red-600 hover:text-red-700 px-3 py-3 min-h-[44px] whitespace-nowrap text-sm"
                 >
                   <RotateCcw className="h-4 w-4 flex-shrink-0" />
                   <span className="hidden sm:inline">Recommencer</span>
@@ -246,7 +245,7 @@ export function NavigationControls({
             <Button
               onClick={handleNext}
               disabled={nextDisabled || isLoading}
-              className="flex items-center gap-2 touch-manipulation bg-red-600 hover:bg-red-700 px-4 py-2 h-10 text-sm whitespace-nowrap"
+              className="flex items-center gap-2 touch-manipulation bg-red-600 hover:bg-red-700 px-4 py-3 min-h-[44px] text-sm whitespace-nowrap"
             >
               <span className="truncate">{nextText}</span>
               <ArrowRight className="h-4 w-4 flex-shrink-0" />

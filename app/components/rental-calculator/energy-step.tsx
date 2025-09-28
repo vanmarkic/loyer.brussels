@@ -4,15 +4,43 @@ import { useForm } from '@/app/context/form-context';
 import { useTranslations } from 'next-intl'; // Add this import
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { AlertCircle, RefreshCw, Info } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+// Helper function to get energy class styling
+const getEnergyClassStyle = (energyClass: string) => {
+  const styles = {
+    A: {
+      default: 'bg-green-100 border-green-300 text-green-800 hover:bg-green-200',
+      selected: 'bg-green-600 border-green-600 text-white shadow-lg',
+    },
+    B: {
+      default: 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100',
+      selected: 'bg-green-500 border-green-500 text-white shadow-lg',
+    },
+    C: {
+      default: 'bg-yellow-100 border-yellow-300 text-yellow-800 hover:bg-yellow-200',
+      selected: 'bg-yellow-600 border-yellow-600 text-white shadow-lg',
+    },
+    D: {
+      default: 'bg-orange-100 border-orange-300 text-orange-800 hover:bg-orange-200',
+      selected: 'bg-orange-600 border-orange-600 text-white shadow-lg',
+    },
+    E: {
+      default: 'bg-red-100 border-red-300 text-red-800 hover:bg-red-200',
+      selected: 'bg-red-600 border-red-600 text-white shadow-lg',
+    },
+    F: {
+      default: 'bg-red-200 border-red-400 text-red-900 hover:bg-red-300',
+      selected: 'bg-red-700 border-red-700 text-white shadow-lg',
+    },
+    G: {
+      default: 'bg-red-300 border-red-500 text-red-900 hover:bg-red-400',
+      selected: 'bg-red-800 border-red-800 text-white shadow-lg',
+    },
+  };
+  return styles[energyClass as keyof typeof styles] || styles.G;
+};
 
 export function EnergyStep() {
   const { state, dispatch, clearError } = useForm();
@@ -44,11 +72,10 @@ export function EnergyStep() {
               <div className="flex justify-end mt-2">
                 <Button
                   variant="outline"
-                  size="sm"
                   onClick={() => {
                     clearError();
                   }}
-                  className="text-xs flex items-center gap-1"
+                  className="text-sm flex items-center gap-1 min-h-[44px] px-4 py-2 touch-manipulation"
                 >
                   <RefreshCw className="h-3 w-3" /> {t('error.retryButton')}
                 </Button>
@@ -91,64 +118,59 @@ export function EnergyStep() {
 
       {renderErrorMessage()}
 
-      <div className="space-y-6 sm:space-y-4">
+      <div className="space-y-8">
         <div>
-          <Label htmlFor="energyClass" className="text-base sm:text-sm font-medium">
+          <Label className="text-xl font-semibold mb-6 block">
             {t('energyClassLabel')}
           </Label>
-          <Select
-            value={state.energyClass}
-            onValueChange={(value) =>
-              dispatch({ type: 'UPDATE_FIELD', field: 'energyClass', value })
-            }
-          >
-            <SelectTrigger
-              id="energyClass"
-              className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
-            >
-              <SelectValue placeholder={t('energyClassPlaceholder')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="A" className="text-lg sm:text-base py-3 sm:py-2">
-                A
-              </SelectItem>
-              <SelectItem value="B" className="text-lg sm:text-base py-3 sm:py-2">
-                B
-              </SelectItem>
-              <SelectItem value="C" className="text-lg sm:text-base py-3 sm:py-2">
-                C
-              </SelectItem>
-              <SelectItem value="D" className="text-lg sm:text-base py-3 sm:py-2">
-                D
-              </SelectItem>
-              <SelectItem value="E" className="text-lg sm:text-base py-3 sm:py-2">
-                E
-              </SelectItem>
-              <SelectItem value="F" className="text-lg sm:text-base py-3 sm:py-2">
-                F
-              </SelectItem>
-              <SelectItem value="G" className="text-lg sm:text-base py-3 sm:py-2">
-                G
-              </SelectItem>
-            </SelectContent>
-          </Select>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+            {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((energyClass) => (
+              <button
+                key={energyClass}
+                type="button"
+                onClick={() =>
+                  dispatch({
+                    type: 'UPDATE_FIELD',
+                    field: 'energyClass',
+                    value: energyClass,
+                  })
+                }
+                className={`
+                  aspect-square rounded-xl border-3 font-bold text-2xl transition-all duration-200 hover:scale-105 hover:shadow-lg min-h-[48px] min-w-[48px] touch-manipulation
+                  ${
+                    state.energyClass === energyClass
+                      ? getEnergyClassStyle(energyClass).selected
+                      : getEnergyClassStyle(energyClass).default
+                  }
+                `}
+                aria-label={`Classe énergétique ${energyClass}`}
+              >
+                {energyClass}
+              </button>
+            ))}
+          </div>
+
+          <p className="text-sm text-gray-600 text-center mt-4">
+            Sélectionnez la classe énergétique de votre logement
+          </p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          onClick={handleBack}
-          variant="outline"
-          className="w-full sm:flex-1 h-12 sm:h-10 text-base sm:text-base touch-manipulation"
-        >
-          {t('backButton')}
-        </Button>
+      <div className="flex flex-col gap-4 pt-6">
         <Button
           onClick={handleContinue}
           disabled={!state.energyClass}
-          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-base sm:text-base font-medium touch-manipulation"
+          className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-16 text-lg font-semibold rounded-xl"
         >
           {t('continueButton')}
+        </Button>
+        <Button
+          onClick={handleBack}
+          variant="outline"
+          className="w-full h-14 text-base border-2 hover:border-gray-400 rounded-xl"
+        >
+          {t('backButton')}
         </Button>
       </div>
     </div>

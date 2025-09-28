@@ -142,8 +142,9 @@ export function SaveContinue({
                     <Button
                       type="button"
                       variant="outline"
-                      size="sm"
                       onClick={() => copyToClipboard(generateSaveLink())}
+                      className="min-h-[44px] px-3 py-2 touch-manipulation flex-shrink-0"
+                      aria-label="Copier le lien de sauvegarde"
                     >
                       <ExternalLink className="h-4 w-4" />
                     </Button>

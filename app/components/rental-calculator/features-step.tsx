@@ -3,9 +3,9 @@
 import { useForm } from '@/app/context/form-context';
 import { useTranslations } from 'next-intl'; // Add this import
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { MinusCircle, PlusCircle } from 'lucide-react';
 
 export function FeaturesStep() {
   const { state, dispatch } = useForm();
@@ -56,9 +56,9 @@ export function FeaturesStep() {
     }
 
     return (
-      <div className="flex flex-col sm:grid sm:grid-cols-[2fr,1fr,1fr] sm:items-center py-4 px-2 border-b border-gray-100 gap-3 sm:gap-0">
-        <div className="font-medium text-base sm:text-sm text-gray-800">{label}</div>
-        <div className="flex items-center justify-start sm:justify-center">
+      <div className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-gray-300 transition-all">
+        <div className="flex flex-col gap-4">
+          <div className="font-semibold text-lg text-gray-800">{label}</div>
           <RadioGroup
             value={radioGroupValue} // Use the pre-calculated value
             onValueChange={(val) =>
@@ -68,33 +68,33 @@ export function FeaturesStep() {
                 value: val === 'true' ? true : false,
               })
             }
-            className="flex items-center space-x-6 sm:space-x-4"
+            className="flex gap-4"
           >
             <>
-              <div className="flex items-center space-x-2">
+              <div className="flex-1">
                 <RadioGroupItem
                   value="true"
                   id={`${field}-true`}
-                  className="h-5 w-5 sm:h-4 sm:w-4 touch-manipulation"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor={`${field}-true`}
-                  className="text-base sm:text-sm font-medium cursor-pointer"
+                  className="flex items-center justify-center h-14 rounded-xl border-2 border-gray-200 bg-gray-50 cursor-pointer hover:bg-green-50 hover:border-green-300 peer-data-[state=checked]:border-green-500 peer-data-[state=checked]:bg-green-50 peer-data-[state=checked]:text-green-700 [&:has([data-state=checked])]:border-green-500 [&:has([data-state=checked])]:bg-green-50 [&:has([data-state=checked])]:text-green-700 font-semibold text-base transition-all"
                 >
-                  {t('yes')}
+                  ✓ {t('yes')}
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex-1">
                 <RadioGroupItem
                   value="false"
                   id={`${field}-false`}
-                  className="h-5 w-5 sm:h-4 sm:w-4 touch-manipulation"
+                  className="peer sr-only"
                 />
                 <Label
                   htmlFor={`${field}-false`}
-                  className="text-base sm:text-sm font-medium cursor-pointer"
+                  className="flex items-center justify-center h-14 rounded-xl border-2 border-gray-200 bg-gray-50 cursor-pointer hover:bg-red-50 hover:border-red-300 peer-data-[state=checked]:border-red-500 peer-data-[state=checked]:bg-red-50 peer-data-[state=checked]:text-red-700 [&:has([data-state=checked])]:border-red-500 [&:has([data-state=checked])]:bg-red-50 [&:has([data-state=checked])]:text-red-700 font-semibold text-base transition-all"
                 >
-                  {t('no')}
+                  ✗ {t('no')}
                 </Label>
               </div>
             </>
@@ -111,15 +111,9 @@ export function FeaturesStep() {
         <p className="text-muted-foreground mt-2">{t('description')}</p>
       </div>
 
-      <div className="border rounded-md overflow-hidden">
-        {/* Desktop table headers - hidden on mobile */}
-        <div className="hidden sm:grid sm:grid-cols-[2fr,1fr,1fr] bg-gray-50 py-2 px-3 border-b border-gray-200">
-          <div className="font-semibold">{t('tableHeaders.option')}</div>
-          <div className="text-center font-semibold">{t('tableHeaders.yes')}</div>
-          <div className="text-center font-semibold">{t('tableHeaders.no')}</div>
-        </div>
-
-        <div className="px-1 sm:px-3">
+      <div className="space-y-6">
+        {/* Features options */}
+        <div className="grid gap-4">
           {createRadioOption('hasCentralHeating', t('options.centralHeating'))}
           {createRadioOption('hasThermalRegulation', t('options.thermalRegulation'))}
           {createRadioOption('hasDoubleGlazing', t('options.doubleGlazing'))}
@@ -127,44 +121,61 @@ export function FeaturesStep() {
           {createRadioOption('hasRecreationalSpaces', t('options.recreationalSpaces'))}
           {createRadioOption('hasStorageSpaces', t('options.storageSpaces'))}
           {createRadioOption('constructedBefore2000', t('options.constructedBefore2000'))}
+        </div>
 
-          {/* Mobile-optimized Garage Input Section */}
-          <div className="flex flex-col sm:grid sm:grid-cols-[2fr,2fr] sm:items-center py-4 px-2 border-t border-gray-100 gap-3 sm:gap-0">
-            <Label
-              htmlFor="numberOfGarages"
-              className="font-medium text-base sm:text-sm text-gray-800"
+        {/* Garage Input Section */}
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+          <Label
+            htmlFor="numberOfGarages"
+            className="block font-semibold text-lg text-gray-800 mb-4"
+          >
+            {t('garageLabel')}
+          </Label>
+          <div className="flex items-center justify-center gap-6">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() =>
+                dispatch({
+                  type: 'UPDATE_FIELD',
+                  field: 'numberOfGarages',
+                  value: Math.max(0, state.numberOfGarages - 1),
+                })
+              }
+              disabled={state.numberOfGarages === 0}
+              className="h-14 w-14 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0"
+              aria-label="Diminuer le nombre de garages"
             >
-              {t('garageLabel')}
-            </Label>
-            <div className="flex items-center sm:justify-center">
-              <Input
-                id="numberOfGarages"
-                type="number"
-                min="0"
-                value={state.numberOfGarages}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'UPDATE_FIELD',
-                    field: 'numberOfGarages',
-                    value: parseInt(e.target.value, 10) || 0, // Ensure it's a number, default to 0
-                  })
-                }
-                className="w-24 h-12 sm:h-10 sm:w-20 text-center text-lg sm:text-base touch-manipulation"
-                inputMode="numeric"
-              />
+              <MinusCircle className="h-6 w-6" />
+            </Button>
+            <div className="bg-gray-50 rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[100px] text-center">
+              <span className="text-3xl font-bold text-gray-800">
+                {state.numberOfGarages}
+              </span>
+              <div className="text-sm text-gray-500 mt-1">garage(s)</div>
             </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() =>
+                dispatch({
+                  type: 'UPDATE_FIELD',
+                  field: 'numberOfGarages',
+                  value: state.numberOfGarages + 1,
+                })
+              }
+              className="h-14 w-14 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0"
+              aria-label="Augmenter le nombre de garages"
+            >
+              <PlusCircle className="h-6 w-6" />
+            </Button>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Button
-          onClick={handleBack}
-          variant="outline"
-          className="w-full sm:flex-1 h-12 sm:h-10 text-base sm:text-base touch-manipulation"
-        >
-          {t('backButton')}
-        </Button>
+      <div className="flex flex-col gap-4 pt-6">
         <Button
           onClick={handleContinue}
           disabled={
@@ -176,9 +187,16 @@ export function FeaturesStep() {
             state.hasStorageSpaces === null ||
             state.constructedBefore2000 === null // Add check for construction year
           }
-          className="w-full sm:flex-1 bg-[#e05c6d] hover:bg-[#d04c5d] h-12 sm:h-10 text-base sm:text-base font-medium touch-manipulation"
+          className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-16 text-lg font-semibold rounded-xl"
         >
           {t('continueButton')}
+        </Button>
+        <Button
+          onClick={handleBack}
+          variant="outline"
+          className="w-full h-14 text-base border-2 hover:border-gray-400 rounded-xl"
+        >
+          {t('backButton')}
         </Button>
       </div>
     </div>

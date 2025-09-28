@@ -3,36 +3,51 @@
 import { useForm } from '@/app/context/form-context';
 import { useTranslations } from 'next-intl';
 import { EnhancedProgress } from '@/app/components/ui/enhanced-progress';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import step components
 const PropertyTypeStep = dynamic(
   () => import('./property-type-step').then((mod) => mod.PropertyTypeStep),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
+  }
 );
 const PropertyDetailsStep = dynamic(
   () => import('./property-details-step').then((mod) => mod.PropertyDetailsStep),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
+  }
 );
 const FeaturesStep = dynamic(
   () => import('./features-step').then((mod) => mod.FeaturesStep),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
+  }
 );
 const EnergyStep = dynamic(() => import('./energy-step').then((mod) => mod.EnergyStep), {
   ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
 });
 const AddressStep = dynamic(
   () => import('./address-step').then((mod) => mod.AddressStep),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
+  }
 );
 const ResultStep = dynamic(() => import('./result-step').then((mod) => mod.ResultStep), {
   ssr: false,
+  loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
 });
 const WuuneResultStep = dynamic(
   () => import('./wuune-result-step').then((mod) => mod.WuuneResultStep),
   {
     ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
   }
 );
 
@@ -120,12 +135,14 @@ export function RentalCalculator() {
       )}
 
       {/* Render dynamic components */}
-      {state.step === 1 && <PropertyTypeStep />}
-      {state.step === 2 && <PropertyDetailsStep />}
-      {state.step === 3 && <FeaturesStep />}
-      {state.step === 4 && <EnergyStep />}
-      {state.step === 5 && <AddressStep />}
-      {state.step === 6 && <WuuneResultStep />}
+      <Suspense fallback={<div className="animate-pulse bg-gray-200 h-32 rounded"></div>}>
+        {state.step === 1 && <PropertyTypeStep />}
+        {state.step === 2 && <PropertyDetailsStep />}
+        {state.step === 3 && <FeaturesStep />}
+        {state.step === 4 && <EnergyStep />}
+        {state.step === 5 && <AddressStep />}
+        {state.step === 6 && <WuuneResultStep />}
+      </Suspense>
     </div>
   );
 }

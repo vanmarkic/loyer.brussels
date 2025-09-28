@@ -111,6 +111,119 @@
       "housingProblems": "Housing Problems",
       "positiveAspects": "Positive Aspects of Housing",
       "personalizedResult": "Personalized Result"
+    },
+    "navigation": {
+      "back": "Back",
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    },
+    "header": {
+      "title": "Detailed Questionnaire",
+      "stepProgress": "Step {currentStep} of {totalSteps}",
+      "percentage": "{percentage}%"
+    },
+    "retrievedInfo": {
+      "title": "Detailed Questionnaire",
+      "description": "We use the information already collected from your evaluation",
+      "alreadyCollected": "✓ Information already collected",
+      "currentRent": "Current rent:",
+      "livingSpace": "Living space:",
+      "email": "Email:",
+      "phone": "Phone:",
+      "notProvided": "Not provided",
+      "notProvidedFeminine": "Not provided",
+      "infoMessage": "This detailed questionnaire will help us better understand your situation and give you more precise advice. No data will be asked again!"
+    },
+    "personalSituation": {
+      "title": "Personal situation and lease",
+      "description": "This information helps us better understand your situation",
+      "leaseType": "Type of lease",
+      "leaseStartDate": "Lease start date",
+      "monthlyIncome": "Approximate monthly income (optional)",
+      "monthlyIncomePlaceholder": "Ex: 2500",
+      "householdComposition": "Household composition",
+      "rentIndexation": "Has your rent been indexed recently?"
+    },
+    "leaseTypes": {
+      "nineYears": "9-year lease (main residence)",
+      "threeYears": "3-year lease",
+      "lessThanYear": "Less than one year lease",
+      "other": "Other"
+    },
+    "householdTypes": {
+      "single": "Single person",
+      "couple": "Couple without children",
+      "family": "Family with child(ren)",
+      "shared": "Shared accommodation"
+    },
+    "rentIndexation": {
+      "yesRecent": "Yes, in the last 12 months",
+      "yesOld": "Yes, but more than a year ago",
+      "no": "No, never",
+      "unknown": "I don't know"
+    },
+    "maintenance": {
+      "boilerMaintenance": "I perform annual boiler maintenance (if applicable)",
+      "fireInsurance": "I have current fire insurance"
+    },
+    "problems": {
+      "title": "Housing problems",
+      "description": "These defects can justify a rent reduction",
+      "healthIssues": {
+        "title": "Health or safety problems",
+        "items": [
+          "Excessive humidity or mold",
+          "Heating or insulation problems",
+          "Significant noise disturbances",
+          "Electricity or plumbing problems",
+          "Infestation (rats, cockroaches, etc.)",
+          "Lack of adequate ventilation"
+        ]
+      },
+      "majorDefects": {
+        "title": "Major housing defects",
+        "items": [
+          "Defective windows or doors",
+          "Floor coverings in poor condition",
+          "Peeling paint or peeling wallpaper",
+          "Faulty kitchen equipment",
+          "Bathroom problems (tiles, taps)",
+          "Insufficient lighting",
+          "Insufficient storage spaces"
+        ]
+      },
+      "warningMessage": "The more defects your housing has, the more arguments you will have to negotiate a rent reduction."
+    },
+    "positiveAspects": {
+      "title": "Positive aspects of housing",
+      "description": "These elements can justify a higher rent",
+      "advantages": "Advantages and equipment",
+      "items": [
+        "Recently renovated housing",
+        "Balcony, terrace or garden",
+        "Parking or garage included",
+        "Elevator in the building",
+        "Very well served neighborhood",
+        "Exceptional view",
+        "High-end equipment",
+        "Excellent thermal insulation",
+        "Security system",
+        "Cellar or storage room included"
+      ],
+      "additionalComments": "Additional comments",
+      "additionalCommentsPlaceholder": "Describe other particular aspects of your housing...",
+      "successMessage": "This information will allow us to give you a complete and personalized evaluation."
+    },
+    "personalizedResult": {
+      "title": "Your personalized situation",
+      "description": "Here is our evaluation based on your responses",
+      "wuune": {
+        "title": "Join Wuune!",
+        "description": "Whatever the result, together we are stronger to defend your rights.",
+        "joinCollective": "Join the collective",
+        "newEvaluation": "Make a new evaluation"
+      }
     }
   },
   "HomePage": {

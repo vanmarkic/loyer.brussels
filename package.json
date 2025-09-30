@@ -15,7 +15,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:screenshots": "playwright test --project=desktop-chromium --project=mobile-safari",
     "test:report": "playwright show-report",
-    "test:email": "tsx scripts/test-email.ts",
+    "test:email": "tsx --env-file=.env.local scripts/test-email.ts",
     "test:email:e2e": "vitest --run app/lib/__tests__/email.e2e.test.ts"
   },
   "dependencies": {

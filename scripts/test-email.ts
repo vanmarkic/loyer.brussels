@@ -1,7 +1,7 @@
 /**
  * Manual script to test Resend email functionality
- * Run with: npx tsx scripts/test-email.ts
- * 
+ * Run with: yarn test:email
+ *
  * This script sends real test emails to verify:
  * 1. Resend API key is configured
  * 2. Domain is verified (or using a verified test domain)
@@ -9,22 +9,31 @@
  * 4. Emails are actually delivered
  */
 
-import { 
-  sendContactNotification, 
+// IMPORTANT: Load environment variables FIRST before any other imports
+import dotenv from "dotenv";
+import { resolve } from "path";
+
+// Load .env.local file BEFORE importing email module
+dotenv.config({ path: resolve(process.cwd(), ".env.local") });
+
+// Now import email functions after environment variables are loaded
+import {
+  sendContactNotification,
   sendContactConfirmation,
   sendQuestionnaireConfirmation,
   type ContactEmailData,
-  type QuestionnaireEmailData 
+  type QuestionnaireEmailData,
 } from "../app/lib/email";
 
 async function testContactEmails() {
   console.log("🧪 Testing Contact Form Emails...\n");
-  
+
   const testContactData: ContactEmailData = {
     name: "Test User",
     email: "drag.markovic@gmail.com", // Replace with your email
     subject: "Email Integration Test",
-    message: "This is a test email from the Loyer.Brussels application to verify Resend integration is working correctly.",
+    message:
+      "This is a test email from the Loyer.Brussels application to verify Resend integration is working correctly.",
     newsletter: true,
     assembly: true,
   };
@@ -32,7 +41,7 @@ async function testContactEmails() {
   // Test admin notification
   console.log("📧 Sending admin notification...");
   const notificationResult = await sendContactNotification(testContactData);
-  
+
   if (notificationResult.success) {
     console.log("✅ Admin notification sent successfully!");
     console.log("   Email ID:", notificationResult.data?.id);
@@ -42,12 +51,12 @@ async function testContactEmails() {
   }
 
   // Small delay to avoid rate limiting
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // Test user confirmation
   console.log("\n📧 Sending user confirmation...");
   const confirmationResult = await sendContactConfirmation(testContactData);
-  
+
   if (confirmationResult.success) {
     console.log("✅ User confirmation sent successfully!");
     console.log("   Email ID:", confirmationResult.data?.id);
@@ -59,7 +68,7 @@ async function testContactEmails() {
 
 async function testQuestionnaireEmail() {
   console.log("\n🧪 Testing Questionnaire Confirmation Email...\n");
-  
+
   const testQuestionnaireData: QuestionnaireEmailData = {
     email: "drag.markovic@gmail.com", // Replace with your email
     submissionId: "test-" + Date.now(),
@@ -74,7 +83,7 @@ async function testQuestionnaireEmail() {
 
   console.log("📧 Sending questionnaire confirmation...");
   const result = await sendQuestionnaireConfirmation(testQuestionnaireData);
-  
+
   if (result.success) {
     console.log("✅ Questionnaire confirmation sent successfully!");
     console.log("   Email ID:", result.data?.id);
@@ -86,7 +95,7 @@ async function testQuestionnaireEmail() {
 
 async function checkEnvironmentVariables() {
   console.log("🔍 Checking Environment Configuration...\n");
-  
+
   const requiredVars = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
@@ -94,10 +103,12 @@ async function checkEnvironmentVariables() {
   };
 
   let allConfigured = true;
-  
+
   for (const [key, value] of Object.entries(requiredVars)) {
     if (value) {
-      console.log(`✅ ${key}: ${key === 'RESEND_API_KEY' ? '***' + value.slice(-4) : value}`);
+      console.log(
+        `✅ ${key}: ${key === "RESEND_API_KEY" ? "***" + value.slice(-4) : value}`
+      );
     } else {
       console.log(`❌ ${key}: NOT SET`);
       allConfigured = false;
@@ -123,7 +134,7 @@ async function main() {
 
   // Check configuration first
   const isConfigured = await checkEnvironmentVariables();
-  
+
   if (!isConfigured) {
     console.log("\n❌ Cannot proceed with email tests - configuration incomplete.");
     process.exit(1);
@@ -134,18 +145,17 @@ async function main() {
   try {
     // Test contact emails
     await testContactEmails();
-    
+
     // Wait a bit to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // Test questionnaire email
     await testQuestionnaireEmail();
-    
+
     console.log("\n" + "═".repeat(50));
     console.log("✅ Email test script completed!");
     console.log("📬 Check your inbox at drag.markovic@gmail.com");
     console.log("═".repeat(50) + "\n");
-    
   } catch (error) {
     console.error("\n❌ Error running email tests:");
     console.error(error);

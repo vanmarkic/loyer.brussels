@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -65,6 +65,9 @@ function DetailedQuestionnaireContent() {
   const existingSpace = globalForm.getLivingSpace();
   const contactInfo = globalForm.getContactInfo();
 
+  // Extract update functions (these are stable from useCallback in context)
+  const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } = globalForm;
+
   const [data, setData] = useState<QuestionnaireData>({
     leaseType: globalForm.state.rentalInfo.leaseType || "",
     leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || "",
@@ -82,31 +85,41 @@ function DetailedQuestionnaireContent() {
     additionalComments: globalForm.state.propertyIssues.additionalComments || "",
   });
 
-  // Update global context when data changes
-  useEffect(() => {
-    globalForm.updateRentalInfo({
-      leaseType: data.leaseType,
-      leaseStartDate: data.leaseStartDate,
-      rentIndexation: data.rentIndexation,
-      boilerMaintenance: data.boilerMaintenance,
-      fireInsurance: data.fireInsurance,
-    });
+  // Helper function to update both local and global state
+  const updateData = useCallback((updates: Partial<QuestionnaireData> | ((prev: QuestionnaireData) => Partial<QuestionnaireData>)) => {
+    setData((prev: QuestionnaireData) => {
+      const computedUpdates = typeof updates === "function" ? updates(prev) : updates;
+      const newData = { ...prev, ...computedUpdates };
 
-    globalForm.updateHouseholdInfo({
-      monthlyIncome: data.monthlyIncome,
-      householdComposition: data.householdComposition,
-      paymentDelays: data.paymentDelays,
-      evictionThreats: data.evictionThreats,
-      mediationAttempts: data.mediationAttempts,
-    });
+      // Schedule global context updates for after render
+      Promise.resolve().then(() => {
+        updateRentalInfo({
+          leaseType: newData.leaseType,
+          leaseStartDate: newData.leaseStartDate,
+          rentIndexation: newData.rentIndexation,
+          boilerMaintenance: newData.boilerMaintenance,
+          fireInsurance: newData.fireInsurance,
+        });
 
-    globalForm.updatePropertyIssues({
-      healthIssues: data.healthIssues,
-      majorDefects: data.majorDefects,
-      positiveAspects: data.positiveAspects,
-      additionalComments: data.additionalComments,
+        updateHouseholdInfo({
+          monthlyIncome: newData.monthlyIncome,
+          householdComposition: newData.householdComposition,
+          paymentDelays: newData.paymentDelays,
+          evictionThreats: newData.evictionThreats,
+          mediationAttempts: newData.mediationAttempts,
+        });
+
+        updatePropertyIssues({
+          healthIssues: newData.healthIssues,
+          majorDefects: newData.majorDefects,
+          positiveAspects: newData.positiveAspects,
+          additionalComments: newData.additionalComments,
+        });
+      });
+
+      return newData;
     });
-  }, [data, globalForm]);
+  }, [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]);
 
   const sections = [
     t("sections.retrievedInfo"),
@@ -168,18 +181,21 @@ function DetailedQuestionnaireContent() {
     }
   };
 
-  const handleCheckboxChange = (
+  const handleCheckboxChange = useCallback((
     field: keyof QuestionnaireData,
     value: string,
     checked: boolean
   ) => {
-    setData((prev) => ({
-      ...prev,
-      [field]: checked
-        ? [...(prev[field] as string[]), value]
-        : (prev[field] as string[]).filter((item) => item !== value),
-    }));
-  };
+    updateData((prev: QuestionnaireData) => {
+      const currentArray = (prev[field] as unknown as string[]) || [];
+      const nextArray = checked
+        ? [...currentArray, value]
+        : currentArray.filter((item) => item !== value);
+      // Ensure uniqueness to avoid duplicates during rapid toggles
+      const uniqueNextArray = Array.from(new Set(nextArray));
+      return { [field]: uniqueNextArray } as Partial<QuestionnaireData>;
+    });
+  }, [updateData]);
 
   const renderSection = () => {
     switch (currentSection) {
@@ -263,7 +279,7 @@ function DetailedQuestionnaireContent() {
                 <RadioGroup
                   value={data.leaseType}
                   onValueChange={(value) =>
-                    setData((prev) => ({ ...prev, leaseType: value }))
+                    updateData({ leaseType: value })
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -294,7 +310,7 @@ function DetailedQuestionnaireContent() {
                   type="date"
                   value={data.leaseStartDate}
                   onChange={(e) =>
-                    setData((prev) => ({ ...prev, leaseStartDate: e.target.value }))
+                    updateData({ leaseStartDate: e.target.value })
                   }
                 />
               </div>
@@ -309,7 +325,7 @@ function DetailedQuestionnaireContent() {
                   placeholder={t("personalSituation.monthlyIncomePlaceholder")}
                   value={data.monthlyIncome}
                   onChange={(e) =>
-                    setData((prev) => ({ ...prev, monthlyIncome: e.target.value }))
+                    updateData({ monthlyIncome: e.target.value })
                   }
                 />
               </div>
@@ -319,7 +335,7 @@ function DetailedQuestionnaireContent() {
                 <RadioGroup
                   value={data.householdComposition}
                   onValueChange={(value) =>
-                    setData((prev) => ({ ...prev, householdComposition: value }))
+                    updateData({ householdComposition: value })
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -346,7 +362,7 @@ function DetailedQuestionnaireContent() {
                 <RadioGroup
                   value={data.rentIndexation}
                   onValueChange={(value) =>
-                    setData((prev) => ({ ...prev, rentIndexation: value }))
+                    updateData({ rentIndexation: value })
                   }
                 >
                   <div className="flex items-center space-x-2">
@@ -374,10 +390,7 @@ function DetailedQuestionnaireContent() {
                     id="boilerMaintenance"
                     checked={data.boilerMaintenance}
                     onCheckedChange={(checked) =>
-                      setData((prev) => ({
-                        ...prev,
-                        boilerMaintenance: checked as boolean,
-                      }))
+                      updateData({ boilerMaintenance: checked as boolean })
                     }
                   />
                   <label htmlFor="boilerMaintenance" className="text-sm">
@@ -390,7 +403,7 @@ function DetailedQuestionnaireContent() {
                     id="fireInsurance"
                     checked={data.fireInsurance}
                     onCheckedChange={(checked) =>
-                      setData((prev) => ({ ...prev, fireInsurance: checked as boolean }))
+                      updateData({ fireInsurance: checked as boolean })
                     }
                   />
                   <label htmlFor="fireInsurance" className="text-sm">
@@ -519,12 +532,12 @@ function DetailedQuestionnaireContent() {
               <Label htmlFor="additionalComments">
                 {t("positiveAspects.additionalComments")}
               </Label>
-              <Textarea
+                <Textarea
                 id="additionalComments"
                 placeholder={t("positiveAspects.additionalCommentsPlaceholder")}
                 value={data.additionalComments}
                 onChange={(e) =>
-                  setData((prev) => ({ ...prev, additionalComments: e.target.value }))
+                  updateData({ additionalComments: e.target.value })
                 }
                 rows={4}
               />

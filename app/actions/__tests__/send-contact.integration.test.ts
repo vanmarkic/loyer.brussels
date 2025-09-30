@@ -5,7 +5,7 @@
 
 import { describe, it, expect, afterAll, vi } from "vitest";
 import { submitContactForm, ContactFormData } from "../send-contact";
-import { supabaseAdmin } from "@/app/lib/supabase";
+import { supabaseAdmin, hasSupabaseCredentials } from "@/app/lib/supabase";
 
 // Mock the email module to avoid hitting Resend API in tests
 vi.mock("@/app/lib/email", () => ({
@@ -27,15 +27,19 @@ describe("Contact Form Integration Tests", () => {
   let testSubmissionId: number | undefined;
   const testEmail = "drag.markovic@gmail.com";
 
+  // Skip all tests if Supabase credentials are not available
+  const skipTests = !hasSupabaseCredentials;
+
   // Cleanup function to remove test data
   afterAll(async () => {
+    if (skipTests) return;
     if (testSubmissionId) {
       await supabaseAdmin.from("contact_submissions").delete().eq("id", testSubmissionId);
     }
   });
 
   describe("submitContactForm", () => {
-    it("should successfully submit a complete contact form", async () => {
+    it.skipIf(skipTests)("should successfully submit a complete contact form", async () => {
       const formData: ContactFormData = {
         name: "Dragan Markovic (Test User)",
         email: testEmail,
@@ -76,7 +80,7 @@ describe("Contact Form Integration Tests", () => {
       }
     });
 
-    it("should successfully submit with minimal required fields", async () => {
+    it.skipIf(skipTests)("should successfully submit with minimal required fields", async () => {
       const formData: ContactFormData = {
         name: "Test User Minimal",
         email: testEmail,
@@ -100,7 +104,7 @@ describe("Contact Form Integration Tests", () => {
       }
     });
 
-    it("should reject submission with missing required fields", async () => {
+    it.skipIf(skipTests)("should reject submission with missing required fields", async () => {
       const formData: ContactFormData = {
         name: "",
         email: testEmail,
@@ -117,7 +121,7 @@ describe("Contact Form Integration Tests", () => {
       expect(result.error).toContain("obligatoires");
     });
 
-    it("should reject submission with invalid email", async () => {
+    it.skipIf(skipTests)("should reject submission with invalid email", async () => {
       const formData: ContactFormData = {
         name: "Test User",
         email: "invalid-email",
@@ -134,7 +138,7 @@ describe("Contact Form Integration Tests", () => {
       expect(result.error).toContain("email invalide");
     });
 
-    it("should handle special characters in message", async () => {
+    it.skipIf(skipTests)("should handle special characters in message", async () => {
       const formData: ContactFormData = {
         name: "Test User",
         email: testEmail,
@@ -167,7 +171,7 @@ describe("Contact Form Integration Tests", () => {
       }
     });
 
-    it("should handle joining Wuune from rent calculator flow", async () => {
+    it.skipIf(skipTests)("should handle joining Wuune from rent calculator flow", async () => {
       const formData: ContactFormData = {
         name: "Test User - Wuune Join",
         email: testEmail,
@@ -192,7 +196,7 @@ describe("Contact Form Integration Tests", () => {
       }
     });
 
-    it("should handle long messages", async () => {
+    it.skipIf(skipTests)("should handle long messages", async () => {
       const longMessage = "A".repeat(5000); // 5000 character message
 
       const formData: ContactFormData = {
@@ -220,7 +224,7 @@ describe("Contact Form Integration Tests", () => {
   });
 
   describe("Database Integration", () => {
-    it("should correctly store newsletter and assembly preferences", async () => {
+    it.skipIf(skipTests)("should correctly store newsletter and assembly preferences", async () => {
       const formData: ContactFormData = {
         name: "Test User - Preferences",
         email: testEmail,
@@ -251,7 +255,7 @@ describe("Contact Form Integration Tests", () => {
       }
     });
 
-    it("should store submission timestamp", async () => {
+    it.skipIf(skipTests)("should store submission timestamp", async () => {
       const beforeSubmit = new Date();
 
       const formData: ContactFormData = {
@@ -289,7 +293,7 @@ describe("Contact Form Integration Tests", () => {
   });
 
   describe("Email Integration", () => {
-    it("should send emails without blocking submission on email failure", async () => {
+    it.skipIf(skipTests)("should send emails without blocking submission on email failure", async () => {
       // This test verifies that even if email sending fails,
       // the submission is still successful (graceful degradation)
 

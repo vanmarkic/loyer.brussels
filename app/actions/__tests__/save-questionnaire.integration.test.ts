@@ -5,7 +5,7 @@
 
 import { describe, it, expect, afterAll, vi } from "vitest";
 import { saveQuestionnaireResponse } from "../save-questionnaire";
-import { supabaseAdmin } from "@/app/lib/supabase";
+import { supabaseAdmin, hasSupabaseCredentials } from "@/app/lib/supabase";
 import type { GlobalFormState } from "@/app/data/global-form-types";
 
 // Mock the email module to avoid hitting Resend API in tests
@@ -28,8 +28,12 @@ describe("Questionnaire Integration Tests", () => {
   const testSubmissionIds: string[] = [];
   const testEmail = "drag.markovic@gmail.com";
 
+  // Skip all tests if Supabase credentials are not available
+  const skipTests = !hasSupabaseCredentials;
+
   // Cleanup function to remove test data
   afterAll(async () => {
+    if (skipTests) return;
     for (const id of testSubmissionIds) {
       await supabaseAdmin.from("questionnaire_responses").delete().eq("id", id);
     }
@@ -106,7 +110,7 @@ describe("Questionnaire Integration Tests", () => {
   };
 
   describe("saveQuestionnaireResponse", () => {
-    it("should successfully submit a complete questionnaire", async () => {
+    it.skipIf(skipTests)("should successfully submit a complete questionnaire", async () => {
       const formState = createTestFormState();
 
       const result = await saveQuestionnaireResponse(formState);
@@ -172,7 +176,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should successfully submit with minimal required data", async () => {
+    it.skipIf(skipTests)("should successfully submit with minimal required data", async () => {
       const minimalFormState: GlobalFormState = {
         currentStep: 1,
         currentPage: "questionnaire",
@@ -245,7 +249,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should reject submission without email", async () => {
+    it.skipIf(skipTests)("should reject submission without email", async () => {
       const formState = createTestFormState();
       formState.userProfile.email = "";
 
@@ -256,7 +260,7 @@ describe("Questionnaire Integration Tests", () => {
       expect(result.error).toContain("email requise");
     });
 
-    it("should handle high rent overpayment case", async () => {
+    it.skipIf(skipTests)("should handle high rent overpayment case", async () => {
       const formState = createTestFormState({
         rentalInfo: {
           actualRent: "1500", // Much higher than max rent
@@ -297,7 +301,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should store complex property issues correctly", async () => {
+    it.skipIf(skipTests)("should store complex property issues correctly", async () => {
       const formState = createTestFormState({
         propertyIssues: {
           healthIssues: [
@@ -343,7 +347,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should handle different household compositions", async () => {
+    it.skipIf(skipTests)("should handle different household compositions", async () => {
       const compositions = ["single", "couple", "family", "shared"];
 
       for (const composition of compositions) {
@@ -375,7 +379,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should store session ID for tracking", async () => {
+    it.skipIf(skipTests)("should store session ID for tracking", async () => {
       const sessionId = `integration-test-${Date.now()}`;
       const formState = createTestFormState({
         sessionId,
@@ -398,7 +402,7 @@ describe("Questionnaire Integration Tests", () => {
       }
     });
 
-    it("should handle special characters in text fields", async () => {
+    it.skipIf(skipTests)("should handle special characters in text fields", async () => {
       const formState = createTestFormState({
         propertyInfo: {
           ...createTestFormState().propertyInfo,
@@ -435,7 +439,7 @@ describe("Questionnaire Integration Tests", () => {
   });
 
   describe("Email Integration", () => {
-    it("should call email confirmation function after successful submission", async () => {
+    it.skipIf(skipTests)("should call email confirmation function after successful submission", async () => {
       const { sendQuestionnaireConfirmation } = await import("@/app/lib/email");
       const formState = createTestFormState();
 
@@ -459,7 +463,7 @@ describe("Questionnaire Integration Tests", () => {
   });
 
   describe("Data Integrity", () => {
-    it("should maintain data integrity across all fields", async () => {
+    it.skipIf(skipTests)("should maintain data integrity across all fields", async () => {
       const formState = createTestFormState({
         propertyInfo: {
           postalCode: 1050,

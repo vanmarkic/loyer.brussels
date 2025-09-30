@@ -8,9 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NavigationControls } from "@/app/components/ui/navigation-controls";
 import { useHoldRepeat } from "@/app/hooks/use-hold-repeat";
-import { MinusCircle, PlusCircle, Calculator, Lightbulb } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { MinusCircle, PlusCircle } from "lucide-react";
 import { useStepNavigationContext } from "./step-wrapper";
 
 export function PropertyDetailsStep() {
@@ -24,6 +22,13 @@ export function PropertyDetailsStep() {
   useEffect(() => {
     sizeRef.current = state.propertyInfo.size;
   }, [state.propertyInfo.size]);
+
+  // Bootstrap size to 1 if it's 0 (UX improvement)
+  useEffect(() => {
+    if (state.propertyInfo.size === 0) {
+      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: 1 } });
+    }
+  }, [dispatch, state.propertyInfo.size]);
 
   // Helper functions for size increment/decrement
   const incrementSize = () => {
@@ -47,6 +52,19 @@ export function PropertyDetailsStep() {
     onRepeat: decrementSize,
     interval: 150,
   });
+
+  // Click handlers that guard against double-fire when pointer events are active
+  const handlePlusClick = () => {
+    if (!incrementControls.isActive()) {
+      incrementSize();
+    }
+  };
+
+  const handleMinusClick = () => {
+    if (!decrementControls.isActive()) {
+      decrementSize();
+    }
+  };
 
   // Debug: Log when controls are triggered (removed to prevent infinite rerenders)
   // console.log("Hold repeat controls initialized:", {
@@ -186,10 +204,13 @@ export function PropertyDetailsStep() {
                 type="button"
                 variant="outline"
                 size="icon"
+                onClick={handleMinusClick}
                 onPointerDown={decrementControls.start}
                 onPointerUp={decrementControls.stop}
                 onPointerLeave={decrementControls.stop}
                 onPointerCancel={decrementControls.stop}
+                onTouchStart={decrementControls.start}
+                onTouchEnd={decrementControls.stop}
                 disabled={
                   !state.propertyInfo.size || state.propertyInfo.size <= 1
                 }
@@ -233,10 +254,13 @@ export function PropertyDetailsStep() {
                 type="button"
                 variant="outline"
                 size="icon"
+                onClick={handlePlusClick}
                 onPointerDown={incrementControls.start}
                 onPointerUp={incrementControls.stop}
                 onPointerLeave={incrementControls.stop}
                 onPointerCancel={incrementControls.stop}
+                onTouchStart={incrementControls.start}
+                onTouchEnd={incrementControls.stop}
                 className="h-16 w-16 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Augmenter la superficie par 1m²"
               >

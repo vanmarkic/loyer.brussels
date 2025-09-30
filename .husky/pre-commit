@@ -1,0 +1,5 @@
+# Run lint-staged for staged files
+npx lint-staged
+
+# Run build to ensure everything compiles
+npm run build

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
+
+// Force dynamic rendering to avoid SSG issues with client hooks
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -76,13 +79,15 @@ function DetailedQuestionnaireContent() {
   const contactInfo = globalForm.getContactInfo();
 
   // Extract update functions (these are stable from useCallback in context)
-  const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } = globalForm;
+  const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } =
+    globalForm;
 
   const [data, setData] = useState<QuestionnaireData>({
     leaseType: globalForm.state.rentalInfo.leaseType || "",
     leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || "",
     monthlyIncome: globalForm.state.householdInfo.monthlyIncome || "",
-    householdComposition: globalForm.state.householdInfo.householdComposition || "",
+    householdComposition:
+      globalForm.state.householdInfo.householdComposition || "",
     rentIndexation: globalForm.state.rentalInfo.rentIndexation || "",
     paymentDelays: globalForm.state.householdInfo.paymentDelays || "",
     evictionThreats: globalForm.state.householdInfo.evictionThreats || "",
@@ -92,7 +97,8 @@ function DetailedQuestionnaireContent() {
     healthIssues: globalForm.state.propertyIssues.healthIssues || [],
     majorDefects: globalForm.state.propertyIssues.majorDefects || [],
     positiveAspects: globalForm.state.propertyIssues.positiveAspects || [],
-    additionalComments: globalForm.state.propertyIssues.additionalComments || "",
+    additionalComments:
+      globalForm.state.propertyIssues.additionalComments || "",
   });
 
   // Helper function to update both local and global state
@@ -100,10 +106,11 @@ function DetailedQuestionnaireContent() {
     (
       updates:
         | Partial<QuestionnaireData>
-        | ((prev: QuestionnaireData) => Partial<QuestionnaireData>)
+        | ((prev: QuestionnaireData) => Partial<QuestionnaireData>),
     ) => {
       setData((prev: QuestionnaireData) => {
-        const computedUpdates = typeof updates === "function" ? updates(prev) : updates;
+        const computedUpdates =
+          typeof updates === "function" ? updates(prev) : updates;
         const newData = { ...prev, ...computedUpdates };
 
         // Schedule global context updates for after render
@@ -135,7 +142,7 @@ function DetailedQuestionnaireContent() {
         return newData;
       });
     },
-    [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]
+    [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues],
   );
 
   const sections = [
@@ -176,7 +183,8 @@ function DetailedQuestionnaireContent() {
       } else {
         toast({
           title: "Erreur",
-          description: result.error || "Une erreur s'est produite. Veuillez réessayer.",
+          description:
+            result.error || "Une erreur s'est produite. Veuillez réessayer.",
           variant: "destructive",
         });
         setIsSubmitting(false);
@@ -185,7 +193,8 @@ function DetailedQuestionnaireContent() {
       console.error("Error submitting questionnaire:", error);
       toast({
         title: "Erreur",
-        description: "Une erreur inattendue s'est produite. Veuillez réessayer.",
+        description:
+          "Une erreur inattendue s'est produite. Veuillez réessayer.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -210,7 +219,7 @@ function DetailedQuestionnaireContent() {
         return { [field]: uniqueNextArray } as Partial<QuestionnaireData>;
       });
     },
-    [updateData]
+    [updateData],
   );
 
   const renderSection = () => {
@@ -286,7 +295,9 @@ function DetailedQuestionnaireContent() {
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 {t("personalSituation.title")}
               </h2>
-              <p className="text-gray-600">{t("personalSituation.description")}</p>
+              <p className="text-gray-600">
+                {t("personalSituation.description")}
+              </p>
             </div>
 
             <div className="space-y-6">
@@ -302,11 +313,15 @@ function DetailedQuestionnaireContent() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="3-years" id="3-years" />
-                    <label htmlFor="3-years">{t("leaseTypes.threeYears")}</label>
+                    <label htmlFor="3-years">
+                      {t("leaseTypes.threeYears")}
+                    </label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="1-year" id="1-year" />
-                    <label htmlFor="1-year">{t("leaseTypes.lessThanYear")}</label>
+                    <label htmlFor="1-year">
+                      {t("leaseTypes.lessThanYear")}
+                    </label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="other" id="other" />
@@ -323,7 +338,9 @@ function DetailedQuestionnaireContent() {
                   id="leaseStartDate"
                   type="date"
                   value={data.leaseStartDate}
-                  onChange={(e) => updateData({ leaseStartDate: e.target.value })}
+                  onChange={(e) =>
+                    updateData({ leaseStartDate: e.target.value })
+                  }
                 />
               </div>
 
@@ -336,7 +353,9 @@ function DetailedQuestionnaireContent() {
                   type="number"
                   placeholder={t("personalSituation.monthlyIncomePlaceholder")}
                   value={data.monthlyIncome}
-                  onChange={(e) => updateData({ monthlyIncome: e.target.value })}
+                  onChange={(e) =>
+                    updateData({ monthlyIncome: e.target.value })
+                  }
                 />
               </div>
 
@@ -344,7 +363,9 @@ function DetailedQuestionnaireContent() {
                 <Label>{t("personalSituation.householdComposition")}</Label>
                 <RadioGroup
                   value={data.householdComposition}
-                  onValueChange={(value) => updateData({ householdComposition: value })}
+                  onValueChange={(value) =>
+                    updateData({ householdComposition: value })
+                  }
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="single" id="single" />
@@ -369,15 +390,21 @@ function DetailedQuestionnaireContent() {
                 <Label>{t("personalSituation.rentIndexation")}</Label>
                 <RadioGroup
                   value={data.rentIndexation}
-                  onValueChange={(value) => updateData({ rentIndexation: value })}
+                  onValueChange={(value) =>
+                    updateData({ rentIndexation: value })
+                  }
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes-recent" id="yes-recent" />
-                    <label htmlFor="yes-recent">{t("rentIndexation.yesRecent")}</label>
+                    <label htmlFor="yes-recent">
+                      {t("rentIndexation.yesRecent")}
+                    </label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes-old" id="yes-old" />
-                    <label htmlFor="yes-old">{t("rentIndexation.yesOld")}</label>
+                    <label htmlFor="yes-old">
+                      {t("rentIndexation.yesOld")}
+                    </label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="no" id="no" />
@@ -385,7 +412,9 @@ function DetailedQuestionnaireContent() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="unknown" id="unknown" />
-                    <label htmlFor="unknown">{t("rentIndexation.unknown")}</label>
+                    <label htmlFor="unknown">
+                      {t("rentIndexation.unknown")}
+                    </label>
                   </div>
                 </RadioGroup>
               </div>
@@ -440,14 +469,18 @@ function DetailedQuestionnaireContent() {
                   {toStringArray(
                     t("problems.healthIssues.items", {
                       returnObjects: true,
-                    }) as unknown
+                    }) as unknown,
                   ).map((issue: string) => (
                     <div key={issue} className="flex items-center space-x-2">
                       <Checkbox
                         id={issue}
                         checked={data.healthIssues.includes(issue)}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange("healthIssues", issue, checked as boolean)
+                          handleCheckboxChange(
+                            "healthIssues",
+                            issue,
+                            checked as boolean,
+                          )
                         }
                       />
                       <label htmlFor={issue} className="text-sm">
@@ -466,14 +499,18 @@ function DetailedQuestionnaireContent() {
                   {toStringArray(
                     t("problems.majorDefects.items", {
                       returnObjects: true,
-                    }) as unknown
+                    }) as unknown,
                   ).map((defect: string) => (
                     <div key={defect} className="flex items-center space-x-2">
                       <Checkbox
                         id={defect}
                         checked={data.majorDefects.includes(defect)}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange("majorDefects", defect, checked as boolean)
+                          handleCheckboxChange(
+                            "majorDefects",
+                            defect,
+                            checked as boolean,
+                          )
                         }
                       />
                       <label htmlFor={defect} className="text-sm">
@@ -501,7 +538,9 @@ function DetailedQuestionnaireContent() {
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 {t("positiveAspects.title")}
               </h2>
-              <p className="text-gray-600">{t("positiveAspects.description")}</p>
+              <p className="text-gray-600">
+                {t("positiveAspects.description")}
+              </p>
             </div>
 
             <div>
@@ -512,7 +551,7 @@ function DetailedQuestionnaireContent() {
                 {toStringArray(
                   t("positiveAspects.items", {
                     returnObjects: true,
-                  }) as unknown
+                  }) as unknown,
                 ).map((aspect: string) => (
                   <div key={aspect} className="flex items-center space-x-2">
                     <Checkbox
@@ -522,7 +561,7 @@ function DetailedQuestionnaireContent() {
                         handleCheckboxChange(
                           "positiveAspects",
                           aspect,
-                          checked as boolean
+                          checked as boolean,
                         )
                       }
                     />
@@ -542,7 +581,9 @@ function DetailedQuestionnaireContent() {
                 id="additionalComments"
                 placeholder={t("positiveAspects.additionalCommentsPlaceholder")}
                 value={data.additionalComments}
-                onChange={(e) => updateData({ additionalComments: e.target.value })}
+                onChange={(e) =>
+                  updateData({ additionalComments: e.target.value })
+                }
                 rows={4}
               />
             </div>
@@ -563,7 +604,9 @@ function DetailedQuestionnaireContent() {
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 {t("personalizedResult.title")}
               </h2>
-              <p className="text-gray-600">{t("personalizedResult.description")}</p>
+              <p className="text-gray-600">
+                {t("personalizedResult.description")}
+              </p>
             </div>
 
             {/* Ici on afficherait le résultat personnalisé */}
@@ -636,14 +679,18 @@ function DetailedQuestionnaireContent() {
               </span>
               <span>
                 {t("header.percentage", {
-                  percentage: Math.round(((currentSection + 1) / sections.length) * 100),
+                  percentage: Math.round(
+                    ((currentSection + 1) / sections.length) * 100,
+                  ),
                 })}
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-red-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${((currentSection + 1) / sections.length) * 100}%` }}
+                style={{
+                  width: `${((currentSection + 1) / sections.length) * 100}%`,
+                }}
               ></div>
             </div>
             <div className="mt-2 text-center">

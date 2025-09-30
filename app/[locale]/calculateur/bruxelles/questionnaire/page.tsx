@@ -86,10 +86,11 @@ function DetailedQuestionnaireContent() {
   });
 
   // Helper function to update both local and global state
-  const updateData = useCallback((updates: Partial<QuestionnaireData>) => {
+  const updateData = useCallback((updates: Partial<QuestionnaireData> | ((prev: QuestionnaireData) => Partial<QuestionnaireData>)) => {
     setData((prev: QuestionnaireData) => {
-      const newData = { ...prev, ...updates };
-      
+      const computedUpdates = typeof updates === "function" ? updates(prev) : updates;
+      const newData = { ...prev, ...computedUpdates };
+
       // Schedule global context updates for after render
       Promise.resolve().then(() => {
         updateRentalInfo({
@@ -115,7 +116,7 @@ function DetailedQuestionnaireContent() {
           additionalComments: newData.additionalComments,
         });
       });
-      
+
       return newData;
     });
   }, [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]);
@@ -185,13 +186,16 @@ function DetailedQuestionnaireContent() {
     value: string,
     checked: boolean
   ) => {
-    const currentArray = data[field] as string[];
-    const newArray = checked
-      ? [...currentArray, value]
-      : currentArray.filter((item) => item !== value);
-    
-    updateData({ [field]: newArray });
-  }, [data, updateData]);
+    updateData((prev: QuestionnaireData) => {
+      const currentArray = (prev[field] as unknown as string[]) || [];
+      const nextArray = checked
+        ? [...currentArray, value]
+        : currentArray.filter((item) => item !== value);
+      // Ensure uniqueness to avoid duplicates during rapid toggles
+      const uniqueNextArray = Array.from(new Set(nextArray));
+      return { [field]: uniqueNextArray } as Partial<QuestionnaireData>;
+    });
+  }, [updateData]);
 
   const renderSection = () => {
     switch (currentSection) {

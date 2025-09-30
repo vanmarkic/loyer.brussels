@@ -5,3 +5,4 @@
 - look for root causes
 - apply Test Driven Development
 - always place generated .md files in a ./docs folder at the root of the project
+- use vitest instead of jest

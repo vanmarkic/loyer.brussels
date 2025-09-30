@@ -7,9 +7,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import type { PropertyInformation } from "@/app/data/global-form-types";
+import { useStepNavigationContext } from "./step-wrapper";
 
 export function FeaturesStep() {
-  const { state, updatePropertyInfo, dispatch } = useGlobalForm();
+  const { state, updatePropertyInfo } = useGlobalForm();
+  const { navigateToStep } = useStepNavigationContext();
   const t = useTranslations("FeaturesStep"); // Add this hook
 
   const handleContinue = () => {
@@ -42,11 +44,11 @@ export function FeaturesStep() {
       updatePropertyInfo(updates);
     }
 
-    dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
+    navigateToStep(state.currentStep + 1);
   };
 
   const handleBack = () => {
-    dispatch({ type: "SET_CURRENT_STEP", payload: Math.max(1, state.currentStep - 1) });
+    navigateToStep(Math.max(1, state.currentStep - 1));
   };
 
   // Helper function to create radio options with mobile-optimized layout
@@ -59,7 +61,7 @@ export function FeaturesStep() {
       | "hasRecreationalSpaces"
       | "hasStorageSpaces"
       | "constructedBefore2000", // Add new field to type
-    label: string
+    label: string,
   ) => {
     const value = state.propertyInfo[field];
 
@@ -131,12 +133,21 @@ export function FeaturesStep() {
         {/* Features options */}
         <div className="grid gap-4">
           {createRadioOption("hasCentralHeating", t("options.centralHeating"))}
-          {createRadioOption("hasThermalRegulation", t("options.thermalRegulation"))}
+          {createRadioOption(
+            "hasThermalRegulation",
+            t("options.thermalRegulation"),
+          )}
           {createRadioOption("hasDoubleGlazing", t("options.doubleGlazing"))}
           {createRadioOption("hasSecondBathroom", t("options.secondBathroom"))}
-          {createRadioOption("hasRecreationalSpaces", t("options.recreationalSpaces"))}
+          {createRadioOption(
+            "hasRecreationalSpaces",
+            t("options.recreationalSpaces"),
+          )}
           {createRadioOption("hasStorageSpaces", t("options.storageSpaces"))}
-          {createRadioOption("constructedBefore2000", t("options.constructedBefore2000"))}
+          {createRadioOption(
+            "constructedBefore2000",
+            t("options.constructedBefore2000"),
+          )}
         </div>
 
         {/* Garage Input Section */}
@@ -154,7 +165,10 @@ export function FeaturesStep() {
               size="icon"
               onClick={() =>
                 updatePropertyInfo({
-                  numberOfGarages: Math.max(0, state.propertyInfo.numberOfGarages - 1),
+                  numberOfGarages: Math.max(
+                    0,
+                    state.propertyInfo.numberOfGarages - 1,
+                  ),
                 })
               }
               disabled={state.propertyInfo.numberOfGarages === 0}

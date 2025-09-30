@@ -11,11 +11,12 @@ import { useHoldRepeat } from "@/app/hooks/use-hold-repeat";
 import { MinusCircle, PlusCircle, Calculator, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useStepNavigationContext } from "./step-wrapper";
 
 export function PropertyDetailsStep() {
   const { state, dispatch } = useGlobalForm();
-  const t = useTranslations("PropertyDetailsStep"); // Add this hook
-  const [showAreaEstimator, setShowAreaEstimator] = useState(false);
+  const { navigateToStep } = useStepNavigationContext();
+  const t = useTranslations("PropertyDetailsStep"); // Add this hookf
 
   // Auto-increment refs and state
   const [isMouseDownOnInput, setIsMouseDownOnInput] = useState(false);
@@ -46,6 +47,12 @@ export function PropertyDetailsStep() {
     onRepeat: decrementSize,
     interval: 150,
   });
+
+  // Debug: Log when controls are triggered (removed to prevent infinite rerenders)
+  // console.log("Hold repeat controls initialized:", {
+  //   incrementActive: incrementControls.isActive(),
+  //   decrementActive: decrementControls.isActive(),
+  // });
 
   // Input-specific handlers
   const handleInputMouseDown = (e: React.MouseEvent) => {
@@ -122,26 +129,21 @@ export function PropertyDetailsStep() {
       type: "UPDATE_PROPERTY_INFO",
       payload: { size: estimatedArea },
     });
-    setShowAreaEstimator(false);
   };
 
   // Visual area estimation helper
   const setVisualEstimate = (size: number) => {
     dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: size } });
-    setShowAreaEstimator(false);
   };
 
   const handleContinue = () => {
     if (state.propertyInfo.size > 0 && state.propertyInfo.propertyType) {
-      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
+      navigateToStep(state.currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    dispatch({
-      type: "SET_CURRENT_STEP",
-      payload: Math.max(1, state.currentStep - 1),
-    });
+    navigateToStep(Math.max(1, state.currentStep - 1));
   };
 
   // Update the incrementBedrooms function to limit to 4
@@ -151,7 +153,7 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
       });
-      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
+      navigateToStep(state.currentStep + 1);
     }
   };
 
@@ -161,7 +163,7 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
       });
-      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
+      navigateToStep(state.currentStep + 1);
     }
   };
 
@@ -178,7 +180,6 @@ export function PropertyDetailsStep() {
             {t("sizeLabel")}
           </Label>
 
-          {/* Area Input with Smart Help */}
           <div className="space-y-4">
             <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
               <Button
@@ -201,13 +202,14 @@ export function PropertyDetailsStep() {
                 <div className="flex items-center justify-center gap-2">
                   <Input
                     id="size"
-                    type="text"
+                    type="number"
                     value={state.propertyInfo.size || ""}
                     onChange={(e) => {
                       const value = e.target.value;
                       // Allow empty input or valid numbers
                       if (value === "" || /^\d+$/.test(value)) {
                         const numValue = value === "" ? 0 : parseInt(value, 10);
+                        sizeRef.current = numValue; // Keep ref in sync
                         dispatch({
                           type: "UPDATE_PROPERTY_INFO",
                           payload: { size: numValue },
@@ -241,132 +243,6 @@ export function PropertyDetailsStep() {
                 <PlusCircle className="h-8 w-8" />
               </Button>
             </div>
-
-            {/* Smart Estimation Helper */}
-            {!state.propertyInfo.size && !showAreaEstimator && (
-              <Alert className="bg-blue-50 border-blue-200">
-                <Lightbulb className="h-4 w-4 text-blue-600" />
-                <AlertDescription className="text-blue-800">
-                  <div className="flex items-center justify-between">
-                    <span>Vous ne connaissez pas la superficie exacte ?</span>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowAreaEstimator(true)}
-                      className="ml-4 border-blue-300 text-blue-700 hover:bg-blue-100 min-h-[44px] px-4 py-2 touch-manipulation"
-                    >
-                      <Calculator className="h-4 w-4 mr-2 flex-shrink-0" />
-                      <span>Estimer</span>
-                    </Button>
-                  </div>
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {/* Area Estimation Panel */}
-            {showAreaEstimator && (
-              <Card className="border-2 border-blue-200 bg-blue-50">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold text-blue-900 mb-4 flex items-center">
-                    <Calculator className="h-5 w-5 mr-2" />
-                    Estimation de la superficie
-                  </h3>
-
-                  {/* Quick Visual Estimates */}
-                  <div className="space-y-3 mb-6">
-                    <p className="text-sm text-blue-800 font-medium">
-                      Estimation visuelle rapide :
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => setVisualEstimate(30)}
-                        className="min-h-[56px] text-left p-4 hover:bg-blue-100 border-blue-300 touch-manipulation"
-                        type="button"
-                      >
-                        <div className="text-sm w-full">
-                          <div className="font-semibold">~30m²</div>
-                          <div className="text-xs text-gray-600">
-                            Studio/petit appart
-                          </div>
-                        </div>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setVisualEstimate(55)}
-                        className="min-h-[56px] text-left p-4 hover:bg-blue-100 border-blue-300 touch-manipulation"
-                        type="button"
-                      >
-                        <div className="text-sm w-full">
-                          <div className="font-semibold">~55m²</div>
-                          <div className="text-xs text-gray-600">1 chambre</div>
-                        </div>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setVisualEstimate(75)}
-                        className="min-h-[56px] text-left p-4 hover:bg-blue-100 border-blue-300 touch-manipulation"
-                        type="button"
-                      >
-                        <div className="text-sm w-full">
-                          <div className="font-semibold">~75m²</div>
-                          <div className="text-xs text-gray-600">
-                            2 chambres
-                          </div>
-                        </div>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setVisualEstimate(95)}
-                        className="min-h-[56px] text-left p-4 hover:bg-blue-100 border-blue-300 touch-manipulation"
-                        type="button"
-                      >
-                        <div className="text-sm w-full">
-                          <div className="font-semibold">~95m²</div>
-                          <div className="text-xs text-gray-600">
-                            3+ chambres
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Smart Room-based Estimation */}
-                  {state.propertyInfo.bedrooms > 0 && (
-                    <div className="border-t border-blue-200 pt-4">
-                      <p className="text-sm text-blue-800 font-medium mb-3">
-                        Basé sur vos {state.propertyInfo.bedrooms} chambres :
-                      </p>
-                      <Button
-                        onClick={estimateAreaFromRooms}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white min-h-[48px] py-3 touch-manipulation"
-                        type="button"
-                      >
-                        <Calculator className="h-4 w-4 mr-2" />
-                        Estimer ~
-                        {Math.round(
-                          35 * Math.max(1, state.propertyInfo.bedrooms) * 1.2,
-                        )}
-                        m²
-                        {state.propertyInfo.propertyType === "house" &&
-                          " (maison)"}
-                        {state.propertyInfo.propertyType === "studio" &&
-                          " (studio)"}
-                      </Button>
-                    </div>
-                  )}
-
-                  <div className="flex justify-end mt-4">
-                    <Button
-                      variant="ghost"
-                      onClick={() => setShowAreaEstimator(false)}
-                      className="text-blue-700 hover:bg-blue-100 min-h-[44px] px-4 py-2 touch-manipulation"
-                    >
-                      Fermer
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
           </div>
         </div>
 

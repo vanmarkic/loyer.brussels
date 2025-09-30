@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { EnergyClass } from "@/app/data/types";
+import { useStepNavigationContext } from "./step-wrapper";
 
 // Helper function to get energy class styling
 const getEnergyClassStyle = (energyClass: string) => {
@@ -47,20 +48,17 @@ const getEnergyClassStyle = (energyClass: string) => {
 };
 
 export function EnergyStep() {
-  const { state, updatePropertyInfo, updateCalculationResults, dispatch } =
-    useGlobalForm();
+  const { state, dispatch, updateCalculationResults } = useGlobalForm();
+  const { navigateToStep } = useStepNavigationContext();
   const t = useTranslations("EnergyStep"); // Add this hook
 
   const handleBack = () => {
-    dispatch({
-      type: "SET_CURRENT_STEP",
-      payload: Math.max(1, state.currentStep - 1),
-    });
+    navigateToStep(Math.max(1, state.currentStep - 1));
   };
 
   const handleContinue = () => {
     if (state.propertyInfo.energyClass) {
-      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
+      navigateToStep(state.currentStep + 1);
     }
   };
 

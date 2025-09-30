@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { FormProvider } from "@/app/context/form-context";
 import { GlobalFormProvider } from "@/app/context/global-form-context";
+import { StepNavigationProvider } from "@/app/components/rental-calculator/step-wrapper";
 import { PropertyDetailsStep } from "@/app/components/rental-calculator/property-details-step";
 
 // Mock next-intl useTranslations
@@ -10,11 +11,38 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
 
-// Utility: render component within both providers
+// Mock Next.js navigation
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  })),
+  useParams: vi.fn(() => ({
+    locale: "fr",
+    step: "property-details",
+  })),
+}));
+
+// Mock the step navigation hook
+vi.mock("@/app/hooks/use-step-navigation", () => ({
+  useStepNavigation: vi.fn(() => ({
+    navigateToStep: vi.fn(),
+    getCurrentStepFromUrl: vi.fn(() => 2),
+    getStepUrl: vi.fn(() => "/fr/calculateur/bruxelles/step/property-details"),
+  })),
+}));
+
+// Utility: render component within all required providers
 function renderWithProvider(ui: React.ReactElement) {
   return render(
     <GlobalFormProvider>
-      <FormProvider>{ui}</FormProvider>
+      <FormProvider>
+        <StepNavigationProvider>{ui}</StepNavigationProvider>
+      </FormProvider>
     </GlobalFormProvider>,
   );
 }

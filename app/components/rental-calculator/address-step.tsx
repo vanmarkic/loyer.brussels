@@ -10,10 +10,12 @@ import { AlertCircle, Loader2, Info } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AddressAutocomplete } from "./address-autocomplete";
 import type { AddressResult } from "@/app/data/types"; // Import type from new location
+import { useStepNavigationContext } from "./step-wrapper";
 
 export function AddressStep() {
-  const { state, updatePropertyInfo, updateCalculationResults, dispatch } =
+  const { state, updatePropertyInfo, updateCalculationResults } =
     useGlobalForm();
+  const { navigateToStep } = useStepNavigationContext();
   const t = useTranslations("AddressStep"); // Add this hook
 
   const handleCalculate = async () => {
@@ -28,7 +30,7 @@ export function AddressStep() {
   };
 
   const handleBack = () => {
-    dispatch({ type: "SET_CURRENT_STEP", payload: Math.max(1, state.currentStep - 1) });
+    navigateToStep(Math.max(1, state.currentStep - 1));
   };
 
   const handleAddressSelect = (address: AddressResult) => {
@@ -43,7 +45,9 @@ export function AddressStep() {
 
     // If we already have the difficulty index from the search, store it
     if (address.indice_synth_difficulte !== undefined) {
-      updateCalculationResults({ difficultyIndex: address.indice_synth_difficulte });
+      updateCalculationResults({
+        difficultyIndex: address.indice_synth_difficulte,
+      });
     }
   };
 
@@ -83,7 +87,10 @@ export function AddressStep() {
 
           <div className="space-y-4 sm:space-y-3">
             <div>
-              <Label htmlFor="postalCode" className="text-base sm:text-sm font-medium">
+              <Label
+                htmlFor="postalCode"
+                className="text-base sm:text-sm font-medium"
+              >
                 {t("postalCodeLabel")}
               </Label>
               <Input
@@ -102,7 +109,10 @@ export function AddressStep() {
             </div>
 
             <div>
-              <Label htmlFor="streetName" className="text-base sm:text-sm font-medium">
+              <Label
+                htmlFor="streetName"
+                className="text-base sm:text-sm font-medium"
+              >
                 {t("streetNameLabel")}
               </Label>
               <Input
@@ -120,7 +130,10 @@ export function AddressStep() {
             </div>
 
             <div>
-              <Label htmlFor="streetNumber" className="text-base sm:text-sm font-medium">
+              <Label
+                htmlFor="streetNumber"
+                className="text-base sm:text-sm font-medium"
+              >
                 {t("streetNumberLabel")}
               </Label>
               <Input

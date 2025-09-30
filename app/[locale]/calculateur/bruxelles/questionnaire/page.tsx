@@ -90,28 +90,30 @@ function DetailedQuestionnaireContent() {
     setData((prev: QuestionnaireData) => {
       const newData = { ...prev, ...updates };
       
-      // Update global context with the new data
-      updateRentalInfo({
-        leaseType: newData.leaseType,
-        leaseStartDate: newData.leaseStartDate,
-        rentIndexation: newData.rentIndexation,
-        boilerMaintenance: newData.boilerMaintenance,
-        fireInsurance: newData.fireInsurance,
-      });
+      // Schedule global context updates for after render
+      Promise.resolve().then(() => {
+        updateRentalInfo({
+          leaseType: newData.leaseType,
+          leaseStartDate: newData.leaseStartDate,
+          rentIndexation: newData.rentIndexation,
+          boilerMaintenance: newData.boilerMaintenance,
+          fireInsurance: newData.fireInsurance,
+        });
 
-      updateHouseholdInfo({
-        monthlyIncome: newData.monthlyIncome,
-        householdComposition: newData.householdComposition,
-        paymentDelays: newData.paymentDelays,
-        evictionThreats: newData.evictionThreats,
-        mediationAttempts: newData.mediationAttempts,
-      });
+        updateHouseholdInfo({
+          monthlyIncome: newData.monthlyIncome,
+          householdComposition: newData.householdComposition,
+          paymentDelays: newData.paymentDelays,
+          evictionThreats: newData.evictionThreats,
+          mediationAttempts: newData.mediationAttempts,
+        });
 
-      updatePropertyIssues({
-        healthIssues: newData.healthIssues,
-        majorDefects: newData.majorDefects,
-        positiveAspects: newData.positiveAspects,
-        additionalComments: newData.additionalComments,
+        updatePropertyIssues({
+          healthIssues: newData.healthIssues,
+          majorDefects: newData.majorDefects,
+          positiveAspects: newData.positiveAspects,
+          additionalComments: newData.additionalComments,
+        });
       });
       
       return newData;

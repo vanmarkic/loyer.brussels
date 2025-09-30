@@ -156,12 +156,14 @@ export function PropertyDetailsStep() {
 
   const handleContinue = () => {
     if (state.propertyInfo.size > 0 && state.propertyInfo.propertyType) {
-      navigateToStep(state.currentStep + 1);
+      // Property-details is step 2, so next is step 3 (features)
+      navigateToStep(3);
     }
   };
 
   const handleBack = () => {
-    navigateToStep(Math.max(1, state.currentStep - 1));
+    // Property-details is step 2, so previous is step 1 (property-type)
+    navigateToStep(1);
   };
 
   // Update the incrementBedrooms function to limit to 4
@@ -171,7 +173,8 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
       });
-      navigateToStep(state.currentStep + 1);
+      // Property-details is step 2, so next is step 3 (features)
+      navigateToStep(3);
     }
   };
 
@@ -181,7 +184,8 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
       });
-      navigateToStep(state.currentStep + 1);
+      // Property-details is step 2, so next is step 3 (features)
+      navigateToStep(3);
     }
   };
 

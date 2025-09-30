@@ -157,12 +157,15 @@ export function PropertyDetailsStep() {
   const handleContinue = () => {
     if (state.propertyInfo.size > 0 && state.propertyInfo.propertyType) {
       // Property-details is step 2, so next is step 3 (features)
+      console.log("navigating to step 3");
+      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
       navigateToStep(3);
     }
   };
 
   const handleBack = () => {
     // Property-details is step 2, so previous is step 1 (property-type)
+    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
     navigateToStep(1);
   };
 
@@ -174,6 +177,7 @@ export function PropertyDetailsStep() {
         payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
       });
       // Property-details is step 2, so next is step 3 (features)
+      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
       navigateToStep(3);
     }
   };
@@ -185,6 +189,7 @@ export function PropertyDetailsStep() {
         payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
       });
       // Property-details is step 2, so next is step 3 (features)
+      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
       navigateToStep(3);
     }
   };

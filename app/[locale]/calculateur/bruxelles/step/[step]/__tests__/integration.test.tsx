@@ -305,6 +305,38 @@ describe("Step Calculator Integration Tests", () => {
         payload: 3,
       });
     });
+
+    it("should sync state when URL changes from property-type to property-details", async () => {
+      const { rerender } = render(<CalculatorStepPage />);
+
+      // Initial state - property-type step (step 1)
+      (useParams as any).mockReturnValue({
+        locale: "fr",
+        step: "property-type",
+      });
+
+      (useGlobalForm as any).mockReturnValue({
+        state: { ...mockGlobalFormState, currentStep: 1 },
+        dispatch: mockDispatch,
+      });
+
+      rerender(<CalculatorStepPage />);
+
+      // Simulate URL change to property-details (step 2)
+      (useParams as any).mockReturnValue({
+        locale: "fr",
+        step: "property-details",
+      });
+
+      rerender(<CalculatorStepPage />);
+
+      await waitFor(() => {
+        expect(mockDispatch).toHaveBeenCalledWith({
+          type: "SET_CURRENT_STEP",
+          payload: 2,
+        });
+      });
+    });
   });
 
   describe("Error scenarios", () => {

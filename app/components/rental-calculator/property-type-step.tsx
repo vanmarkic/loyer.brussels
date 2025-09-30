@@ -13,13 +13,15 @@ import { Building, Home, Hotel } from "lucide-react";
 import { useStepNavigationContext } from "./step-wrapper";
 
 export function PropertyTypeStep() {
-  const { state, updatePropertyInfo } = useGlobalForm();
+  const { state, updatePropertyInfo, dispatch } = useGlobalForm();
   const { navigateToStep } = useStepNavigationContext();
   const t = useTranslations("PropertyTypeStep"); // Add this hook
 
   const handleContinue = () => {
     if (state.propertyInfo.propertyType) {
-      navigateToStep(state.currentStep + 1);
+      const nextStep = state.currentStep + 1;
+      dispatch({ type: "SET_CURRENT_STEP", payload: nextStep });
+      navigateToStep(nextStep);
     }
   };
 

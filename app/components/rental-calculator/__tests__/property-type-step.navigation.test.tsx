@@ -1,0 +1,244 @@
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { useRouter, useParams } from "next/navigation";
+import { useGlobalForm } from "@/app/context/global-form-context";
+import { useStepNavigation } from "@/app/hooks/use-step-navigation";
+import { StepNavigationProvider } from "@/app/components/rental-calculator/step-wrapper";
+import { GlobalFormProvider } from "@/app/context/global-form-context";
+import { FormProvider } from "@/app/context/form-context";
+import { PropertyTypeStep } from "@/app/components/rental-calculator/property-type-step";
+import { vi } from "vitest";
+
+// Mock Next.js navigation
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+  useParams: vi.fn(),
+}));
+
+// Mock the step navigation hook
+vi.mock("@/app/hooks/use-step-navigation", () => ({
+  useStepNavigation: vi.fn(),
+}));
+
+// Mock the global form context
+vi.mock("@/app/context/global-form-context", () => ({
+  useGlobalForm: vi.fn(),
+  GlobalFormProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+// Mock the form context
+vi.mock("@/app/context/form-context", () => ({
+  FormProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
+// Mock next-intl useTranslations
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
+describe("PropertyTypeStep Navigation", () => {
+  const mockPush = vi.fn();
+  const mockNavigateToStep = vi.fn();
+  const mockDispatch = vi.fn();
+
+  const mockGlobalFormState = {
+    currentStep: 1,
+    propertyInfo: {
+      propertyType: "apartment", // Pre-selected to enable Continue button
+      size: 0,
+      bedrooms: 1,
+      bathrooms: 1,
+      numberOfGarages: 0,
+      energyClass: "",
+      constructedBefore2000: null,
+      propertyState: null,
+      hasCentralHeating: null,
+      hasThermalRegulation: null,
+      hasDoubleGlazing: null,
+      hasSecondBathroom: null,
+      hasRecreationalSpaces: null,
+      hasStorageSpaces: null,
+    },
+    userProfile: {
+      email: "",
+      phone: "",
+      joinNewsletter: false,
+      joinAssembly: false,
+    },
+    rentalInfo: {
+      actualRent: "",
+      leaseType: "",
+      leaseStartDate: "",
+      rentIndexation: "",
+      boilerMaintenance: false,
+      fireInsurance: false,
+    },
+    householdInfo: {
+      monthlyIncome: "",
+      householdComposition: "",
+      paymentDelays: "",
+      evictionThreats: "",
+      mediationAttempts: "",
+    },
+    propertyIssues: {
+      healthIssues: [],
+      majorDefects: [],
+      positiveAspects: [],
+      additionalComments: "",
+    },
+    calculationResults: {
+      difficultyIndex: null,
+      medianRent: null,
+      minRent: null,
+      maxRent: null,
+      isLoading: false,
+      error: null,
+      errorCode: null,
+    },
+    currentPage: "calculator" as const,
+    lastUpdated: Date.now(),
+    sessionId: "test-session-id",
+  };
+
+  const mockSaveSession = vi.fn();
+  const mockLoadSession = vi.fn();
+  const mockClearSession = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    (useRouter as any).mockReturnValue({
+      push: mockPush,
+      replace: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      prefetch: vi.fn(),
+    });
+
+    (useParams as any).mockReturnValue({
+      locale: "fr",
+      step: "property-type",
+    });
+
+    (useStepNavigation as any).mockReturnValue({
+      navigateToStep: mockNavigateToStep,
+      getCurrentStepFromUrl: vi.fn(() => 1),
+      getStepUrl: vi.fn((step: number) => {
+        const stepMap: Record<number, string> = {
+          1: "/fr/calculateur/bruxelles/step/property-type",
+          2: "/fr/calculateur/bruxelles/step/property-details",
+          3: "/fr/calculateur/bruxelles/step/features",
+          4: "/fr/calculateur/bruxelles/step/energy",
+          5: "/fr/calculateur/bruxelles/step/address",
+          6: "/fr/calculateur/bruxelles/step/results",
+        };
+        return stepMap[step] || null;
+      }),
+    });
+
+    (useGlobalForm as any).mockReturnValue({
+      state: mockGlobalFormState,
+      dispatch: mockDispatch,
+      saveSession: mockSaveSession,
+      loadSession: mockLoadSession,
+      clearSession: mockClearSession,
+      updateUserProfile: vi.fn(),
+      updatePropertyInfo: vi.fn(),
+      updateRentalInfo: vi.fn(),
+      updateHouseholdInfo: vi.fn(),
+      updatePropertyIssues: vi.fn(),
+      updateCalculationResults: vi.fn(),
+      getActualRent: vi.fn(() => ""),
+      getLivingSpace: vi.fn(() => 0),
+      getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
+    });
+  });
+
+  it("should dispatch SET_CURRENT_STEP and navigate to step 2 when Continue is clicked", async () => {
+    render(
+      <GlobalFormProvider>
+        <FormProvider>
+          <StepNavigationProvider>
+            <PropertyTypeStep />
+          </StepNavigationProvider>
+        </FormProvider>
+      </GlobalFormProvider>,
+    );
+
+    // Find and click the Continue button - the mock translation returns the key as the value
+    const continueButton = screen.getByText("continueButton");
+    expect(continueButton).toBeInTheDocument();
+
+    fireEvent.click(continueButton);
+
+    // This test will initially fail because PropertyTypeStep doesn't dispatch SET_CURRENT_STEP
+    // After the fix, it should pass
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: "SET_CURRENT_STEP",
+        payload: 2,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockNavigateToStep).toHaveBeenCalledWith(2);
+    });
+  });
+
+  it("should not navigate when no property type is selected", async () => {
+    // Mock state with no property type selected
+    const stateWithoutPropertyType = {
+      ...mockGlobalFormState,
+      propertyInfo: {
+        ...mockGlobalFormState.propertyInfo,
+        propertyType: "", // No selection
+      },
+    };
+
+    (useGlobalForm as any).mockReturnValue({
+      state: stateWithoutPropertyType,
+      dispatch: mockDispatch,
+      saveSession: mockSaveSession,
+      loadSession: mockLoadSession,
+      clearSession: mockClearSession,
+      updateUserProfile: vi.fn(),
+      updatePropertyInfo: vi.fn(),
+      updateRentalInfo: vi.fn(),
+      updateHouseholdInfo: vi.fn(),
+      updatePropertyIssues: vi.fn(),
+      updateCalculationResults: vi.fn(),
+      getActualRent: vi.fn(() => ""),
+      getLivingSpace: vi.fn(() => 0),
+      getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
+    });
+
+    render(
+      <GlobalFormProvider>
+        <FormProvider>
+          <StepNavigationProvider>
+            <PropertyTypeStep />
+          </StepNavigationProvider>
+        </FormProvider>
+      </GlobalFormProvider>,
+    );
+
+    // Find the Continue button - it should be disabled
+    const continueButton = screen.getByText("continueButton");
+    // The SaveContinue component renders the button with disabled attribute on the button element
+    const buttonElement = continueButton.closest("button");
+    expect(buttonElement).toBeDisabled();
+
+    fireEvent.click(continueButton);
+
+    // Should not dispatch or navigate when disabled
+    await waitFor(() => {
+      expect(mockDispatch).not.toHaveBeenCalledWith({
+        type: "SET_CURRENT_STEP",
+        payload: 2,
+      });
+    });
+
+    expect(mockNavigateToStep).not.toHaveBeenCalled();
+  });
+});

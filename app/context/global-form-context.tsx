@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   createContext,
@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from 'react';
+} from "react";
 import type {
   GlobalFormState,
   UserProfile,
@@ -16,29 +16,29 @@ import type {
   HouseholdInformation,
   PropertyIssues,
   CalculationResults,
-} from '../data/global-form-types';
+} from "../data/global-form-types";
 
 // Session storage key
-const STORAGE_KEY = 'loyer-brussels-form-data';
+const STORAGE_KEY = "loyer-brussels-form-data";
 
 // Default state values
 const defaultUserProfile: UserProfile = {
-  email: '',
-  phone: '',
+  email: "",
+  phone: "",
   joinNewsletter: false,
   joinAssembly: false,
 };
 
 const defaultPropertyInfo: PropertyInformation = {
   postalCode: 0,
-  streetName: '',
-  streetNumber: '',
-  propertyType: '',
+  streetName: "",
+  streetNumber: "",
+  propertyType: "",
   size: 0,
   bedrooms: 1,
   bathrooms: 1,
   numberOfGarages: 0,
-  energyClass: '',
+  energyClass: "",
   constructedBefore2000: null,
   propertyState: null,
   hasCentralHeating: null,
@@ -50,27 +50,27 @@ const defaultPropertyInfo: PropertyInformation = {
 };
 
 const defaultRentalInfo: RentalInformation = {
-  actualRent: '',
-  leaseType: '',
-  leaseStartDate: '',
-  rentIndexation: '',
+  actualRent: "",
+  leaseType: "",
+  leaseStartDate: "",
+  rentIndexation: "",
   boilerMaintenance: false,
   fireInsurance: false,
 };
 
 const defaultHouseholdInfo: HouseholdInformation = {
-  monthlyIncome: '',
-  householdComposition: '',
-  paymentDelays: '',
-  evictionThreats: '',
-  mediationAttempts: '',
+  monthlyIncome: "",
+  householdComposition: "",
+  paymentDelays: "",
+  evictionThreats: "",
+  mediationAttempts: "",
 };
 
 const defaultPropertyIssues: PropertyIssues = {
   healthIssues: [],
   majorDefects: [],
   positiveAspects: [],
-  additionalComments: '',
+  additionalComments: "",
 };
 
 const defaultCalculationResults: CalculationResults = {
@@ -88,8 +88,9 @@ const generateSessionId = (): string => {
 };
 
 const initialGlobalState: GlobalFormState = {
+  size: 0,
   currentStep: 1,
-  currentPage: 'calculator',
+  currentPage: "calculator",
   userProfile: defaultUserProfile,
   propertyInfo: defaultPropertyInfo,
   rentalInfo: defaultRentalInfo,
@@ -102,88 +103,94 @@ const initialGlobalState: GlobalFormState = {
 
 // Action types
 type GlobalFormAction =
-  | { type: 'RESTORE_SESSION'; payload: GlobalFormState }
-  | { type: 'UPDATE_USER_PROFILE'; payload: Partial<UserProfile> }
-  | { type: 'UPDATE_PROPERTY_INFO'; payload: Partial<PropertyInformation> }
-  | { type: 'UPDATE_RENTAL_INFO'; payload: Partial<RentalInformation> }
-  | { type: 'UPDATE_HOUSEHOLD_INFO'; payload: Partial<HouseholdInformation> }
-  | { type: 'UPDATE_PROPERTY_ISSUES'; payload: Partial<PropertyIssues> }
-  | { type: 'UPDATE_CALCULATION_RESULTS'; payload: Partial<CalculationResults> }
-  | { type: 'SET_CURRENT_STEP'; payload: number }
-  | { type: 'SET_CURRENT_PAGE'; payload: 'calculator' | 'results' | 'questionnaire' }
-  | { type: 'RESET_FORM' }
-  | { type: 'AUTO_SAVE' };
+  | { type: "RESTORE_SESSION"; payload: GlobalFormState }
+  | { type: "UPDATE_USER_PROFILE"; payload: Partial<UserProfile> }
+  | { type: "UPDATE_PROPERTY_INFO"; payload: Partial<PropertyInformation> }
+  | { type: "UPDATE_RENTAL_INFO"; payload: Partial<RentalInformation> }
+  | { type: "UPDATE_HOUSEHOLD_INFO"; payload: Partial<HouseholdInformation> }
+  | { type: "UPDATE_PROPERTY_ISSUES"; payload: Partial<PropertyIssues> }
+  | { type: "UPDATE_CALCULATION_RESULTS"; payload: Partial<CalculationResults> }
+  | { type: "SET_CURRENT_STEP"; payload: number }
+  | {
+      type: "SET_CURRENT_PAGE";
+      payload: "calculator" | "results" | "questionnaire";
+    }
+  | { type: "RESET_FORM" }
+  | { type: "AUTO_SAVE" };
 
 // Reducer
 const globalFormReducer = (
   state: GlobalFormState,
-  action: GlobalFormAction
+  action: GlobalFormAction,
 ): GlobalFormState => {
   const newState = (() => {
     switch (action.type) {
-      case 'RESTORE_SESSION':
+      case "RESTORE_SESSION":
         return { ...action.payload, lastUpdated: Date.now() };
 
-      case 'UPDATE_USER_PROFILE':
+      case "UPDATE_USER_PROFILE":
         return {
           ...state,
           userProfile: { ...state.userProfile, ...action.payload },
           lastUpdated: Date.now(),
         };
 
-      case 'UPDATE_PROPERTY_INFO':
+      case "UPDATE_PROPERTY_INFO":
         return {
           ...state,
           propertyInfo: { ...state.propertyInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
 
-      case 'UPDATE_RENTAL_INFO':
+      case "UPDATE_RENTAL_INFO":
         return {
           ...state,
           rentalInfo: { ...state.rentalInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
 
-      case 'UPDATE_HOUSEHOLD_INFO':
+      case "UPDATE_HOUSEHOLD_INFO":
         return {
           ...state,
           householdInfo: { ...state.householdInfo, ...action.payload },
           lastUpdated: Date.now(),
         };
 
-      case 'UPDATE_PROPERTY_ISSUES':
+      case "UPDATE_PROPERTY_ISSUES":
         return {
           ...state,
           propertyIssues: { ...state.propertyIssues, ...action.payload },
           lastUpdated: Date.now(),
         };
 
-      case 'UPDATE_CALCULATION_RESULTS':
+      case "UPDATE_CALCULATION_RESULTS":
         return {
           ...state,
-          calculationResults: { ...state.calculationResults, ...action.payload },
+          calculationResults: {
+            ...state.calculationResults,
+            ...action.payload,
+          },
           lastUpdated: Date.now(),
         };
 
-      case 'SET_CURRENT_STEP':
+      case "SET_CURRENT_STEP":
         return {
           ...state,
           currentStep: action.payload,
           lastUpdated: Date.now(),
         };
 
-      case 'SET_CURRENT_PAGE':
+      case "SET_CURRENT_PAGE":
         return {
           ...state,
           currentPage: action.payload,
           lastUpdated: Date.now(),
         };
 
-      case 'RESET_FORM':
+      case "RESET_FORM":
         return { ...initialGlobalState, sessionId: generateSessionId() };
 
-      case 'AUTO_SAVE':
+      case "AUTO_SAVE":
         return { ...state, lastUpdated: Date.now() };
 
       default:
@@ -219,7 +226,9 @@ interface GlobalFormContextType {
 }
 
 // Context
-const GlobalFormContext = createContext<GlobalFormContextType | undefined>(undefined);
+const GlobalFormContext = createContext<GlobalFormContextType | undefined>(
+  undefined,
+);
 
 // Provider
 export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -229,18 +238,18 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Session management functions - defined early to avoid hoisting issues
   const saveSession = useCallback(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        console.log('Session saved:', state.sessionId);
+        console.log("Session saved:", state.sessionId);
       } catch (error) {
-        console.warn('Failed to save session:', error);
+        console.warn("Failed to save session:", error);
       }
     }
   }, [state]);
 
   const loadSession = useCallback(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
         const saved = sessionStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -250,25 +259,25 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
           const maxAge = 24 * 60 * 60 * 1000; // 24 hours
 
           if (sessionAge < maxAge) {
-            dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
-            console.log('Session restored:', parsedState.sessionId);
+            dispatch({ type: "RESTORE_SESSION", payload: parsedState });
+            console.log("Session restored:", parsedState.sessionId);
           } else {
             // Session expired, clear it
             sessionStorage.removeItem(STORAGE_KEY);
           }
         }
       } catch (error) {
-        console.warn('Failed to load session:', error);
+        console.warn("Failed to load session:", error);
         sessionStorage.removeItem(STORAGE_KEY);
       }
     }
   }, []);
 
   const clearSession = useCallback(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       sessionStorage.removeItem(STORAGE_KEY);
     }
-    dispatch({ type: 'RESET_FORM' });
+    dispatch({ type: "RESET_FORM" });
   }, []);
 
   // Load session on mount
@@ -276,7 +285,7 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     const loadSessionFromStorage = () => {
       // Check for session ID in URL parameters first
       const urlParams = new URLSearchParams(window.location.search);
-      const sessionIdFromUrl = urlParams.get('session');
+      const sessionIdFromUrl = urlParams.get("session");
 
       if (sessionIdFromUrl) {
         // Try to load specific session by ID
@@ -289,24 +298,27 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
               const maxAge = 24 * 60 * 60 * 1000; // 24 hours
 
               if (sessionAge < maxAge) {
-                dispatch({ type: 'RESTORE_SESSION', payload: parsedState });
-                console.log('Session restored from URL:', parsedState.sessionId);
+                dispatch({ type: "RESTORE_SESSION", payload: parsedState });
+                console.log(
+                  "Session restored from URL:",
+                  parsedState.sessionId,
+                );
 
                 // Clean up URL after successful restore
                 const newUrl = window.location.pathname;
-                window.history.replaceState({}, '', newUrl);
+                window.history.replaceState({}, "", newUrl);
                 return;
               }
             }
           } catch (error) {
-            console.warn('Failed to restore session from URL:', error);
+            console.warn("Failed to restore session from URL:", error);
           }
         }
 
         // If URL session fails, show message and clean URL
-        console.warn('Session from URL not found or expired');
+        console.warn("Session from URL not found or expired");
         const newUrl = window.location.pathname;
-        window.history.replaceState({}, '', newUrl);
+        window.history.replaceState({}, "", newUrl);
       }
 
       // Fallback to regular session loading
@@ -328,28 +340,43 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Convenience methods with useCallback to prevent unnecessary re-renders
   const updateUserProfile = useCallback((updates: Partial<UserProfile>) => {
-    dispatch({ type: 'UPDATE_USER_PROFILE', payload: updates });
+    dispatch({ type: "UPDATE_USER_PROFILE", payload: updates });
   }, []);
 
-  const updatePropertyInfo = useCallback((updates: Partial<PropertyInformation>) => {
-    dispatch({ type: 'UPDATE_PROPERTY_INFO', payload: updates });
-  }, []);
+  const updatePropertyInfo = useCallback(
+    (updates: Partial<PropertyInformation>) => {
+      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: updates });
+    },
+    [],
+  );
 
-  const updateRentalInfo = useCallback((updates: Partial<RentalInformation>) => {
-    dispatch({ type: 'UPDATE_RENTAL_INFO', payload: updates });
-  }, []);
+  const updateRentalInfo = useCallback(
+    (updates: Partial<RentalInformation>) => {
+      dispatch({ type: "UPDATE_RENTAL_INFO", payload: updates });
+    },
+    [],
+  );
 
-  const updateHouseholdInfo = useCallback((updates: Partial<HouseholdInformation>) => {
-    dispatch({ type: 'UPDATE_HOUSEHOLD_INFO', payload: updates });
-  }, []);
+  const updateHouseholdInfo = useCallback(
+    (updates: Partial<HouseholdInformation>) => {
+      dispatch({ type: "UPDATE_HOUSEHOLD_INFO", payload: updates });
+    },
+    [],
+  );
 
-  const updatePropertyIssues = useCallback((updates: Partial<PropertyIssues>) => {
-    dispatch({ type: 'UPDATE_PROPERTY_ISSUES', payload: updates });
-  }, []);
+  const updatePropertyIssues = useCallback(
+    (updates: Partial<PropertyIssues>) => {
+      dispatch({ type: "UPDATE_PROPERTY_ISSUES", payload: updates });
+    },
+    [],
+  );
 
-  const updateCalculationResults = useCallback((updates: Partial<CalculationResults>) => {
-    dispatch({ type: 'UPDATE_CALCULATION_RESULTS', payload: updates });
-  }, []);
+  const updateCalculationResults = useCallback(
+    (updates: Partial<CalculationResults>) => {
+      dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates });
+    },
+    [],
+  );
 
   // Data getters - stabilized with useCallback to prevent unnecessary re-renders
   const getActualRent = useCallback((): string => {
@@ -398,7 +425,7 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
       getActualRent,
       getLivingSpace,
       getContactInfo,
-    ]
+    ],
   );
 
   return (
@@ -412,7 +439,7 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useGlobalForm = (): GlobalFormContextType => {
   const context = useContext(GlobalFormContext);
   if (!context) {
-    throw new Error('useGlobalForm must be used within a GlobalFormProvider');
+    throw new Error("useGlobalForm must be used within a GlobalFormProvider");
   }
   return context;
 };
@@ -450,74 +477,76 @@ export const useForm = () => {
     errorCode: globalForm.state.calculationResults.errorCode,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const legacyDispatch = (action: any) => {
     // Map legacy actions to new actions
     switch (action.type) {
-      case 'NEXT_STEP':
+      case "NEXT_STEP":
         globalForm.dispatch({
-          type: 'SET_CURRENT_STEP',
+          type: "SET_CURRENT_STEP",
           payload: globalForm.state.currentStep + 1,
         });
         break;
-      case 'PREV_STEP':
+      case "PREV_STEP":
         globalForm.dispatch({
-          type: 'SET_CURRENT_STEP',
+          type: "SET_CURRENT_STEP",
           payload: Math.max(1, globalForm.state.currentStep - 1),
         });
         break;
-      case 'GO_TO_STEP':
-        globalForm.dispatch({ type: 'SET_CURRENT_STEP', payload: action.payload });
+      case "GO_TO_STEP":
+        globalForm.dispatch({
+          type: "SET_CURRENT_STEP",
+          payload: action.payload,
+        });
         break;
-      case 'UPDATE_FIELD':
+      case "UPDATE_FIELD":
         // Map field updates to appropriate sections
         const field = action.field;
         const value = action.value;
 
         if (
           [
-            'postalCode',
-            'streetName',
-            'streetNumber',
-            'propertyType',
-            'size',
-            'bedrooms',
-            'bathrooms',
-            'numberOfGarages',
-            'energyClass',
-            'constructedBefore2000',
-            'propertyState',
-            'hasCentralHeating',
-            'hasThermalRegulation',
-            'hasDoubleGlazing',
-            'hasSecondBathroom',
-            'hasRecreationalSpaces',
-            'hasStorageSpaces',
+            "postalCode",
+            "streetName",
+            "streetNumber",
+            "propertyType",
+            "size",
+            "bedrooms",
+            "bathrooms",
+            "numberOfGarages",
+            "energyClass",
+            "constructedBefore2000",
+            "propertyState",
+            "hasCentralHeating",
+            "hasThermalRegulation",
+            "hasDoubleGlazing",
+            "hasSecondBathroom",
+            "hasRecreationalSpaces",
+            "hasStorageSpaces",
           ].includes(field)
         ) {
           globalForm.updatePropertyInfo({ [field]: value });
         } else if (
           [
-            'difficultyIndex',
-            'medianRent',
-            'minRent',
-            'maxRent',
-            'isLoading',
-            'error',
-            'errorCode',
+            "difficultyIndex",
+            "medianRent",
+            "minRent",
+            "maxRent",
+            "isLoading",
+            "error",
+            "errorCode",
           ].includes(field)
         ) {
           globalForm.updateCalculationResults({ [field]: value });
         }
         break;
-      case 'FETCH_DIFFICULTY_INDEX_START':
+      case "FETCH_DIFFICULTY_INDEX_START":
         globalForm.updateCalculationResults({
           isLoading: true,
           error: null,
           errorCode: null,
         });
         break;
-      case 'FETCH_DIFFICULTY_INDEX_SUCCESS':
+      case "FETCH_DIFFICULTY_INDEX_SUCCESS":
         globalForm.updateCalculationResults({
           difficultyIndex: action.payload,
           isLoading: false,
@@ -525,21 +554,21 @@ export const useForm = () => {
           errorCode: null,
         });
         break;
-      case 'FETCH_DIFFICULTY_INDEX_ERROR':
+      case "FETCH_DIFFICULTY_INDEX_ERROR":
         globalForm.updateCalculationResults({
           isLoading: false,
           error: action.payload.message,
           errorCode: action.payload.code,
         });
         break;
-      case 'CALCULATE_RENT':
+      case "CALCULATE_RENT":
         // This would need to be handled by the parent component
         break;
-      case 'RESET_FORM':
+      case "RESET_FORM":
         globalForm.clearSession();
         break;
       default:
-        console.warn('Unmapped legacy action:', action);
+        console.warn("Unmapped legacy action:", action);
     }
   };
 
@@ -549,7 +578,7 @@ export const useForm = () => {
     fetchDifficultyIndexAndCalculate: async () => {
       // This would need to be implemented in the consuming component
       console.warn(
-        'fetchDifficultyIndexAndCalculate needs to be implemented in the consuming component'
+        "fetchDifficultyIndexAndCalculate needs to be implemented in the consuming component",
       );
     },
     clearError: () => {

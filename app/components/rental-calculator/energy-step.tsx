@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { AlertCircle, RefreshCw, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { EnergyClass } from "@/app/data/types";
 
 // Helper function to get energy class styling
 const getEnergyClassStyle = (energyClass: string) => {
   const styles = {
     A: {
-      default: "bg-green-100 border-green-300 text-green-800 hover:bg-green-200",
+      default:
+        "bg-green-100 border-green-300 text-green-800 hover:bg-green-200",
       selected: "bg-green-600 border-green-600 text-white shadow-lg",
     },
     B: {
@@ -19,11 +21,13 @@ const getEnergyClassStyle = (energyClass: string) => {
       selected: "bg-green-500 border-green-500 text-white shadow-lg",
     },
     C: {
-      default: "bg-yellow-100 border-yellow-300 text-yellow-800 hover:bg-yellow-200",
+      default:
+        "bg-yellow-100 border-yellow-300 text-yellow-800 hover:bg-yellow-200",
       selected: "bg-yellow-600 border-yellow-600 text-white shadow-lg",
     },
     D: {
-      default: "bg-orange-100 border-orange-300 text-orange-800 hover:bg-orange-200",
+      default:
+        "bg-orange-100 border-orange-300 text-orange-800 hover:bg-orange-200",
       selected: "bg-orange-600 border-orange-600 text-white shadow-lg",
     },
     E: {
@@ -48,33 +52,36 @@ export function EnergyStep() {
   const t = useTranslations("EnergyStep"); // Add this hook
 
   const handleBack = () => {
-    dispatch({ type: "PREV_STEP" });
+    dispatch({
+      type: "SET_CURRENT_STEP",
+      payload: Math.max(1, state.currentStep - 1),
+    });
   };
 
   const handleContinue = () => {
-    if (state.energyClass) {
-      dispatch({ type: "NEXT_STEP" });
+    if (state.propertyInfo.energyClass) {
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
     }
   };
 
   // Function to render appropriate error message with action buttons
   const renderErrorMessage = () => {
-    if (!state.error) return null;
+    if (!state.calculationResults.error) return null;
 
     // Different error types might need different actions
-    switch (state.errorCode) {
+    switch (state.calculationResults.errorCode) {
       case "DATABASE_ERROR":
         return (
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{t("error.databaseErrorTitle")}</AlertTitle>
             <AlertDescription className="space-y-2">
-              <p>{state.error}</p>
+              <p>{state.calculationResults.error}</p>
               <div className="flex justify-end mt-2">
                 <Button
                   variant="outline"
                   onClick={() => {
-                    clearError();
+                    updateCalculationResults({ error: null, errorCode: null });
                   }}
                   className="text-sm flex items-center gap-1 min-h-[44px] px-4 py-2 touch-manipulation"
                 >
@@ -89,7 +96,9 @@ export function EnergyStep() {
         return (
           <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{state.error}</AlertDescription>
+            <AlertDescription>
+              {state.calculationResults.error}
+            </AlertDescription>
           </Alert>
         );
     }
@@ -124,32 +133,32 @@ export function EnergyStep() {
           <Label className="text-xl font-semibold mb-6 block">
             {t("energyClassLabel")}
           </Label>
-
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-4">
-            {["A", "B", "C", "D", "E", "F", "G"].map((energyClass) => (
-              <button
-                key={energyClass}
-                type="button"
-                onClick={() =>
-                  dispatch({
-                    type: "UPDATE_FIELD",
-                    field: "energyClass",
-                    value: energyClass,
-                  })
-                }
-                className={`
+            {(["A", "B", "C", "D", "E", "F", "G"] as const).map(
+              (energyClass) => (
+                <button
+                  key={energyClass}
+                  type="button"
+                  onClick={() =>
+                    dispatch({
+                      type: "UPDATE_PROPERTY_INFO",
+                      payload: { energyClass: energyClass },
+                    })
+                  }
+                  className={`
                   aspect-square rounded-xl border-3 font-bold text-2xl transition-all duration-200 hover:scale-105 hover:shadow-lg min-h-[48px] min-w-[48px] touch-manipulation
                   ${
-                    state.energyClass === energyClass
+                    state.propertyInfo.energyClass === energyClass
                       ? getEnergyClassStyle(energyClass).selected
                       : getEnergyClassStyle(energyClass).default
                   }
                 `}
-                aria-label={`Classe énergétique ${energyClass}`}
-              >
-                {energyClass}
-              </button>
-            ))}
+                  aria-label={`Classe énergétique ${energyClass}`}
+                >
+                  {energyClass}
+                </button>
+              ),
+            )}
           </div>
 
           <p className="text-sm text-gray-600 text-center mt-4">
@@ -161,7 +170,7 @@ export function EnergyStep() {
       <div className="flex flex-col gap-4 pt-6">
         <Button
           onClick={handleContinue}
-          disabled={!state.energyClass}
+          disabled={!state.propertyInfo.energyClass}
           className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-16 text-lg font-semibold rounded-xl"
         >
           {t("continueButton")}

@@ -173,7 +173,6 @@ function DetailedQuestionnaireContent() {
           title: "Questionnaire soumis !",
           description:
             "Vos réponses ont été enregistrées avec succès. Nous vous contacterons bientôt.",
-          duration: 5000,
         });
 
         // Wait a bit before redirecting to contact page

@@ -21,7 +21,14 @@ import {
 } from "lucide-react";
 
 export function WuuneResultStep() {
-  const { state, getActualRent, getLivingSpace, getContactInfo } = useGlobalForm();
+  const {
+    state,
+    getActualRent,
+    getLivingSpace,
+    getContactInfo,
+    updateRentalInfo,
+    updateUserProfile,
+  } = useGlobalForm();
   const currentLocale = useLocale();
 
   // Get existing data to avoid re-asking
@@ -29,23 +36,25 @@ export function WuuneResultStep() {
   const contactInfo = getContactInfo();
 
   // Local state for new inputs only - initialized once
-  const [actualRent, setActualRent] = useState<string>(() => existingRent || "");
+  const [actualRent, setActualRent] = useState<string>(
+    () => existingRent || "",
+  );
   const [email, setEmail] = useState<string>(() => contactInfo.email || "");
   const [phone, setPhone] = useState<string>(() => contactInfo.phone || "");
   const [joinNewsletter, setJoinNewsletter] = useState(
-    () => globalForm.state.userProfile.joinNewsletter
+    () => state.userProfile.joinNewsletter,
   );
   const [joinAssembly, setJoinAssembly] = useState(
-    () => globalForm.state.userProfile.joinAssembly
+    () => state.userProfile.joinAssembly,
   );
 
   // Handlers to update both local and global state
   const handleActualRentChange = useCallback(
     (value: string) => {
       setActualRent(value);
-      globalForm.updateRentalInfo({ actualRent: value });
+      updateRentalInfo({ actualRent: value });
     },
-    [globalForm]
+    [updateRentalInfo],
   );
 
   const handleContactInfoChange = useCallback(
@@ -57,25 +66,27 @@ export function WuuneResultStep() {
     }) => {
       if (updates.email !== undefined) setEmail(updates.email);
       if (updates.phone !== undefined) setPhone(updates.phone);
-      if (updates.joinNewsletter !== undefined) setJoinNewsletter(updates.joinNewsletter);
-      if (updates.joinAssembly !== undefined) setJoinAssembly(updates.joinAssembly);
+      if (updates.joinNewsletter !== undefined)
+        setJoinNewsletter(updates.joinNewsletter);
+      if (updates.joinAssembly !== undefined)
+        setJoinAssembly(updates.joinAssembly);
 
-      globalForm.updateUserProfile({
+      updateUserProfile({
         email: updates.email ?? email,
         phone: updates.phone ?? phone,
         joinNewsletter: updates.joinNewsletter ?? joinNewsletter,
         joinAssembly: updates.joinAssembly ?? joinAssembly,
       });
     },
-    [globalForm, email, phone, joinNewsletter, joinAssembly]
+    [updateUserProfile, email, phone, joinNewsletter, joinAssembly],
   );
 
   // Calculer la différence entre le loyer réel et le loyer de référence
   const rentDifference = actualRent
-    ? parseFloat(actualRent) - (state.medianRent || 0)
+    ? parseFloat(actualRent) - (state.calculationResults.medianRent || 0)
     : 0;
-  const rentDifferencePercentage = state.medianRent
-    ? (rentDifference / state.medianRent) * 100
+  const rentDifferencePercentage = state.calculationResults.medianRent
+    ? (rentDifference / state.calculationResults.medianRent) * 100
     : 0;
 
   // Déterminer le type de situation
@@ -166,9 +177,12 @@ export function WuuneResultStep() {
       <Card className="bg-gradient-to-r from-red-600 to-red-500 text-white">
         <CardContent className="p-8 text-center">
           <h3 className="text-xl font-medium mb-2">Loyer de référence légal</h3>
-          <div className="text-6xl font-bold mb-2">{state.medianRent || "..."} €</div>
+          <div className="text-6xl font-bold mb-2">
+            {state.calculationResults.medianRent || "..."} €
+          </div>
           <p className="text-sm opacity-90">
-            Fourchette : {state.minRent || "N/A"} € - {state.maxRent || "N/A"} €/mois
+            Fourchette : {state.calculationResults.minRent || "N/A"} € -{" "}
+            {state.calculationResults.maxRent || "N/A"} €/mois
           </p>
         </CardContent>
       </Card>
@@ -177,7 +191,9 @@ export function WuuneResultStep() {
       <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold">Quel est votre loyer actuel ?</h3>
+            <h3 className="text-xl font-semibold">
+              Quel est votre loyer actuel ?
+            </h3>
             {existingRent && (
               <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
                 ✓ Déjà renseigné
@@ -190,7 +206,9 @@ export function WuuneResultStep() {
               <Input
                 id="actual-rent"
                 type="number"
-                placeholder={existingRent ? `Actuellement: ${existingRent}€` : "Ex: 850"}
+                placeholder={
+                  existingRent ? `Actuellement: ${existingRent}€` : "Ex: 850"
+                }
                 value={actualRent}
                 onChange={(e) => handleActualRentChange(e.target.value)}
                 className="text-xl font-semibold"
@@ -230,8 +248,12 @@ export function WuuneResultStep() {
             <div className="flex flex-col items-center text-center space-y-6">
               {message.icon}
               <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-3">{message.title}</h3>
-                <p className="text-lg text-gray-600 mb-4">{message.description}</p>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3">
+                  {message.title}
+                </h3>
+                <p className="text-lg text-gray-600 mb-4">
+                  {message.description}
+                </p>
                 <p className="text-gray-700">{message.action}</p>
               </div>
             </div>
@@ -248,8 +270,8 @@ export function WuuneResultStep() {
               Rejoignez le collectif Wuune !
             </h3>
             <p className="text-lg text-gray-600">
-              Ensemble, nous pouvons faire changer les choses et défendre le droit au
-              logement.
+              Ensemble, nous pouvons faire changer les choses et défendre le
+              droit au logement.
             </p>
           </div>
 
@@ -259,7 +281,9 @@ export function WuuneResultStep() {
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center gap-2 text-green-800 mb-3">
                   <CheckCircle className="h-5 w-5" />
-                  <span className="font-medium">Vos informations de contact :</span>
+                  <span className="font-medium">
+                    Vos informations de contact :
+                  </span>
                 </div>
                 <div className="space-y-2 text-sm">
                   {contactInfo.email && (
@@ -276,15 +300,15 @@ export function WuuneResultStep() {
                   )}
                 </div>
                 <p className="text-xs text-green-700 mt-2">
-                  Ces informations seront utilisées pour votre adhésion. Vous pourrez les
-                  modifier si nécessaire.
+                  Ces informations seront utilisées pour votre adhésion. Vous
+                  pourrez les modifier si nécessaire.
                 </p>
               </div>
             ) : (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-800">
-                  Vous pourrez renseigner vos coordonnées lors de la finalisation de votre
-                  adhésion.
+                  Vous pourrez renseigner vos coordonnées lors de la
+                  finalisation de votre adhésion.
                 </p>
               </div>
             )}
@@ -298,7 +322,9 @@ export function WuuneResultStep() {
                   type="email"
                   placeholder="votre.email@exemple.com"
                   value={email}
-                  onChange={(e) => handleContactInfoChange({ email: e.target.value })}
+                  onChange={(e) =>
+                    handleContactInfoChange({ email: e.target.value })
+                  }
                 />
               </div>
             )}
@@ -312,7 +338,9 @@ export function WuuneResultStep() {
                   type="tel"
                   placeholder="0X XX XX XX XX"
                   value={phone}
-                  onChange={(e) => handleContactInfoChange({ phone: e.target.value })}
+                  onChange={(e) =>
+                    handleContactInfoChange({ phone: e.target.value })
+                  }
                 />
               </div>
             )}
@@ -324,7 +352,9 @@ export function WuuneResultStep() {
                   id="newsletter"
                   checked={joinNewsletter}
                   onChange={(e) =>
-                    handleContactInfoChange({ joinNewsletter: e.target.checked })
+                    handleContactInfoChange({
+                      joinNewsletter: e.target.checked,
+                    })
                   }
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
@@ -358,7 +388,9 @@ export function WuuneResultStep() {
               <Users className="h-5 w-5 mr-2" />
               Rejoindre Wuune
             </Button>
-            <Link href={`/${currentLocale}/calculateur/bruxelles/questionnaire`}>
+            <Link
+              href={`/${currentLocale}/calculateur/bruxelles/questionnaire`}
+            >
               <Button
                 variant="outline"
                 className="border-red-600 text-red-600 hover:bg-red-50 px-8 py-3 text-lg"
@@ -419,8 +451,8 @@ export function WuuneResultStep() {
       <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
         <p className="text-sm text-blue-800">
           <Shield className="h-4 w-4 inline mr-2" />
-          Vos données restent anonymes et confidentielles. Elles ne seront jamais
-          transmises à des tiers sans votre consentement explicite.
+          Vos données restent anonymes et confidentielles. Elles ne seront
+          jamais transmises à des tiers sans votre consentement explicite.
         </p>
       </div>
     </div>

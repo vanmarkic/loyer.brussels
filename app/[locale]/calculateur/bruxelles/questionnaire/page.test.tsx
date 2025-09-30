@@ -1,9 +1,15 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import DetailedQuestionnairePage, { DetailedQuestionnaireContent } from "./page";
+import DetailedQuestionnairePage from "./page";
 import {
   GlobalFormProvider,
   useGlobalForm,
@@ -11,31 +17,33 @@ import {
 import { saveQuestionnaireResponse } from "@/app/actions/save-questionnaire";
 import { useToast } from "@/hooks/use-toast";
 
-jest.mock("next-intl", () => ({
-  useLocale: jest.fn(),
-  useTranslations: jest.fn(),
+import { vi } from "vitest";
+
+vi.mock("next-intl", () => ({
+  useLocale: vi.fn(),
+  useTranslations: vi.fn(),
 }));
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
 }));
 
-jest.mock("@/app/actions/save-questionnaire", () => ({
-  saveQuestionnaireResponse: jest.fn(),
+vi.mock("@/app/actions/save-questionnaire", () => ({
+  saveQuestionnaireResponse: vi.fn(),
 }));
 
-jest.mock("@/hooks/use-toast", () => ({
-  useToast: jest.fn(),
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: vi.fn(),
 }));
 
-jest.mock("../../../../context/global-form-context", () => ({
+vi.mock("../../../../context/global-form-context", () => ({
   GlobalFormProvider: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  useGlobalForm: jest.fn(),
+  useGlobalForm: vi.fn(),
 }));
 
-jest.mock("lucide-react", () => ({
+vi.mock("lucide-react", () => ({
   ArrowLeft: () => <div data-testid="arrow-left-icon" />,
   ArrowRight: () => <div data-testid="arrow-right-icon" />,
   CheckCircle: () => <div data-testid="check-circle-icon" />,
@@ -45,8 +53,15 @@ jest.mock("lucide-react", () => ({
   Loader2: () => <div data-testid="loader-icon" />,
 }));
 
-jest.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, disabled, className, variant, ...props }: any) => (
+vi.mock("@/components/ui/button", () => ({
+  Button: ({
+    children,
+    onClick,
+    disabled,
+    className,
+    variant,
+    ...props
+  }: any) => (
     <button
       onClick={onClick}
       disabled={disabled}
@@ -59,14 +74,16 @@ jest.mock("@/components/ui/button", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/card", () => ({
-  Card: ({ children, className }: any) => <div className={className}>{children}</div>,
+vi.mock("@/components/ui/card", () => ({
+  Card: ({ children, className }: any) => (
+    <div className={className}>{children}</div>
+  ),
   CardContent: ({ children, className }: any) => (
     <div className={className}>{children}</div>
   ),
 }));
 
-jest.mock("@/components/ui/input", () => ({
+vi.mock("@/components/ui/input", () => ({
   Input: ({ id, type, value, onChange, placeholder, ...props }: any) => (
     <input
       id={id}
@@ -79,7 +96,7 @@ jest.mock("@/components/ui/input", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/label", () => ({
+vi.mock("@/components/ui/label", () => ({
   Label: ({ children, htmlFor, className }: any) => (
     <label htmlFor={htmlFor} className={className}>
       {children}
@@ -87,7 +104,7 @@ jest.mock("@/components/ui/label", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/textarea", () => ({
+vi.mock("@/components/ui/textarea", () => ({
   Textarea: ({ id, value, onChange, placeholder, rows, ...props }: any) => (
     <textarea
       id={id}
@@ -100,7 +117,7 @@ jest.mock("@/components/ui/textarea", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/radio-group", () => ({
+vi.mock("@/components/ui/radio-group", () => ({
   RadioGroup: ({ children, value, onValueChange }: any) => (
     <div
       data-testid="radio-group"
@@ -121,7 +138,7 @@ jest.mock("@/components/ui/radio-group", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/checkbox", () => ({
+vi.mock("@/components/ui/checkbox", () => ({
   Checkbox: ({ id, checked, onCheckedChange }: any) => (
     <input
       type="checkbox"
@@ -132,16 +149,16 @@ jest.mock("@/components/ui/checkbox", () => ({
   ),
 }));
 
-jest.mock("@/components/ui/toaster", () => ({
+vi.mock("@/components/ui/toaster", () => ({
   Toaster: () => <div data-testid="toaster" />,
 }));
 
 describe("DetailedQuestionnairePage", () => {
-  const mockToast = jest.fn();
-  const mockPush = jest.fn();
-  const mockUpdateRentalInfo = jest.fn();
-  const mockUpdateHouseholdInfo = jest.fn();
-  const mockUpdatePropertyIssues = jest.fn();
+  const mockToast = vi.fn();
+  const mockPush = vi.fn();
+  const mockUpdateRentalInfo = vi.fn();
+  const mockUpdateHouseholdInfo = vi.fn();
+  const mockUpdatePropertyIssues = vi.fn();
 
   const defaultTranslations: Record<string, any> = {
     "sections.retrievedInfo": "Retrieved Info",
@@ -166,7 +183,8 @@ describe("DetailedQuestionnairePage", () => {
     "retrievedInfo.phone": "Phone:",
     "retrievedInfo.notProvided": "Not provided",
     "retrievedInfo.notProvidedFeminine": "Not provided",
-    "retrievedInfo.infoMessage": "This information will be used for your evaluation",
+    "retrievedInfo.infoMessage":
+      "This information will be used for your evaluation",
     "personalSituation.title": "Personal Situation",
     "personalSituation.description": "Tell us about your situation",
     "personalSituation.leaseType": "Lease Type",
@@ -203,7 +221,11 @@ describe("DetailedQuestionnairePage", () => {
     "positiveAspects.title": "Positive Aspects",
     "positiveAspects.description": "What do you like about your housing?",
     "positiveAspects.advantages": "Advantages",
-    "positiveAspects.items": ["Good location", "Quiet neighborhood", "Good transport"],
+    "positiveAspects.items": [
+      "Good location",
+      "Quiet neighborhood",
+      "Good transport",
+    ],
     "positiveAspects.additionalComments": "Additional Comments",
     "positiveAspects.additionalCommentsPlaceholder": "Tell us more...",
     "positiveAspects.successMessage": "Thank you for sharing",
@@ -217,6 +239,12 @@ describe("DetailedQuestionnairePage", () => {
 
   const mockT = (key: string, params?: any) => {
     let translation = defaultTranslations[key] || key;
+
+    // Ensure translation is a string before calling replace
+    if (typeof translation !== "string") {
+      translation = String(translation);
+    }
+
     if (params) {
       Object.keys(params).forEach((param) => {
         translation = translation.replace(`{{${param}}}`, params[param]);
@@ -257,21 +285,24 @@ describe("DetailedQuestionnairePage", () => {
         phone: "0123456789",
       },
     },
-    getActualRent: jest.fn(() => "1000"),
-    getLivingSpace: jest.fn(() => "50"),
-    getContactInfo: jest.fn(() => ({ email: "test@example.com", phone: "0123456789" })),
+    getActualRent: vi.fn(() => "1000"),
+    getLivingSpace: vi.fn(() => "50"),
+    getContactInfo: vi.fn(() => ({
+      email: "test@example.com",
+      phone: "0123456789",
+    })),
     updateRentalInfo: mockUpdateRentalInfo,
     updateHouseholdInfo: mockUpdateHouseholdInfo,
     updatePropertyIssues: mockUpdatePropertyIssues,
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    (useLocale as jest.Mock).mockReturnValue("en");
-    (useTranslations as jest.Mock).mockReturnValue(mockT);
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
-    (useToast as jest.Mock).mockReturnValue({ toast: mockToast });
-    (useGlobalForm as jest.Mock).mockReturnValue(mockGlobalFormState);
+    vi.clearAllMocks();
+    (useLocale as any).mockReturnValue("en");
+    (useTranslations as any).mockReturnValue(mockT);
+    (useRouter as any).mockReturnValue({ push: mockPush });
+    (useToast as any).mockReturnValue({ toast: mockToast });
+    (useGlobalForm as any).mockReturnValue(mockGlobalFormState);
 
     delete (window as any).location;
     (window as any).location = { href: "" };
@@ -280,15 +311,15 @@ describe("DetailedQuestionnairePage", () => {
   // ... [all other tests remain unchanged] ...
 
   it("displays generic error toast on exception", async () => {
-    (saveQuestionnaireResponse as jest.Mock).mockRejectedValue(
-      new Error("Network error")
+    (saveQuestionnaireResponse as any).mockRejectedValue(
+      new Error("Network error"),
     );
 
     render(<DetailedQuestionnairePage />);
 
     // Navigate to last section and submit
     for (let i = 0; i < 4; i++) {
-      fireEvent.click(screen.getByText(i < 3 ? "Next" : "Finish").closest("button")!);
+      fireEvent.click(screen.getByText("Next").closest("button")!);
       await waitFor(() => {});
     }
 
@@ -297,7 +328,8 @@ describe("DetailedQuestionnairePage", () => {
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
         title: "Erreur",
-        description: "Une erreur inattendue s'est produite. Veuillez réessayer.",
+        description:
+          "Une erreur inattendue s'est produite. Veuillez réessayer.",
         variant: "destructive",
       });
     });

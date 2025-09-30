@@ -25,7 +25,7 @@ export interface PropertyInformation {
 
   // Features
   numberOfGarages: number;
-  energyClass: EnergyClass | "";
+  energyClass: EnergyClass;
   constructedBefore2000: boolean | null;
   propertyState: PropertyState | null;
 
@@ -79,6 +79,7 @@ export interface CalculationResults {
 
 // Unified global form state
 export interface GlobalFormState {
+  size: unknown;
   // Flow control
   currentStep: number;
   currentPage: "calculator" | "results" | "questionnaire";

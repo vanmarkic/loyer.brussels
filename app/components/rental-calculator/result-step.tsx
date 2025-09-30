@@ -9,7 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // Removed direct supabase import: import { supabase } from "@/app/lib/supabase";
 import { rentRecordRepository } from "@/app/data/repositories"; // Import the repository
-import type { UserInputs, RentRecordInput, RentRecordUpdate } from "@/app/data/types"; // Import types
+import type {
+  UserInputs,
+  RentRecordInput,
+  RentRecordUpdate,
+} from "@/app/data/types"; // Import types
 import {
   ArrowRight,
   Download,
@@ -33,20 +37,28 @@ export function ResultStep() {
   const t = useTranslations("ResultStep");
   const tFeatures = useTranslations("FeaturesStep");
   const tDetails = useTranslations("PropertyDetailsStep");
-
+  const globalForm = useGlobalForm();
   // Get existing data from global context to avoid re-asking
   const existingRent = globalForm.getActualRent();
   const contactInfo = globalForm.getContactInfo();
 
   // Initialize with existing data
-  const [actualRent, setActualRent] = useState<string>(() => existingRent || "");
+  const [actualRent, setActualRent] = useState<string>(
+    () => existingRent || "",
+  );
   const [email, setEmail] = useState<string>(() => contactInfo.email || "");
-  const [phoneNumber, setPhoneNumber] = useState<string>(() => contactInfo.phone || "");
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    () => contactInfo.phone || "",
+  );
 
   const [recordId, setRecordId] = useState<number | null>(null);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
-  const [updateStatus, setUpdateStatus] = useState<"idle" | "success" | "error">("idle");
-  const [initialInsertError, setInitialInsertError] = useState<string | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [initialInsertError, setInitialInsertError] = useState<string | null>(
+    null,
+  );
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false); // Add loading state
 
   // Handlers to update both local and global state
@@ -55,7 +67,7 @@ export function ResultStep() {
       setActualRent(value);
       globalForm.updateRentalInfo({ actualRent: value });
     },
-    [globalForm]
+    [globalForm],
   );
 
   const handleEmailChange = useCallback(
@@ -63,7 +75,7 @@ export function ResultStep() {
       setEmail(value);
       globalForm.updateUserProfile({ email: value });
     },
-    [globalForm]
+    [globalForm],
   );
 
   const handlePhoneChange = useCallback(
@@ -71,14 +83,14 @@ export function ResultStep() {
       setPhoneNumber(value);
       globalForm.updateUserProfile({ phone: value });
     },
-    [globalForm]
+    [globalForm],
   );
 
   const handleReset = () => {
     dispatch({ type: "RESET_FORM" });
   };
   const handleEdit = () => {
-    dispatch({ type: "GO_TO_STEP", payload: 1 });
+    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
   };
 
   // Removed: const handleDownloadPdf = handlePDF(state);
@@ -89,8 +101,36 @@ export function ResultStep() {
     try {
       // Dynamically import the handlePDF function
       const { handlePDF } = await import("@/lib/utils");
+      // Convert GlobalFormState to FormState for PDF generation
+      const formState = {
+        step: state.currentStep,
+        postalCode: state.propertyInfo.postalCode,
+        streetName: state.propertyInfo.streetName,
+        streetNumber: state.propertyInfo.streetNumber,
+        propertyType: state.propertyInfo.propertyType,
+        size: state.propertyInfo.size,
+        bedrooms: state.propertyInfo.bedrooms,
+        bathrooms: state.propertyInfo.bathrooms,
+        numberOfGarages: state.propertyInfo.numberOfGarages,
+        energyClass: state.propertyInfo.energyClass,
+        difficultyIndex: state.calculationResults.difficultyIndex,
+        medianRent: state.calculationResults.medianRent,
+        minRent: state.calculationResults.minRent,
+        maxRent: state.calculationResults.maxRent,
+        isLoading: state.calculationResults.isLoading,
+        error: state.calculationResults.error,
+        errorCode: state.calculationResults.errorCode,
+        hasCentralHeating: state.propertyInfo.hasCentralHeating,
+        hasThermalRegulation: state.propertyInfo.hasThermalRegulation,
+        hasDoubleGlazing: state.propertyInfo.hasDoubleGlazing,
+        hasSecondBathroom: state.propertyInfo.hasSecondBathroom,
+        hasRecreationalSpaces: state.propertyInfo.hasRecreationalSpaces,
+        hasStorageSpaces: state.propertyInfo.hasStorageSpaces,
+        constructedBefore2000: state.propertyInfo.constructedBefore2000,
+        propertyState: state.propertyInfo.propertyState,
+      };
       // Execute the PDF generation
-      handlePDF(state)(); // Call the returned function
+      handlePDF(formState)(); // Call the returned function
     } catch (error) {
       console.error("Error loading or generating PDF:", error);
       // Optionally show an error message to the user
@@ -102,7 +142,7 @@ export function ResultStep() {
   // Helper function to get user inputs from state matching UserInputs type
   const getUserInputs = (): UserInputs => {
     let propertyStateString: string;
-    switch (state.propertyState) {
+    switch (state.propertyInfo.propertyState) {
       case 1:
         propertyStateString = "bad";
         break; // Mauvais état
@@ -117,47 +157,57 @@ export function ResultStep() {
     }
 
     return {
-      propertyType: state.propertyType || "studio", // Provide default if empty
-      size: state.size || 0,
-      bedrooms: state.bedrooms || 0,
-      bathrooms: state.bathrooms || 1,
-      energyClass: state.energyClass || "G", // Provide default if empty
-      hasCentralHeating: state.hasCentralHeating ?? false, // Default to false if null
-      hasThermalRegulation: state.hasThermalRegulation ?? false,
-      hasDoubleGlazing: state.hasDoubleGlazing ?? false,
-      hasSecondBathroom: state.hasSecondBathroom ?? false,
-      hasRecreationalSpaces: state.hasRecreationalSpaces ?? false,
-      hasStorageSpaces: state.hasStorageSpaces ?? false,
-      streetNumber: state.streetNumber || "",
-      streetName: state.streetName || "",
-      postalCode: state.postalCode || 0,
-      difficultyIndex: state.difficultyIndex, // Can be null
-      constructedBefore2000: state.constructedBefore2000 ?? false,
+      propertyType: state.propertyInfo.propertyType || "studio", // Provide default if empty
+      size: state.propertyInfo.size || 0,
+      bedrooms: state.propertyInfo.bedrooms || 0,
+      bathrooms: state.propertyInfo.bathrooms || 1,
+      energyClass: state.propertyInfo.energyClass || "G", // Provide default if empty
+      hasCentralHeating: state.propertyInfo.hasCentralHeating ?? false, // Default to false if null
+      hasThermalRegulation: state.propertyInfo.hasThermalRegulation ?? false,
+      hasDoubleGlazing: state.propertyInfo.hasDoubleGlazing ?? false,
+      hasSecondBathroom: state.propertyInfo.hasSecondBathroom ?? false,
+      hasRecreationalSpaces: state.propertyInfo.hasRecreationalSpaces ?? false,
+      hasStorageSpaces: state.propertyInfo.hasStorageSpaces ?? false,
+      streetNumber: state.propertyInfo.streetNumber || "",
+      streetName: state.propertyInfo.streetName || "",
+      postalCode: state.propertyInfo.postalCode || 0,
+      difficultyIndex: state.calculationResults.difficultyIndex, // Can be null
+      constructedBefore2000: state.propertyInfo.constructedBefore2000 ?? false,
       propertyState: propertyStateString, // Assign the mapped string value
-      numberOfGarages: state.numberOfGarages || 0,
+      numberOfGarages: state.propertyInfo.numberOfGarages || 0,
     };
   };
 
   // Effect to insert initial record using the repository
   useEffect(() => {
     const insertInitialRecord = async () => {
-      if (state.medianRent && !recordId && !initialInsertError) {
+      if (
+        state.calculationResults.medianRent &&
+        !recordId &&
+        !initialInsertError
+      ) {
         const userInputs = getUserInputs();
         const initialRecord: RentRecordInput = {
           user_inputs: userInputs,
-          median_rent: state.medianRent,
+          median_rent: state.calculationResults.medianRent,
           created_at: new Date().toISOString(),
         };
 
         try {
-          console.log("Attempting initial insert via repository:", initialRecord);
+          console.log(
+            "Attempting initial insert via repository:",
+            initialRecord,
+          );
           // Use the repository to create the record
           const newId = await rentRecordRepository.create(initialRecord);
           setRecordId(newId);
           console.log("Initial record inserted via repository with ID:", newId);
           setInitialInsertError(null);
         } catch (error) {
-          console.error("Error inserting initial rent record via repository:", error);
+          console.error(
+            "Error inserting initial rent record via repository:",
+            error,
+          );
           const errorMessage =
             error instanceof Error
               ? error.message
@@ -170,7 +220,7 @@ export function ResultStep() {
 
     insertInitialRecord();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.medianRent, recordId, initialInsertError]); // Dependencies remain similar
+  }, [state.calculationResults.medianRent, recordId, initialInsertError]); // Dependencies remain similar
 
   // Function to handle the UPDATE using the repository
   const handleActualRentUpdate = async () => {
@@ -182,7 +232,7 @@ export function ResultStep() {
       const userInputs = getUserInputs();
       const initialRecord: RentRecordInput = {
         user_inputs: userInputs,
-        median_rent: state.medianRent || 0,
+        median_rent: state.calculationResults.medianRent || 0,
         created_at: new Date().toISOString(),
       };
 
@@ -233,11 +283,13 @@ export function ResultStep() {
 
       console.log(
         `Attempting to update record ID: ${currentRecordId} via repository with data:`,
-        updateData
+        updateData,
       );
       // Use the repository to update the record
       await rentRecordRepository.update(currentRecordId, updateData);
-      console.log(`Record ID: ${currentRecordId} updated successfully via repository.`);
+      console.log(
+        `Record ID: ${currentRecordId} updated successfully via repository.`,
+      );
       setUpdateStatus("success");
     } catch (error) {
       console.error("Error updating rent record via repository:", error);
@@ -271,16 +323,23 @@ export function ResultStep() {
         <CardContent className="p-6">
           <div className="text-center">
             <p className="text-lg font-medium">{t("estimatedRentLabel")}</p>
-            <p className="text-5xl font-bold mt-2">{state.medianRent ?? "..."} €</p>
+            <p className="text-5xl font-bold mt-2">
+              {state.calculationResults.medianRent ?? "..."} €
+            </p>
             <div className="flex justify-center items-center mt-2">
               <p className="text-sm opacity-80">
-                {t("priceRangeLabel")}: {state.minRent ?? "N/A"} € -{" "}
-                {state.maxRent ?? "N/A"}€
+                {t("priceRangeLabel")}:{" "}
+                {state.calculationResults.minRent ?? "N/A"} € -{" "}
+                {state.calculationResults.maxRent ?? "N/A"}€
               </p>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-white">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-white"
+                    >
                       <Info className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -315,7 +374,9 @@ export function ResultStep() {
             placeholder={t("actualRentSection.rentPlaceholder")}
             value={actualRent}
             onChange={(e) => handleActualRentChange(e.target.value)}
-            disabled={isUpdating || updateStatus === "success" || !!initialInsertError}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
             min="0"
             step="1"
           />
@@ -329,19 +390,25 @@ export function ResultStep() {
             placeholder={t("actualRentSection.emailPlaceholder")}
             value={email}
             onChange={(e) => handleEmailChange(e.target.value)}
-            disabled={isUpdating || updateStatus === "success" || !!initialInsertError}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
           />
         </div>
         {/* Phone Number Input */}
         <div className="space-y-2">
-          <Label htmlFor="phoneNumber">{t("actualRentSection.phoneLabel")}</Label>
+          <Label htmlFor="phoneNumber">
+            {t("actualRentSection.phoneLabel")}
+          </Label>
           <Input
             id="phoneNumber"
             type="tel"
             placeholder={t("actualRentSection.phonePlaceholder")}
             value={phoneNumber}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            disabled={isUpdating || updateStatus === "success" || !!initialInsertError}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
           />
         </div>
         <Button
@@ -357,17 +424,19 @@ export function ResultStep() {
           {isUpdating
             ? t("actualRentSection.updatingButton")
             : updateStatus === "success"
-            ? t("actualRentSection.updatedButton")
-            : t("actualRentSection.confirmButton")}
+              ? t("actualRentSection.updatedButton")
+              : t("actualRentSection.confirmButton")}
         </Button>
         {updateStatus === "success" && (
           <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
-            <CheckCircle className="h-4 w-4" /> {t("actualRentSection.successMessage")}
+            <CheckCircle className="h-4 w-4" />{" "}
+            {t("actualRentSection.successMessage")}
           </p>
         )}
         {updateStatus === "error" && (
           <p className="text-sm text-red-600 flex items-center gap-1 mt-2">
-            <XCircle className="h-4 w-4" /> {t("actualRentSection.errorMessage")}
+            <XCircle className="h-4 w-4" />{" "}
+            {t("actualRentSection.errorMessage")}
           </p>
         )}
       </div>
@@ -382,41 +451,67 @@ export function ResultStep() {
               {t("summary.addressLabel")}
             </h4>
             <p>
-              {state.streetNumber} {state.streetName}, {state.postalCode}{" "}
-              {t("summary.city")}
+              {state.propertyInfo.streetNumber} {state.propertyInfo.streetName},{" "}
+              {state.propertyInfo.postalCode} {t("summary.city")}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="text-muted-foreground">{t("summary.propertyTypeLabel")}:</div>
+            <div className="text-muted-foreground">
+              {t("summary.propertyTypeLabel")}:
+            </div>
             <div className="font-medium">
-              {propertyTypeLabels[state.propertyType || "studio"] || "-"}{" "}
+              {propertyTypeLabels[
+                state.propertyInfo.propertyType || "studio"
+              ] || "-"}{" "}
               {/* Handle empty string */}
             </div>
             {/* Removed duplicate address display */}
-            <div className="text-muted-foreground">{t("summary.sizeLabel")}:</div>
-            <div className="font-medium">{state.size} m²</div>
-            <div className="text-muted-foreground">{t("summary.bedroomsLabel")}:</div>
-            <div className="font-medium">
-              {state.bedrooms === 4 ? tDetails("bedroomsCountMax") : state.bedrooms}
+            <div className="text-muted-foreground">
+              {t("summary.sizeLabel")}:
             </div>
-            <div className="text-muted-foreground">{t("summary.bathroomsLabel")}:</div>
-            <div className="font-medium">{state.bathrooms}</div>
-            <div className="text-muted-foreground">{t("summary.energyClassLabel")}:</div>
-            <div className="font-medium">{state.energyClass || "-"}</div>{" "}
+            <div className="font-medium">{state.propertyInfo.size} m²</div>
+            <div className="text-muted-foreground">
+              {t("summary.bedroomsLabel")}:
+            </div>
+            <div className="font-medium">
+              {state.propertyInfo.bedrooms === 4
+                ? tDetails("bedroomsCountMax")
+                : state.propertyInfo.bedrooms}
+            </div>
+            <div className="text-muted-foreground">
+              {t("summary.bathroomsLabel")}:
+            </div>
+            <div className="font-medium">{state.propertyInfo.bathrooms}</div>
+            <div className="text-muted-foreground">
+              {t("summary.energyClassLabel")}:
+            </div>
+            <div className="font-medium">
+              {state.propertyInfo.energyClass || "-"}
+            </div>{" "}
             {/* Handle empty string */}
-            <div className="text-muted-foreground">{t("summary.featuresLabel")}:</div>
+            <div className="text-muted-foreground">
+              {t("summary.featuresLabel")}:
+            </div>
             <div className="font-medium">
               {[
-                state.hasCentralHeating ? tFeatures("options.centralHeating") : null,
-                state.hasThermalRegulation
+                state.propertyInfo.hasCentralHeating
+                  ? tFeatures("options.centralHeating")
+                  : null,
+                state.propertyInfo.hasThermalRegulation
                   ? tFeatures("options.thermalRegulation")
                   : null,
-                state.hasDoubleGlazing ? tFeatures("options.doubleGlazing") : null,
-                state.hasSecondBathroom ? tFeatures("options.secondBathroom") : null,
-                state.hasRecreationalSpaces
+                state.propertyInfo.hasDoubleGlazing
+                  ? tFeatures("options.doubleGlazing")
+                  : null,
+                state.propertyInfo.hasSecondBathroom
+                  ? tFeatures("options.secondBathroom")
+                  : null,
+                state.propertyInfo.hasRecreationalSpaces
                   ? tFeatures("options.recreationalSpaces")
                   : null,
-                state.hasStorageSpaces ? tFeatures("options.storageSpaces") : null,
+                state.propertyInfo.hasStorageSpaces
+                  ? tFeatures("options.storageSpaces")
+                  : null,
               ]
                 .filter(Boolean)
                 .join(", ") || t("summary.featuresNone")}
@@ -430,8 +525,12 @@ export function ResultStep() {
         <div className="flex items-start gap-2">
           <Calculator className="h-5 w-5 text-blue-700 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-medium text-blue-800">{t("calculationMethod.title")}</p>
-            <p className="mt-1 text-blue-700">{t("calculationMethod.description")}</p>
+            <p className="font-medium text-blue-800">
+              {t("calculationMethod.title")}
+            </p>
+            <p className="mt-1 text-blue-700">
+              {t("calculationMethod.description")}
+            </p>
           </div>
         </div>
       </div>
@@ -457,18 +556,30 @@ export function ResultStep() {
             ) : (
               <Download className="h-4 w-4" />
             )}
-            {isDownloadingPdf ? t("downloadingPdfButton") : t("downloadPdfButton")}
+            {isDownloadingPdf
+              ? t("downloadingPdfButton")
+              : t("downloadPdfButton")}
           </Button>
-          <Button variant="outline" className="flex-1 gap-2" disabled={isDownloadingPdf}>
+          <Button
+            variant="outline"
+            className="flex-1 gap-2"
+            disabled={isDownloadingPdf}
+          >
             {" "}
             {/* Optionally disable share too */}
             <Share2 className="h-4 w-4" /> {t("shareButton")}
           </Button>
         </div>
-        <Button onClick={handleEdit} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
+        <Button
+          onClick={handleEdit}
+          className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2"
+        >
           {t("modifyButton")} <ArrowRight className="h-4 w-4" />
         </Button>
-        <Button onClick={handleReset} className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2">
+        <Button
+          onClick={handleReset}
+          className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2"
+        >
           {t("newEstimationButton")} <ArrowRight className="h-4 w-4" />
         </Button>
       </div>

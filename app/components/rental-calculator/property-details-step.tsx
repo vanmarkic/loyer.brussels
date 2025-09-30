@@ -13,33 +13,39 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function PropertyDetailsStep() {
-  const { state, updatePropertyInfo, dispatch } = useGlobalForm();
+  const { state, dispatch } = useGlobalForm();
   const t = useTranslations("PropertyDetailsStep"); // Add this hook
   const [showAreaEstimator, setShowAreaEstimator] = useState(false);
 
   // Auto-increment refs and state
   const [isMouseDownOnInput, setIsMouseDownOnInput] = useState(false);
-  const sizeRef = useRef<number>(state.size);
+  const sizeRef = useRef<number>(state.propertyInfo.size);
   useEffect(() => {
-    sizeRef.current = state.size;
-  }, [state.size]);
+    sizeRef.current = state.propertyInfo.size;
+  }, [state.propertyInfo.size]);
 
   // Helper functions for size increment/decrement
   const incrementSize = () => {
     const newValue = (sizeRef.current || 0) + 1;
     sizeRef.current = newValue;
-    dispatch({ type: "UPDATE_FIELD", field: "size", value: newValue });
+    dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
   };
 
   const decrementSize = () => {
     const newValue = Math.max(1, (sizeRef.current || 0) - 1);
     sizeRef.current = newValue;
-    dispatch({ type: "UPDATE_FIELD", field: "size", value: newValue });
+    dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
   };
 
   // Use the hold repeat hook for increment and decrement
-  const incrementControls = useHoldRepeat({ onRepeat: incrementSize, interval: 150 });
-  const decrementControls = useHoldRepeat({ onRepeat: decrementSize, interval: 150 });
+  const incrementControls = useHoldRepeat({
+    onRepeat: incrementSize,
+    interval: 150,
+  });
+  const decrementControls = useHoldRepeat({
+    onRepeat: decrementSize,
+    interval: 150,
+  });
 
   // Input-specific handlers
   const handleInputMouseDown = (e: React.MouseEvent) => {
@@ -106,40 +112,56 @@ export function PropertyDetailsStep() {
     };
 
     const baseArea =
-      baseAreaPerRoom[state.propertyType as keyof typeof baseAreaPerRoom] || 35;
-    const roomMultiplier = Math.max(1, state.bedrooms);
+      baseAreaPerRoom[
+        state.propertyInfo.propertyType as keyof typeof baseAreaPerRoom
+      ] || 35;
+    const roomMultiplier = Math.max(1, state.propertyInfo.bedrooms);
     const estimatedArea = Math.round(baseArea * roomMultiplier * 1.2); // Include common areas
 
-    dispatch({ type: "UPDATE_FIELD", field: "size", value: estimatedArea });
+    dispatch({
+      type: "UPDATE_PROPERTY_INFO",
+      payload: { size: estimatedArea },
+    });
     setShowAreaEstimator(false);
   };
 
   // Visual area estimation helper
   const setVisualEstimate = (size: number) => {
-    dispatch({ type: "UPDATE_FIELD", field: "size", value: size });
+    dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: size } });
     setShowAreaEstimator(false);
   };
 
   const handleContinue = () => {
-    if (state.size > 0 && state.propertyType) {
-      dispatch({ type: "NEXT_STEP" });
+    if (state.propertyInfo.size > 0 && state.propertyInfo.propertyType) {
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
     }
   };
 
   const handleBack = () => {
-    dispatch({ type: "PREV_STEP" });
+    dispatch({
+      type: "SET_CURRENT_STEP",
+      payload: Math.max(1, state.currentStep - 1),
+    });
   };
 
   // Update the incrementBedrooms function to limit to 4
   const incrementBedrooms = () => {
-    if (state.bedrooms < 4) {
-      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms + 1 });
+    if (state.propertyInfo.bedrooms < 4) {
+      dispatch({
+        type: "UPDATE_PROPERTY_INFO",
+        payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
+      });
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
     }
   };
 
   const decrementBedrooms = () => {
-    if (state.bedrooms > 0) {
-      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms - 1 });
+    if (state.propertyInfo.bedrooms > 0) {
+      dispatch({
+        type: "UPDATE_PROPERTY_INFO",
+        payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
+      });
+      dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
     }
   };
 
@@ -167,7 +189,9 @@ export function PropertyDetailsStep() {
                 onPointerUp={decrementControls.stop}
                 onPointerLeave={decrementControls.stop}
                 onPointerCancel={decrementControls.stop}
-                disabled={!state.size || state.size <= 1}
+                disabled={
+                  !state.propertyInfo.size || state.propertyInfo.size <= 1
+                }
                 className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Diminuer la superficie par 1m²"
               >
@@ -178,16 +202,15 @@ export function PropertyDetailsStep() {
                   <Input
                     id="size"
                     type="text"
-                    value={state.size || ""}
+                    value={state.propertyInfo.size || ""}
                     onChange={(e) => {
                       const value = e.target.value;
                       // Allow empty input or valid numbers
                       if (value === "" || /^\d+$/.test(value)) {
                         const numValue = value === "" ? 0 : parseInt(value, 10);
                         dispatch({
-                          type: "UPDATE_FIELD",
-                          field: "size",
-                          value: numValue,
+                          type: "UPDATE_PROPERTY_INFO",
+                          payload: { size: numValue },
                         });
                       }
                     }}
@@ -199,7 +222,9 @@ export function PropertyDetailsStep() {
                     placeholder="75"
                     inputMode="numeric"
                   />
-                  <span className="text-xl font-semibold text-gray-500">m²</span>
+                  <span className="text-xl font-semibold text-gray-500">
+                    m²
+                  </span>
                 </div>
               </div>
               <Button
@@ -218,7 +243,7 @@ export function PropertyDetailsStep() {
             </div>
 
             {/* Smart Estimation Helper */}
-            {!state.size && !showAreaEstimator && (
+            {!state.propertyInfo.size && !showAreaEstimator && (
               <Alert className="bg-blue-50 border-blue-200">
                 <Lightbulb className="h-4 w-4 text-blue-600" />
                 <AlertDescription className="text-blue-800">
@@ -260,7 +285,9 @@ export function PropertyDetailsStep() {
                       >
                         <div className="text-sm w-full">
                           <div className="font-semibold">~30m²</div>
-                          <div className="text-xs text-gray-600">Studio/petit appart</div>
+                          <div className="text-xs text-gray-600">
+                            Studio/petit appart
+                          </div>
                         </div>
                       </Button>
                       <Button
@@ -282,7 +309,9 @@ export function PropertyDetailsStep() {
                       >
                         <div className="text-sm w-full">
                           <div className="font-semibold">~75m²</div>
-                          <div className="text-xs text-gray-600">2 chambres</div>
+                          <div className="text-xs text-gray-600">
+                            2 chambres
+                          </div>
                         </div>
                       </Button>
                       <Button
@@ -293,17 +322,19 @@ export function PropertyDetailsStep() {
                       >
                         <div className="text-sm w-full">
                           <div className="font-semibold">~95m²</div>
-                          <div className="text-xs text-gray-600">3+ chambres</div>
+                          <div className="text-xs text-gray-600">
+                            3+ chambres
+                          </div>
                         </div>
                       </Button>
                     </div>
                   </div>
 
                   {/* Smart Room-based Estimation */}
-                  {state.bedrooms > 0 && (
+                  {state.propertyInfo.bedrooms > 0 && (
                     <div className="border-t border-blue-200 pt-4">
                       <p className="text-sm text-blue-800 font-medium mb-3">
-                        Basé sur vos {state.bedrooms} chambres :
+                        Basé sur vos {state.propertyInfo.bedrooms} chambres :
                       </p>
                       <Button
                         onClick={estimateAreaFromRooms}
@@ -311,9 +342,15 @@ export function PropertyDetailsStep() {
                         type="button"
                       >
                         <Calculator className="h-4 w-4 mr-2" />
-                        Estimer ~{Math.round(35 * Math.max(1, state.bedrooms) * 1.2)}m²
-                        {state.propertyType === "house" && " (maison)"}
-                        {state.propertyType === "studio" && " (studio)"}
+                        Estimer ~
+                        {Math.round(
+                          35 * Math.max(1, state.propertyInfo.bedrooms) * 1.2,
+                        )}
+                        m²
+                        {state.propertyInfo.propertyType === "house" &&
+                          " (maison)"}
+                        {state.propertyInfo.propertyType === "studio" &&
+                          " (studio)"}
                       </Button>
                     </div>
                   )}
@@ -334,14 +371,16 @@ export function PropertyDetailsStep() {
         </div>
 
         <div>
-          <Label className="text-xl font-semibold mb-6 block">{t("bedroomsLabel")}</Label>
+          <Label className="text-xl font-semibold mb-6 block">
+            {t("bedroomsLabel")}
+          </Label>
           <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
             <Button
               type="button"
               variant="outline"
               size="icon"
               onClick={decrementBedrooms}
-              disabled={state.bedrooms === 0}
+              disabled={state.propertyInfo.bedrooms === 0}
               className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0"
               aria-label="Diminuer le nombre de chambres"
             >
@@ -349,7 +388,9 @@ export function PropertyDetailsStep() {
             </Button>
             <div className="bg-white rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[120px] text-center">
               <span className="text-4xl font-bold text-gray-800">
-                {state.bedrooms === 4 ? t("bedroomsCountMax") : state.bedrooms}
+                {state.propertyInfo.bedrooms === 4
+                  ? t("bedroomsCountMax")
+                  : state.propertyInfo.bedrooms}
               </span>
               <div className="text-sm text-gray-500 mt-1">chambres</div>
             </div>
@@ -358,7 +399,7 @@ export function PropertyDetailsStep() {
               variant="outline"
               size="icon"
               onClick={incrementBedrooms}
-              disabled={state.bedrooms >= 4}
+              disabled={state.propertyInfo.bedrooms >= 4}
               className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0"
               aria-label="Augmenter le nombre de chambres"
             >
@@ -373,7 +414,9 @@ export function PropertyDetailsStep() {
         totalSteps={6}
         onNext={handleContinue}
         onPrevious={handleBack}
-        nextDisabled={state.size <= 0 || !state.propertyType}
+        nextDisabled={
+          state.propertyInfo.size <= 0 || !state.propertyInfo.propertyType
+        }
         nextText={t("continueButton")}
         previousText={t("backButton")}
         autoSaveEnabled={true}

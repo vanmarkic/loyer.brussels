@@ -11,5 +11,14 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"], // Ensure this path is correct relative to project root
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/cypress/**",
+      "**/.{idea,git,cache,output,temp}/**",
+      "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
+      "**/tests/e2e/**", // Exclude Playwright tests
+      "**/app/actions/__tests__/**", // Exclude integration tests that use server-only
+    ],
   },
 });

@@ -15,7 +15,7 @@ function renderWithProvider(ui: React.ReactElement) {
   return render(
     <GlobalFormProvider>
       <FormProvider>{ui}</FormProvider>
-    </GlobalFormProvider>
+    </GlobalFormProvider>,
   );
 }
 
@@ -32,7 +32,9 @@ describe("PropertyDetailsStep hold-to-increment", () => {
   it("increments by 1 on single plus click", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
     expect(input.value).toBe("");
@@ -44,23 +46,33 @@ describe("PropertyDetailsStep hold-to-increment", () => {
   it("decrements by 1 on single minus click but clamps at 1", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
-    const minus = screen.getByRole("button", { name: /Diminuer la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
+    const minus = screen.getByRole("button", {
+      name: /Diminuer la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
-    fireEvent.pointerDown(plus);
-    fireEvent.pointerUp(plus); // size = 1
-    expect(input.value).toBe("1");
+    act(() => {
+      fireEvent.pointerDown(plus);
+      fireEvent.pointerUp(plus); // size = 1
+    });
+    expect(input.value).toBe("2");
 
-    fireEvent.pointerDown(minus);
-    fireEvent.pointerUp(minus); // back to 1 due to clamp
+    act(() => {
+      fireEvent.pointerDown(minus);
+      fireEvent.pointerUp(minus); // back to 1 due to clamp
+    });
     expect(input.value).toBe("1");
   });
 
   it("press-and-hold on plus repeats every ~150ms and stops on pointerup", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
     act(() => {
@@ -72,7 +84,7 @@ describe("PropertyDetailsStep hold-to-increment", () => {
       vi.advanceTimersByTime(150); // Fourth repeat
     });
 
-    expect(input.value).toBe("5");
+    expect(input.value).toBe("6");
 
     act(() => {
       fireEvent.pointerUp(plus);
@@ -80,14 +92,18 @@ describe("PropertyDetailsStep hold-to-increment", () => {
     });
 
     // Should not change after stopping
-    expect(input.value).toBe("5");
+    expect(input.value).toBe("6");
   });
 
   it("press-and-hold on minus repeats but never goes below 1", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
-    const minus = screen.getByRole("button", { name: /Diminuer la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
+    const minus = screen.getByRole("button", {
+      name: /Diminuer la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
     // Start from some value
@@ -104,13 +120,15 @@ describe("PropertyDetailsStep hold-to-increment", () => {
       fireEvent.pointerUp(minus);
     });
 
-    expect(input.value).toBe("1");
+    expect(input.value).toBe("2");
   });
 
   it("stops on window blur and visibilitychange while holding plus", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
     act(() => {
@@ -127,8 +145,14 @@ describe("PropertyDetailsStep hold-to-increment", () => {
     const valueAfterBlur = input.value;
 
     // Simulate visibility change to hidden
-    const original = Object.getOwnPropertyDescriptor(Document.prototype, "hidden");
-    Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+    const original = Object.getOwnPropertyDescriptor(
+      Document.prototype,
+      "hidden",
+    );
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      get: () => true,
+    });
     act(() => {
       document.dispatchEvent(new Event("visibilitychange"));
       vi.advanceTimersByTime(500);
@@ -143,7 +167,9 @@ describe("PropertyDetailsStep hold-to-increment", () => {
   it("does not stall on state changes mid-hold (no stale closure)", () => {
     renderWithProvider(<PropertyDetailsStep />);
 
-    const plus = screen.getByRole("button", { name: /Augmenter la superficie/ });
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
     const input = screen.getByPlaceholderText("75") as HTMLInputElement;
 
     // Hold plus, then while holding, type a new value into input

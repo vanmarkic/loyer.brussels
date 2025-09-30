@@ -60,6 +60,13 @@ function DetailedQuestionnaireContent() {
   const [currentSection, setCurrentSection] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Normalize a possibly non-array value (like a string) into a string[]
+  const toStringArray = useCallback((value: unknown): string[] => {
+    if (Array.isArray(value)) return value as string[];
+    if (value === undefined || value === null) return [];
+    return [String(value)];
+  }, []);
+
   // Get pre-filled data from global context
   const existingRent = globalForm.getActualRent();
   const existingSpace = globalForm.getLivingSpace();
@@ -431,10 +438,10 @@ function DetailedQuestionnaireContent() {
                   {t("problems.healthIssues.title")}
                 </Label>
                 <div className="space-y-2 mt-2">
-                  {(
+                  {toStringArray(
                     t("problems.healthIssues.items", {
                       returnObjects: true,
-                    }) as unknown as string[]
+                    }) as unknown
                   ).map((issue: string) => (
                     <div key={issue} className="flex items-center space-x-2">
                       <Checkbox
@@ -457,10 +464,10 @@ function DetailedQuestionnaireContent() {
                   {t("problems.majorDefects.title")}
                 </Label>
                 <div className="space-y-2 mt-2">
-                  {(
+                  {toStringArray(
                     t("problems.majorDefects.items", {
                       returnObjects: true,
-                    }) as unknown as string[]
+                    }) as unknown
                   ).map((defect: string) => (
                     <div key={defect} className="flex items-center space-x-2">
                       <Checkbox
@@ -503,10 +510,10 @@ function DetailedQuestionnaireContent() {
                 {t("positiveAspects.advantages")}
               </Label>
               <div className="space-y-2 mt-2">
-                {(
+                {toStringArray(
                   t("positiveAspects.items", {
                     returnObjects: true,
-                  }) as unknown as string[]
+                  }) as unknown
                 ).map((aspect: string) => (
                   <div key={aspect} className="flex items-center space-x-2">
                     <Checkbox

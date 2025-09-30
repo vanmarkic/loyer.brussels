@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { ArrowLeft, ArrowRight, RotateCcw, Save } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { ArrowLeft, ArrowRight, RotateCcw, Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { useGlobalForm } from '@/app/context/global-form-context';
+} from "@/components/ui/alert-dialog";
+import { useGlobalForm } from "@/app/context/global-form-context";
 
 interface NavigationControlsProps {
   currentStep: number;
@@ -40,17 +40,17 @@ export function NavigationControls({
   onReset,
   nextDisabled = false,
   previousDisabled = false,
-  nextText = 'Suivant',
-  previousText = 'Précédent',
+  nextText = "Suivant",
+  previousText = "Précédent",
   isLoading = false,
   autoSaveEnabled = true,
   autoSaveInterval = 30,
-  className = '',
+  className = "",
 }: NavigationControlsProps) {
   const { state, saveSession, clearSession } = useGlobalForm();
   const [lastSave, setLastSave] = useState<Date | null>(null);
   const [isNavigationWarningOpen, setIsNavigationWarningOpen] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState<'next' | 'previous' | null>(
+  const [pendingNavigation, setPendingNavigation] = useState<"next" | "previous" | null>(
     null
   );
 
@@ -88,15 +88,14 @@ export function NavigationControls({
     };
 
     // Add state to history for current step
-    const currentState = { step: currentStep, data: state };
-    window.history.replaceState(currentState, '', window.location.href);
+    window.history.replaceState({ step: currentStep }, "", window.location.href);
 
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener("popstate", handlePopState);
     };
-  }, [currentStep, state, saveSession, onNext, onPrevious]);
+  }, [currentStep, saveSession, onNext, onPrevious]);
 
   // Handle page unload (refresh, close)
   useEffect(() => {
@@ -107,17 +106,17 @@ export function NavigationControls({
       // Show warning if user has unsaved progress
       if (currentStep > 1) {
         const message =
-          'Vous avez des données non sauvegardées. Êtes-vous sûr de vouloir quitter?';
+          "Vous avez des données non sauvegardées. Êtes-vous sûr de vouloir quitter?";
         event.preventDefault();
         event.returnValue = message;
         return message;
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [currentStep, saveSession]);
 
@@ -129,8 +128,7 @@ export function NavigationControls({
     }
 
     // Add new state to history
-    const nextState = { step: currentStep + 1, data: state };
-    window.history.pushState(nextState, '', window.location.href);
+    window.history.pushState({ step: currentStep + 1 }, "", window.location.href);
 
     onNext?.();
   };
@@ -160,10 +158,10 @@ export function NavigationControls({
   };
 
   const formatLastSave = (date: Date) => {
-    return date.toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 

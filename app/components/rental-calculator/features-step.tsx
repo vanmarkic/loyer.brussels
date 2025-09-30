@@ -1,46 +1,57 @@
-'use client';
+"use client";
 
-import { useForm } from '@/app/context/form-context';
-import { useTranslations } from 'next-intl'; // Add this import
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { MinusCircle, PlusCircle } from 'lucide-react';
+import { useForm } from "@/app/context/form-context";
+import { useTranslations } from "next-intl"; // Add this import
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
 export function FeaturesStep() {
   const { state, dispatch } = useForm();
-  const t = useTranslations('FeaturesStep'); // Add this hook
+  const t = useTranslations("FeaturesStep"); // Add this hook
 
   const handleContinue = () => {
-    // Check if all options have been selected
-    const allSelected =
-      state.hasCentralHeating !== null &&
-      state.hasThermalRegulation !== null &&
-      state.hasDoubleGlazing !== null &&
-      state.hasSecondBathroom !== null &&
-      state.hasRecreationalSpaces !== null &&
-      state.hasStorageSpaces !== null &&
-      state.constructedBefore2000 !== null; // Add validation for construction year
-
-    if (allSelected) {
-      dispatch({ type: 'NEXT_STEP' });
+    // Set default values (false) for any unanswered questions
+    if (state.hasCentralHeating === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasCentralHeating", value: false });
     }
+    if (state.hasThermalRegulation === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasThermalRegulation", value: false });
+    }
+    if (state.hasDoubleGlazing === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasDoubleGlazing", value: false });
+    }
+    if (state.hasSecondBathroom === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasSecondBathroom", value: false });
+    }
+    if (state.hasRecreationalSpaces === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasRecreationalSpaces", value: false });
+    }
+    if (state.hasStorageSpaces === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "hasStorageSpaces", value: false });
+    }
+    if (state.constructedBefore2000 === null) {
+      dispatch({ type: "UPDATE_FIELD", field: "constructedBefore2000", value: false });
+    }
+
+    dispatch({ type: "NEXT_STEP" });
   };
 
   const handleBack = () => {
-    dispatch({ type: 'PREV_STEP' });
+    dispatch({ type: "PREV_STEP" });
   };
 
   // Helper function to create radio options with mobile-optimized layout
   const createRadioOption = (
     field:
-      | 'hasCentralHeating'
-      | 'hasThermalRegulation'
-      | 'hasDoubleGlazing'
-      | 'hasSecondBathroom'
-      | 'hasRecreationalSpaces'
-      | 'hasStorageSpaces'
-      | 'constructedBefore2000', // Add new field to type
+      | "hasCentralHeating"
+      | "hasThermalRegulation"
+      | "hasDoubleGlazing"
+      | "hasSecondBathroom"
+      | "hasRecreationalSpaces"
+      | "hasStorageSpaces"
+      | "constructedBefore2000", // Add new field to type
     label: string
   ) => {
     const value = state[field];
@@ -49,8 +60,8 @@ export function FeaturesStep() {
     let radioGroupValue: string | undefined;
 
     // For boolean fields (hasCentralHeating, etc.)
-    if (typeof value === 'boolean') {
-      radioGroupValue = value ? 'true' : 'false';
+    if (typeof value === "boolean") {
+      radioGroupValue = value ? "true" : "false";
     } else {
       radioGroupValue = undefined; // value is null
     }
@@ -63,9 +74,9 @@ export function FeaturesStep() {
             value={radioGroupValue} // Use the pre-calculated value
             onValueChange={(val) =>
               dispatch({
-                type: 'UPDATE_FIELD',
+                type: "UPDATE_FIELD",
                 field,
-                value: val === 'true' ? true : false,
+                value: val === "true" ? true : false,
               })
             }
             className="flex gap-4"
@@ -81,7 +92,7 @@ export function FeaturesStep() {
                   htmlFor={`${field}-true`}
                   className="flex items-center justify-center h-14 rounded-xl border-2 border-gray-200 bg-gray-50 cursor-pointer hover:bg-green-50 hover:border-green-300 peer-data-[state=checked]:border-green-500 peer-data-[state=checked]:bg-green-50 peer-data-[state=checked]:text-green-700 [&:has([data-state=checked])]:border-green-500 [&:has([data-state=checked])]:bg-green-50 [&:has([data-state=checked])]:text-green-700 font-semibold text-base transition-all"
                 >
-                  ✓ {t('yes')}
+                  ✓ {t("yes")}
                 </Label>
               </div>
               <div className="flex-1">
@@ -94,7 +105,7 @@ export function FeaturesStep() {
                   htmlFor={`${field}-false`}
                   className="flex items-center justify-center h-14 rounded-xl border-2 border-gray-200 bg-gray-50 cursor-pointer hover:bg-red-50 hover:border-red-300 peer-data-[state=checked]:border-red-500 peer-data-[state=checked]:bg-red-50 peer-data-[state=checked]:text-red-700 [&:has([data-state=checked])]:border-red-500 [&:has([data-state=checked])]:bg-red-50 [&:has([data-state=checked])]:text-red-700 font-semibold text-base transition-all"
                 >
-                  ✗ {t('no')}
+                  ✗ {t("no")}
                 </Label>
               </div>
             </>
@@ -107,20 +118,20 @@ export function FeaturesStep() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">{t('title')}</h2>
-        <p className="text-muted-foreground mt-2">{t('description')}</p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       <div className="space-y-6">
         {/* Features options */}
         <div className="grid gap-4">
-          {createRadioOption('hasCentralHeating', t('options.centralHeating'))}
-          {createRadioOption('hasThermalRegulation', t('options.thermalRegulation'))}
-          {createRadioOption('hasDoubleGlazing', t('options.doubleGlazing'))}
-          {createRadioOption('hasSecondBathroom', t('options.secondBathroom'))}
-          {createRadioOption('hasRecreationalSpaces', t('options.recreationalSpaces'))}
-          {createRadioOption('hasStorageSpaces', t('options.storageSpaces'))}
-          {createRadioOption('constructedBefore2000', t('options.constructedBefore2000'))}
+          {createRadioOption("hasCentralHeating", t("options.centralHeating"))}
+          {createRadioOption("hasThermalRegulation", t("options.thermalRegulation"))}
+          {createRadioOption("hasDoubleGlazing", t("options.doubleGlazing"))}
+          {createRadioOption("hasSecondBathroom", t("options.secondBathroom"))}
+          {createRadioOption("hasRecreationalSpaces", t("options.recreationalSpaces"))}
+          {createRadioOption("hasStorageSpaces", t("options.storageSpaces"))}
+          {createRadioOption("constructedBefore2000", t("options.constructedBefore2000"))}
         </div>
 
         {/* Garage Input Section */}
@@ -129,7 +140,7 @@ export function FeaturesStep() {
             htmlFor="numberOfGarages"
             className="block font-semibold text-lg text-gray-800 mb-4"
           >
-            {t('garageLabel')}
+            {t("garageLabel")}
           </Label>
           <div className="flex items-center justify-center gap-6">
             <Button
@@ -138,8 +149,8 @@ export function FeaturesStep() {
               size="icon"
               onClick={() =>
                 dispatch({
-                  type: 'UPDATE_FIELD',
-                  field: 'numberOfGarages',
+                  type: "UPDATE_FIELD",
+                  field: "numberOfGarages",
                   value: Math.max(0, state.numberOfGarages - 1),
                 })
               }
@@ -161,8 +172,8 @@ export function FeaturesStep() {
               size="icon"
               onClick={() =>
                 dispatch({
-                  type: 'UPDATE_FIELD',
-                  field: 'numberOfGarages',
+                  type: "UPDATE_FIELD",
+                  field: "numberOfGarages",
                   value: state.numberOfGarages + 1,
                 })
               }
@@ -178,25 +189,16 @@ export function FeaturesStep() {
       <div className="flex flex-col gap-4 pt-6">
         <Button
           onClick={handleContinue}
-          disabled={
-            state.hasCentralHeating === null ||
-            state.hasThermalRegulation === null ||
-            state.hasDoubleGlazing === null ||
-            state.hasSecondBathroom === null ||
-            state.hasRecreationalSpaces === null ||
-            state.hasStorageSpaces === null ||
-            state.constructedBefore2000 === null // Add check for construction year
-          }
           className="w-full bg-[#e05c6d] hover:bg-[#d04c5d] h-16 text-lg font-semibold rounded-xl"
         >
-          {t('continueButton')}
+          {t("continueButton")}
         </Button>
         <Button
           onClick={handleBack}
           variant="outline"
           className="w-full h-14 text-base border-2 hover:border-gray-400 rounded-xl"
         >
-          {t('backButton')}
+          {t("backButton")}
         </Button>
       </div>
     </div>

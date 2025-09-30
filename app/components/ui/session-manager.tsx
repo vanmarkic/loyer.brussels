@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useGlobalForm } from '@/app/context/global-form-context';
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useGlobalForm } from "@/app/context/global-form-context";
 
 interface SessionManagerContextType {
   isOnline: boolean;
   lastSync: Date | null;
-  sessionHealth: 'healthy' | 'warning' | 'error';
+  sessionHealth: "healthy" | "warning" | "error";
   autoSaveEnabled: boolean;
   setAutoSaveEnabled: (enabled: boolean) => void;
   forceSync: () => Promise<void>;
@@ -33,8 +33,8 @@ export function SessionManagerProvider({
   const { state, saveSession, loadSession, clearSession } = useGlobalForm();
   const [isOnline, setIsOnline] = useState(true);
   const [lastSync, setLastSync] = useState<Date | null>(null);
-  const [sessionHealth, setSessionHealth] = useState<'healthy' | 'warning' | 'error'>(
-    'healthy'
+  const [sessionHealth, setSessionHealth] = useState<"healthy" | "warning" | "error">(
+    "healthy"
   );
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
 
@@ -43,74 +43,17 @@ export function SessionManagerProvider({
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Set initial state
     setIsOnline(navigator.onLine);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
-
-  // Auto-save functionality
-  useEffect(() => {
-    if (!autoSaveEnabled) return;
-
-    const interval = setInterval(async () => {
-      try {
-        await forceSync();
-        setSessionHealth('healthy');
-      } catch (error) {
-        console.warn('Auto-save failed:', error);
-        setSessionHealth('warning');
-      }
-    }, autoSaveInterval * 1000);
-
-    return () => clearInterval(interval);
-  }, [autoSaveEnabled, autoSaveInterval]);
-
-  // Session health monitoring
-  useEffect(() => {
-    const checkSessionHealth = () => {
-      try {
-        const sessionAge = Date.now() - state.lastUpdated;
-        const maxAge = maxSessionAge * 60 * 60 * 1000; // Convert to ms
-
-        if (sessionAge > maxAge) {
-          setSessionHealth('error');
-        } else if (sessionAge > maxAge * 0.8) {
-          setSessionHealth('warning');
-        } else {
-          setSessionHealth('healthy');
-        }
-
-        // Check storage quota
-        if ('storage' in navigator && 'estimate' in navigator.storage) {
-          navigator.storage.estimate().then((estimate) => {
-            const usage = estimate.usage || 0;
-            const quota = estimate.quota || 1;
-            const usagePercentage = usage / quota;
-
-            if (usagePercentage > 0.9) {
-              setSessionHealth('error');
-            } else if (usagePercentage > 0.8) {
-              setSessionHealth('warning');
-            }
-          });
-        }
-      } catch (error) {
-        setSessionHealth('error');
-      }
-    };
-
-    const healthInterval = setInterval(checkSessionHealth, 60000); // Check every minute
-    checkSessionHealth(); // Initial check
-
-    return () => clearInterval(healthInterval);
-  }, [state.lastUpdated, maxSessionAge]);
 
   // Force sync function
   const forceSync = useCallback(async (): Promise<void> => {
@@ -124,6 +67,63 @@ export function SessionManagerProvider({
       }
     });
   }, [saveSession]);
+
+  // Auto-save functionality
+  useEffect(() => {
+    if (!autoSaveEnabled) return;
+
+    const interval = setInterval(async () => {
+      try {
+        await forceSync();
+        setSessionHealth("healthy");
+      } catch (error) {
+        console.warn("Auto-save failed:", error);
+        setSessionHealth("warning");
+      }
+    }, autoSaveInterval * 1000);
+
+    return () => clearInterval(interval);
+  }, [autoSaveEnabled, autoSaveInterval, forceSync]);
+
+  // Session health monitoring
+  useEffect(() => {
+    const checkSessionHealth = () => {
+      try {
+        const sessionAge = Date.now() - state.lastUpdated;
+        const maxAge = maxSessionAge * 60 * 60 * 1000; // Convert to ms
+
+        if (sessionAge > maxAge) {
+          setSessionHealth("error");
+        } else if (sessionAge > maxAge * 0.8) {
+          setSessionHealth("warning");
+        } else {
+          setSessionHealth("healthy");
+        }
+
+        // Check storage quota
+        if ("storage" in navigator && "estimate" in navigator.storage) {
+          navigator.storage.estimate().then((estimate) => {
+            const usage = estimate.usage || 0;
+            const quota = estimate.quota || 1;
+            const usagePercentage = usage / quota;
+
+            if (usagePercentage > 0.9) {
+              setSessionHealth("error");
+            } else if (usagePercentage > 0.8) {
+              setSessionHealth("warning");
+            }
+          });
+        }
+      } catch (error) {
+        setSessionHealth("error");
+      }
+    };
+
+    const healthInterval = setInterval(checkSessionHealth, 60000); // Check every minute
+    checkSessionHealth(); // Initial check
+
+    return () => clearInterval(healthInterval);
+  }, [state.lastUpdated, maxSessionAge]);
 
   // Get session statistics
   const getSessionStats = useCallback(() => {
@@ -141,21 +141,21 @@ export function SessionManagerProvider({
     const propertyFields = Object.values(state.propertyInfo);
     totalFields += propertyFields.length;
     completedFields += propertyFields.filter(
-      (field) => field !== null && field !== '' && field !== 0
+      (field) => field !== null && field !== "" && field !== 0
     ).length;
 
     // Count rental info fields
     const rentalFields = Object.values(state.rentalInfo);
     totalFields += rentalFields.length;
     completedFields += rentalFields.filter(
-      (field) => field !== null && field !== '' && field !== false
+      (field) => field !== null && field !== "" && field !== false
     ).length;
 
     // Count user profile fields
     const userFields = Object.values(state.userProfile);
     totalFields += userFields.length;
     completedFields += userFields.filter(
-      (field) => field !== null && field !== '' && field !== false
+      (field) => field !== null && field !== "" && field !== false
     ).length;
 
     const stepProgress = Math.round((completedFields / totalFields) * 100);
@@ -170,15 +170,15 @@ export function SessionManagerProvider({
   // Handle page visibility changes (auto-save when user switches tabs)
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden' && autoSaveEnabled) {
+      if (document.visibilityState === "hidden" && autoSaveEnabled) {
         forceSync().catch(console.warn);
       }
     };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [autoSaveEnabled, forceSync]);
 
@@ -202,13 +202,13 @@ export function SessionManagerProvider({
 export const useSessionManager = (): SessionManagerContextType => {
   const context = useContext(SessionManagerContext);
   if (!context) {
-    throw new Error('useSessionManager must be used within a SessionManagerProvider');
+    throw new Error("useSessionManager must be used within a SessionManagerProvider");
   }
   return context;
 };
 
 // Session health indicator component
-export function SessionHealthIndicator({ className = '' }: { className?: string }) {
+export function SessionHealthIndicator({ className = "" }: { className?: string }) {
   const { sessionHealth, isOnline, lastSync, getSessionStats } = useSessionManager();
   const [stats, setStats] = useState(getSessionStats());
 
@@ -221,31 +221,31 @@ export function SessionHealthIndicator({ className = '' }: { className?: string 
   }, [getSessionStats]);
 
   const getHealthColor = () => {
-    if (!isOnline) return 'text-red-600';
+    if (!isOnline) return "text-red-600";
     switch (sessionHealth) {
-      case 'healthy':
-        return 'text-green-600';
-      case 'warning':
-        return 'text-yellow-600';
-      case 'error':
-        return 'text-red-600';
+      case "healthy":
+        return "text-green-600";
+      case "warning":
+        return "text-yellow-600";
+      case "error":
+        return "text-red-600";
       default:
-        return 'text-gray-600';
+        return "text-gray-600";
     }
   };
 
   const getHealthMessage = () => {
     if (!isOnline)
-      return 'Hors ligne - les données seront synchronisées à la reconnexion';
+      return "Hors ligne - les données seront synchronisées à la reconnexion";
     switch (sessionHealth) {
-      case 'healthy':
-        return 'Session saine';
-      case 'warning':
-        return 'Session expirée bientôt';
-      case 'error':
-        return 'Session expirée ou erreur de stockage';
+      case "healthy":
+        return "Session saine";
+      case "warning":
+        return "Session expirée bientôt";
+      case "error":
+        return "Session expirée ou erreur de stockage";
       default:
-        return 'État inconnu';
+        return "État inconnu";
     }
   };
 
@@ -254,11 +254,11 @@ export function SessionHealthIndicator({ className = '' }: { className?: string 
       <div className={`flex items-center gap-1 ${getHealthColor()}`}>
         <div
           className={`w-2 h-2 rounded-full ${
-            isOnline && sessionHealth === 'healthy'
-              ? 'bg-green-500 animate-pulse'
-              : isOnline && sessionHealth === 'warning'
-              ? 'bg-yellow-500'
-              : 'bg-red-500'
+            isOnline && sessionHealth === "healthy"
+              ? "bg-green-500 animate-pulse"
+              : isOnline && sessionHealth === "warning"
+              ? "bg-yellow-500"
+              : "bg-red-500"
           }`}
         />
         <span>{getHealthMessage()}</span>

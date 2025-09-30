@@ -14,7 +14,9 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:screenshots": "playwright test --project=desktop-chromium --project=mobile-safari",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "test:email": "tsx scripts/test-email.ts",
+    "test:email:e2e": "vitest --run app/lib/__tests__/email.e2e.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "~1.2.2",
@@ -82,6 +84,7 @@
     "jsdom": "^26.1.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.20.6",
     "typescript": "^5",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^5.1.4",

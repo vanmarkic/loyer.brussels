@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useForm } from "@/app/context/form-context";
 import { useGlobalForm } from "@/app/context/global-form-context";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -30,8 +29,7 @@ import {
 import { propertyTypeLabels } from "@/lib/utils"; // Keep propertyTypeLabels if needed elsewhere, remove handlePDF
 
 export function ResultStep() {
-  const { state, dispatch } = useForm();
-  const globalForm = useGlobalForm();
+  const { state, updateRentalInfo, dispatch } = useGlobalForm();
   const t = useTranslations("ResultStep");
   const tFeatures = useTranslations("FeaturesStep");
   const tDetails = useTranslations("PropertyDetailsStep");

@@ -1,87 +1,61 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { useForm } from '@/app/context/form-context';
-import { useTranslations } from 'next-intl'; // Add this import
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { NavigationControls } from '@/app/components/ui/navigation-controls';
-import {
-  MinusCircle,
-  PlusCircle,
-  Calculator,
-  Home,
-  HelpCircle,
-  Lightbulb,
-} from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useState, useRef, useEffect } from "react";
+import { useGlobalForm } from "@/app/context/global-form-context";
+import { useTranslations } from "next-intl"; // Add this import
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NavigationControls } from "@/app/components/ui/navigation-controls";
+import { useHoldRepeat } from "@/app/hooks/use-hold-repeat";
+import { MinusCircle, PlusCircle, Calculator, Lightbulb } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function PropertyDetailsStep() {
-  const { state, dispatch } = useForm();
-  const t = useTranslations('PropertyDetailsStep'); // Add this hook
+  const { state, updatePropertyInfo, dispatch } = useGlobalForm();
+  const t = useTranslations("PropertyDetailsStep"); // Add this hook
   const [showAreaEstimator, setShowAreaEstimator] = useState(false);
-  const [estimationMethod, setEstimationMethod] = useState<'direct' | 'rooms' | 'visual'>(
-    'direct'
-  );
 
   // Auto-increment refs and state
-  const incrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const decrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const [isMouseDownOnInput, setIsMouseDownOnInput] = useState(false);
+  const sizeRef = useRef<number>(state.size);
+  useEffect(() => {
+    sizeRef.current = state.size;
+  }, [state.size]);
 
   // Helper functions for size increment/decrement
   const incrementSize = () => {
-    const newValue = (state.size || 0) + 1;
-    dispatch({ type: 'UPDATE_FIELD', field: 'size', value: newValue });
+    const newValue = (sizeRef.current || 0) + 1;
+    sizeRef.current = newValue;
+    dispatch({ type: "UPDATE_FIELD", field: "size", value: newValue });
   };
 
   const decrementSize = () => {
-    const newValue = Math.max(1, (state.size || 0) - 1);
-    dispatch({ type: 'UPDATE_FIELD', field: 'size', value: newValue });
+    const newValue = Math.max(1, (sizeRef.current || 0) - 1);
+    sizeRef.current = newValue;
+    dispatch({ type: "UPDATE_FIELD", field: "size", value: newValue });
   };
 
-  // Auto-increment handlers
-  const startIncrementing = () => {
-    incrementSize(); // Immediate increment
-    incrementIntervalRef.current = setInterval(incrementSize, 150); // Faster increment for better UX
-  };
-
-  const startDecrementing = () => {
-    decrementSize(); // Immediate decrement
-    decrementIntervalRef.current = setInterval(decrementSize, 150); // Faster increment for better UX
-  };
-
-  const stopIncrementing = () => {
-    if (incrementIntervalRef.current) {
-      clearInterval(incrementIntervalRef.current);
-      incrementIntervalRef.current = null;
-    }
-  };
-
-  const stopDecrementing = () => {
-    if (decrementIntervalRef.current) {
-      clearInterval(decrementIntervalRef.current);
-      decrementIntervalRef.current = null;
-    }
-  };
+  // Use the hold repeat hook for increment and decrement
+  const incrementControls = useHoldRepeat({ onRepeat: incrementSize, interval: 150 });
+  const decrementControls = useHoldRepeat({ onRepeat: decrementSize, interval: 150 });
 
   // Input-specific handlers
   const handleInputMouseDown = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent focus when clicking for increment
     setIsMouseDownOnInput(true);
-    startIncrementing();
+    incrementControls.start();
   };
 
   const handleInputMouseUp = () => {
     setIsMouseDownOnInput(false);
-    stopIncrementing();
+    incrementControls.stop();
   };
 
   const handleInputMouseLeave = () => {
     setIsMouseDownOnInput(false);
-    stopIncrementing();
+    incrementControls.stop();
   };
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -91,24 +65,37 @@ export function PropertyDetailsStep() {
     }
   };
 
-  // Cleanup intervals on unmount and add global mouse event listeners
+  // Cleanup intervals on unmount and add global stop event listeners
   useEffect(() => {
+    const stopAll = () => {
+      setIsMouseDownOnInput(false);
+      incrementControls.stop();
+      decrementControls.stop();
+    };
+
     const handleGlobalMouseUp = () => {
       if (isMouseDownOnInput) {
-        setIsMouseDownOnInput(false);
-        stopIncrementing();
+        stopAll();
       }
     };
 
-    // Add global mouse up listener to handle mouse up outside the input
-    document.addEventListener('mouseup', handleGlobalMouseUp);
+    const handleVisibility = () => {
+      if (document.hidden) stopAll();
+    };
+
+    document.addEventListener("mouseup", handleGlobalMouseUp);
+    window.addEventListener("pointerup", stopAll);
+    window.addEventListener("blur", stopAll);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      stopIncrementing();
-      stopDecrementing();
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      stopAll();
+      document.removeEventListener("mouseup", handleGlobalMouseUp);
+      window.removeEventListener("pointerup", stopAll);
+      window.removeEventListener("blur", stopAll);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [isMouseDownOnInput]);
+  }, [isMouseDownOnInput, incrementControls, decrementControls]);
 
   // Smart area estimation based on property type and rooms
   const estimateAreaFromRooms = () => {
@@ -123,50 +110,50 @@ export function PropertyDetailsStep() {
     const roomMultiplier = Math.max(1, state.bedrooms);
     const estimatedArea = Math.round(baseArea * roomMultiplier * 1.2); // Include common areas
 
-    dispatch({ type: 'UPDATE_FIELD', field: 'size', value: estimatedArea });
+    dispatch({ type: "UPDATE_FIELD", field: "size", value: estimatedArea });
     setShowAreaEstimator(false);
   };
 
   // Visual area estimation helper
   const setVisualEstimate = (size: number) => {
-    dispatch({ type: 'UPDATE_FIELD', field: 'size', value: size });
+    dispatch({ type: "UPDATE_FIELD", field: "size", value: size });
     setShowAreaEstimator(false);
   };
 
   const handleContinue = () => {
     if (state.size > 0 && state.propertyType) {
-      dispatch({ type: 'NEXT_STEP' });
+      dispatch({ type: "NEXT_STEP" });
     }
   };
 
   const handleBack = () => {
-    dispatch({ type: 'PREV_STEP' });
+    dispatch({ type: "PREV_STEP" });
   };
 
   // Update the incrementBedrooms function to limit to 4
   const incrementBedrooms = () => {
     if (state.bedrooms < 4) {
-      dispatch({ type: 'UPDATE_FIELD', field: 'bedrooms', value: state.bedrooms + 1 });
+      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms + 1 });
     }
   };
 
   const decrementBedrooms = () => {
     if (state.bedrooms > 0) {
-      dispatch({ type: 'UPDATE_FIELD', field: 'bedrooms', value: state.bedrooms - 1 });
+      dispatch({ type: "UPDATE_FIELD", field: "bedrooms", value: state.bedrooms - 1 });
     }
   };
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">{t('title')}</h2>
-        <p className="text-muted-foreground mt-2">{t('description')}</p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       <div className="space-y-8">
         <div>
           <Label htmlFor="size" className="text-xl font-semibold mb-4 block">
-            {t('sizeLabel')}
+            {t("sizeLabel")}
           </Label>
 
           {/* Area Input with Smart Help */}
@@ -176,11 +163,10 @@ export function PropertyDetailsStep() {
                 type="button"
                 variant="outline"
                 size="icon"
-                onMouseDown={startDecrementing}
-                onMouseUp={stopDecrementing}
-                onMouseLeave={stopDecrementing}
-                onTouchStart={startDecrementing}
-                onTouchEnd={stopDecrementing}
+                onPointerDown={decrementControls.start}
+                onPointerUp={decrementControls.stop}
+                onPointerLeave={decrementControls.stop}
+                onPointerCancel={decrementControls.stop}
                 disabled={!state.size || state.size <= 1}
                 className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Diminuer la superficie par 1m²"
@@ -192,15 +178,15 @@ export function PropertyDetailsStep() {
                   <Input
                     id="size"
                     type="text"
-                    value={state.size || ''}
+                    value={state.size || ""}
                     onChange={(e) => {
                       const value = e.target.value;
                       // Allow empty input or valid numbers
-                      if (value === '' || /^\d+$/.test(value)) {
-                        const numValue = value === '' ? 0 : parseInt(value, 10);
+                      if (value === "" || /^\d+$/.test(value)) {
+                        const numValue = value === "" ? 0 : parseInt(value, 10);
                         dispatch({
-                          type: 'UPDATE_FIELD',
-                          field: 'size',
+                          type: "UPDATE_FIELD",
+                          field: "size",
                           value: numValue,
                         });
                       }
@@ -220,11 +206,10 @@ export function PropertyDetailsStep() {
                 type="button"
                 variant="outline"
                 size="icon"
-                onMouseDown={startIncrementing}
-                onMouseUp={stopIncrementing}
-                onMouseLeave={stopIncrementing}
-                onTouchStart={startIncrementing}
-                onTouchEnd={stopIncrementing}
+                onPointerDown={incrementControls.start}
+                onPointerUp={incrementControls.stop}
+                onPointerLeave={incrementControls.stop}
+                onPointerCancel={incrementControls.stop}
                 className="h-16 w-16 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Augmenter la superficie par 1m²"
               >
@@ -327,8 +312,8 @@ export function PropertyDetailsStep() {
                       >
                         <Calculator className="h-4 w-4 mr-2" />
                         Estimer ~{Math.round(35 * Math.max(1, state.bedrooms) * 1.2)}m²
-                        {state.propertyType === 'house' && ' (maison)'}
-                        {state.propertyType === 'studio' && ' (studio)'}
+                        {state.propertyType === "house" && " (maison)"}
+                        {state.propertyType === "studio" && " (studio)"}
                       </Button>
                     </div>
                   )}
@@ -349,7 +334,7 @@ export function PropertyDetailsStep() {
         </div>
 
         <div>
-          <Label className="text-xl font-semibold mb-6 block">{t('bedroomsLabel')}</Label>
+          <Label className="text-xl font-semibold mb-6 block">{t("bedroomsLabel")}</Label>
           <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
             <Button
               type="button"
@@ -364,7 +349,7 @@ export function PropertyDetailsStep() {
             </Button>
             <div className="bg-white rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[120px] text-center">
               <span className="text-4xl font-bold text-gray-800">
-                {state.bedrooms === 4 ? t('bedroomsCountMax') : state.bedrooms}
+                {state.bedrooms === 4 ? t("bedroomsCountMax") : state.bedrooms}
               </span>
               <div className="text-sm text-gray-500 mt-1">chambres</div>
             </div>
@@ -389,8 +374,8 @@ export function PropertyDetailsStep() {
         onNext={handleContinue}
         onPrevious={handleBack}
         nextDisabled={state.size <= 0 || !state.propertyType}
-        nextText={t('continueButton')}
-        previousText={t('backButton')}
+        nextText={t("continueButton")}
+        previousText={t("backButton")}
         autoSaveEnabled={true}
         autoSaveInterval={30}
         className="mt-8"

@@ -1,14 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { useForm } from '@/app/context/form-context';
-import { useGlobalForm } from '@/app/context/global-form-context';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useState, useCallback } from "react";
+import { useGlobalForm } from "@/app/context/global-form-context";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { useLocale } from "next-intl";
 import {
   Heart,
   Users,
@@ -19,21 +18,20 @@ import {
   Phone,
   Shield,
   FileText,
-} from 'lucide-react';
+} from "lucide-react";
 
 export function WuuneResultStep() {
-  const { state } = useForm();
-  const globalForm = useGlobalForm();
+  const { state, getActualRent, getLivingSpace, getContactInfo } = useGlobalForm();
   const currentLocale = useLocale();
 
   // Get existing data to avoid re-asking
-  const existingRent = globalForm.getActualRent();
-  const contactInfo = globalForm.getContactInfo();
+  const existingRent = getActualRent();
+  const contactInfo = getContactInfo();
 
   // Local state for new inputs only - initialized once
-  const [actualRent, setActualRent] = useState<string>(() => existingRent || '');
-  const [email, setEmail] = useState<string>(() => contactInfo.email || '');
-  const [phone, setPhone] = useState<string>(() => contactInfo.phone || '');
+  const [actualRent, setActualRent] = useState<string>(() => existingRent || "");
+  const [email, setEmail] = useState<string>(() => contactInfo.email || "");
+  const [phone, setPhone] = useState<string>(() => contactInfo.phone || "");
   const [joinNewsletter, setJoinNewsletter] = useState(
     () => globalForm.state.userProfile.joinNewsletter
   );
@@ -82,65 +80,65 @@ export function WuuneResultStep() {
 
   // Déterminer le type de situation
   const getSituationType = () => {
-    if (!actualRent) return 'unknown';
-    if (rentDifferencePercentage <= -5) return 'below-grid'; // Loyer inférieur à la grille
-    if (rentDifferencePercentage > 20) return 'abusive'; // Loyer abusif (plus de 20% au-dessus)
-    if (rentDifferencePercentage > 5) return 'high-but-legal'; // Loyer élevé mais non abusif
-    return 'fair'; // Loyer équitable
+    if (!actualRent) return "unknown";
+    if (rentDifferencePercentage <= -5) return "below-grid"; // Loyer inférieur à la grille
+    if (rentDifferencePercentage > 20) return "abusive"; // Loyer abusif (plus de 20% au-dessus)
+    if (rentDifferencePercentage > 5) return "high-but-legal"; // Loyer élevé mais non abusif
+    return "fair"; // Loyer équitable
   };
 
   const situationType = getSituationType();
 
   const getMessageForSituation = () => {
     switch (situationType) {
-      case 'below-grid':
+      case "below-grid":
         return {
           icon: <CheckCircle className="h-16 w-16 text-green-600" />,
-          title: 'Félicitations ! Votre loyer est équitable',
+          title: "Félicitations ! Votre loyer est équitable",
           description:
             "Votre loyer est inférieur aux références légales. C'est une bonne nouvelle !",
-          color: 'green',
+          color: "green",
           action:
-            'Rejoignez Wuune pour défendre un encadrement encore plus strict et protéger tous les locataires.',
+            "Rejoignez Wuune pour défendre un encadrement encore plus strict et protéger tous les locataires.",
         };
-      case 'fair':
+      case "fair":
         return {
           icon: <CheckCircle className="h-16 w-16 text-blue-600" />,
           title: "Votre loyer respecte l'encadrement",
           description:
-            'Votre loyer est dans les normes légales établies par la Région bruxelloise.',
-          color: 'blue',
+            "Votre loyer est dans les normes légales établies par la Région bruxelloise.",
+          color: "blue",
           action:
-            'Rejoignez Wuune pour maintenir et améliorer cette protection légale pour tous.',
+            "Rejoignez Wuune pour maintenir et améliorer cette protection légale pour tous.",
         };
-      case 'high-but-legal':
+      case "high-but-legal":
         return {
           icon: <TrendingUp className="h-16 w-16 text-orange-600" />,
-          title: 'Votre loyer est élevé mais légal',
+          title: "Votre loyer est élevé mais légal",
           description:
-            'Votre loyer dépasse légèrement les références mais reste dans les limites autorisées.',
-          color: 'orange',
+            "Votre loyer dépasse légèrement les références mais reste dans les limites autorisées.",
+          color: "orange",
           action:
             "Vous pourriez négocier une baisse en mettant en avant d'éventuels défauts du logement. Wuune peut vous accompagner dans cette démarche.",
         };
-      case 'abusive':
+      case "abusive":
         return {
           icon: <AlertTriangle className="h-16 w-16 text-red-600" />,
-          title: '⚠️ Votre loyer semble abusif !',
+          title: "⚠️ Votre loyer semble abusif !",
           description:
-            'Votre loyer dépasse largement les références légales. Vous avez le droit de contester.',
-          color: 'red',
+            "Votre loyer dépasse largement les références légales. Vous avez le droit de contester.",
+          color: "red",
           action:
-            'Rejoignez Wuune dès maintenant ! Nous vous aiderons à faire valoir vos droits et à obtenir une baisse de loyer.',
+            "Rejoignez Wuune dès maintenant ! Nous vous aiderons à faire valoir vos droits et à obtenir une baisse de loyer.",
         };
       default:
         return {
           icon: <Heart className="h-16 w-16 text-gray-600" />,
-          title: 'Évaluez votre situation',
+          title: "Évaluez votre situation",
           description:
-            'Entrez votre loyer actuel pour obtenir une analyse personnalisée.',
-          color: 'gray',
-          action: 'Rejoignez Wuune pour défendre vos droits de locataire.',
+            "Entrez votre loyer actuel pour obtenir une analyse personnalisée.",
+          color: "gray",
+          action: "Rejoignez Wuune pour défendre vos droits de locataire.",
         };
     }
   };
@@ -168,9 +166,9 @@ export function WuuneResultStep() {
       <Card className="bg-gradient-to-r from-red-600 to-red-500 text-white">
         <CardContent className="p-8 text-center">
           <h3 className="text-xl font-medium mb-2">Loyer de référence légal</h3>
-          <div className="text-6xl font-bold mb-2">{state.medianRent || '...'} €</div>
+          <div className="text-6xl font-bold mb-2">{state.medianRent || "..."} €</div>
           <p className="text-sm opacity-90">
-            Fourchette : {state.minRent || 'N/A'} € - {state.maxRent || 'N/A'} €/mois
+            Fourchette : {state.minRent || "N/A"} € - {state.maxRent || "N/A"} €/mois
           </p>
         </CardContent>
       </Card>
@@ -192,7 +190,7 @@ export function WuuneResultStep() {
               <Input
                 id="actual-rent"
                 type="number"
-                placeholder={existingRent ? `Actuellement: ${existingRent}€` : 'Ex: 850'}
+                placeholder={existingRent ? `Actuellement: ${existingRent}€` : "Ex: 850"}
                 value={actualRent}
                 onChange={(e) => handleActualRentChange(e.target.value)}
                 className="text-xl font-semibold"
@@ -210,12 +208,12 @@ export function WuuneResultStep() {
                   <span>Différence avec la référence :</span>
                   <span
                     className={`font-semibold ${
-                      rentDifference > 0 ? 'text-red-600' : 'text-green-600'
+                      rentDifference > 0 ? "text-red-600" : "text-green-600"
                     }`}
                   >
-                    {rentDifference > 0 ? '+' : ''}
+                    {rentDifference > 0 ? "+" : ""}
                     {rentDifference.toFixed(0)} € (
-                    {rentDifferencePercentage > 0 ? '+' : ''}
+                    {rentDifferencePercentage > 0 ? "+" : ""}
                     {rentDifferencePercentage.toFixed(1)}%)
                   </span>
                 </div>

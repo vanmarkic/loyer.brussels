@@ -1,6 +1,6 @@
 "use server";
 
-import { supabaseAdmin } from "@/app/lib/supabase";
+import { supabaseAdmin } from "@/app/server/supabase-admin";
 import {
   sendContactNotification,
   sendContactConfirmation,

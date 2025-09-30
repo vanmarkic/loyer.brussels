@@ -1,6 +1,6 @@
 "use server";
 
-import { supabaseAdmin } from "@/app/lib/supabase";
+import { supabaseAdmin } from "@/app/server/supabase-admin";
 import { sendQuestionnaireConfirmation, QuestionnaireEmailData } from "@/app/lib/email";
 import type { GlobalFormState } from "@/app/data/global-form-types";
 

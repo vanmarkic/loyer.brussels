@@ -1,70 +1,70 @@
-'use client';
+"use client";
 
-import { useForm } from '@/app/context/form-context';
-import { useTranslations } from 'next-intl'; // Add this import
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { SaveContinue } from '@/app/components/ui/save-continue';
-import { AlertCircle, Loader2, Info } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AddressAutocomplete } from './address-autocomplete';
-import type { AddressResult } from '@/app/data/types'; // Import type from new location
+import { useGlobalForm } from "@/app/context/global-form-context";
+import { useTranslations } from "next-intl"; // Add this import
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { SaveContinue } from "@/app/components/ui/save-continue";
+import { AlertCircle, Loader2, Info } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AddressAutocomplete } from "./address-autocomplete";
+import type { AddressResult } from "@/app/data/types"; // Import type from new location
 
 export function AddressStep() {
-  const { state, dispatch, fetchDifficultyIndexAndCalculate, clearError } = useForm();
-  const t = useTranslations('AddressStep'); // Add this hook
+  const { state, updatePropertyInfo, updateCalculationResults, dispatch } =
+    useGlobalForm();
+  const t = useTranslations("AddressStep"); // Add this hook
 
   const handleCalculate = async () => {
-    if (state.postalCode && state.streetName && state.streetNumber) {
-      await fetchDifficultyIndexAndCalculate();
+    if (
+      state.propertyInfo.postalCode &&
+      state.propertyInfo.streetName &&
+      state.propertyInfo.streetNumber
+    ) {
+      // TODO: Implement difficulty index fetch and calculation
+      console.log("Calculate rent for:", state.propertyInfo);
     }
   };
 
   const handleBack = () => {
-    dispatch({ type: 'PREV_STEP' });
+    dispatch({ type: "SET_CURRENT_STEP", payload: Math.max(1, state.currentStep - 1) });
   };
 
   const handleAddressSelect = (address: AddressResult) => {
     // Clear any previous errors
-    clearError();
+    updateCalculationResults({ error: null, errorCode: null });
 
-    dispatch({ type: 'UPDATE_FIELD', field: 'postalCode', value: address.postcode });
-    dispatch({ type: 'UPDATE_FIELD', field: 'streetName', value: address.streetname_fr });
-    dispatch({
-      type: 'UPDATE_FIELD',
-      field: 'streetNumber',
-      value: address.house_number,
+    updatePropertyInfo({
+      postalCode: parseInt(address.postcode),
+      streetName: address.streetname_fr,
+      streetNumber: address.house_number,
     });
 
     // If we already have the difficulty index from the search, store it
     if (address.indice_synth_difficulte !== undefined) {
-      dispatch({
-        type: 'UPDATE_FIELD',
-        field: 'difficultyIndex',
-        value: address.indice_synth_difficulte,
-      });
+      updateCalculationResults({ difficultyIndex: address.indice_synth_difficulte });
     }
   };
 
   // Check if Supabase environment variables are available
   const hasSupabaseCredentials =
-    typeof window !== 'undefined' &&
+    typeof window !== "undefined" &&
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">{t('title')}</h2>
-        <p className="text-muted-foreground mt-2">{t('description')}</p>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
       </div>
 
       {!hasSupabaseCredentials && (
         <Alert className="mb-4 bg-amber-50 border-amber-200">
           <Info className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-800">
-            {t('demoModeAlert')}
+            {t("demoModeAlert")}
           </AlertDescription>
         </Alert>
       )}
@@ -72,32 +72,30 @@ export function AddressStep() {
       <div className="space-y-6 sm:space-y-4">
         <AddressAutocomplete
           onAddressSelect={handleAddressSelect}
-          label={t('autocompleteLabel')}
-          placeholder={t('autocompletePlaceholder')}
+          label={t("autocompleteLabel")}
+          placeholder={t("autocompletePlaceholder")}
         />
 
         <div className="pt-4 border-t border-gray-200">
           <p className="text-base sm:text-sm text-muted-foreground mb-4 sm:mb-3">
-            {t('manualEntryInstruction')}
+            {t("manualEntryInstruction")}
           </p>
 
           <div className="space-y-4 sm:space-y-3">
             <div>
               <Label htmlFor="postalCode" className="text-base sm:text-sm font-medium">
-                {t('postalCodeLabel')}
+                {t("postalCodeLabel")}
               </Label>
               <Input
                 id="postalCode"
-                value={state.postalCode}
+                value={state.propertyInfo.postalCode || ""}
                 onChange={(e) => {
-                  clearError();
-                  dispatch({
-                    type: 'UPDATE_FIELD',
-                    field: 'postalCode',
-                    value: e.target.value,
+                  updateCalculationResults({ error: null, errorCode: null });
+                  updatePropertyInfo({
+                    postalCode: parseInt(e.target.value) || 0,
                   });
                 }}
-                placeholder={t('postalCodePlaceholder')}
+                placeholder={t("postalCodePlaceholder")}
                 className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
                 inputMode="numeric"
               />
@@ -105,40 +103,36 @@ export function AddressStep() {
 
             <div>
               <Label htmlFor="streetName" className="text-base sm:text-sm font-medium">
-                {t('streetNameLabel')}
+                {t("streetNameLabel")}
               </Label>
               <Input
                 id="streetName"
-                value={state.streetName}
+                value={state.propertyInfo.streetName}
                 onChange={(e) => {
-                  clearError();
-                  dispatch({
-                    type: 'UPDATE_FIELD',
-                    field: 'streetName',
-                    value: e.target.value,
+                  updateCalculationResults({ error: null, errorCode: null });
+                  updatePropertyInfo({
+                    streetName: e.target.value,
                   });
                 }}
-                placeholder={t('streetNamePlaceholder')}
+                placeholder={t("streetNamePlaceholder")}
                 className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
               />
             </div>
 
             <div>
               <Label htmlFor="streetNumber" className="text-base sm:text-sm font-medium">
-                {t('streetNumberLabel')}
+                {t("streetNumberLabel")}
               </Label>
               <Input
                 id="streetNumber"
-                value={state.streetNumber}
+                value={state.propertyInfo.streetNumber}
                 onChange={(e) => {
-                  clearError();
-                  dispatch({
-                    type: 'UPDATE_FIELD',
-                    field: 'streetNumber',
-                    value: e.target.value,
+                  updateCalculationResults({ error: null, errorCode: null });
+                  updatePropertyInfo({
+                    streetNumber: e.target.value,
                   });
                 }}
-                placeholder={t('streetNumberPlaceholder')}
+                placeholder={t("streetNumberPlaceholder")}
                 className="mt-2 sm:mt-1 h-12 sm:h-10 text-lg sm:text-base touch-manipulation"
                 inputMode="numeric"
               />
@@ -147,10 +141,10 @@ export function AddressStep() {
         </div>
       </div>
 
-      {state.error && (
+      {state.calculationResults.error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription>{state.error}</AlertDescription>
+          <AlertDescription>{state.calculationResults.error}</AlertDescription>
         </Alert>
       )}
 
@@ -160,18 +154,20 @@ export function AddressStep() {
           variant="outline"
           className="w-full sm:flex-1 h-12 sm:h-10 text-base sm:text-base touch-manipulation"
         >
-          {t('backButton')}
+          {t("backButton")}
         </Button>
         <SaveContinue
           onContinue={handleCalculate}
           continueText={
-            state.isLoading ? `${t('calculatingButton')}...` : t('calculateButton')
+            state.calculationResults.isLoading
+              ? `${t("calculatingButton")}...`
+              : t("calculateButton")
           }
           disabled={
-            !state.postalCode ||
-            !state.streetName ||
-            !state.streetNumber ||
-            state.isLoading
+            !state.propertyInfo.postalCode ||
+            !state.propertyInfo.streetName ||
+            !state.propertyInfo.streetNumber ||
+            state.calculationResults.isLoading
           }
           isLastStep={true}
           autoSaveInterval={30}

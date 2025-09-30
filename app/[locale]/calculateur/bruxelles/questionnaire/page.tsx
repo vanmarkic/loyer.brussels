@@ -96,40 +96,47 @@ function DetailedQuestionnaireContent() {
   });
 
   // Helper function to update both local and global state
-  const updateData = useCallback((updates: Partial<QuestionnaireData> | ((prev: QuestionnaireData) => Partial<QuestionnaireData>)) => {
-    setData((prev: QuestionnaireData) => {
-      const computedUpdates = typeof updates === "function" ? updates(prev) : updates;
-      const newData = { ...prev, ...computedUpdates };
+  const updateData = useCallback(
+    (
+      updates:
+        | Partial<QuestionnaireData>
+        | ((prev: QuestionnaireData) => Partial<QuestionnaireData>)
+    ) => {
+      setData((prev: QuestionnaireData) => {
+        const computedUpdates = typeof updates === "function" ? updates(prev) : updates;
+        const newData = { ...prev, ...computedUpdates };
 
-      // Schedule global context updates for after render
-      Promise.resolve().then(() => {
-        updateRentalInfo({
-          leaseType: newData.leaseType,
-          leaseStartDate: newData.leaseStartDate,
-          rentIndexation: newData.rentIndexation,
-          boilerMaintenance: newData.boilerMaintenance,
-          fireInsurance: newData.fireInsurance,
+        // Schedule global context updates for after render
+        Promise.resolve().then(() => {
+          updateRentalInfo({
+            leaseType: newData.leaseType,
+            leaseStartDate: newData.leaseStartDate,
+            rentIndexation: newData.rentIndexation,
+            boilerMaintenance: newData.boilerMaintenance,
+            fireInsurance: newData.fireInsurance,
+          });
+
+          updateHouseholdInfo({
+            monthlyIncome: newData.monthlyIncome,
+            householdComposition: newData.householdComposition,
+            paymentDelays: newData.paymentDelays,
+            evictionThreats: newData.evictionThreats,
+            mediationAttempts: newData.mediationAttempts,
+          });
+
+          updatePropertyIssues({
+            healthIssues: newData.healthIssues,
+            majorDefects: newData.majorDefects,
+            positiveAspects: newData.positiveAspects,
+            additionalComments: newData.additionalComments,
+          });
         });
 
-        updateHouseholdInfo({
-          monthlyIncome: newData.monthlyIncome,
-          householdComposition: newData.householdComposition,
-          paymentDelays: newData.paymentDelays,
-          evictionThreats: newData.evictionThreats,
-          mediationAttempts: newData.mediationAttempts,
-        });
-
-        updatePropertyIssues({
-          healthIssues: newData.healthIssues,
-          majorDefects: newData.majorDefects,
-          positiveAspects: newData.positiveAspects,
-          additionalComments: newData.additionalComments,
-        });
+        return newData;
       });
-
-      return newData;
-    });
-  }, [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]);
+    },
+    [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]
+  );
 
   const sections = [
     t("sections.retrievedInfo"),
@@ -191,21 +198,20 @@ function DetailedQuestionnaireContent() {
     }
   };
 
-  const handleCheckboxChange = useCallback((
-    field: keyof QuestionnaireData,
-    value: string,
-    checked: boolean
-  ) => {
-    updateData((prev: QuestionnaireData) => {
-      const currentArray = (prev[field] as unknown as string[]) || [];
-      const nextArray = checked
-        ? [...currentArray, value]
-        : currentArray.filter((item) => item !== value);
-      // Ensure uniqueness to avoid duplicates during rapid toggles
-      const uniqueNextArray = Array.from(new Set(nextArray));
-      return { [field]: uniqueNextArray } as Partial<QuestionnaireData>;
-    });
-  }, [updateData]);
+  const handleCheckboxChange = useCallback(
+    (field: keyof QuestionnaireData, value: string, checked: boolean) => {
+      updateData((prev: QuestionnaireData) => {
+        const currentArray = (prev[field] as unknown as string[]) || [];
+        const nextArray = checked
+          ? [...currentArray, value]
+          : currentArray.filter((item) => item !== value);
+        // Ensure uniqueness to avoid duplicates during rapid toggles
+        const uniqueNextArray = Array.from(new Set(nextArray));
+        return { [field]: uniqueNextArray } as Partial<QuestionnaireData>;
+      });
+    },
+    [updateData]
+  );
 
   const renderSection = () => {
     switch (currentSection) {
@@ -288,9 +294,7 @@ function DetailedQuestionnaireContent() {
                 <Label>{t("personalSituation.leaseType")}</Label>
                 <RadioGroup
                   value={data.leaseType}
-                  onValueChange={(value) =>
-                    updateData({ leaseType: value })
-                  }
+                  onValueChange={(value) => updateData({ leaseType: value })}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="9-years" id="9-years" />
@@ -319,9 +323,7 @@ function DetailedQuestionnaireContent() {
                   id="leaseStartDate"
                   type="date"
                   value={data.leaseStartDate}
-                  onChange={(e) =>
-                    updateData({ leaseStartDate: e.target.value })
-                  }
+                  onChange={(e) => updateData({ leaseStartDate: e.target.value })}
                 />
               </div>
 
@@ -334,9 +336,7 @@ function DetailedQuestionnaireContent() {
                   type="number"
                   placeholder={t("personalSituation.monthlyIncomePlaceholder")}
                   value={data.monthlyIncome}
-                  onChange={(e) =>
-                    updateData({ monthlyIncome: e.target.value })
-                  }
+                  onChange={(e) => updateData({ monthlyIncome: e.target.value })}
                 />
               </div>
 
@@ -344,9 +344,7 @@ function DetailedQuestionnaireContent() {
                 <Label>{t("personalSituation.householdComposition")}</Label>
                 <RadioGroup
                   value={data.householdComposition}
-                  onValueChange={(value) =>
-                    updateData({ householdComposition: value })
-                  }
+                  onValueChange={(value) => updateData({ householdComposition: value })}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="single" id="single" />
@@ -371,9 +369,7 @@ function DetailedQuestionnaireContent() {
                 <Label>{t("personalSituation.rentIndexation")}</Label>
                 <RadioGroup
                   value={data.rentIndexation}
-                  onValueChange={(value) =>
-                    updateData({ rentIndexation: value })
-                  }
+                  onValueChange={(value) => updateData({ rentIndexation: value })}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes-recent" id="yes-recent" />
@@ -542,13 +538,11 @@ function DetailedQuestionnaireContent() {
               <Label htmlFor="additionalComments">
                 {t("positiveAspects.additionalComments")}
               </Label>
-                <Textarea
+              <Textarea
                 id="additionalComments"
                 placeholder={t("positiveAspects.additionalCommentsPlaceholder")}
                 value={data.additionalComments}
-                onChange={(e) =>
-                  updateData({ additionalComments: e.target.value })
-                }
+                onChange={(e) => updateData({ additionalComments: e.target.value })}
                 rows={4}
               />
             </div>

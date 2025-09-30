@@ -1,50 +1,50 @@
-'use client';
+"use client";
 
-import { useForm } from '@/app/context/form-context';
-import { useTranslations } from 'next-intl';
-import { EnhancedProgress } from '@/app/components/ui/enhanced-progress';
-import { useState, useEffect, Suspense } from 'react';
-import dynamic from 'next/dynamic';
+import { useGlobalForm } from "@/app/context/global-form-context";
+import { useTranslations } from "next-intl";
+import { EnhancedProgress } from "@/app/components/ui/enhanced-progress";
+import { useState, useEffect, Suspense } from "react";
+import dynamic from "next/dynamic";
 
 // Dynamically import step components
 const PropertyTypeStep = dynamic(
-  () => import('./property-type-step').then((mod) => mod.PropertyTypeStep),
+  () => import("./property-type-step").then((mod) => mod.PropertyTypeStep),
   {
     ssr: false,
     loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
   }
 );
 const PropertyDetailsStep = dynamic(
-  () => import('./property-details-step').then((mod) => mod.PropertyDetailsStep),
+  () => import("./property-details-step").then((mod) => mod.PropertyDetailsStep),
   {
     ssr: false,
     loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
   }
 );
 const FeaturesStep = dynamic(
-  () => import('./features-step').then((mod) => mod.FeaturesStep),
+  () => import("./features-step").then((mod) => mod.FeaturesStep),
   {
     ssr: false,
     loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
   }
 );
-const EnergyStep = dynamic(() => import('./energy-step').then((mod) => mod.EnergyStep), {
+const EnergyStep = dynamic(() => import("./energy-step").then((mod) => mod.EnergyStep), {
   ssr: false,
   loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
 });
 const AddressStep = dynamic(
-  () => import('./address-step').then((mod) => mod.AddressStep),
+  () => import("./address-step").then((mod) => mod.AddressStep),
   {
     ssr: false,
     loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
   }
 );
-const ResultStep = dynamic(() => import('./result-step').then((mod) => mod.ResultStep), {
+const ResultStep = dynamic(() => import("./result-step").then((mod) => mod.ResultStep), {
   ssr: false,
   loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
 });
 const WuuneResultStep = dynamic(
-  () => import('./wuune-result-step').then((mod) => mod.WuuneResultStep),
+  () => import("./wuune-result-step").then((mod) => mod.WuuneResultStep),
   {
     ssr: false,
     loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded"></div>,
@@ -52,8 +52,8 @@ const WuuneResultStep = dynamic(
 );
 
 export function RentalCalculator() {
-  const { state } = useForm();
-  const t = useTranslations('RentalCalculator');
+  const { state } = useGlobalForm();
+  const t = useTranslations("RentalCalculator");
   const [startTime] = useState(Date.now());
   const [elapsedMinutes, setElapsedMinutes] = useState(0);
 
@@ -71,45 +71,45 @@ export function RentalCalculator() {
   const calculatorSteps = [
     {
       id: 1,
-      name: 'Type de propriété',
+      name: "Type de propriété",
       estimatedMinutes: 1,
-      isCompleted: state.step > 1,
-      isActive: state.step === 1,
+      isCompleted: state.currentStep > 1,
+      isActive: state.currentStep === 1,
     },
     {
       id: 2,
-      name: 'Détails du bien',
+      name: "Détails du bien",
       estimatedMinutes: 2,
-      isCompleted: state.step > 2,
-      isActive: state.step === 2,
+      isCompleted: state.currentStep > 2,
+      isActive: state.currentStep === 2,
     },
     {
       id: 3,
-      name: 'Caractéristiques',
+      name: "Caractéristiques",
       estimatedMinutes: 2,
-      isCompleted: state.step > 3,
-      isActive: state.step === 3,
+      isCompleted: state.currentStep > 3,
+      isActive: state.currentStep === 3,
     },
     {
       id: 4,
-      name: 'Performance énergétique',
+      name: "Performance énergétique",
       estimatedMinutes: 1,
-      isCompleted: state.step > 4,
-      isActive: state.step === 4,
+      isCompleted: state.currentStep > 4,
+      isActive: state.currentStep === 4,
     },
     {
       id: 5,
-      name: 'Adresse',
+      name: "Adresse",
       estimatedMinutes: 2,
-      isCompleted: state.step > 5,
-      isActive: state.step === 5,
+      isCompleted: state.currentStep > 5,
+      isActive: state.currentStep === 5,
     },
     {
       id: 6,
-      name: 'Résultats',
+      name: "Résultats",
       estimatedMinutes: 0,
-      isCompleted: state.step > 6,
-      isActive: state.step === 6,
+      isCompleted: state.currentStep > 6,
+      isActive: state.currentStep === 6,
     },
   ];
 
@@ -121,11 +121,11 @@ export function RentalCalculator() {
 
   return (
     <div className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-4 sm:p-6 transition-all duration-1000 min-h-[500px] sm:min-h-[400px]">
-      {state.step < totalSteps && (
+      {state.currentStep < totalSteps && (
         <div className="mb-4 sm:mb-6">
           <EnhancedProgress
             steps={calculatorSteps}
-            currentStep={state.step}
+            currentStep={state.currentStep}
             totalTimeMinutes={totalTimeMinutes}
             elapsedTimeMinutes={elapsedMinutes}
             showTimeEstimate={true}
@@ -136,12 +136,12 @@ export function RentalCalculator() {
 
       {/* Render dynamic components */}
       <Suspense fallback={<div className="animate-pulse bg-gray-200 h-32 rounded"></div>}>
-        {state.step === 1 && <PropertyTypeStep />}
-        {state.step === 2 && <PropertyDetailsStep />}
-        {state.step === 3 && <FeaturesStep />}
-        {state.step === 4 && <EnergyStep />}
-        {state.step === 5 && <AddressStep />}
-        {state.step === 6 && <WuuneResultStep />}
+        {state.currentStep === 1 && <PropertyTypeStep />}
+        {state.currentStep === 2 && <PropertyDetailsStep />}
+        {state.currentStep === 3 && <FeaturesStep />}
+        {state.currentStep === 4 && <EnergyStep />}
+        {state.currentStep === 5 && <AddressStep />}
+        {state.currentStep === 6 && <WuuneResultStep />}
       </Suspense>
     </div>
   );

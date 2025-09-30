@@ -1,3 +1,5 @@
+import type { PropertyType, EnergyClass, PropertyState } from "./types";
+
 // Unified data types for the entire calculator flow
 export interface UserProfile {
   // Contact information
@@ -16,16 +18,16 @@ export interface PropertyInformation {
   streetNumber: string;
 
   // Basic property info
-  propertyType: string;
+  propertyType: PropertyType | "";
   size: number; // Living space in m²
   bedrooms: number;
   bathrooms: number;
 
   // Features
   numberOfGarages: number;
-  energyClass: string;
+  energyClass: EnergyClass | "";
   constructedBefore2000: boolean | null;
-  propertyState: string | null;
+  propertyState: PropertyState | null;
 
   // Amenities
   hasCentralHeating: boolean | null;
@@ -79,7 +81,7 @@ export interface CalculationResults {
 export interface GlobalFormState {
   // Flow control
   currentStep: number;
-  currentPage: 'calculator' | 'results' | 'questionnaire';
+  currentPage: "calculator" | "results" | "questionnaire";
 
   // User information
   userProfile: UserProfile;

@@ -1,13 +1,12 @@
 import { supabase } from "@/app/lib/supabase";
 import { IAddressRepository } from "../../interfaces/address";
 import { AddressResult, SearchServiceResponse } from "../../types";
+import { parseAddressQuery } from "@/app/lib/address/parse-query";
 
-// Helper function to check for Supabase credentials
+// Helper function to check for Supabase credentials (read-only queries only need anon key)
 function hasSupabaseCredentials(): boolean {
   return (
-    !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-    !!process.env.NEXT_PUBLIC_SERVICE_KEY
+    !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 }
 
@@ -57,35 +56,8 @@ export class SupabaseAddressRepository implements IAddressRepository {
     }
 
     try {
-      // --- Address Parsing Logic (copied from search-addresses.ts) ---
-      const cleanedQuery = query.trim();
-      let postalCode: string | null = null;
-      let houseNumber: string | null = null;
-      let streetQuery: string = "";
-      const postalCodeRegex = /\b(1\d{3})\b/;
-      const houseNumberRegex = /\b(\d+[a-zA-Z]*)\b/g;
-
-      const postalCodeMatch = cleanedQuery.match(postalCodeRegex);
-      if (postalCodeMatch) {
-        postalCode = postalCodeMatch[1];
-      }
-
-      const potentialHouseNumbers = [...cleanedQuery.matchAll(houseNumberRegex)]
-        .map((m) => m[1])
-        .filter((num) => num !== postalCode);
-      if (potentialHouseNumbers.length > 0) {
-        houseNumber = potentialHouseNumbers[0];
-      }
-
-      let remainingQuery = cleanedQuery;
-      if (postalCode) {
-        remainingQuery = remainingQuery.replace(postalCode, "");
-      }
-      if (houseNumber) {
-        remainingQuery = remainingQuery.replace(houseNumber, "");
-      }
-      streetQuery = remainingQuery.replace(/\s+/g, " ").trim();
-      // --- End Address Parsing Logic ---
+      // Parse the address query using the extracted utility
+      const { postalCode, houseNumber, streetQuery } = parseAddressQuery(query);
 
       if (!streetQuery) {
         return {

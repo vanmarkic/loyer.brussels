@@ -1,45 +1,52 @@
 "use client";
 
-import { useForm } from "@/app/context/form-context";
+import { useGlobalForm } from "@/app/context/global-form-context";
 import { useTranslations } from "next-intl"; // Add this import
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { MinusCircle, PlusCircle } from "lucide-react";
+import type { PropertyInformation } from "@/app/data/global-form-types";
 
 export function FeaturesStep() {
-  const { state, dispatch } = useForm();
+  const { state, updatePropertyInfo, dispatch } = useGlobalForm();
   const t = useTranslations("FeaturesStep"); // Add this hook
 
   const handleContinue = () => {
     // Set default values (false) for any unanswered questions
-    if (state.hasCentralHeating === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasCentralHeating", value: false });
+    const updates: Partial<PropertyInformation> = {};
+
+    if (state.propertyInfo.hasCentralHeating === null) {
+      updates.hasCentralHeating = false;
     }
-    if (state.hasThermalRegulation === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasThermalRegulation", value: false });
+    if (state.propertyInfo.hasThermalRegulation === null) {
+      updates.hasThermalRegulation = false;
     }
-    if (state.hasDoubleGlazing === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasDoubleGlazing", value: false });
+    if (state.propertyInfo.hasDoubleGlazing === null) {
+      updates.hasDoubleGlazing = false;
     }
-    if (state.hasSecondBathroom === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasSecondBathroom", value: false });
+    if (state.propertyInfo.hasSecondBathroom === null) {
+      updates.hasSecondBathroom = false;
     }
-    if (state.hasRecreationalSpaces === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasRecreationalSpaces", value: false });
+    if (state.propertyInfo.hasRecreationalSpaces === null) {
+      updates.hasRecreationalSpaces = false;
     }
-    if (state.hasStorageSpaces === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "hasStorageSpaces", value: false });
+    if (state.propertyInfo.hasStorageSpaces === null) {
+      updates.hasStorageSpaces = false;
     }
-    if (state.constructedBefore2000 === null) {
-      dispatch({ type: "UPDATE_FIELD", field: "constructedBefore2000", value: false });
+    if (state.propertyInfo.constructedBefore2000 === null) {
+      updates.constructedBefore2000 = false;
     }
 
-    dispatch({ type: "NEXT_STEP" });
+    if (Object.keys(updates).length > 0) {
+      updatePropertyInfo(updates);
+    }
+
+    dispatch({ type: "SET_CURRENT_STEP", payload: state.currentStep + 1 });
   };
 
   const handleBack = () => {
-    dispatch({ type: "PREV_STEP" });
+    dispatch({ type: "SET_CURRENT_STEP", payload: Math.max(1, state.currentStep - 1) });
   };
 
   // Helper function to create radio options with mobile-optimized layout
@@ -54,7 +61,7 @@ export function FeaturesStep() {
       | "constructedBefore2000", // Add new field to type
     label: string
   ) => {
-    const value = state[field];
+    const value = state.propertyInfo[field];
 
     // Determine the value for the RadioGroup explicitly
     let radioGroupValue: string | undefined;
@@ -73,10 +80,8 @@ export function FeaturesStep() {
           <RadioGroup
             value={radioGroupValue} // Use the pre-calculated value
             onValueChange={(val) =>
-              dispatch({
-                type: "UPDATE_FIELD",
-                field,
-                value: val === "true" ? true : false,
+              updatePropertyInfo({
+                [field]: val === "true" ? true : false,
               })
             }
             className="flex gap-4"
@@ -148,13 +153,11 @@ export function FeaturesStep() {
               variant="outline"
               size="icon"
               onClick={() =>
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "numberOfGarages",
-                  value: Math.max(0, state.numberOfGarages - 1),
+                updatePropertyInfo({
+                  numberOfGarages: Math.max(0, state.propertyInfo.numberOfGarages - 1),
                 })
               }
-              disabled={state.numberOfGarages === 0}
+              disabled={state.propertyInfo.numberOfGarages === 0}
               className="h-14 w-14 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0"
               aria-label="Diminuer le nombre de garages"
             >
@@ -162,7 +165,7 @@ export function FeaturesStep() {
             </Button>
             <div className="bg-gray-50 rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[100px] text-center">
               <span className="text-3xl font-bold text-gray-800">
-                {state.numberOfGarages}
+                {state.propertyInfo.numberOfGarages}
               </span>
               <div className="text-sm text-gray-500 mt-1">garage(s)</div>
             </div>
@@ -171,10 +174,8 @@ export function FeaturesStep() {
               variant="outline"
               size="icon"
               onClick={() =>
-                dispatch({
-                  type: "UPDATE_FIELD",
-                  field: "numberOfGarages",
-                  value: state.numberOfGarages + 1,
+                updatePropertyInfo({
+                  numberOfGarages: state.propertyInfo.numberOfGarages + 1,
                 })
               }
               className="h-14 w-14 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0"

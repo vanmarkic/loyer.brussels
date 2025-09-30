@@ -65,11 +65,41 @@ The workflow will be tested on the next:
 - Pull request to `main` or `develop` branch
 - Manual workflow trigger
 
+## Permissions Fix
+
+Added permissions block to allow PR comments:
+
+```yaml
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+```
+
+Also added error handling to prevent workflow failure if comment posting fails:
+
+```yaml
+- name: Comment test results on PR
+  if: github.event_name == 'pull_request'
+  continue-on-error: true  # Don't fail workflow if comment fails
+  uses: actions/github-script@v7
+  with:
+    script: |
+      try {
+        await github.rest.issues.createComment({...});
+      } catch (error) {
+        console.log('Could not post comment:', error.message);
+      }
+```
+
 ## Status
 ✅ **FIXED** - Ready to commit and push
 
 ---
 
 **Date**: September 30, 2025  
-**Issue**: Deprecated `actions/upload-artifact@v3`  
-**Resolution**: Updated all actions to latest versions (v4/v7)
+**Issue**: Deprecated `actions/upload-artifact@v3` + Missing permissions  
+**Resolution**: Updated all actions to latest versions (v4/v7) + Added permissions block

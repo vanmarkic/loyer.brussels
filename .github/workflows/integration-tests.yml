@@ -10,6 +10,10 @@ on:
 jobs:
   integration-test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
 
     strategy:
       matrix:
@@ -48,13 +52,18 @@ jobs:
 
       - name: Comment test results on PR
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ Integration tests passed successfully!'
-            })
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '✅ Integration tests passed successfully!'
+              });
+            } catch (error) {
+              console.log('Could not post comment (permissions may be required):', error.message);
+            }
 

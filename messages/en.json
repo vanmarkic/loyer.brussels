@@ -2,6 +2,14 @@
   "greeting": "Hello!",
   "main_title": "HOW MUCH DOES IT COST TO RENT A PROPERTY IN BRUSSELS?",
   "start_button": "Start",
+  "NotFound": {
+    "title": "Page not found",
+    "code": "404",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to home",
+    "calculator": "Rent calculator",
+    "contact": "Contact us"
+  },
   "test_subtitle": "Take the test!",
   "test_description": "Whether you are a current or future tenant or landlord, this site will allow you to find out the indicative reference rent for the property you rent or plan to rent, taking into account its location and main characteristics.",
   "info_box_text": "The rent grid website has been updated to make the calculation of the reference rent more transparent.",

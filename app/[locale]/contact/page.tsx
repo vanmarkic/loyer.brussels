@@ -328,50 +328,58 @@ function ContactPageContent() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex items-start space-x-2">
+                  <label
+                    htmlFor="newsletter"
+                    className="flex items-start gap-3 cursor-pointer p-3 -m-3 rounded hover:bg-gray-50 transition-colors"
+                  >
                     <Checkbox
                       id="newsletter"
                       checked={formData.newsletter}
                       onCheckedChange={(checked) =>
                         handleCheckboxChange("newsletter", checked as boolean)
                       }
+                      className="mt-0.5"
                     />
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="newsletter" className="text-sm text-gray-700">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="text-sm text-gray-700">
                           Je souhaite m&apos;inscrire à la newsletter pour recevoir les
                           actualités du collectif
-                        </label>
+                        </span>
                         {isJoiningWuune && userProfile.joinNewsletter && (
-                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded inline-block w-fit">
                             ✓ Pré-rempli
                           </span>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </label>
 
-                  <div className="flex items-start space-x-2">
+                  <label
+                    htmlFor="assembly"
+                    className="flex items-start gap-3 cursor-pointer p-3 -m-3 rounded hover:bg-gray-50 transition-colors"
+                  >
                     <Checkbox
                       id="assembly"
                       checked={formData.assembly}
                       onCheckedChange={(checked) =>
                         handleCheckboxChange("assembly", checked as boolean)
                       }
+                      className="mt-0.5"
                     />
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="assembly" className="text-sm text-gray-700">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <span className="text-sm text-gray-700">
                           Je souhaite être invité(e) aux prochaines assemblées locales
-                        </label>
+                        </span>
                         {isJoiningWuune && userProfile.joinAssembly && (
-                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded inline-block w-fit">
                             ✓ Pré-rempli
                           </span>
                         )}
                       </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-lg">

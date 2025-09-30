@@ -3,9 +3,25 @@
  * Tests the complete flow: validation -> database -> email sending
  */
 
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, afterAll, vi } from "vitest";
 import { submitContactForm, ContactFormData } from "../send-contact";
 import { supabaseAdmin } from "@/app/lib/supabase";
+
+// Mock the email module to avoid hitting Resend API in tests
+vi.mock("@/app/lib/email", () => ({
+  sendContactNotification: vi.fn().mockResolvedValue({
+    success: true,
+    data: { id: "mock-email-id" },
+  }),
+  sendContactConfirmation: vi.fn().mockResolvedValue({
+    success: true,
+    data: { id: "mock-email-id" },
+  }),
+  sendQuestionnaireConfirmation: vi.fn().mockResolvedValue({
+    success: true,
+    data: { id: "mock-email-id" },
+  }),
+}));
 
 describe("Contact Form Integration Tests", () => {
   let testSubmissionId: number | undefined;

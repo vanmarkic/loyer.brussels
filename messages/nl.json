@@ -2,6 +2,14 @@
   "greeting": "Hallo!",
   "main_title": "HOEVEEL KOST HET OM EEN WONING TE HUREN IN BRUSSEL?",
   "start_button": "Start",
+  "NotFound": {
+    "title": "Pagina niet gevonden",
+    "code": "404",
+    "description": "De pagina die u zoekt bestaat niet of is verplaatst.",
+    "backHome": "Terug naar home",
+    "calculator": "Huurcalculator",
+    "contact": "Contacteer ons"
+  },
   "test_subtitle": "Doe de test!",
   "test_description": "Of u nu een huidige of toekomstige huurder of verhuurder bent, deze site stelt u in staat de indicatieve referentiehuurprijs te kennen voor de woning die u huurt of van plan bent te huren, rekening houdend met de locatie en de belangrijkste kenmerken.",
   "info_box_text": "De website van het huurprijzenrooster is aangepast om de berekening van de referentiehuurprijs transparanter te maken.",

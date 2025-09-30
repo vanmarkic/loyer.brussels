@@ -3,7 +3,7 @@
  * Tests the complete flow: data collection -> validation -> database -> email
  */
 
-import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+import { describe, it, expect, afterAll, vi } from "vitest";
 import { saveQuestionnaireResponse } from "../save-questionnaire";
 import { supabaseAdmin } from "@/app/lib/supabase";
 import type { GlobalFormState } from "@/app/data/global-form-types";
@@ -435,19 +435,22 @@ describe("Questionnaire Integration Tests", () => {
   });
 
   describe("Email Integration", () => {
-    it("should send confirmation email after successful submission", async () => {
+    it("should call email confirmation function after successful submission", async () => {
+      const { sendQuestionnaireConfirmation } = await import("@/app/lib/email");
       const formState = createTestFormState();
 
       const result = await saveQuestionnaireResponse(formState);
 
-      // Should succeed even if email fails (graceful degradation)
+      // Should succeed
       expect(result.success).toBe(true);
       expect(result.submissionId).toBeDefined();
 
-      // Check inbox for confirmation email
-      console.log(
-        `✉️ Integration test: Check ${testEmail} for confirmation email with ID: ${result.submissionId}`
-      );
+      // Verify email function was called
+      expect(sendQuestionnaireConfirmation).toHaveBeenCalledWith({
+        email: testEmail,
+        submissionId: result.submissionId,
+        submissionDate: expect.any(String),
+      });
 
       if (result.submissionId) {
         testSubmissionIds.push(result.submissionId);
@@ -510,4 +513,3 @@ describe("Questionnaire Integration Tests", () => {
     });
   });
 });
-

@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft, Shield, Info, User, Home, Building } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useLocale } from 'next-intl';
-import { FormProvider } from '../../../context/form-context';
-import { GlobalFormProvider } from '../../../context/global-form-context';
-import { RentalCalculator } from '../../../components/rental-calculator/calculator';
-import { UnifiedCalculatorLayout } from '../../../components/layouts/unified-calculator-layout';
-import { SessionRestoration } from '../../../components/ui/session-restoration';
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, Shield, Info, User, Home, Building } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useLocale } from "next-intl";
+import { FormProvider } from "../../../context/form-context";
+import { GlobalFormProvider } from "../../../context/global-form-context";
+import { RentalCalculator } from "../../../components/rental-calculator/calculator";
+import { UnifiedCalculatorLayout } from "../../../components/layouts/unified-calculator-layout";
+import { SessionRestoration } from "../../../components/ui/session-restoration";
 import {
   SessionManagerProvider,
   SessionHealthIndicator,
-} from '../../../components/ui/session-manager';
+} from "../../../components/ui/session-manager";
 
 export default function BruxellesCalculatorPage() {
   const currentLocale = useLocale();
-  const [currentStep, setCurrentStep] = useState<'filters' | 'intro' | 'calculator'>(
-    'filters'
+  const [currentStep, setCurrentStep] = useState<"filters" | "intro" | "calculator">(
+    "filters"
   );
-  const [housingType, setHousingType] = useState<string>('');
-  const [userType, setUserType] = useState<string>('');
+  const [housingType, setHousingType] = useState<string>("");
+  const [userType, setUserType] = useState<string>("");
   const [consent, setConsent] = useState(false);
 
   const handleHousingTypeSelect = (type: string) => {
-    if (type === 'ais' || type === 'social') {
+    if (type === "ais" || type === "social") {
       // Afficher message que l'encadrement ne s'applique pas
       alert(
         "L'encadrement des loyers ne s'applique pas aux logements AIS ou logements sociaux."
@@ -34,20 +34,20 @@ export default function BruxellesCalculatorPage() {
       return;
     }
     setHousingType(type);
-    setCurrentStep('intro');
+    setCurrentStep("intro");
   };
 
   const handleUserTypeSelect = (type: string) => {
     setUserType(type);
-    if (type === 'bailleur') {
+    if (type === "bailleur") {
       // Rediriger vers le parcours bailleur
       window.location.href = `/${currentLocale}/calculateur/bruxelles/bailleur`;
-    } else if (type === 'locataire') {
-      setCurrentStep('calculator');
+    } else if (type === "locataire") {
+      setCurrentStep("calculator");
     }
   };
 
-  if (currentStep === 'filters') {
+  if (currentStep === "filters") {
     return (
       <UnifiedCalculatorLayout
         title="Évaluation Bruxelles"
@@ -68,7 +68,7 @@ export default function BruxellesCalculatorPage() {
           <div className="grid md:grid-cols-3 gap-6">
             <div
               className="bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-green-500"
-              onClick={() => handleHousingTypeSelect('prive')}
+              onClick={() => handleHousingTypeSelect("prive")}
             >
               <div className="text-center">
                 <Home className="h-12 w-12 text-green-600 mx-auto mb-4" />
@@ -84,7 +84,7 @@ export default function BruxellesCalculatorPage() {
 
             <div
               className="bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-red-500"
-              onClick={() => handleHousingTypeSelect('ais')}
+              onClick={() => handleHousingTypeSelect("ais")}
             >
               <div className="text-center">
                 <Building className="h-12 w-12 text-red-600 mx-auto mb-4" />
@@ -98,7 +98,7 @@ export default function BruxellesCalculatorPage() {
 
             <div
               className="bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 hover:border-red-500"
-              onClick={() => handleHousingTypeSelect('social')}
+              onClick={() => handleHousingTypeSelect("social")}
             >
               <div className="text-center">
                 <Shield className="h-12 w-12 text-red-600 mx-auto mb-4" />
@@ -133,11 +133,11 @@ export default function BruxellesCalculatorPage() {
     );
   }
 
-  if (currentStep === 'intro') {
+  if (currentStep === "intro") {
     return (
       <UnifiedCalculatorLayout
         title="Évaluation Bruxelles"
-        onBack={() => setCurrentStep('filters')}
+        onBack={() => setCurrentStep("filters")}
         backText="Retour"
         showProgress={true}
         currentStep={2}
@@ -163,19 +163,22 @@ export default function BruxellesCalculatorPage() {
                     Cet outil vous aide à évaluer si votre loyer respecte l'encadrement
                     légal. Toutes vos données restent anonymes et confidentielles.
                   </p>
-                  <div className="flex items-center space-x-2">
+                  <label
+                    htmlFor="consent"
+                    className="flex items-start gap-3 cursor-pointer p-3 -m-3 rounded hover:bg-green-100 transition-colors"
+                  >
                     <input
                       type="checkbox"
                       id="consent"
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
-                      className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                      className="w-6 h-6 mt-0.5 flex-shrink-0 rounded border-gray-300 text-green-600 focus:ring-green-500 focus:ring-2 cursor-pointer"
                     />
-                    <label htmlFor="consent" className="text-sm text-green-700">
+                    <span className="text-sm text-green-700 flex-1">
                       J'accepte que mes données anonymisées soient utilisées à des fins de
                       recherche pour améliorer les politiques de logement.
-                    </label>
-                  </div>
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>
@@ -183,9 +186,9 @@ export default function BruxellesCalculatorPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div
                 className={`bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 ${
-                  !consent ? 'opacity-50 cursor-not-allowed' : 'hover:border-blue-500'
+                  !consent ? "opacity-50 cursor-not-allowed" : "hover:border-blue-500"
                 }`}
-                onClick={() => consent && handleUserTypeSelect('locataire')}
+                onClick={() => consent && handleUserTypeSelect("locataire")}
               >
                 <div className="text-center">
                   <User className="h-12 w-12 text-blue-600 mx-auto mb-4" />
@@ -198,9 +201,9 @@ export default function BruxellesCalculatorPage() {
 
               <div
                 className={`bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 ${
-                  !consent ? 'opacity-50 cursor-not-allowed' : 'hover:border-purple-500'
+                  !consent ? "opacity-50 cursor-not-allowed" : "hover:border-purple-500"
                 }`}
-                onClick={() => consent && handleUserTypeSelect('bailleur')}
+                onClick={() => consent && handleUserTypeSelect("bailleur")}
               >
                 <div className="text-center">
                   <Building className="h-12 w-12 text-purple-600 mx-auto mb-4" />
@@ -213,9 +216,9 @@ export default function BruxellesCalculatorPage() {
 
               <div
                 className={`bg-white rounded-lg shadow-lg p-6 cursor-pointer hover:shadow-xl transition-shadow border-2 ${
-                  !consent ? 'opacity-50 cursor-not-allowed' : 'hover:border-gray-500'
+                  !consent ? "opacity-50 cursor-not-allowed" : "hover:border-gray-500"
                 }`}
-                onClick={() => consent && handleUserTypeSelect('autre')}
+                onClick={() => consent && handleUserTypeSelect("autre")}
               >
                 <div className="text-center">
                   <Info className="h-12 w-12 text-gray-600 mx-auto mb-4" />
@@ -262,9 +265,9 @@ export default function BruxellesCalculatorPage() {
               <SessionRestoration
                 onSessionRestored={(wasRestored) => {
                   if (wasRestored) {
-                    console.log('Session restored successfully');
+                    console.log("Session restored successfully");
                   } else {
-                    console.log('Starting fresh session');
+                    console.log("Starting fresh session");
                   }
                 }}
               />

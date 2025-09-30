@@ -62,7 +62,10 @@ function DetailedQuestionnaireContent() {
 
   // Normalize a possibly non-array value (like a string) into a string[]
   const toStringArray = useCallback((value: unknown): string[] => {
-    if (Array.isArray(value)) return value as string[];
+    if (Array.isArray(value)) {
+      // Safely convert all array elements to strings
+      return value.map((item) => String(item));
+    }
     if (value === undefined || value === null) return [];
     return [String(value)];
   }, []);

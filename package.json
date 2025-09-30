@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:integration": "vitest --run app/actions/__tests__",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:screenshots": "playwright test --project=desktop-chromium --project=mobile-safari",
+    "test:report": "playwright show-report"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "~1.2.2",
@@ -55,10 +62,12 @@
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "~2.1.7",
     "recharts": "~2.15.0",
+    "resend": "^6.1.1",
     "sonner": "~1.7.1",
     "tailwind-merge": "~2.5.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

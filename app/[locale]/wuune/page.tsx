@@ -29,7 +29,7 @@ export default function WuunePage() {
               aria-label="Retour à la page d'accueil"
             >
               <ArrowLeft className="h-5 w-5" aria-hidden="true" />
-              <span>Retour à l'accueil</span>
+              <span>Retour à l&apos;accueil</span>
             </Link>
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-red-600" aria-hidden="true" />
@@ -65,7 +65,7 @@ export default function WuunePage() {
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
                 Nous croyons fermement que le logement est un droit fondamental et que
-                chacun mérite un toit décent à un prix équitable. Notre action s'inscrit
+                chacun mérite un toit décent à un prix équitable. Notre action s&apos;inscrit
                 dans une démarche solidaire et collective.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -155,7 +155,7 @@ export default function WuunePage() {
                   Information et sensibilisation
                 </h3>
                 <p className="text-gray-600">
-                  Nous informons les locataires de leurs droits et sensibilisons l'opinion
+                  Nous informons les locataires de leurs droits et sensibilisons l&apos;opinion
                   publique aux problématiques du logement à travers des campagnes de
                   communication et des événements.
                 </p>

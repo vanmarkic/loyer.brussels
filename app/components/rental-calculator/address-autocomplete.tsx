@@ -92,7 +92,7 @@ export function AddressAutocomplete({
     };
 
     fetchAddresses();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, t]);
 
   const handleSelect = (address: AddressResult) => {
     onAddressSelect(address);

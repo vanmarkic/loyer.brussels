@@ -15,11 +15,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Skip to main content link for keyboard navigation */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-red-600 focus:text-white focus:rounded-md focus:shadow-lg"
+      >
+        Aller au contenu principal
+      </a>
+      
       {/* Top header - simplified like wuune.be */}
       <header className="bg-white py-3 px-4 border-b border-gray-200">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Users className="h-5 w-5 text-red-600" />
+            <Users className="h-5 w-5 text-red-600" aria-hidden="true" />
             <span className="text-sm font-bold uppercase text-gray-700 tracking-wider">
               {t('HomePage.header.collectiveTitle')}
             </span>
@@ -32,7 +40,7 @@ export default function Home() {
       <nav className="bg-red-600 py-3 px-6">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Heart className="h-8 w-8 text-white" />
+            <Heart className="h-8 w-8 text-white" aria-hidden="true" />
             <div className="text-white">
               <div className="font-black text-xl leading-tight tracking-wide">WUUNE</div>
               <div className="text-xs font-medium leading-tight opacity-90">
@@ -69,15 +77,18 @@ export default function Home() {
           <button
             className="text-white flex items-center gap-2 wuune-nav md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
           >
-            {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" />
+            {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
       </nav>
 
       {/* Mobile menu - clean style */}
       {isMenuOpen && (
-        <div className="md:hidden bg-red-700 py-4 px-6 border-t border-red-500">
+        <div id="mobile-menu" className="md:hidden bg-red-700 py-4 px-6 border-t border-red-500">
           <div className="flex flex-col gap-4 text-white">
             <Link href={`/${currentLocale}`} className="wuune-nav hover:underline">
               {t('HomePage.navigation.home')}
@@ -102,7 +113,7 @@ export default function Home() {
       )}
 
       {/* Hero section with gradient background - matching wuune.be style */}
-      <main className="flex-1 bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
+      <main id="main-content" className="flex-1 bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
         <div className="container mx-auto px-4 py-20 md:py-32 relative">
           <div className="text-center max-w-6xl mx-auto">
             {/* Main hero content centered like wuune.be */}
@@ -145,14 +156,16 @@ export default function Home() {
                   <Link
                     href="#"
                     className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors shadow-lg"
+                    aria-label="Partager sur Facebook"
                   >
-                    <Facebook className="h-6 w-6 text-white" />
+                    <Facebook className="h-6 w-6 text-white" aria-hidden="true" />
                   </Link>
                   <Link
                     href="#"
                     className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 transition-colors shadow-lg"
+                    aria-label="Partager sur Twitter"
                   >
-                    <Twitter className="h-6 w-6 text-white" />
+                    <Twitter className="h-6 w-6 text-white" aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -308,22 +321,36 @@ export default function Home() {
                 {t('HomePage.newsletter.title')}
               </h3>
               <form className="space-y-4">
+                <label htmlFor="newsletter-name" className="sr-only">
+                  {t('HomePage.newsletter.namePlaceholder')}
+                </label>
                 <input
+                  id="newsletter-name"
                   type="text"
                   placeholder={t('HomePage.newsletter.namePlaceholder')}
                   className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
                 />
+                <label htmlFor="newsletter-firstname" className="sr-only">
+                  {t('HomePage.newsletter.firstNamePlaceholder')}
+                </label>
                 <input
+                  id="newsletter-firstname"
                   type="text"
                   placeholder={t('HomePage.newsletter.firstNamePlaceholder')}
                   className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
                 />
+                <label htmlFor="newsletter-email" className="sr-only">
+                  {t('HomePage.newsletter.emailPlaceholder')}
+                </label>
                 <input
+                  id="newsletter-email"
                   type="email"
                   placeholder={t('HomePage.newsletter.emailPlaceholder')}
                   className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500"
+                  required
+                  aria-required="true"
                 />
-                <Button className="w-full bg-red-600 text-white hover:bg-red-700 py-3 font-bold uppercase tracking-wide">
+                <Button type="submit" className="w-full bg-red-600 text-white hover:bg-red-700 py-3 font-bold uppercase tracking-wide">
                   {t('HomePage.newsletter.subscribeButton')}
                 </Button>
               </form>
@@ -336,7 +363,7 @@ export default function Home() {
       <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <Heart className="h-6 w-6 text-red-500" />
+            <Heart className="h-6 w-6 text-red-500" aria-hidden="true" />
             <span className="font-black text-xl tracking-wide">WUUNE</span>
           </div>
           <p className="text-gray-300 text-sm mb-4">{t('HomePage.footer.description')}</p>

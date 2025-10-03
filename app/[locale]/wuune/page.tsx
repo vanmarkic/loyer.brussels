@@ -11,6 +11,14 @@ export default function WuunePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Skip to main content link for keyboard navigation */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-red-600 focus:text-white focus:rounded-md focus:shadow-lg"
+      >
+        Aller au contenu principal
+      </a>
+      
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
@@ -18,12 +26,13 @@ export default function WuunePage() {
             <Link
               href={`/${currentLocale}`}
               className="flex items-center gap-2 text-red-600 hover:text-red-700"
+              aria-label="Retour à la page d'accueil"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-5 w-5" aria-hidden="true" />
               <span>Retour à l'accueil</span>
             </Link>
             <div className="flex items-center gap-2">
-              <Heart className="h-6 w-6 text-red-600" />
+              <Heart className="h-6 w-6 text-red-600" aria-hidden="true" />
               <span className="font-bold text-xl">WUUNE</span>
             </div>
           </div>
@@ -44,7 +53,7 @@ export default function WuunePage() {
       </section>
 
       {/* Notre mission */}
-      <section className="py-16">
+      <section id="main-content" className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
@@ -61,15 +70,15 @@ export default function WuunePage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-red-50 rounded-lg">
-                  <Target className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                  <Target className="h-8 w-8 text-red-600 mx-auto mb-2" aria-hidden="true" />
                   <h3 className="font-semibold text-gray-800">Objectifs clairs</h3>
                 </div>
                 <div className="text-center p-4 bg-red-50 rounded-lg">
-                  <Shield className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                  <Shield className="h-8 w-8 text-red-600 mx-auto mb-2" aria-hidden="true" />
                   <h3 className="font-semibold text-gray-800">Protection légale</h3>
                 </div>
                 <div className="text-center p-4 bg-red-50 rounded-lg">
-                  <Handshake className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                  <Handshake className="h-8 w-8 text-red-600 mx-auto mb-2" aria-hidden="true" />
                   <h3 className="font-semibold text-gray-800">Solidarité</h3>
                 </div>
               </div>
@@ -101,7 +110,7 @@ export default function WuunePage() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center space-y-4">
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                <Users className="h-8 w-8 text-red-600" />
+                <Users className="h-8 w-8 text-red-600" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800">Solidarité</h3>
               <p className="text-gray-600">
@@ -111,7 +120,7 @@ export default function WuunePage() {
             </div>
             <div className="text-center space-y-4">
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                <Shield className="h-8 w-8 text-red-600" />
+                <Shield className="h-8 w-8 text-red-600" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800">Justice sociale</h3>
               <p className="text-gray-600">
@@ -121,7 +130,7 @@ export default function WuunePage() {
             </div>
             <div className="text-center space-y-4">
               <div className="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                <Heart className="h-8 w-8 text-red-600" />
+                <Heart className="h-8 w-8 text-red-600" aria-hidden="true" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800">Bienveillance</h3>
               <p className="text-gray-600">

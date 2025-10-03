@@ -137,6 +137,14 @@ function ContactPageContent() {
     <>
       <Toaster />
       <div className="min-h-screen bg-gray-50">
+        {/* Skip to main content link for keyboard navigation */}
+        <a 
+          href="#main-content" 
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-red-600 focus:text-white focus:rounded-md focus:shadow-lg"
+        >
+          Aller au contenu principal
+        </a>
+        
         {/* Header */}
         <header className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-4">
@@ -144,12 +152,13 @@ function ContactPageContent() {
               <Link
                 href={`/${currentLocale}`}
                 className="flex items-center gap-2 text-red-600 hover:text-red-700"
+                aria-label={t("ContactPage.header.backToHome")}
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-5 w-5" aria-hidden="true" />
                 <span>{t("ContactPage.header.backToHome")}</span>
               </Link>
               <div className="flex items-center gap-2">
-                <Heart className="h-6 w-6 text-red-600" />
+                <Heart className="h-6 w-6 text-red-600" aria-hidden="true" />
                 <span className="font-bold text-xl">{t("ContactPage.header.title")}</span>
               </div>
             </div>
@@ -171,11 +180,11 @@ function ContactPageContent() {
         </section>
 
         {/* Contact info */}
-        <section className="py-16">
+        <section id="main-content" className="py-16">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <div className="text-center bg-white rounded-lg shadow-md p-8">
-                <Mail className="h-12 w-12 text-red-600 mx-auto mb-4" />
+                <Mail className="h-12 w-12 text-red-600 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Email</h3>
                 <p className="text-gray-600 mb-2">Écrivez-nous à :</p>
                 <a
@@ -187,7 +196,7 @@ function ContactPageContent() {
               </div>
 
               <div className="text-center bg-white rounded-lg shadow-md p-8">
-                <Users className="h-12 w-12 text-red-600 mx-auto mb-4" />
+                <Users className="h-12 w-12 text-red-600 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">
                   Assemblées locales
                 </h3>
@@ -199,7 +208,7 @@ function ContactPageContent() {
               </div>
 
               <div className="text-center bg-white rounded-lg shadow-md p-8">
-                <FileText className="h-12 w-12 text-red-600 mx-auto mb-4" />
+                <FileText className="h-12 w-12 text-red-600 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Newsletter</h3>
                 <p className="text-gray-600 mb-2">Restez informé(e) :</p>
                 <p className="text-red-600 font-medium">Inscrivez-vous ci-dessous</p>
@@ -227,7 +236,7 @@ function ContactPageContent() {
                 {isJoiningWuune && contactInfo.email && (
                   <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center gap-2 text-green-800">
-                      <CheckCircle className="h-5 w-5" />
+                      <CheckCircle className="h-5 w-5" aria-hidden="true" />
                       <span className="text-sm font-medium">
                         Certaines informations ont été pré-remplies à partir de vos
                         réponses précédentes
@@ -251,6 +260,7 @@ function ContactPageContent() {
                       name="name"
                       type="text"
                       required
+                      aria-required="true"
                       value={formData.name}
                       onChange={handleChange}
                       className="w-full"
@@ -277,6 +287,7 @@ function ContactPageContent() {
                       name="email"
                       type="email"
                       required
+                      aria-required="true"
                       value={formData.email}
                       onChange={handleChange}
                       className={
@@ -301,6 +312,7 @@ function ContactPageContent() {
                     name="subject"
                     type="text"
                     required
+                    aria-required="true"
                     value={formData.subject}
                     onChange={handleChange}
                     className="w-full"
@@ -319,6 +331,7 @@ function ContactPageContent() {
                     id="message"
                     name="message"
                     required
+                    aria-required="true"
                     value={formData.message}
                     onChange={handleChange}
                     rows={6}
@@ -395,12 +408,12 @@ function ContactPageContent() {
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                       Envoi en cours...
                     </>
                   ) : (
                     <>
-                      <Send className="h-5 w-5" />
+                      <Send className="h-5 w-5" aria-hidden="true" />
                       Envoyer le message
                     </>
                   )}

@@ -18,7 +18,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: process.env.BASE_URL || "http://localhost:3000",
+    baseURL: process.env.BASE_URL || "http://localhost:3002",
     trace: "on-first-retry",
     screenshot: "on", // Always take screenshots
     video: "retain-on-failure",
@@ -50,7 +50,7 @@ export default defineConfig({
   // Web server configuration
   webServer: {
     command: "yarn dev",
-    url: "http://localhost:3000",
+    url: "http://localhost:3002",
     reuseExistingServer: true,
     timeout: 120 * 1000,
   },

@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+} from '@/app/components/ui/dialog';
+import { Alert, AlertDescription } from '@/app/components/ui/alert';
 import { Clock, Trash2, Play } from 'lucide-react';
 import { useGlobalForm } from '@/features/calculator/context/global-form-context';
 

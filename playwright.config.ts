@@ -35,11 +35,11 @@ export default defineConfig({
     },
   ],
 
-  // Web server configuration - use production build for stable tests
+  // Web server configuration - use dev server temporarily
   webServer: {
-    command: "yarn build && yarn start -p 3002",
+    command: "yarn dev",
     url: "http://localhost:3002",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
 });

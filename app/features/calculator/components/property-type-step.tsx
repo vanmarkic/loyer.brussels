@@ -5,10 +5,10 @@ import React from "react";
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import type { PropertyType } from "@/app/data/types"; // Import PropertyType from its new location
 import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { SaveContinue } from "@/app/components/ui/save-continue";
+import { Button } from "@/app/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
+import { Label } from "@/app/components/ui/label";
+import { SaveContinue } from "@/app/components/save-continue";
 import { Building, Home, Hotel } from "lucide-react";
 import { useStepNavigationContext } from "./step-wrapper";
 

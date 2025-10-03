@@ -51,7 +51,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
       <body className={inter.className}>
         {/* Wrap children with NextIntlClientProvider */}
         <NextIntlClientProvider locale={locale} messages={messages}>

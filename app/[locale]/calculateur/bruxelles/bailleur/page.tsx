@@ -13,8 +13,8 @@ import {
   Handshake,
   ExternalLink,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/app/components/ui/button";
+import { Alert, AlertDescription } from "@/app/components/ui/alert";
 import { useLocale } from "next-intl";
 
 export default function BailleurPage() {

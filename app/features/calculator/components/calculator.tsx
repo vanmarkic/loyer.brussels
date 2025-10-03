@@ -2,7 +2,7 @@
 
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { useTranslations } from "next-intl";
-import { EnhancedProgress } from "@/components/ui/enhanced-progress";
+import { EnhancedProgress } from "@/app/components/ui/enhanced-progress";
 import { useState, useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
 

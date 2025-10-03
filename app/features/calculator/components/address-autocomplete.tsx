@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl"; // Add this import
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { Loader2, MapPin, AlertCircle } from "lucide-react";
 import { searchAddresses } from "@/features/calculator/actions/search-addresses";
 import type { AddressResult } from "@/app/data/types"; // Import type from new location
 import { useDebounce } from "@/app/hooks/use-debounce";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/app/components/ui/alert";
 
 interface AddressAutocompleteProps {
   onAddressSelect: (address: AddressResult) => void;

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, Users, ArrowLeft, Target, Shield, Handshake } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { useLocale } from "next-intl";
 
 export default function WuunePage() {

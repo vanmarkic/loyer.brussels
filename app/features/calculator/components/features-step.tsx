@@ -2,9 +2,9 @@
 
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/app/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
+import { Label } from "@/app/components/ui/label";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import type { PropertyInformation } from "@/features/calculator/types/global-form-types";
 import { useStepNavigationContext } from "./step-wrapper";

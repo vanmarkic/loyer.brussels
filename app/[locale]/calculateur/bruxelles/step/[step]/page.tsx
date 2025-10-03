@@ -10,11 +10,11 @@ import {
 } from "@/features/calculator/context/global-form-context";
 import { UnifiedCalculatorLayout } from "@/app/components/layouts/unified-calculator-layout";
 import { FormProvider } from "@/features/calculator/context/form-context";
-import { SessionRestoration } from "@/app/components/ui/session-restoration";
+import { SessionRestoration } from "@/app/components/session-restoration";
 import {
   SessionManagerProvider,
   SessionHealthIndicator,
-} from "@/app/components/ui/session-manager";
+} from "@/app/components/session-manager";
 import { RentalCalculator } from "@/features/calculator/components/calculator";
 import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
 import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";

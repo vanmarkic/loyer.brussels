@@ -3,7 +3,7 @@
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/app/i18n/navigation";
 import { locales } from "@/app/i18n/request";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { useTransition } from "react";
 
 export default function LanguageSwitcher() {

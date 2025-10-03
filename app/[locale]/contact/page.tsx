@@ -13,15 +13,15 @@ import {
   CheckCircle,
   Loader2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Textarea } from "@/app/components/ui/textarea";
+import { Checkbox } from "@/app/components/ui/checkbox";
 import { useLocale, useTranslations } from "next-intl";
 import { useGlobalForm, GlobalFormProvider } from "@/features/calculator/context/global-form-context";
 import { submitContactForm, ContactFormData } from "@/app/actions/send-contact";
 import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/app/components/ui/toaster";
 
 function ContactPageContent() {
   const currentLocale = useLocale();

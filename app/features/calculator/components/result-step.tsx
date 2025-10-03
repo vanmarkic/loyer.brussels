@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/app/components/ui/button";
+import { Card, CardContent } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 // Removed direct supabase import: import { supabase } from "@/app/lib/supabase";
 import { rentRecordRepository } from "@/app/data/repositories"; // Import the repository
 import type {
@@ -29,7 +29,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/app/components/ui/tooltip";
 import { propertyTypeLabels } from "@/features/calculator/lib/utils";
 
 export function ResultStep() {
@@ -101,6 +101,18 @@ export function ResultStep() {
     try {
       // Dynamically import the handlePDF function
       const { handlePDF } = await import("@/app/lib/utils");
+
+      // Convert PropertyState from string to number for PDF generation
+      const convertPropertyState = (state: "excellent" | "good" | "fair" | "poor" | null): 1 | 2 | 3 | null => {
+        if (!state) return null;
+        switch (state) {
+          case "poor": return 1;
+          case "fair": return 1;
+          case "good": return 2;
+          case "excellent": return 3;
+        }
+      };
+
       // Convert GlobalFormState to FormState for PDF generation
       const formState = {
         step: state.currentStep,
@@ -127,7 +139,7 @@ export function ResultStep() {
         hasRecreationalSpaces: state.propertyInfo.hasRecreationalSpaces,
         hasStorageSpaces: state.propertyInfo.hasStorageSpaces,
         constructedBefore2000: state.propertyInfo.constructedBefore2000,
-        propertyState: state.propertyInfo.propertyState,
+        propertyState: convertPropertyState(state.propertyInfo.propertyState),
       };
       // Execute the PDF generation
       handlePDF(formState)(); // Call the returned function
@@ -143,13 +155,13 @@ export function ResultStep() {
   const getUserInputs = (): UserInputs => {
     let propertyStateString: string;
     switch (state.propertyInfo.propertyState) {
-      case 1:
+      case "poor":
         propertyStateString = "bad";
         break; // Mauvais état
-      case 2:
+      case "good":
         propertyStateString = "good";
         break; // Bon état
-      case 3:
+      case "excellent":
         propertyStateString = "excellent";
         break; // Excellent état
       default:

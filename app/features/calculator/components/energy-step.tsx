@@ -2,10 +2,10 @@
 
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/app/components/ui/button";
+import { Label } from "@/app/components/ui/label";
 import { AlertCircle, RefreshCw, Info } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { EnergyClass } from "@/app/data/types";
 import { useStepNavigationContext } from "./step-wrapper";
 

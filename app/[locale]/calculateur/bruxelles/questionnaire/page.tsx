@@ -14,13 +14,13 @@ import {
   Heart,
   Loader2,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/app/components/ui/button";
+import { Card, CardContent } from "@/app/components/ui/card";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { Textarea } from "@/app/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
+import { Checkbox } from "@/app/components/ui/checkbox";
 import { useLocale, useTranslations } from "next-intl";
 import {
   GlobalFormProvider,
@@ -28,7 +28,7 @@ import {
 } from "@/features/calculator/context/global-form-context";
 import { saveQuestionnaireResponse } from "@/app/actions/save-questionnaire";
 import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/app/components/ui/toaster";
 
 interface QuestionnaireData {
   // Note: rentAmount and livingSpace are now pulled from global context

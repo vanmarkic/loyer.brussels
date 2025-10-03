@@ -37,7 +37,7 @@ vi.mock("@/hooks/use-toast", () => ({
 }));
 
 vi.mock("@/features/calculator/context/global-form-context", async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal<typeof import("@/features/calculator/context/global-form-context")>();
   return {
     ...actual,
     GlobalFormProvider: ({ children }: { children: React.ReactNode }) => (
@@ -57,7 +57,7 @@ vi.mock("lucide-react", () => ({
   Loader2: () => <div data-testid="loader-icon" />,
 }));
 
-vi.mock("@/components/ui/button", () => ({
+vi.mock("@/app/components/ui/button", () => ({
   Button: ({
     children,
     onClick,
@@ -78,7 +78,7 @@ vi.mock("@/components/ui/button", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/card", () => ({
+vi.mock("@/app/components/ui/card", () => ({
   Card: ({ children, className }: any) => (
     <div className={className}>{children}</div>
   ),
@@ -87,7 +87,7 @@ vi.mock("@/components/ui/card", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/input", () => ({
+vi.mock("@/app/components/ui/input", () => ({
   Input: ({ id, type, value, onChange, placeholder, ...props }: any) => (
     <input
       id={id}
@@ -100,7 +100,7 @@ vi.mock("@/components/ui/input", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/label", () => ({
+vi.mock("@/app/components/ui/label", () => ({
   Label: ({ children, htmlFor, className }: any) => (
     <label htmlFor={htmlFor} className={className}>
       {children}
@@ -108,7 +108,7 @@ vi.mock("@/components/ui/label", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/textarea", () => ({
+vi.mock("@/app/components/ui/textarea", () => ({
   Textarea: ({ id, value, onChange, placeholder, rows, ...props }: any) => (
     <textarea
       id={id}
@@ -121,7 +121,7 @@ vi.mock("@/components/ui/textarea", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/radio-group", () => ({
+vi.mock("@/app/components/ui/radio-group", () => ({
   RadioGroup: ({ children, value, onValueChange }: any) => (
     <div
       data-testid="radio-group"
@@ -142,7 +142,7 @@ vi.mock("@/components/ui/radio-group", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/checkbox", () => ({
+vi.mock("@/app/components/ui/checkbox", () => ({
   Checkbox: ({ id, checked, onCheckedChange }: any) => (
     <input
       type="checkbox"
@@ -153,7 +153,7 @@ vi.mock("@/components/ui/checkbox", () => ({
   ),
 }));
 
-vi.mock("@/components/ui/toaster", () => ({
+vi.mock("@/app/components/ui/toaster", () => ({
   Toaster: () => <div data-testid="toaster" />,
 }));
 

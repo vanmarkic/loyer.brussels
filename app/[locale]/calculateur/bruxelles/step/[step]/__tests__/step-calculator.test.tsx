@@ -6,7 +6,7 @@ import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigati
 import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
 import { GlobalFormProvider } from "@/features/calculator/context/global-form-context";
 import { FormProvider } from "@/features/calculator/context/form-context";
-import { SessionManagerProvider } from "@/app/components/ui/session-manager";
+import { SessionManagerProvider } from "@/app/components/session-manager";
 import { vi } from "vitest";
 
 // Mock Next.js navigation
@@ -22,7 +22,7 @@ vi.mock("@/features/calculator/hooks/use-step-navigation", () => ({
 
 // Mock the global form context
 vi.mock("@/features/calculator/context/global-form-context", async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal<typeof import("@/features/calculator/context/global-form-context")>();
   return {
     ...actual,
     useGlobalForm: vi.fn(),

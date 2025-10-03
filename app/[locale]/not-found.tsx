@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Heart, Home, Calculator, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function NotFound() {

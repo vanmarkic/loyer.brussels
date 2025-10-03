@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 
 interface UseHoldRepeatOptions {
   /** Function to call on each repeat */
@@ -38,6 +38,17 @@ export function useHoldRepeat({
   // Always keep the latest onRepeat
   onRepeatRef.current = onRepeat;
 
+  // Cleanup on unmount to prevent orphaned intervals
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      isActiveRef.current = false;
+    };
+  }, []);
+
   const getIntervalForPhase = (phase: number): number => {
     if (!acceleration) return 150;
 
@@ -76,7 +87,9 @@ export function useHoldRepeat({
 
   const start = useCallback(() => {
     // Don't start if already active
-    if (isActiveRef.current) return;
+    if (isActiveRef.current) {
+      return;
+    }
 
     isActiveRef.current = true;
     startTimeRef.current = Date.now();

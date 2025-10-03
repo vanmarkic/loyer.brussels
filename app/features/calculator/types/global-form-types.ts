@@ -1,6 +1,9 @@
-import type { PropertyType, EnergyClass, PropertyState } from "@/features/calculator/types/global-form-types";
-
 // Unified data types for the entire calculator flow
+
+// Property-related enums
+export type PropertyType = "studio" | "apartment" | "house";
+export type EnergyClass = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "";
+export type PropertyState = "excellent" | "good" | "fair" | "poor";
 export interface UserProfile {
   // Contact information
   email: string;

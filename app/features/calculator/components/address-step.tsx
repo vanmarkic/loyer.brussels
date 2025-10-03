@@ -2,12 +2,12 @@
 
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { useTranslations } from "next-intl"; // Add this import
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { SaveContinue } from "@/app/components/ui/save-continue";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
+import { SaveContinue } from "@/app/components/save-continue";
 import { AlertCircle, Loader2, Info } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/app/components/ui/alert";
 import { AddressAutocomplete } from "./address-autocomplete";
 import type { AddressResult } from "@/app/data/types"; // Import type from new location
 import { useStepNavigationContext } from "./step-wrapper";

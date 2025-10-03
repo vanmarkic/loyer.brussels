@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Facebook, Menu, Twitter, Users, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/ui/button';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import LanguageSwitcher from '@/app/components/language-switcher';

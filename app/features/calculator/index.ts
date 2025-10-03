@@ -11,8 +11,14 @@ export * from './components/result-step';
 export * from './components/calculator';
 
 // Context
-export * from './context/global-form-context';
-export * from './context/form-context';
+export {
+  GlobalFormContext,
+  GlobalFormProvider,
+  useGlobalForm,
+  initialGlobalState,
+  globalFormReducer
+} from './context/global-form-context';
+export { FormProvider, useForm, type FormState } from './context/form-context';
 
 // Hooks
 export * from './hooks/use-step-navigation';

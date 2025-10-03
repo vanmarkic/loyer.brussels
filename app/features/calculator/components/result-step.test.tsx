@@ -79,7 +79,7 @@ const mockGlobalFormMethods = {
 };
 
 vi.mock("@/features/calculator/context/global-form-context", async (importOriginal) => {
-  const actual = await importOriginal();
+  const actual = await importOriginal<typeof import("@/features/calculator/context/global-form-context")>();
   return {
     ...actual,
     useGlobalForm: () => ({

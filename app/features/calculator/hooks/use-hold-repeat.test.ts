@@ -15,7 +15,7 @@ describe("useHoldRepeat", () => {
   it("should call onRepeat immediately when start is called with immediate=true", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: true })
+      useHoldRepeat({ onRepeat, immediate: true })
     );
 
     act(() => {
@@ -28,7 +28,7 @@ describe("useHoldRepeat", () => {
   it("should not call onRepeat immediately when start is called with immediate=false", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: false })
+      useHoldRepeat({ onRepeat, immediate: false })
     );
 
     act(() => {
@@ -38,10 +38,10 @@ describe("useHoldRepeat", () => {
     expect(onRepeat).toHaveBeenCalledTimes(0);
   });
 
-  it("should repeat onRepeat at the specified interval", () => {
+  it("should repeat onRepeat at the default interval (150ms)", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: true })
+      useHoldRepeat({ onRepeat, immediate: true })
     );
 
     act(() => {
@@ -51,9 +51,9 @@ describe("useHoldRepeat", () => {
     // Should be called immediately
     expect(onRepeat).toHaveBeenCalledTimes(1);
 
-    // Advance timers and check repeats
+    // Advance timers and check repeats (default is 150ms)
     act(() => {
-      vi.advanceTimersByTime(300); // 3 intervals
+      vi.advanceTimersByTime(450); // 3 intervals at 150ms
     });
 
     expect(onRepeat).toHaveBeenCalledTimes(4); // 1 immediate + 3 repeats
@@ -62,7 +62,7 @@ describe("useHoldRepeat", () => {
   it("should stop repeating when stop is called", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: true })
+      useHoldRepeat({ onRepeat, immediate: true })
     );
 
     act(() => {
@@ -72,7 +72,7 @@ describe("useHoldRepeat", () => {
     expect(onRepeat).toHaveBeenCalledTimes(1);
 
     act(() => {
-      vi.advanceTimersByTime(200);
+      vi.advanceTimersByTime(300); // 2 intervals at 150ms
     });
 
     expect(onRepeat).toHaveBeenCalledTimes(3); // 1 immediate + 2 repeats
@@ -88,7 +88,7 @@ describe("useHoldRepeat", () => {
 
   it("should return correct isActive status", () => {
     const onRepeat = vi.fn();
-    const { result } = renderHook(() => useHoldRepeat({ onRepeat, interval: 100 }));
+    const { result} = renderHook(() => useHoldRepeat({ onRepeat }));
 
     expect(result.current.isActive()).toBe(false);
 
@@ -108,7 +108,7 @@ describe("useHoldRepeat", () => {
   it("should handle multiple start/stop cycles", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: true })
+      useHoldRepeat({ onRepeat, immediate: true })
     );
 
     // First cycle
@@ -133,10 +133,10 @@ describe("useHoldRepeat", () => {
     expect(result.current.isActive()).toBe(false);
   });
 
-  it("should clear existing interval when start is called multiple times", () => {
+  it("should not start multiple times if already active", () => {
     const onRepeat = vi.fn();
     const { result } = renderHook(() =>
-      useHoldRepeat({ onRepeat, interval: 100, immediate: true })
+      useHoldRepeat({ onRepeat, immediate: true })
     );
 
     act(() => {
@@ -146,15 +146,17 @@ describe("useHoldRepeat", () => {
     expect(onRepeat).toHaveBeenCalledTimes(1);
 
     act(() => {
-      result.current.start(); // Should clear previous interval
+      result.current.start(); // Should not do anything if already active
     });
 
-    expect(onRepeat).toHaveBeenCalledTimes(2); // Only the immediate call from second start
+    // Should still be only 1 call (the initial start)
+    expect(onRepeat).toHaveBeenCalledTimes(1);
 
     act(() => {
-      vi.advanceTimersByTime(100);
+      vi.advanceTimersByTime(150);
     });
 
-    expect(onRepeat).toHaveBeenCalledTimes(3); // Only 1 repeat from second start
+    // Now we should have 2 calls (1 immediate + 1 interval)
+    expect(onRepeat).toHaveBeenCalledTimes(2);
   });
 });

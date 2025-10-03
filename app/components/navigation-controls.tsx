@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw, Save } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "@/app/components/ui/alert-dialog";
 import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 
 interface NavigationControlsProps {
@@ -87,8 +87,11 @@ export function NavigationControls({
       }
     };
 
-    // Add state to history for current step
-    window.history.replaceState({ step: currentStep }, "", window.location.href);
+    // Only update history if step actually changed
+    const currentState = window.history.state;
+    if (!currentState || currentState.step !== currentStep) {
+      window.history.replaceState({ step: currentStep }, "", window.location.href);
+    }
 
     window.addEventListener("popstate", handlePopState);
 

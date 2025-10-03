@@ -106,7 +106,7 @@ export function SaveContinue({
               className="flex items-center gap-2 touch-manipulation text-sm sm:text-base px-3 py-2 h-10 sm:h-auto whitespace-nowrap"
               type="button"
             >
-              <Save className="h-4 w-4 flex-shrink-0" />
+              <Save className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
               <span className="truncate">Sauvegarder pour plus tard</span>
             </Button>
           </DialogTrigger>
@@ -146,7 +146,7 @@ export function SaveContinue({
                       className="min-h-[44px] px-3 py-2 touch-manipulation flex-shrink-0"
                       aria-label="Copier le lien de sauvegarde"
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ export function SaveContinue({
           }`}
         >
           <span className="truncate">{continueText}</span>
-          <ArrowRight className="h-4 w-4 flex-shrink-0" />
+          <ArrowRight className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
         </Button>
       </div>
     </div>

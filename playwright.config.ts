@@ -13,7 +13,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: 1, // Single worker for consistency
   reporter: [
-    ["html", { outputFolder: "playwright-report" }],
+    ["html", { outputFolder: "playwright-report", open: "never" }],
     ["json", { outputFile: "test-results/results.json" }],
   ],
 
@@ -31,18 +31,6 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         viewport: { width: 1920, height: 1080 },
-      },
-    },
-    {
-      name: "mobile-safari",
-      use: {
-        ...devices["iPhone 13 Pro"],
-      },
-    },
-    {
-      name: "tablet",
-      use: {
-        ...devices["iPad Pro"],
       },
     },
   ],

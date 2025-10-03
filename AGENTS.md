@@ -14,3 +14,6 @@
 - use "npm run test" rather than "npm test" to run tests
 - removing code is a very good thing
 - run playwright tests headless locally, I don't want to see the browser UI
+- make sure to prefer running self terminating command in the terminal, e.g. "npx playwright test" instead of "npx playwright test --watch", look for the equivalent in other tools
+- run playwright in UI mode, e.g. "npx playwright test --ui" when debugging tests
+- if handy, run playwright test with vscode extension

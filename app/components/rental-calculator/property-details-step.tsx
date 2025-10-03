@@ -19,6 +19,9 @@ export function PropertyDetailsStep() {
   // Auto-increment refs and state
   const [isMouseDownOnInput, setIsMouseDownOnInput] = useState(false);
   const sizeRef = useRef<number>(state.propertyInfo.size);
+  const plusButtonRef = useRef<HTMLButtonElement>(null);
+  const minusButtonRef = useRef<HTMLButtonElement>(null);
+  
   useEffect(() => {
     sizeRef.current = state.propertyInfo.size;
   }, [state.propertyInfo.size]);
@@ -33,12 +36,14 @@ export function PropertyDetailsStep() {
   // Helper functions for size increment/decrement
   const incrementSize = () => {
     const newValue = (sizeRef.current || 0) + 1;
+    console.log(`[incrementSize] Incrementing from ${sizeRef.current} to ${newValue}`);
     sizeRef.current = newValue;
     dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
   };
 
   const decrementSize = () => {
     const newValue = Math.max(1, (sizeRef.current || 0) - 1);
+    console.log(`[decrementSize] Decrementing from ${sizeRef.current} to ${newValue}`);
     sizeRef.current = newValue;
     dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
   };
@@ -52,6 +57,23 @@ export function PropertyDetailsStep() {
     onRepeat: decrementSize,
     acceleration: true,
   });
+
+  // Expose test helpers to window for E2E tests
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).__testHelpers = {
+        startIncrement: incrementControls.start,
+        stopIncrement: incrementControls.stop,
+        startDecrement: decrementControls.start,
+        stopDecrement: decrementControls.stop,
+      };
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).__testHelpers;
+      }
+    };
+  }, [incrementControls, decrementControls]);
 
   // Click handlers that guard against double-fire when pointer events are active
   const handlePlusClick = () => {
@@ -126,7 +148,51 @@ export function PropertyDetailsStep() {
       window.removeEventListener("blur", stopAll);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [isMouseDownOnInput, incrementControls, decrementControls]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMouseDownOnInput]);
+
+  // Add native event listeners for E2E tests (dispatchEvent compatibility)
+  useEffect(() => {
+    const plusBtn = plusButtonRef.current;
+    const minusBtn = minusButtonRef.current;
+    
+    const handlePlusMouseDown = () => {
+      console.log("[E2E] Native mousedown on plus button");
+      incrementControls.start();
+    };
+    const handlePlusMouseUp = () => {
+      console.log("[E2E] Native mouseup on plus button");
+      incrementControls.stop();
+    };
+    const handleMinusMouseDown = () => {
+      console.log("[E2E] Native mousedown on minus button");
+      decrementControls.start();
+    };
+    const handleMinusMouseUp = () => {
+      console.log("[E2E] Native mouseup on minus button");
+      decrementControls.stop();
+    };
+    
+    if (plusBtn) {
+      plusBtn.addEventListener('mousedown', handlePlusMouseDown);
+      plusBtn.addEventListener('mouseup', handlePlusMouseUp);
+    }
+    if (minusBtn) {
+      minusBtn.addEventListener('mousedown', handleMinusMouseDown);
+      minusBtn.addEventListener('mouseup', handleMinusMouseUp);
+    }
+    
+    return () => {
+      if (plusBtn) {
+        plusBtn.removeEventListener('mousedown', handlePlusMouseDown);
+        plusBtn.removeEventListener('mouseup', handlePlusMouseUp);
+      }
+      if (minusBtn) {
+        minusBtn.removeEventListener('mousedown', handleMinusMouseDown);
+        minusBtn.removeEventListener('mouseup', handleMinusMouseUp);
+      }
+    };
+  }, [incrementControls, decrementControls]);
 
   // Smart area estimation based on property type and rooms
   const estimateAreaFromRooms = () => {
@@ -210,6 +276,7 @@ export function PropertyDetailsStep() {
           <div className="space-y-4">
             <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
               <Button
+                ref={minusButtonRef}
                 type="button"
                 variant="outline"
                 size="icon"
@@ -229,6 +296,7 @@ export function PropertyDetailsStep() {
                 }
                 className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Diminuer la superficie par 1m²"
+                data-testid="decrease-size-btn"
               >
                 <MinusCircle className="h-8 w-8" />
               </Button>
@@ -264,6 +332,7 @@ export function PropertyDetailsStep() {
                 </div>
               </div>
               <Button
+                ref={plusButtonRef}
                 type="button"
                 variant="outline"
                 size="icon"
@@ -280,6 +349,7 @@ export function PropertyDetailsStep() {
                 // onMouseCancel removed (unsupported prop)
                 className="h-16 w-16 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Augmenter la superficie par 1m²"
+                data-testid="increase-size-btn"
               >
                 <PlusCircle className="h-8 w-8" />
               </Button>

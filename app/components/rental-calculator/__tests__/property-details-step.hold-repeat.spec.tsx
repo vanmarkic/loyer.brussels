@@ -327,4 +327,102 @@ describe("PropertyDetailsStep hold-to-increment", () => {
     // But due to state persistence, we expect 4 (1 + 1 + 1 + 1)
     expect(Number(input.value)).toBeGreaterThanOrEqual(3);
   });
+
+  it("should accelerate increment speed when holding plus button for longer", () => {
+    renderWithProvider(<PropertyDetailsStep />);
+
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
+    const input = screen.getByPlaceholderText("75") as HTMLInputElement;
+
+    // Start from initial value (bootstrap sets to 1)
+    expect(input.value).toBe("1");
+
+    act(() => {
+      fireEvent.pointerDown(plus);
+      
+      // Phase 1: Initial speed (150ms interval)
+      // After 600ms at 150ms interval = ~4 increments (immediate + 3 intervals)
+      vi.advanceTimersByTime(600);
+      const valueAfterInitial = Number(input.value);
+      
+      // Phase 2: After holding longer, speed should accelerate
+      // After another 1000ms, the interval should be faster (e.g., 75ms or 50ms)
+      // Expected: significantly more than 6-7 additional increments at 150ms
+      // With acceleration to 75ms: ~13 increments, to 50ms: ~20 increments
+      vi.advanceTimersByTime(1000);
+      const valueAfterAcceleration = Number(input.value);
+      
+      fireEvent.pointerUp(plus);
+    });
+
+    const finalValue = Number(input.value);
+    const incrementsIn600ms = finalValue - 1; // subtract initial value
+    const incrementsInNext1000ms = finalValue - (1 + 4); // increments after acceleration phase
+
+    // At fixed 150ms interval:
+    // 600ms = ~4 increments
+    // 1000ms = ~6-7 increments
+    // Total = ~10-11 increments from start
+
+    // With acceleration (e.g., to 75ms after 600ms):
+    // 600ms = ~4 increments at 150ms
+    // 1000ms = ~13 increments at 75ms
+    // Total = ~17 increments
+
+    // With faster acceleration (to 50ms):
+    // Total = ~24 increments
+
+    // Test expectation: after 1600ms total hold time,
+    // we should have significantly more than 11 increments
+    // This test WILL FAIL with current fixed-interval implementation
+    expect(finalValue).toBeGreaterThan(15);
+    
+    // Additionally verify that the rate increased in phase 2
+    // In phase 1 (600ms): ~4 increments
+    // In phase 2 (1000ms): should be > 7 increments (more than 1000/150)
+    expect(incrementsInNext1000ms).toBeGreaterThan(7);
+  });
+
+  it("should accelerate decrement speed when holding minus button for longer", () => {
+    renderWithProvider(<PropertyDetailsStep />);
+
+    const plus = screen.getByRole("button", {
+      name: /Augmenter la superficie/,
+    });
+    const minus = screen.getByRole("button", {
+      name: /Diminuer la superficie/,
+    });
+    const input = screen.getByPlaceholderText("75") as HTMLInputElement;
+
+    // Start from a higher value to test decrement acceleration
+    act(() => {
+      fireEvent.change(input, { target: { value: "50" } });
+    });
+    expect(input.value).toBe("50");
+
+    act(() => {
+      fireEvent.pointerDown(minus);
+      
+      // Phase 1: Initial speed (150ms interval)
+      // After 600ms at 150ms interval = ~4 decrements
+      vi.advanceTimersByTime(600);
+      
+      // Phase 2: After holding longer, speed should accelerate
+      // After another 1000ms, interval should be faster
+      vi.advanceTimersByTime(1000);
+      
+      fireEvent.pointerUp(minus);
+    });
+
+    const finalValue = Number(input.value);
+    const totalDecrements = 50 - finalValue;
+
+    // At fixed 150ms interval: ~10-11 decrements total
+    // With acceleration: should be significantly more (>15)
+    // This test WILL FAIL with current fixed-interval implementation
+    expect(totalDecrements).toBeGreaterThan(15);
+    expect(finalValue).toBe(Math.max(1, 50 - totalDecrements)); // respect minimum
+  });
 });

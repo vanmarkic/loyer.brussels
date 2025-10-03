@@ -212,4 +212,100 @@ test.describe("Property Size Hold-Repeat Functionality", () => {
     expect(finalSize).not.toBe(startSize);
     console.log(`   ✅ Rapid pointer events handled correctly`);
   });
+
+  test("should accelerate increment speed when + button is held for longer", async ({
+    page,
+  }) => {
+    console.log("📍 Test: Acceleration on long hold of + button");
+
+    // Navigate to property details step
+    await navigateToPropertyDetailsStep(page);
+
+    const sizeInput = page.locator("#size");
+
+    // Set initial value
+    await sizeInput.fill("10");
+    await page.waitForTimeout(300);
+
+    // Get initial size value
+    const getSize = async () => Number((await sizeInput.inputValue()) || "0");
+    const startSize = await getSize();
+    console.log(`   ✓ Initial size: ${startSize}`);
+
+    // Find the + button
+    const plusBtn = page.getByRole("button", {
+      name: /augmenter la superficie/i,
+    });
+    await expect(plusBtn).toBeVisible();
+    await expect(plusBtn).toBeEnabled();
+
+    // Hold the button for a longer duration (2000ms) to trigger acceleration
+    console.log("   📍 Holding + button for 2000ms to test acceleration...");
+    await plusBtn.dispatchEvent("pointerdown");
+    await page.waitForTimeout(2000);
+    await plusBtn.dispatchEvent("pointerup");
+
+    // Check final size
+    const finalSize = await getSize();
+    const totalIncrements = finalSize - startSize;
+    console.log(`   ✓ Final size: ${finalSize}`);
+    console.log(`   ✓ Total increments: ${totalIncrements}`);
+
+    // With fixed 150ms interval: 2000ms / 150ms = ~13 increments
+    // With acceleration (e.g., starting at 150ms, then 100ms, then 50ms):
+    // Expected: significantly more than 13 increments
+    // This test WILL FAIL with current fixed-interval implementation
+    expect(totalIncrements).toBeGreaterThan(20);
+    console.log(
+      `   ✅ Acceleration verified: ${totalIncrements} increments in 2000ms (expected >20)`,
+    );
+  });
+
+  test("should accelerate decrement speed when - button is held for longer", async ({
+    page,
+  }) => {
+    console.log("📍 Test: Acceleration on long hold of - button");
+
+    // Navigate to property details step
+    await navigateToPropertyDetailsStep(page);
+
+    const sizeInput = page.locator("#size");
+
+    // Set initial value high enough to test decrement
+    await sizeInput.fill("50");
+    await page.waitForTimeout(300);
+
+    // Get initial size value
+    const getSize = async () => Number((await sizeInput.inputValue()) || "0");
+    const startSize = await getSize();
+    console.log(`   ✓ Initial size: ${startSize}`);
+
+    // Find the - button
+    const minusBtn = page.getByRole("button", {
+      name: /diminuer la superficie/i,
+    });
+    await expect(minusBtn).toBeVisible();
+    await expect(minusBtn).toBeEnabled();
+
+    // Hold the button for a longer duration (2000ms) to trigger acceleration
+    console.log("   📍 Holding - button for 2000ms to test acceleration...");
+    await minusBtn.dispatchEvent("pointerdown");
+    await page.waitForTimeout(2000);
+    await minusBtn.dispatchEvent("pointerup");
+
+    // Check final size
+    const finalSize = await getSize();
+    const totalDecrements = startSize - finalSize;
+    console.log(`   ✓ Final size: ${finalSize}`);
+    console.log(`   ✓ Total decrements: ${totalDecrements}`);
+
+    // With fixed 150ms interval: 2000ms / 150ms = ~13 decrements
+    // With acceleration: should be significantly more than 13 decrements
+    // This test WILL FAIL with current fixed-interval implementation
+    expect(totalDecrements).toBeGreaterThan(20);
+    expect(finalSize).toBeGreaterThanOrEqual(1); // Respect minimum constraint
+    console.log(
+      `   ✅ Acceleration verified: ${totalDecrements} decrements in 2000ms (expected >20)`,
+    );
+  });
 });

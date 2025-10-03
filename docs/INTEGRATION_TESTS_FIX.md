@@ -1,17 +1,21 @@
 # Integration Tests Fix - Skip When Credentials Missing
 
 ## Issue
+
 Integration tests were failing in CI/CD because Supabase environment variables were not configured:
+
 ```
 Error: supabaseUrl is required.
 ```
 
 ## Root Cause
+
 The Supabase client was being created at module load time with empty strings when environment variables were missing, causing the client initialization to throw an error.
 
 ## Solution
 
 ### 1. Updated Supabase Client Initialization
+
 **File**: `/workspace/app/lib/supabase.ts`
 
 - Added placeholder values for missing environment variables
@@ -20,26 +24,30 @@ The Supabase client was being created at module load time with empty strings whe
 
 ```typescript
 // Before
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";  // ❌ Throws error
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""; // ❌ Throws error
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 // After
-export const hasSupabaseCredentials = 
+export const hasSupabaseCredentials =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
   !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
   !!process.env.NEXT_PUBLIC_SERVICE_KEY;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co";  // ✅ Valid URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co"; // ✅ Valid URL
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
 ```
 
 ### 2. Updated Integration Tests to Skip When Credentials Missing
 
 #### Files Updated:
+
 - `/workspace/app/actions/__tests__/save-questionnaire.integration.test.ts`
 - `/workspace/app/actions/__tests__/send-contact.integration.test.ts`
 
 **Changes**:
+
 1. Import `hasSupabaseCredentials` flag
 2. Add `skipTests` variable based on credential availability
 3. Use `it.skipIf(skipTests)()` for all test cases
@@ -53,9 +61,12 @@ import { supabaseAdmin, hasSupabaseCredentials } from "@/app/lib/supabase";
 const skipTests = !hasSupabaseCredentials;
 
 // Skip tests conditionally
-it.skipIf(skipTests)("should successfully submit a complete questionnaire", async () => {
-  // test code...
-});
+it.skipIf(skipTests)(
+  "should successfully submit a complete questionnaire",
+  async () => {
+    // test code...
+  },
+);
 
 // Skip cleanup when tests are skipped
 afterAll(async () => {
@@ -67,6 +78,7 @@ afterAll(async () => {
 ## Test Results
 
 ### Without Credentials (CI/CD)
+
 ```bash
 ✓ app/actions/__tests__/save-questionnaire.integration.test.ts (10 tests | 10 skipped)
 ✓ app/actions/__tests__/send-contact.integration.test.ts (10 tests | 10 skipped)
@@ -77,6 +89,7 @@ Test Files  2 skipped (2)
 ```
 
 ### With Credentials (Local Development)
+
 ```bash
 ✓ app/actions/__tests__/save-questionnaire.integration.test.ts (10 tests)
 ✓ app/actions/__tests__/send-contact.integration.test.ts (10 tests)

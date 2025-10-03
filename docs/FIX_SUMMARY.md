@@ -1,9 +1,11 @@
 # Fix Summary: Infinite Rerender on Questionnaire Page
 
 ## Issue
+
 Users experienced infinite rerenders when clicking on "questionnaire détaillé" button from the results page.
 
 ## Root Cause Analysis
+
 The infinite rerender was caused by a circular dependency in a `useEffect` hook:
 
 ```typescript
@@ -16,6 +18,7 @@ useEffect(() => {
 ```
 
 **The Problem:**
+
 1. User changes form data → `data` state updates
 2. `useEffect` runs → calls `globalForm.update*()` methods
 3. Global context updates → component re-renders with new `globalForm` reference
@@ -25,9 +28,11 @@ useEffect(() => {
 ## Solution Implemented
 
 ### Step 1: Remove problematic useEffect
+
 Removed the `useEffect` hook entirely to prevent the circular dependency.
 
 ### Step 2: Create stable update callback
+
 ```typescript
 // Extract stable functions from context
 const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } = globalForm;
@@ -36,21 +41,23 @@ const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } = globalFo
 const updateData = useCallback((updates: Partial<QuestionnaireData>) => {
   setData((prev: QuestionnaireData) => {
     const newData = { ...prev, ...updates };
-    
+
     // Schedule global context updates for AFTER render (prevents "Cannot update while rendering" warning)
     Promise.resolve().then(() => {
       updateRentalInfo({...});
       updateHouseholdInfo({...});
       updatePropertyIssues({...});
     });
-    
+
     return newData;
   });
 }, [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues]); // ✅ Stable deps
 ```
 
 ### Step 3: Update all state setters
+
 Replaced all `setData((prev) => ({ ...prev, field: value }))` calls with:
+
 - `updateData({ field: value })`
 
 This ensures both local and global state are updated together without triggering rerenders.
@@ -64,8 +71,10 @@ This ensures both local and global state are updated together without triggering
    - Added: `useCallback`
 
 2. **Extract stable functions** (Lines 68-69):
+
    ```typescript
-   const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } = globalForm;
+   const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } =
+     globalForm;
    ```
 
 3. **New updateData function** (Lines 88-119):
@@ -81,11 +90,16 @@ This ensures both local and global state are updated together without triggering
 
 5. **Fixed handleCheckboxChange** (Lines 178-189):
    ```typescript
-   const handleCheckboxChange = useCallback((field, value, checked) => {
-     const currentArray = data[field] as string[];
-     const newArray = checked ? [...currentArray, value] : currentArray.filter(item => item !== value);
-     updateData({ [field]: newArray });
-   }, [data, updateData]);
+   const handleCheckboxChange = useCallback(
+     (field, value, checked) => {
+       const currentArray = data[field] as string[];
+       const newArray = checked
+         ? [...currentArray, value]
+         : currentArray.filter((item) => item !== value);
+       updateData({ [field]: newArray });
+     },
+     [data, updateData],
+   );
    ```
 
 ## Testing Performed
@@ -156,7 +170,8 @@ To verify the fix works:
    - Zero additional requests over 3 seconds
    - No infinite request loops
 
-**Evidence**: 
+**Evidence**:
+
 - 0 React warnings detected ✅
 - 0 additional network requests after load ✅
 - Smooth navigation and form interactions ✅

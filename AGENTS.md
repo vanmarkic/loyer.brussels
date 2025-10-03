@@ -12,3 +12,5 @@
 - leave the codebase cleaner than you found it (boyscout rule)
 - use context7 mcp server
 - use "npm run test" rather than "npm test" to run tests
+- removing code is a very good thing
+- run playwright tests headless locally, I don't want to see the browser UI

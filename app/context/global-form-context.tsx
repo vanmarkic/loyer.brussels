@@ -87,7 +87,7 @@ const generateSessionId = (): string => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-const initialGlobalState: GlobalFormState = {
+export const initialGlobalState: GlobalFormState = {
   size: 0,
   currentStep: 1,
   currentPage: "calculator",
@@ -119,7 +119,7 @@ type GlobalFormAction =
   | { type: "AUTO_SAVE" };
 
 // Reducer
-const globalFormReducer = (
+export const globalFormReducer = (
   state: GlobalFormState,
   action: GlobalFormAction,
 ): GlobalFormState => {
@@ -226,9 +226,9 @@ interface GlobalFormContextType {
 }
 
 // Context
-const GlobalFormContext = createContext<GlobalFormContextType | undefined>(
-  undefined,
-);
+export const GlobalFormContext = createContext<
+  GlobalFormContextType | undefined
+>(undefined);
 
 // Provider
 export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({

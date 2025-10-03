@@ -279,10 +279,10 @@ function DetailedQuestionnaireContent() {
             </div>
 
             <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-              <p className="text-sm text-blue-800">
+              <div className="text-sm text-blue-800">
                 <Info className="h-4 w-4 inline mr-2" />
                 {t("retrievedInfo.infoMessage")}
-              </p>
+              </div>
             </div>
           </div>
         );
@@ -522,10 +522,10 @@ function DetailedQuestionnaireContent() {
             </div>
 
             <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg">
-              <p className="text-sm text-orange-800">
+              <div className="text-sm text-orange-800">
                 <AlertCircle className="h-4 w-4 inline mr-2" />
                 {t("problems.warningMessage")}
-              </p>
+              </div>
             </div>
           </div>
         );
@@ -588,10 +588,10 @@ function DetailedQuestionnaireContent() {
             </div>
 
             <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-              <p className="text-sm text-green-800">
+              <div className="text-sm text-green-800">
                 <CheckCircle className="h-4 w-4 inline mr-2" />
                 {t("positiveAspects.successMessage")}
-              </p>
+              </div>
             </div>
           </div>
         );

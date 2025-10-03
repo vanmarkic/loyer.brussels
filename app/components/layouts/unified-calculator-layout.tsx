@@ -91,7 +91,7 @@ export function UnifiedCalculatorLayout({
       <footer className="bg-white border-t py-3 sm:py-4 px-3 sm:px-4">
         <div className="container mx-auto text-center">
           <p className="text-xs sm:text-sm text-gray-600">
-            © 2024 Collectif Wuune - Outil d'évaluation des loyers
+            © 2024 Collectif Wuune - Outil d&apos;évaluation des loyers
           </p>
         </div>
       </footer>

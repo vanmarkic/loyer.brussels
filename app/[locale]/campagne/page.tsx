@@ -29,7 +29,7 @@ export default function CampagnePage() {
               className="flex items-center gap-2 text-red-600 hover:text-red-700"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>Retour à l'accueil</span>
+              <span>Retour à l&apos;accueil</span>
             </Link>
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 text-red-600" />
@@ -69,7 +69,7 @@ export default function CampagnePage() {
                 </h3>
                 <p className="text-gray-600">
                   À Bruxelles, les loyers ont augmenté de plus de 30% en 10 ans, bien
-                  au-delà de l'inflation et des revenus des ménages.
+                  au-delà de l&apos;inflation et des revenus des ménages.
                 </p>
               </div>
               <div className="bg-white rounded-lg shadow-md p-6">
@@ -144,7 +144,7 @@ export default function CampagnePage() {
                 Mobilisation citoyenne
               </h3>
               <p className="text-gray-600">
-                Créer un mouvement citoyen fort capable d'influencer les politiques
+                Créer un mouvement citoyen fort capable d&apos;influencer les politiques
                 publiques de logement.
               </p>
             </div>
@@ -164,11 +164,11 @@ export default function CampagnePage() {
                 <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    Plateforme d'évaluation des loyers
+                    Plateforme d&apos;évaluation des loyers
                   </h3>
                   <p className="text-gray-600">
-                    Développement d'un outil en ligne permettant à chaque locataire
-                    d'évaluer facilement si son loyer respecte les grilles légales.
+                    Développement d&apos;un outil en ligne permettant à chaque locataire
+                    d&apos;évaluer facilement si son loyer respecte les grilles légales.
                   </p>
                 </div>
               </div>
@@ -193,7 +193,7 @@ export default function CampagnePage() {
                     Campagnes de sensibilisation
                   </h3>
                   <p className="text-gray-600">
-                    Diffusion d'informations dans les quartiers, sur les réseaux sociaux
+                    Diffusion d&apos;informations dans les quartiers, sur les réseaux sociaux
                     et dans les médias pour alerter sur les droits des locataires.
                   </p>
                 </div>
@@ -220,7 +220,7 @@ export default function CampagnePage() {
                   </h3>
                   <p className="text-gray-600">
                     Rencontres avec les élus, participation aux consultations publiques et
-                    propositions d'amélioration de la législation.
+                    propositions d&apos;amélioration de la législation.
                   </p>
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default function CampagnePage() {
                 <ul className="space-y-3 text-white/90">
                   <li>• Partage ton expérience de locataire</li>
                   <li>• Signale les loyers abusifs dont tu as connaissance</li>
-                  <li>• Aide d'autres locataires dans leurs démarches</li>
+                  <li>• Aide d&apos;autres locataires dans leurs démarches</li>
                   <li>• Contribue financièrement selon tes moyens</li>
                   <li>• Utilise tes compétences pour nous soutenir</li>
                 </ul>

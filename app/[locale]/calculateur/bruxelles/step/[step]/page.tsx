@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useReducer, useMemo } from "react";
+import { useEffect, useReducer, useMemo, useCallback } from "react";
 import {
   useGlobalForm,
   GlobalFormContext,
@@ -83,12 +83,12 @@ export default function CalculatorStepPage() {
     const saveSession = () => {};
     const loadSession = () => {};
     const clearSession = () => dispatch({ type: "RESET_FORM" });
-    const getActualRent = () => state.rentalInfo.actualRent;
-    const getLivingSpace = () => state.propertyInfo.size;
-    const getContactInfo = () => ({
+    const getActualRent = useCallback(() => state.rentalInfo.actualRent, [state.rentalInfo.actualRent]);
+    const getLivingSpace = useCallback(() => state.propertyInfo.size, [state.propertyInfo.size]);
+    const getContactInfo = useCallback(() => ({
       email: state.userProfile.email,
       phone: state.userProfile.phone,
-    });
+    }), [state.userProfile.email, state.userProfile.phone]);
     const contextValue = useMemo(
       () => ({
         state,

@@ -58,7 +58,7 @@ export default function BailleurPage() {
               Informez-vous pour éviter les conflits
             </h1>
             <p className="text-xl md:text-2xl leading-relaxed">
-              Respectez l'encadrement des loyers et maintenez de bonnes relations avec vos
+              Respectez l&apos;encadrement des loyers et maintenez de bonnes relations avec vos
               locataires
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function BailleurPage() {
                     Un accompagnement bienveillant
                   </h3>
                   <p className="text-green-700">
-                    Notre objectif n'est pas de sanctionner, mais de vous aider à
+                    Notre objectif n&apos;est pas de sanctionner, mais de vous aider à
                     comprendre et respecter la réglementation. Un loyer équitable est
                     bénéfique pour tous : il favorise la stabilité locative et réduit les
                     risques de conflits.
@@ -117,7 +117,7 @@ export default function BailleurPage() {
               <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
                 <BookOpen className="h-12 w-12 text-purple-600 mb-4" />
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                  Guide : "Puis-je augmenter le loyer ?"
+                  Guide : &quot;Puis-je augmenter le loyer ?&quot;
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Découvrez dans quelles conditions vous pouvez réviser le loyer et les
@@ -136,7 +136,7 @@ export default function BailleurPage() {
                 </h3>
                 <p className="text-gray-600 mb-4">
                   Évaluez rapidement le risque que votre loyer ne respecte pas
-                  l'encadrement.
+                  l&apos;encadrement.
                 </p>
                 <Button
                   onClick={handleQuickDiagnostic}
@@ -155,7 +155,7 @@ export default function BailleurPage() {
                     <Shield className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
                       <strong>Risque faible :</strong> Votre loyer semble conforme à
-                      l'encadrement. Continuez à maintenir cette bonne pratique !
+                      l&apos;encadrement. Continuez à maintenir cette bonne pratique !
                     </AlertDescription>
                   </Alert>
                 )}
@@ -177,7 +177,7 @@ export default function BailleurPage() {
                     <AlertDescription className="text-red-800">
                       <strong>Risque élevé :</strong> Votre loyer semble dépasser les
                       seuils légaux. Contactez-nous pour un accompagnement personnalisé et
-                      éviter d'éventuels conflits.
+                      éviter d&apos;éventuels conflits.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -191,7 +191,7 @@ export default function BailleurPage() {
                     Refaire le test
                   </Button>
                   <Button className="bg-green-600 text-white hover:bg-green-700">
-                    Obtenir de l'aide
+                    Obtenir de l&apos;aide
                   </Button>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function BailleurPage() {
                   </h3>
                   <p className="text-gray-600 mb-4">
                     En cas de désaccord avec votre locataire, optez pour la médiation.
-                    C'est souvent plus rapide et moins coûteux qu'une procédure
+                    C&apos;est souvent plus rapide et moins coûteux qu&apos;une procédure
                     judiciaire.
                   </p>
                   <Button
@@ -284,13 +284,13 @@ export default function BailleurPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Pourquoi encadrer les loyers ?</h2>
             <p className="text-xl mb-8 leading-relaxed">
-              L'encadrement des loyers protège le marché locatif et assure une concurrence
+              L&apos;encadrement des loyers protège le marché locatif et assure une concurrence
               loyale. Il garantit des loyers équitables tout en préservant la rentabilité
               des investissements immobiliers.
             </p>
             <div className="bg-white/10 rounded-lg p-6 mb-8">
               <p className="text-lg">
-                Pour en savoir plus sur les enjeux et bénéfices de l'encadrement des
+                Pour en savoir plus sur les enjeux et bénéfices de l&apos;encadrement des
                 loyers, consultez les travaux de BADALA (Base de Données des Loyers).
               </p>
             </div>
@@ -307,7 +307,7 @@ export default function BailleurPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Besoin d'accompagnement ?
+              Besoin d&apos;accompagnement ?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
               Notre équipe est là pour vous conseiller et vous accompagner dans vos

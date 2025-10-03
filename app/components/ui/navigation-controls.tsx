@@ -219,7 +219,7 @@ export function NavigationControls({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Recommencer l'évaluation?</AlertDialogTitle>
+                  <AlertDialogTitle>Recommencer l&apos;évaluation?</AlertDialogTitle>
                   <AlertDialogDescription>
                     Cette action supprimera toutes vos réponses actuelles et vous ramènera
                     au début. Cette action ne peut pas être annulée.

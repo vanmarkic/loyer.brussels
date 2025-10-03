@@ -37,7 +37,7 @@ export default function CalculatorPage() {
               className="flex items-center gap-2 text-red-600 hover:text-red-700 transition-colors"
             >
               <ArrowLeft className="h-5 w-5" />
-              <span>Retour à l'accueil</span>
+              <span>Retour à l&apos;accueil</span>
             </Link>
             <div className="flex items-center gap-2">
               <MapPin className="h-6 w-6 text-red-600" />
@@ -99,7 +99,7 @@ export default function CalculatorPage() {
                       <h3 className="text-2xl font-bold text-gray-800 mb-3">Flandres</h3>
                       <p className="text-gray-600">Région flamande</p>
                       <div className="mt-4 px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
-                        En cours d'évaluation
+                        En cours d&apos;évaluation
                       </div>
                     </div>
                   </div>
@@ -129,7 +129,7 @@ export default function CalculatorPage() {
                             </h3>
                             <p className="text-green-700 text-sm">
                               À Bruxelles, les loyers sont encadrés par une grille de
-                              référence légale. Notre outil vous permet d'évaluer si votre
+                              référence légale. Notre outil vous permet d&apos;évaluer si votre
                               loyer respecte cette grille.
                             </p>
                           </div>
@@ -158,7 +158,7 @@ export default function CalculatorPage() {
                         onClick={handleContinue}
                         className="bg-red-600 text-white hover:bg-red-700 px-8 py-3 text-lg"
                       >
-                        Continuer l'évaluation
+                        Continuer l&apos;évaluation
                       </Button>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ export default function CalculatorPage() {
                             Encadrement non encore appliqué
                           </h3>
                           <p className="text-orange-700 mb-4">
-                            L'encadrement des loyers n'est pas encore en vigueur en
+                            L&apos;encadrement des loyers n&apos;est pas encore en vigueur en
                             Wallonie, mais vous pouvez tout de même évaluer votre
                             situation pour vous préparer aux évolutions futures.
                           </p>
@@ -196,7 +196,7 @@ export default function CalculatorPage() {
 
                     <div className="mt-8 space-y-4">
                       <Button className="bg-orange-600 text-white hover:bg-orange-700 px-8 py-3 text-lg w-full">
-                        Continuer l'évaluation (indicative)
+                        Continuer l&apos;évaluation (indicative)
                       </Button>
                       <Button
                         variant="outline"
@@ -223,10 +223,10 @@ export default function CalculatorPage() {
                         <Info className="h-6 w-6 text-gray-600 mt-0.5 mr-3 flex-shrink-0" />
                         <div>
                           <h3 className="font-semibold text-gray-800 mb-3">
-                            Outil en cours d'évaluation
+                            Outil en cours d&apos;évaluation
                           </h3>
                           <p className="text-gray-700 mb-4">
-                            Nous travaillons actuellement sur l'adaptation de notre outil
+                            Nous travaillons actuellement sur l&apos;adaptation de notre outil
                             pour la région flamande. Cette fonctionnalité sera bientôt
                             disponible.
                           </p>
@@ -264,7 +264,7 @@ export default function CalculatorPage() {
       <footer className="bg-white border-t py-4 px-4">
         <div className="container mx-auto text-center">
           <p className="text-sm text-gray-600">
-            © 2024 Collectif Wuune - Outil d'évaluation des loyers
+            © 2024 Collectif Wuune - Outil d&apos;évaluation des loyers
           </p>
         </div>
       </footer>

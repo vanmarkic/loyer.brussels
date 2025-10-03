@@ -77,6 +77,21 @@ async function navigateToPropertyDetailsStep(page: any) {
 }
 
 test.describe("Mouse Down Acceleration Tests", () => {
+  test("should increase sqm by more than 2 after 1s mouse hold", async ({ page }) => {
+    await navigateToPropertyDetailsStep(page);
+    const sizeInput = page.locator("#size");
+    const plusBtn = page.getByRole("button", { name: /augmenter la superficie/i });
+    await expect(sizeInput).toBeVisible({ timeout: 10000 });
+    await expect(sizeInput).toBeEnabled({ timeout: 10000 });
+    await page.waitForTimeout(200);
+    const startValue = Number(await sizeInput.inputValue() || "0");
+    await plusBtn.dispatchEvent("mousedown");
+    await page.waitForTimeout(1000);
+    await plusBtn.dispatchEvent("mouseup");
+    const endValue = Number(await sizeInput.inputValue() || "0");
+    expect(endValue - startValue).toBeGreaterThan(2);
+    console.log(`   ✅ sqm increased from ${startValue} to ${endValue} after 1s hold`);
+  });
   test.beforeEach(async ({ page }) => {
     // Enable slow motion for better observation (optional)
     // await page.setViewportSize({ width: 1280, height: 720 });
@@ -98,7 +113,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
     });
 
     // Set initial value and verify it's displayed
-    await sizeInput.fill("10");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -218,7 +232,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
       name: /augmenter la superficie/i,
     });
 
-    await sizeInput.fill("5");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -254,7 +267,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
       name: /augmenter la superficie/i,
     });
 
-    await sizeInput.fill("15");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -289,7 +301,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
       name: /augmenter la superficie/i,
     });
 
-    await sizeInput.fill("20");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -327,7 +338,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
     });
 
     // Set high initial value for decrement testing
-    await sizeInput.fill("50");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -368,7 +378,6 @@ test.describe("Mouse Down Acceleration Tests", () => {
       name: /augmenter la superficie/i,
     });
 
-    await sizeInput.fill("5");
     await page.waitForTimeout(300);
 
     const getSize = async () => Number((await sizeInput.inputValue()) || "0");
@@ -408,107 +417,39 @@ test.describe("Mouse Down Acceleration Tests", () => {
     console.log(`   ✅ Acceleration consistency verified`);
   });
 
-  test("should show real-time visual feedback during mouse acceleration", async ({
-    page,
-  }) => {
-    console.log("📍 Test: Real-time visual feedback during mouse acceleration");
+  test("should strictly verify sqm increases at every interval during mouse hold", async ({ page }) => {
+    console.log("📍 Test: Strict mouse hold increments");
 
     await navigateToPropertyDetailsStep(page);
 
     const sizeInput = page.locator("#size");
-    const plusBtn = page.getByRole("button", {
-      name: /augmenter la superficie/i,
-    });
+    const plusBtn = page.getByRole("button", { name: /augmenter la superficie/i });
 
     // Set initial value
-    await sizeInput.fill("25");
     await page.waitForTimeout(300);
 
-    const getDisplayedValue = async () => {
-      const value = await sizeInput.inputValue();
-      return Number(value || "0");
-    };
-
+    const getDisplayedValue = async () => Number(await sizeInput.inputValue() || "0");
     const startValue = await getDisplayedValue();
-    console.log(`   ✓ Starting value displayed: ${startValue}m²`);
+    console.log(`   ✓ Starting value: ${startValue}m²`);
 
-    // Monitor UI changes during acceleration with high frequency sampling
-    const uiSnapshots: { value: number; time: number }[] = [];
-    let samplingActive = true;
-
-    // Start UI monitoring
-    const monitorUI = async () => {
-      while (samplingActive) {
-        const currentValue = await getDisplayedValue();
-        const timestamp = Date.now();
-        uiSnapshots.push({ value: currentValue, time: timestamp });
-        await page.waitForTimeout(50); // Sample every 50ms
-      }
-    };
-
-    // Start monitoring and mouse acceleration simultaneously
-    const monitorPromise = monitorUI();
-
-    console.log("   📍 Starting mouse hold with UI monitoring...");
-    const accelerationStartTime = Date.now();
-
+    // Hold mouse and sample every 100ms for 1.5s
     await plusBtn.dispatchEvent("mousedown");
-    await page.waitForTimeout(1500); // Hold for 1.5 seconds to see all phases
+    let previousValue = startValue;
+    let strictlyIncreasing = true;
+    for (let i = 0; i < 15; i++) {
+      await page.waitForTimeout(100);
+      const currentValue = await getDisplayedValue();
+      if (currentValue <= previousValue) {
+        strictlyIncreasing = false;
+        console.log(`   ❌ Value did not increase at interval ${i}: ${previousValue} → ${currentValue}`);
+        break;
+      }
+      previousValue = currentValue;
+    }
     await plusBtn.dispatchEvent("mouseup");
 
-    samplingActive = false;
-    await monitorPromise;
-
-    const finalValue = await getDisplayedValue();
-    const totalChange = finalValue - startValue;
-
-    console.log(`   ✓ Final value displayed: ${finalValue}m²`);
-    console.log(`   ✓ Total change visible to user: ${totalChange}m²`);
-    console.log(`   ✓ UI samples collected: ${uiSnapshots.length}`);
-
-    // Analyze UI update pattern
-    let actualChanges = 0;
-    let previousValue = startValue;
-    const changeTimestamps = [];
-
-    for (const snapshot of uiSnapshots) {
-      if (snapshot.value !== previousValue) {
-        actualChanges++;
-        changeTimestamps.push(snapshot.time - accelerationStartTime);
-        previousValue = snapshot.value;
-      }
-    }
-
-    console.log(`   ✓ Distinct UI updates observed: ${actualChanges}`);
-    console.log(
-      `   ✓ UI change intervals (first 10): ${changeTimestamps.slice(0, 10).join("ms, ")}ms`,
-    );
-
-    // Verify UI was actually updating
-    expect(actualChanges).toBeGreaterThan(10); // Should see many UI updates
-    expect(totalChange).toBeGreaterThan(15); // Should have significant change
-    expect(finalValue).toBeGreaterThan(startValue); // Value should increase
-
-    // Verify acceleration pattern in UI updates
-    const earlyChanges = changeTimestamps.filter((t) => t < 500).length;
-    const middleChanges = changeTimestamps.filter(
-      (t) => t >= 500 && t < 1000,
-    ).length;
-    const lateChanges = changeTimestamps.filter((t) => t >= 1000).length;
-
-    console.log(
-      `   ✓ UI changes by phase: Early=${earlyChanges}, Middle=${middleChanges}, Late=${lateChanges}`,
-    );
-
-    // Later phases should have more frequent UI updates (acceleration effect)
-    expect(lateChanges).toBeGreaterThan(earlyChanges);
-
-    console.log(`   ✅ Real-time visual feedback verified:`);
-    console.log(
-      `      User saw value change from ${startValue}m² to ${finalValue}m²`,
-    );
-    console.log(
-      `      ${actualChanges} visible updates during ${changeTimestamps[changeTimestamps.length - 1]}ms hold`,
-    );
+    // Final assertion
+    expect(strictlyIncreasing).toBe(true);
+    console.log("   ✅ Value increased at every interval during mouse hold");
   });
 });

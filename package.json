@@ -14,7 +14,7 @@
     "test:integration": "vitest --run app/actions/__tests__",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --headless",
     "test:e2e:ui": "playwright test --ui",
     "test:screenshots": "playwright test --project=desktop-chromium --project=mobile-safari",
     "test:report": "playwright show-report",

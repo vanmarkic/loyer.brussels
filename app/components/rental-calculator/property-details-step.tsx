@@ -220,6 +220,10 @@ export function PropertyDetailsStep() {
                 onPointerCancel={decrementControls.stop}
                 onTouchStart={decrementControls.start}
                 onTouchEnd={decrementControls.stop}
+                onMouseDown={decrementControls.start}
+                onMouseUp={decrementControls.stop}
+                onMouseLeave={decrementControls.stop}
+                // onMouseCancel removed (unsupported prop)
                 disabled={
                   !state.propertyInfo.size || state.propertyInfo.size <= 1
                 }
@@ -270,6 +274,10 @@ export function PropertyDetailsStep() {
                 onPointerCancel={incrementControls.stop}
                 onTouchStart={incrementControls.start}
                 onTouchEnd={incrementControls.stop}
+                onMouseDown={incrementControls.start}
+                onMouseUp={incrementControls.stop}
+                onMouseLeave={incrementControls.stop}
+                // onMouseCancel removed (unsupported prop)
                 className="h-16 w-16 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0 select-none"
                 aria-label="Augmenter la superficie par 1m²"
               >

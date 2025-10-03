@@ -30,7 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { propertyTypeLabels } from "@/lib/utils"; // Keep propertyTypeLabels if needed elsewhere, remove handlePDF
+import { propertyTypeLabels } from "@/app/lib/utils";
 
 export function ResultStep() {
   const { state, updateRentalInfo, dispatch } = useGlobalForm();
@@ -100,7 +100,7 @@ export function ResultStep() {
     setIsDownloadingPdf(true);
     try {
       // Dynamically import the handlePDF function
-      const { handlePDF } = await import("@/lib/utils");
+      const { handlePDF } = await import("@/app/lib/utils");
       // Convert GlobalFormState to FormState for PDF generation
       const formState = {
         step: state.currentStep,

@@ -13,7 +13,7 @@ import DetailedQuestionnairePage from "./page";
 import {
   GlobalFormProvider,
   useGlobalForm,
-} from "../../../../context/global-form-context";
+} from "@/features/calculator/context/global-form-context";
 import { saveQuestionnaireResponse } from "@/app/actions/save-questionnaire";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,12 +36,16 @@ vi.mock("@/hooks/use-toast", () => ({
   useToast: vi.fn(),
 }));
 
-vi.mock("../../../../context/global-form-context", () => ({
-  GlobalFormProvider: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
-  useGlobalForm: vi.fn(),
-}));
+vi.mock("@/features/calculator/context/global-form-context", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    GlobalFormProvider: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
+    useGlobalForm: vi.fn(),
+  };
+});
 
 vi.mock("lucide-react", () => ({
   ArrowLeft: () => <div data-testid="arrow-left-icon" />,

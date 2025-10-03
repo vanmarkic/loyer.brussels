@@ -29,6 +29,18 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@/features/*": [
+        "./app/features/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/app/*": [
+        "./app/*"
+      ],
+      "@/hooks/*": [
+        "./app/hooks/*"
       ]
     }
   },

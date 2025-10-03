@@ -1,7 +1,7 @@
 import { supabase } from "@/app/lib/supabase";
 import { IAddressRepository } from "../../interfaces/address";
 import { AddressResult, SearchServiceResponse } from "../../types";
-import { parseAddressQuery } from "@/app/lib/address/parse-query";
+import { parseAddressQuery } from "@/features/calculator/lib/address/parse-query";
 
 // Helper function to check for Supabase credentials (read-only queries only need anon key)
 function hasSupabaseCredentials(): boolean {

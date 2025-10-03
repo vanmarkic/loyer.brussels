@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Clock, Trash2, Play } from 'lucide-react';
-import { useGlobalForm } from '@/app/context/global-form-context';
+import { useGlobalForm } from '@/features/calculator/context/global-form-context';
 
 interface SessionRestorationProps {
   onSessionRestored?: (wasRestored: boolean) => void;

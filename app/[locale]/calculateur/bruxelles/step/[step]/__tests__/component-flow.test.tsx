@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter, useParams } from "next/navigation";
-import { useGlobalForm } from "@/app/context/global-form-context";
-import { useStepNavigation } from "@/app/hooks/use-step-navigation";
-import { StepNavigationProvider } from "@/app/components/rental-calculator/step-wrapper";
-import { GlobalFormProvider } from "@/app/context/global-form-context";
-import { FormProvider } from "@/app/context/form-context";
+import { useGlobalForm } from "@/features/calculator/context/global-form-context";
+import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
+import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
+import { GlobalFormProvider } from "@/features/calculator/context/global-form-context";
+import { FormProvider } from "@/features/calculator/context/form-context";
 import { SessionManagerProvider } from "@/app/components/ui/session-manager";
 import { vi } from "vitest";
 
@@ -16,18 +16,22 @@ vi.mock("next/navigation", () => ({
 }));
 
 // Mock the step navigation hook
-vi.mock("@/app/hooks/use-step-navigation", () => ({
+vi.mock("@/features/calculator/hooks/use-step-navigation", () => ({
   useStepNavigation: vi.fn(),
 }));
 
 // Mock the global form context
-vi.mock("@/app/context/global-form-context", () => ({
-  useGlobalForm: vi.fn(),
-  GlobalFormProvider: ({ children }: { children: React.ReactNode }) => children,
-}));
+vi.mock("@/features/calculator/context/global-form-context", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useGlobalForm: vi.fn(),
+    GlobalFormProvider: ({ children }: { children: React.ReactNode }) => children,
+  };
+});
 
 // Mock the form context
-vi.mock("@/app/context/form-context", () => ({
+vi.mock("@/features/calculator/context/form-context", () => ({
   FormProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
@@ -43,7 +47,7 @@ vi.mock("@/app/components/ui/session-manager", () => ({
 }));
 
 // Mock the rental calculator component
-vi.mock("@/app/components/rental-calculator/calculator", () => ({
+vi.mock("@/features/calculator/components/calculator", () => ({
   RentalCalculator: () => (
     <div data-testid="rental-calculator">Rental Calculator</div>
   ),

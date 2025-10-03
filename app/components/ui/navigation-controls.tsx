@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useGlobalForm } from "@/app/context/global-form-context";
+import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 
 interface NavigationControlsProps {
   currentStep: number;

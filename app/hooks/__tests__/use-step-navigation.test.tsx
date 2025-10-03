@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useRouter, useParams } from "next/navigation";
-import { useStepNavigation } from "../use-step-navigation";
+import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
 import { vi } from "vitest";
 
 // Mock Next.js navigation

@@ -1,0 +1,588 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { useGlobalForm } from "@/features/calculator/context/global-form-context";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+// Removed direct supabase import: import { supabase } from "@/app/lib/supabase";
+import { rentRecordRepository } from "@/app/data/repositories"; // Import the repository
+import type {
+  UserInputs,
+  RentRecordInput,
+  RentRecordUpdate,
+} from "@/app/data/types"; // Import types
+import {
+  ArrowRight,
+  Download,
+  Share2,
+  Info,
+  Calculator,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { propertyTypeLabels } from "@/features/calculator/lib/utils";
+
+export function ResultStep() {
+  const { state, updateRentalInfo, dispatch } = useGlobalForm();
+  const t = useTranslations("ResultStep");
+  const tFeatures = useTranslations("FeaturesStep");
+  const tDetails = useTranslations("PropertyDetailsStep");
+  const globalForm = useGlobalForm();
+  // Get existing data from global context to avoid re-asking
+  const existingRent = globalForm.getActualRent();
+  const contactInfo = globalForm.getContactInfo();
+
+  // Initialize with existing data
+  const [actualRent, setActualRent] = useState<string>(
+    () => existingRent || "",
+  );
+  const [email, setEmail] = useState<string>(() => contactInfo.email || "");
+  const [phoneNumber, setPhoneNumber] = useState<string>(
+    () => contactInfo.phone || "",
+  );
+
+  const [recordId, setRecordId] = useState<number | null>(null);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [updateStatus, setUpdateStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [initialInsertError, setInitialInsertError] = useState<string | null>(
+    null,
+  );
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false); // Add loading state
+
+  // Handlers to update both local and global state
+  const handleActualRentChange = useCallback(
+    (value: string) => {
+      setActualRent(value);
+      globalForm.updateRentalInfo({ actualRent: value });
+    },
+    [globalForm],
+  );
+
+  const handleEmailChange = useCallback(
+    (value: string) => {
+      setEmail(value);
+      globalForm.updateUserProfile({ email: value });
+    },
+    [globalForm],
+  );
+
+  const handlePhoneChange = useCallback(
+    (value: string) => {
+      setPhoneNumber(value);
+      globalForm.updateUserProfile({ phone: value });
+    },
+    [globalForm],
+  );
+
+  const handleReset = () => {
+    dispatch({ type: "RESET_FORM" });
+  };
+  const handleEdit = () => {
+    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
+  };
+
+  // Removed: const handleDownloadPdf = handlePDF(state);
+
+  // Async function to handle dynamic import and PDF generation
+  const triggerPdfDownload = async () => {
+    setIsDownloadingPdf(true);
+    try {
+      // Dynamically import the handlePDF function
+      const { handlePDF } = await import("@/app/lib/utils");
+      // Convert GlobalFormState to FormState for PDF generation
+      const formState = {
+        step: state.currentStep,
+        postalCode: state.propertyInfo.postalCode,
+        streetName: state.propertyInfo.streetName,
+        streetNumber: state.propertyInfo.streetNumber,
+        propertyType: state.propertyInfo.propertyType,
+        size: state.propertyInfo.size,
+        bedrooms: state.propertyInfo.bedrooms,
+        bathrooms: state.propertyInfo.bathrooms,
+        numberOfGarages: state.propertyInfo.numberOfGarages,
+        energyClass: state.propertyInfo.energyClass,
+        difficultyIndex: state.calculationResults.difficultyIndex,
+        medianRent: state.calculationResults.medianRent,
+        minRent: state.calculationResults.minRent,
+        maxRent: state.calculationResults.maxRent,
+        isLoading: state.calculationResults.isLoading,
+        error: state.calculationResults.error,
+        errorCode: state.calculationResults.errorCode,
+        hasCentralHeating: state.propertyInfo.hasCentralHeating,
+        hasThermalRegulation: state.propertyInfo.hasThermalRegulation,
+        hasDoubleGlazing: state.propertyInfo.hasDoubleGlazing,
+        hasSecondBathroom: state.propertyInfo.hasSecondBathroom,
+        hasRecreationalSpaces: state.propertyInfo.hasRecreationalSpaces,
+        hasStorageSpaces: state.propertyInfo.hasStorageSpaces,
+        constructedBefore2000: state.propertyInfo.constructedBefore2000,
+        propertyState: state.propertyInfo.propertyState,
+      };
+      // Execute the PDF generation
+      handlePDF(formState)(); // Call the returned function
+    } catch (error) {
+      console.error("Error loading or generating PDF:", error);
+      // Optionally show an error message to the user
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
+
+  // Helper function to get user inputs from state matching UserInputs type
+  const getUserInputs = (): UserInputs => {
+    let propertyStateString: string;
+    switch (state.propertyInfo.propertyState) {
+      case 1:
+        propertyStateString = "bad";
+        break; // Mauvais état
+      case 2:
+        propertyStateString = "good";
+        break; // Bon état
+      case 3:
+        propertyStateString = "excellent";
+        break; // Excellent état
+      default:
+        propertyStateString = "good"; // Default to 'good' if null or unexpected
+    }
+
+    return {
+      propertyType: state.propertyInfo.propertyType || "studio", // Provide default if empty
+      size: state.propertyInfo.size || 0,
+      bedrooms: state.propertyInfo.bedrooms || 0,
+      bathrooms: state.propertyInfo.bathrooms || 1,
+      energyClass: state.propertyInfo.energyClass || "G", // Provide default if empty
+      hasCentralHeating: state.propertyInfo.hasCentralHeating ?? false, // Default to false if null
+      hasThermalRegulation: state.propertyInfo.hasThermalRegulation ?? false,
+      hasDoubleGlazing: state.propertyInfo.hasDoubleGlazing ?? false,
+      hasSecondBathroom: state.propertyInfo.hasSecondBathroom ?? false,
+      hasRecreationalSpaces: state.propertyInfo.hasRecreationalSpaces ?? false,
+      hasStorageSpaces: state.propertyInfo.hasStorageSpaces ?? false,
+      streetNumber: state.propertyInfo.streetNumber || "",
+      streetName: state.propertyInfo.streetName || "",
+      postalCode: state.propertyInfo.postalCode || 0,
+      difficultyIndex: state.calculationResults.difficultyIndex, // Can be null
+      constructedBefore2000: state.propertyInfo.constructedBefore2000 ?? false,
+      propertyState: propertyStateString, // Assign the mapped string value
+      numberOfGarages: state.propertyInfo.numberOfGarages || 0,
+    };
+  };
+
+  // Effect to insert initial record using the repository
+  useEffect(() => {
+    const insertInitialRecord = async () => {
+      if (
+        state.calculationResults.medianRent &&
+        !recordId &&
+        !initialInsertError
+      ) {
+        const userInputs = getUserInputs();
+        const initialRecord: RentRecordInput = {
+          user_inputs: userInputs,
+          median_rent: state.calculationResults.medianRent,
+          created_at: new Date().toISOString(),
+        };
+
+        try {
+          console.log(
+            "Attempting initial insert via repository:",
+            initialRecord,
+          );
+          // Use the repository to create the record
+          const newId = await rentRecordRepository.create(initialRecord);
+          setRecordId(newId);
+          console.log("Initial record inserted via repository with ID:", newId);
+          setInitialInsertError(null);
+        } catch (error) {
+          console.error(
+            "Error inserting initial rent record via repository:",
+            error,
+          );
+          const errorMessage =
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred during initial insert.";
+          setInitialInsertError(errorMessage);
+          setRecordId(null);
+        }
+      }
+    };
+
+    insertInitialRecord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.calculationResults.medianRent, recordId, initialInsertError]); // Dependencies remain similar
+
+  // Function to handle the UPDATE using the repository
+  const handleActualRentUpdate = async () => {
+    let currentRecordId = recordId;
+
+    // If recordId doesn't exist yet but there's no error, try to create the record first
+    if (!currentRecordId && !initialInsertError) {
+      console.log("Attempting to create record before update...");
+      const userInputs = getUserInputs();
+      const initialRecord: RentRecordInput = {
+        user_inputs: userInputs,
+        median_rent: state.calculationResults.medianRent || 0,
+        created_at: new Date().toISOString(),
+      };
+
+      try {
+        currentRecordId = await rentRecordRepository.create(initialRecord);
+        setRecordId(currentRecordId);
+        console.log("Record created successfully with ID:", currentRecordId);
+        setInitialInsertError(null);
+      } catch (error) {
+        console.error("Error creating record during update:", error);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "An unknown error occurred during record creation.";
+        setInitialInsertError(errorMessage);
+        setUpdateStatus("error");
+        return;
+      }
+    }
+
+    if (!currentRecordId) {
+      console.error("Cannot update rent, no record ID available.");
+      setUpdateStatus("error");
+      return;
+    }
+
+    setIsUpdating(true);
+    setUpdateStatus("idle");
+
+    const rentValue = parseFloat(actualRent);
+    if (isNaN(rentValue) || rentValue <= 0) {
+      console.error("Invalid actual rent value:", actualRent);
+      setUpdateStatus("error");
+      setIsUpdating(false);
+      return;
+    }
+
+    try {
+      const updateData: RentRecordUpdate = {
+        actual_rent: rentValue,
+      };
+      if (email.trim()) {
+        updateData.email = email.trim();
+      }
+      if (phoneNumber.trim()) {
+        updateData.phone_number = phoneNumber.trim();
+      }
+
+      console.log(
+        `Attempting to update record ID: ${currentRecordId} via repository with data:`,
+        updateData,
+      );
+      // Use the repository to update the record
+      await rentRecordRepository.update(currentRecordId, updateData);
+      console.log(
+        `Record ID: ${currentRecordId} updated successfully via repository.`,
+      );
+      setUpdateStatus("success");
+    } catch (error) {
+      console.error("Error updating rent record via repository:", error);
+      setUpdateStatus("error");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // --- JSX remains largely the same ---
+  return (
+    <div className="space-y-6">
+      {initialInsertError && (
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+          role="alert"
+        >
+          <strong className="font-bold">{t("initialInsertError.title")}</strong>
+          <span className="block sm:inline">
+            {" "}
+            {t("initialInsertError.message", { error: initialInsertError })}
+          </span>
+        </div>
+      )}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
+        <p className="text-muted-foreground mt-2">{t("description")}</p>
+      </div>
+
+      <Card className="bg-gradient-to-r from-[#f18240] to-[#e05c6d] text-white">
+        <CardContent className="p-6">
+          <div className="text-center">
+            <p className="text-lg font-medium">{t("estimatedRentLabel")}</p>
+            <p className="text-5xl font-bold mt-2">
+              {state.calculationResults.medianRent ?? "..."} €
+            </p>
+            <div className="flex justify-center items-center mt-2">
+              <p className="text-sm opacity-80">
+                {t("priceRangeLabel")}:{" "}
+                {state.calculationResults.minRent ?? "N/A"} € -{" "}
+                {state.calculationResults.maxRent ?? "N/A"}€
+              </p>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-white"
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t("priceRangeTooltip")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Actual Rent Input Section */}
+      <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+        <div className="flex items-center justify-between">
+          <h3 className="font-medium">{t("actualRentSection.title")}</h3>
+          {(existingRent || contactInfo.email || contactInfo.phone) && (
+            <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+              ✓ Données sauvegardées
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {t("actualRentSection.description")}
+        </p>
+        <div className="space-y-2">
+          <Label htmlFor="actualRent">{t("actualRentSection.rentLabel")}</Label>
+          <Input
+            id="actualRent"
+            type="number"
+            placeholder={t("actualRentSection.rentPlaceholder")}
+            value={actualRent}
+            onChange={(e) => handleActualRentChange(e.target.value)}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
+            min="0"
+            step="1"
+          />
+        </div>
+        {/* Email Input */}
+        <div className="space-y-2">
+          <Label htmlFor="email">{t("actualRentSection.emailLabel")}</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder={t("actualRentSection.emailPlaceholder")}
+            value={email}
+            onChange={(e) => handleEmailChange(e.target.value)}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
+          />
+        </div>
+        {/* Phone Number Input */}
+        <div className="space-y-2">
+          <Label htmlFor="phoneNumber">
+            {t("actualRentSection.phoneLabel")}
+          </Label>
+          <Input
+            id="phoneNumber"
+            type="tel"
+            placeholder={t("actualRentSection.phonePlaceholder")}
+            value={phoneNumber}
+            onChange={(e) => handlePhoneChange(e.target.value)}
+            disabled={
+              isUpdating || updateStatus === "success" || !!initialInsertError
+            }
+          />
+        </div>
+        <Button
+          onClick={handleActualRentUpdate}
+          disabled={
+            isUpdating ||
+            updateStatus === "success" ||
+            actualRent.trim() === "" ||
+            !!initialInsertError
+          }
+          className="w-full"
+        >
+          {isUpdating
+            ? t("actualRentSection.updatingButton")
+            : updateStatus === "success"
+              ? t("actualRentSection.updatedButton")
+              : t("actualRentSection.confirmButton")}
+        </Button>
+        {updateStatus === "success" && (
+          <p className="text-sm text-green-600 flex items-center gap-1 mt-2">
+            <CheckCircle className="h-4 w-4" />{" "}
+            {t("actualRentSection.successMessage")}
+          </p>
+        )}
+        {updateStatus === "error" && (
+          <p className="text-sm text-red-600 flex items-center gap-1 mt-2">
+            <XCircle className="h-4 w-4" />{" "}
+            {t("actualRentSection.errorMessage")}
+          </p>
+        )}
+      </div>
+      {/* End Actual Rent Input Section */}
+
+      {/* Summary Section */}
+      <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+        <h3 className="font-medium">{t("summary.title")}</h3>
+        <div className="space-y-3">
+          <div>
+            <h4 className="text-sm font-medium text-gray-500">
+              {t("summary.addressLabel")}
+            </h4>
+            <p>
+              {state.propertyInfo.streetNumber} {state.propertyInfo.streetName},{" "}
+              {state.propertyInfo.postalCode} {t("summary.city")}
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="text-muted-foreground">
+              {t("summary.propertyTypeLabel")}:
+            </div>
+            <div className="font-medium">
+              {propertyTypeLabels[
+                state.propertyInfo.propertyType || "studio"
+              ] || "-"}{" "}
+              {/* Handle empty string */}
+            </div>
+            {/* Removed duplicate address display */}
+            <div className="text-muted-foreground">
+              {t("summary.sizeLabel")}:
+            </div>
+            <div className="font-medium">{state.propertyInfo.size} m²</div>
+            <div className="text-muted-foreground">
+              {t("summary.bedroomsLabel")}:
+            </div>
+            <div className="font-medium">
+              {state.propertyInfo.bedrooms === 4
+                ? tDetails("bedroomsCountMax")
+                : state.propertyInfo.bedrooms}
+            </div>
+            <div className="text-muted-foreground">
+              {t("summary.bathroomsLabel")}:
+            </div>
+            <div className="font-medium">{state.propertyInfo.bathrooms}</div>
+            <div className="text-muted-foreground">
+              {t("summary.energyClassLabel")}:
+            </div>
+            <div className="font-medium">
+              {state.propertyInfo.energyClass || "-"}
+            </div>{" "}
+            {/* Handle empty string */}
+            <div className="text-muted-foreground">
+              {t("summary.featuresLabel")}:
+            </div>
+            <div className="font-medium">
+              {[
+                state.propertyInfo.hasCentralHeating
+                  ? tFeatures("options.centralHeating")
+                  : null,
+                state.propertyInfo.hasThermalRegulation
+                  ? tFeatures("options.thermalRegulation")
+                  : null,
+                state.propertyInfo.hasDoubleGlazing
+                  ? tFeatures("options.doubleGlazing")
+                  : null,
+                state.propertyInfo.hasSecondBathroom
+                  ? tFeatures("options.secondBathroom")
+                  : null,
+                state.propertyInfo.hasRecreationalSpaces
+                  ? tFeatures("options.recreationalSpaces")
+                  : null,
+                state.propertyInfo.hasStorageSpaces
+                  ? tFeatures("options.storageSpaces")
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(", ") || t("summary.featuresNone")}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Calculation Method Section */}
+      <div className="bg-blue-50 p-4 rounded-lg text-sm">
+        <div className="flex items-start gap-2">
+          <Calculator className="h-5 w-5 text-blue-700 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-medium text-blue-800">
+              {t("calculationMethod.title")}
+            </p>
+            <p className="mt-1 text-blue-700">
+              {t("calculationMethod.description")}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Important Info Section */}
+      <div className="bg-amber-50 p-4 rounded-lg text-sm">
+        <p className="font-medium text-amber-800">{t("importantInfo.title")}</p>
+        <p className="mt-1 text-amber-700">{t("importantInfo.description1")}</p>
+        <p className="mt-2 text-amber-700">{t("importantInfo.description2")}</p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            className="flex-1 gap-2"
+            onClick={triggerPdfDownload}
+            disabled={isDownloadingPdf}
+          >
+            {isDownloadingPdf ? (
+              <span className="animate-spin h-4 w-4 border-b-2 border-current rounded-full inline-block"></span>
+            ) : (
+              <Download className="h-4 w-4" />
+            )}
+            {isDownloadingPdf
+              ? t("downloadingPdfButton")
+              : t("downloadPdfButton")}
+          </Button>
+          <Button
+            variant="outline"
+            className="flex-1 gap-2"
+            disabled={isDownloadingPdf}
+          >
+            {" "}
+            {/* Optionally disable share too */}
+            <Share2 className="h-4 w-4" /> {t("shareButton")}
+          </Button>
+        </div>
+        <Button
+          onClick={handleEdit}
+          className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2"
+        >
+          {t("modifyButton")} <ArrowRight className="h-4 w-4" />
+        </Button>
+        <Button
+          onClick={handleReset}
+          className="bg-[#e05c6d] hover:bg-[#d04c5d] gap-2"
+        >
+          {t("newEstimationButton")} <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}

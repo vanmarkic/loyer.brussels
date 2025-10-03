@@ -25,7 +25,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   GlobalFormProvider,
   useGlobalForm,
-} from "../../../../context/global-form-context";
+} from "@/features/calculator/context/global-form-context";
 import { saveQuestionnaireResponse } from "@/app/actions/save-questionnaire";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";

@@ -7,18 +7,18 @@ import {
   GlobalFormContext,
   initialGlobalState,
   globalFormReducer,
-} from "@/app/context/global-form-context";
+} from "@/features/calculator/context/global-form-context";
 import { UnifiedCalculatorLayout } from "@/app/components/layouts/unified-calculator-layout";
-import { FormProvider } from "@/app/context/form-context";
+import { FormProvider } from "@/features/calculator/context/form-context";
 import { SessionRestoration } from "@/app/components/ui/session-restoration";
 import {
   SessionManagerProvider,
   SessionHealthIndicator,
 } from "@/app/components/ui/session-manager";
-import { RentalCalculator } from "@/app/components/rental-calculator/calculator";
-import { useStepNavigation } from "@/app/hooks/use-step-navigation";
-import { StepNavigationProvider } from "@/app/components/rental-calculator/step-wrapper";
-import { PropertyInformation } from "@/app/data/global-form-types";
+import { RentalCalculator } from "@/features/calculator/components/calculator";
+import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
+import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
+import { PropertyInformation } from "@/features/calculator/types/global-form-types";
 
 // Step mapping
 const STEP_MAPPING = {

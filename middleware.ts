@@ -1,5 +1,5 @@
-import createMiddleware from "next-intl/middleware";
-import { locales, defaultLocale } from "@/src/i18n/request"; // Updated import path
+import createMiddleware from 'next-intl/middleware';
+import { locales, defaultLocale } from "@/app/i18n/request";
 
 export default createMiddleware({
   // A list of all locales that are supported

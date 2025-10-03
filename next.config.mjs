@@ -3,7 +3,7 @@ import createNextIntlPlugin from "next-intl/plugin"; // Import the plugin
 const withNextIntl = createNextIntlPlugin(
   // Provide the path to your i18n configuration file that exports the default config
   // Relative to the root of your project
-  "./src/i18n/request.ts"
+  "./app/i18n/request.ts"
 );
 
 /** @type {import('next').NextConfig} */
@@ -18,14 +18,16 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Fix multiple lockfiles warning
+  outputFileTracingRoot: process.cwd(),
   // Turbopack configuration for Next.js 15
   turbopack: {
     // Custom module resolution
     resolveAlias: {
-      '@': './src',
-      '@/components': './components', 
+      '@': './',
+      '@/components': './components',
       '@/app': './app',
-      '@/lib': './lib',
+      '@/features': './app/features',
     },
   },
 };

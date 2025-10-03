@@ -7,7 +7,7 @@ import {
   getTranslations,
   setRequestLocale,
 } from "next-intl/server"; // Import setRequestLocale and getTranslations
-import { locales } from "@/src/i18n/request"; // Updated import path
+import { locales } from "@/app/i18n/request";
 import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });

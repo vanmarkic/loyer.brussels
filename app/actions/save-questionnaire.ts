@@ -2,7 +2,7 @@
 
 import { supabaseAdmin } from "@/app/server/supabase-admin";
 import { sendQuestionnaireConfirmation, QuestionnaireEmailData } from "@/app/lib/email";
-import type { GlobalFormState } from "@/app/data/global-form-types";
+import type { GlobalFormState } from "@/features/calculator/types/global-form-types";
 
 export interface QuestionnaireSubmissionResult {
   success: boolean;

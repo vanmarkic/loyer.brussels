@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocale, useTranslations } from "next-intl";
-import { useGlobalForm, GlobalFormProvider } from "@/app/context/global-form-context";
+import { useGlobalForm, GlobalFormProvider } from "@/features/calculator/context/global-form-context";
 import { submitContactForm, ContactFormData } from "@/app/actions/send-contact";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";

@@ -304,6 +304,20 @@ This document details the accessibility improvements made to the loyer.brussels 
 
 ## Future Improvements
 
+### High Priority - Calculator Components
+1. **Calculator Steps Accessibility**
+   - Review all calculator step components for ARIA labels
+   - Add aria-hidden to decorative icons in:
+     - `app/components/rental-calculator/features-step.tsx`
+     - `app/components/rental-calculator/energy-step.tsx`
+     - `app/components/rental-calculator/wuune-result-step.tsx`
+     - `app/components/rental-calculator/address-autocomplete.tsx`
+     - `app/components/rental-calculator/property-details-step.tsx`
+     - `app/components/rental-calculator/property-type-step.tsx`
+     - `app/components/rental-calculator/result-step.tsx`
+   - Add skip links if needed
+   - Test keyboard navigation through multi-step form
+
 ### Medium Priority
 1. **Color Contrast Verification**
    - Run automated contrast checks on all text/background combinations

@@ -43,14 +43,14 @@ export function PropertyDetailsStep() {
     dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
   };
 
-  // Use the hold repeat hook for increment and decrement
+  // Use the hold repeat hook for increment and decrement with acceleration
   const incrementControls = useHoldRepeat({
     onRepeat: incrementSize,
-    interval: 150,
+    acceleration: true,
   });
   const decrementControls = useHoldRepeat({
     onRepeat: decrementSize,
-    interval: 150,
+    acceleration: true,
   });
 
   // Click handlers that guard against double-fire when pointer events are active

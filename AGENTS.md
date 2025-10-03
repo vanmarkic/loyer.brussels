@@ -11,3 +11,4 @@
 - use vitest instead of jest
 - leave the codebase cleaner than you found it (boyscout rule)
 - use context7 mcp server
+- use "npm run test" rather than "npm test" to run tests

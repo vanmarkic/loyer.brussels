@@ -18,6 +18,16 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Turbopack configuration for Next.js 15
+  turbopack: {
+    // Custom module resolution
+    resolveAlias: {
+      '@': './src',
+      '@/components': './components', 
+      '@/app': './app',
+      '@/lib': './lib',
+    },
+  },
 };
 
 // Wrap your config with the plugin

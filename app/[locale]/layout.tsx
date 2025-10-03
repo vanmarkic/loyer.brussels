@@ -2,7 +2,11 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"; // Import setRequestLocale and getTranslations
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server"; // Import setRequestLocale and getTranslations
 import { locales } from "@/src/i18n/request"; // Updated import path
 import "../globals.css";
 
@@ -10,10 +14,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 // Generate dynamic metadata based on locale
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
   return {
@@ -30,11 +35,14 @@ export function generateStaticParams() {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default async function RootLayout({ children, params }: RootLayoutProps) {
-  const { locale } = params;
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
+  const { locale } = await params;
 
   // Enable static rendering
   setRequestLocale(locale);

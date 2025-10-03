@@ -11,7 +11,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "test:integration": "vitest --run app/actions/__tests__",
+    "test:integration": "vitest --run --config vitest.integration.config.mjs app/actions/__tests__",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test --headless",

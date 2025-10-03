@@ -154,14 +154,18 @@ export default function Home() {
                     {t('HomePage.hero.shareText')}
                   </span>
                   <Link
-                    href="#"
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://loyer.brussels')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors shadow-lg"
                     aria-label="Partager sur Facebook"
                   >
                     <Facebook className="h-6 w-6 text-white" aria-hidden="true" />
                   </Link>
                   <Link
-                    href="#"
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://loyer.brussels')}&text=${encodeURIComponent('Rejoignez Wuune - Collectif contre les loyers abusifs')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 transition-colors shadow-lg"
                     aria-label="Partager sur Twitter"
                   >
@@ -214,7 +218,8 @@ export default function Home() {
                   {t('HomePage.news.items.permanences.date')}
                 </div>
                 <h3 className="wuune-news-title">
-                  <Link href="#" className="hover:text-red-600">
+                  {/* News article pages not yet created - linking to contact for more info */}
+                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
                     {t('HomePage.news.items.permanences.title')}
                   </Link>
                 </h3>
@@ -228,7 +233,7 @@ export default function Home() {
                   {t('HomePage.news.items.abusiveRent.date')}
                 </div>
                 <h3 className="wuune-news-title">
-                  <Link href="#" className="hover:text-red-600">
+                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
                     {t('HomePage.news.items.abusiveRent.title')}
                   </Link>
                 </h3>
@@ -242,7 +247,7 @@ export default function Home() {
                   {t('HomePage.news.items.manifesto.date')}
                 </div>
                 <h3 className="wuune-news-title">
-                  <Link href="#" className="hover:text-red-600">
+                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
                     {t('HomePage.news.items.manifesto.title')}
                   </Link>
                 </h3>
@@ -256,7 +261,7 @@ export default function Home() {
                   {t('HomePage.news.items.formation.date')}
                 </div>
                 <h3 className="wuune-news-title">
-                  <Link href="#" className="hover:text-red-600">
+                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
                     {t('HomePage.news.items.formation.title')}
                   </Link>
                 </h3>
@@ -266,6 +271,8 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Note: "View All News" button removed as /actualites page does not exist yet */}
+            {/* Uncomment when actualites page is created:
             <div className="text-center mt-8">
               <Link href={`/${currentLocale}/actualites`}>
                 <Button
@@ -276,6 +283,7 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
+            */}
           </div>
         </div>
       </section>
@@ -289,26 +297,27 @@ export default function Home() {
                 {t('HomePage.resources.title')}
               </h3>
               <div className="space-y-4">
+                {/* Resources coming soon - for now linking to contact page */}
                 <Link
-                  href="#"
+                  href={`/${currentLocale}/contact`}
                   className="block text-red-600 hover:text-red-700 font-semibold"
                 >
                   {t('HomePage.resources.links.legalAid')}
                 </Link>
                 <Link
-                  href="#"
+                  href={`/${currentLocale}/contact`}
                   className="block text-red-600 hover:text-red-700 font-semibold"
                 >
                   {t('HomePage.resources.links.tenantRights')}
                 </Link>
                 <Link
-                  href="#"
+                  href={`/${currentLocale}/contact`}
                   className="block text-red-600 hover:text-red-700 font-semibold"
                 >
                   {t('HomePage.resources.links.rentControl')}
                 </Link>
                 <Link
-                  href="#"
+                  href={`/${currentLocale}/contact`}
                   className="block text-red-600 hover:text-red-700 font-semibold"
                 >
                   {t('HomePage.resources.links.mediation')}

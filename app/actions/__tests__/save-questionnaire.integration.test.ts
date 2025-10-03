@@ -1,6 +1,7 @@
 /**
  * Integration tests for questionnaire submission
  * Tests the complete flow: data collection -> validation -> database -> email
+ * @vitest-environment node
  */
 
 import { describe, it, expect, afterAll, vi } from "vitest";

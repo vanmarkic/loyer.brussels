@@ -1,6 +1,7 @@
 /**
  * Integration tests for contact form submission
  * Tests the complete flow: validation -> database -> email sending
+ * @vitest-environment node
  */
 
 import { describe, it, expect, afterAll, vi } from "vitest";

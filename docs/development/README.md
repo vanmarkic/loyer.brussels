@@ -31,6 +31,15 @@ Failing tests have been added for an acceleration feature in the apartment size 
 - **[DATA_REDUNDANCY_TESTING.md](./DATA_REDUNDANCY_TESTING.md)** - Data validation testing
 - **[FINAL_E2E_TEST_RESULTS.md](./FINAL_E2E_TEST_RESULTS.md)** - E2E test results
 
+## Code Quality & Maintenance
+
+- **[CODEBASE_CLEANUP_REPORT.md](./CODEBASE_CLEANUP_REPORT.md)** - Comprehensive cleanup analysis with parallel execution plan
+  - Security vulnerabilities and fixes
+  - Code quality improvements
+  - Type safety enhancements
+  - Documentation gaps and solutions
+  - Task assignment matrix for parallel execution
+
 ## Quick Links
 
 - Main README: [`../README.md`](../README.md)

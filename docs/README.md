@@ -24,6 +24,7 @@ development/
 ├── ARCHITECTURE.md             # Technical architecture & improvement roadmap
 ├── TESTING_GUIDE.md           # Comprehensive testing procedures (E2E, integration, manual)
 ├── DEPLOYMENT.md              # Complete deployment & setup guide
+├── CODEBASE_CLEANUP_REPORT.md # Parallel task execution plan for code quality improvements
 ├── FINAL_E2E_TEST_RESULTS.md  # Latest E2E test verification results
 └── DATA_REDUNDANCY_TESTING.md # Specific testing procedures for data flow
 ```
@@ -83,6 +84,14 @@ analysis/
 2. **Testing Procedures**: `development/TESTING_GUIDE.md`
 3. **Architecture Patterns**: `development/ARCHITECTURE.md`
 4. **Recent Solutions**: `history/SEPTEMBER_2025_WORK.md`
+5. **Code Quality Tasks**: `development/CODEBASE_CLEANUP_REPORT.md` for improvement opportunities
+
+#### **Improve Code Quality**
+
+1. **Cleanup Plan**: `development/CODEBASE_CLEANUP_REPORT.md` for parallel task execution
+2. **Security Fixes**: Check report for vulnerability remediation
+3. **Type Safety**: See report for TypeScript improvements
+4. **Dead Code**: Review report for elimination candidates
 
 #### **Understand User Experience**
 

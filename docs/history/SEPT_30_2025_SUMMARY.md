@@ -174,7 +174,6 @@ yarn test:screenshots  # Visual tests
 ### High Priority (Week 2)
 
 1. **Form Validation Enhancement** (3 days)
-
    - Real-time validation with helpful messages
    - Field-level error indicators
    - Better error recovery UX
@@ -187,12 +186,10 @@ yarn test:screenshots  # Visual tests
 ### Quick Wins (1-2 days total)
 
 3. **Brussels Card Prominence** (0.5 days)
-
    - Make active Brussels region more prominent
    - Add "Disponible maintenant" badge
 
 4. **Contact Form Pre-fill** (1 day)
-
    - Use session data when `?join=true` parameter present
    - Pre-fill email/phone from calculator
 
@@ -203,7 +200,6 @@ yarn test:screenshots  # Visual tests
 ### Medium Priority (Weeks 3-4)
 
 6. **Social Proof Integration** (3 days)
-
    - Member count display
    - Brief testimonials
    - Impact metrics
@@ -245,36 +241,30 @@ yarn test:screenshots  # Visual tests
 ### Files Modified
 
 1. **`app/components/rental-calculator/result-step.tsx`**
-
    - Added GlobalFormContext integration
    - Added data pre-filling from session
    - Added visual indicators for saved data
    - Added handlers to sync local & global state
 
 2. **`app/[locale]/not-found.tsx`**
-
    - Created new branded 404 page
    - Multilingual support
    - Navigation recovery options
 
 3. **`components/ui/checkbox.tsx`**
-
    - Enhanced mobile size (20x20px)
    - Added cursor pointer
    - Responsive icon sizing
 
 4. **`components/ui/input.tsx`**
-
    - Mobile height: 48px (from 40px)
    - Added touch-manipulation
 
 5. **`components/ui/textarea.tsx`**
-
    - Mobile min-height: 96px (from 80px)
    - Added touch-manipulation
 
 6. **`components/ui/button.tsx`**
-
    - Mobile sizes: 48px (from 40px)
    - All sizes now mobile-friendly
 

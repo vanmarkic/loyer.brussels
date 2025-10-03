@@ -135,12 +135,10 @@ yarn test save-questionnaire.integration
 After running tests, check `drag.markovic@gmail.com` for:
 
 1. **Contact Form Confirmation**
-
    - Subject: "Votre message a bien été reçu - Loyer.Brussels"
    - Contains: User's submission details, next steps
 
 2. **Questionnaire Confirmation**
-
    - Subject: "Votre questionnaire a été soumis - Loyer.Brussels"
    - Contains: Submission ID, timestamp, next steps
 
@@ -396,4 +394,3 @@ All features are fully tested and working correctly. The email domain verificati
 **Last Run**: September 30, 2025, 16:57:36  
 **Duration**: 7.78 seconds  
 **Result**: ✅ All 20 tests PASSED
-

@@ -106,7 +106,9 @@
 3. [ ] In questionnaire section 1, fill additional data
 4. [ ] Open browser console and run:
    ```javascript
-   const session = JSON.parse(sessionStorage.getItem("loyer-brussels-form-data"));
+   const session = JSON.parse(
+     sessionStorage.getItem("loyer-brussels-form-data"),
+   );
    console.log("Rent:", session.rentalInfo.actualRent);
    console.log("Email:", session.userProfile.email);
    console.log("Living Space:", session.propertyInfo.size);
@@ -201,10 +203,10 @@ location.reload();
 
 ### Environment:
 
-- **Date Tested:** ****\_\_****
-- **Browser:** ****\_\_****
-- **OS:** ****\_\_****
-- **Tester:** ****\_\_****
+- **Date Tested:** \***\*\_\_\*\***
+- **Browser:** \***\*\_\_\*\***
+- **OS:** \***\*\_\_\*\***
+- **Tester:** \***\*\_\_\*\***
 
 ### Results:
 

@@ -11,13 +11,11 @@
 Users were being asked for the same information multiple times:
 
 1. **Rent Amount** - Asked in:
-
    - `result-step.tsx` (step 6 of calculator)
    - `wuune-result-step.tsx` (alternative result view)
    - Potentially questionnaire
 
 2. **Contact Information** - Asked in:
-
    - `result-step.tsx` (email & phone)
    - `wuune-result-step.tsx` (email & phone)
    - Contact form (again!)
@@ -69,7 +67,9 @@ const contactInfo = globalForm.getContactInfo();
 
 const [actualRent, setActualRent] = useState<string>(() => existingRent || "");
 const [email, setEmail] = useState<string>(() => contactInfo.email || "");
-const [phoneNumber, setPhoneNumber] = useState<string>(() => contactInfo.phone || "");
+const [phoneNumber, setPhoneNumber] = useState<string>(
+  () => contactInfo.phone || "",
+);
 
 // Update both local and global state
 const handleActualRentChange = useCallback(
@@ -77,7 +77,7 @@ const handleActualRentChange = useCallback(
     setActualRent(value);
     globalForm.updateRentalInfo({ actualRent: value });
   },
-  [globalForm]
+  [globalForm],
 );
 ```
 
@@ -226,19 +226,16 @@ const handleActualRentChange = useCallback(
 ## Code Files Modified
 
 1. ✅ `app/components/rental-calculator/result-step.tsx`
-
    - Added `useGlobalForm()` hook
    - Added data getters for existing values
    - Added handlers to update global context
    - Added visual indicator for saved data
 
 2. ✅ `app/context/global-form-context.tsx`
-
    - Already had all necessary infrastructure
    - No changes needed
 
 3. ✅ `app/[locale]/calculateur/bruxelles/questionnaire/page.tsx`
-
    - Already correctly using global context
    - No changes needed
 

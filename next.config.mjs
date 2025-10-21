@@ -3,7 +3,7 @@ import createNextIntlPlugin from "next-intl/plugin"; // Import the plugin
 const withNextIntl = createNextIntlPlugin(
   // Provide the path to your i18n configuration file that exports the default config
   // Relative to the root of your project
-  "./app/i18n/request.ts"
+  "./i18n/request.ts"
 );
 
 /** @type {import('next').NextConfig} */

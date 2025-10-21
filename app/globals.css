@@ -11,6 +11,21 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-start-rgb));
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Headings use Chelsea Market */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-chelsea-market), cursive;
+}
+
+/* Paragraphs use Inter */
+p {
+  font-family: var(--font-inter), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 @layer base {
@@ -285,11 +300,49 @@ body {
   perspective: 1000px;
 }
 
+/* Fade-in animation for hero */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+/* Slide-up animation for sections */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .smooth-transition,
   .hover-scale,
-  .card-hover {
+  .card-hover,
+  .animate-fade-in,
+  .animate-slide-up {
     transition: none !important;
     animation: none !important;
   }

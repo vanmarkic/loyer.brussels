@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Facebook, Menu, Twitter, Users, Heart } from 'lucide-react';
+import { Facebook, Menu, Twitter, Heart } from 'lucide-react';
 import { Button } from '@/app/components/ui/button';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -16,28 +16,15 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Skip to main content link for keyboard navigation */}
-      <a 
-        href="#main-content" 
+      <a
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-red-600 focus:text-white focus:rounded-md focus:shadow-lg"
       >
         Aller au contenu principal
       </a>
-      
-      {/* Top header - simplified like wuune.be */}
-      <header className="bg-white py-3 px-4 border-b border-gray-200">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Users className="h-5 w-5 text-red-600" aria-hidden="true" />
-            <span className="text-sm font-bold uppercase text-gray-700 tracking-wider">
-              {t('HomePage.header.collectiveTitle')}
-            </span>
-          </div>
-          <LanguageSwitcher />
-        </div>
-      </header>
 
       {/* Main navigation - bold style like wuune.be */}
-      <nav className="bg-red-600 py-3 px-6">
+      <nav className="bg-red-600 py-4 px-6">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Heart className="h-8 w-8 text-white" aria-hidden="true" />
@@ -73,16 +60,20 @@ export default function Home() {
             >
               {t('HomePage.navigation.contact')}
             </Link>
+            <LanguageSwitcher />
           </div>
-          <button
-            className="text-white flex items-center gap-2 wuune-nav md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" aria-hidden="true" />
-          </button>
+          <div className="flex md:hidden items-center gap-4">
+            <LanguageSwitcher />
+            <button
+              className="text-white flex items-center gap-2 wuune-nav"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {t('HomePage.navigation.menu')} <Menu className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -113,43 +104,38 @@ export default function Home() {
       )}
 
       {/* Hero section with gradient background - matching wuune.be style */}
-      <main id="main-content" className="flex-1 bg-gradient-to-br from-red-600 via-red-500 to-orange-500">
-        <div className="container mx-auto px-4 py-20 md:py-32 relative">
-          <div className="text-center max-w-6xl mx-auto">
+      <main id="main-content" className="flex-1 bg-gradient-to-br from-red-600 via-red-500 to-orange-500 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 py-12 md:py-20 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
             {/* Main hero content centered like wuune.be */}
-            <div className="text-white space-y-12">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase leading-tight text-shadow-lg tracking-wide">
+            <div className="text-white space-y-6 md:space-y-8">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase leading-tight text-shadow-lg tracking-wide animate-fade-in">
                 {t('HomePage.hero.mainTitle')}
               </h1>
 
-              <div className="flex justify-center mb-8">
-                <div className="aspect-video w-full max-w-md md:max-w-lg rounded-xl overflow-hidden shadow-2xl border-4 border-white/20">
-                  <Image
-                    src="/hero-manifestation.svg"
-                    alt={t('HomePage.hero.imageAlt')}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-8 max-w-4xl mx-auto">
-                <h2 className="text-2xl md:text-4xl font-bold">
+              <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
                   {t('HomePage.hero.subtitle')}
                 </h2>
-                <p className="text-lg md:text-xl leading-relaxed font-medium">
+                <p className="text-lg md:text-xl lg:text-2xl leading-relaxed font-medium opacity-95 max-w-3xl mx-auto">
                   {t('HomePage.hero.description')}
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-8 items-center justify-center pt-8">
-                <Link href={`/${currentLocale}/calculateur`}>
-                  <Button className="bg-white text-red-600 hover:bg-gray-100 rounded-full px-12 py-4 text-xl font-bold shadow-lg transform hover:scale-105 transition-all uppercase">
+              <div className="flex flex-col sm:flex-row gap-6 md:gap-8 items-center justify-center pt-6">
+                <Link href={`/${currentLocale}/calculateur`} className="w-full sm:w-auto">
+                  <Button className="w-full sm:w-auto bg-white text-red-600 hover:bg-gray-50 rounded-full px-12 py-6 text-xl font-bold shadow-2xl transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 uppercase tracking-wide">
                     {t('HomePage.hero.startButton')}
                   </Button>
                 </Link>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3">
                   <span className="text-sm uppercase font-bold tracking-wide">
                     {t('HomePage.hero.shareText')}
                   </span>
@@ -157,19 +143,19 @@ export default function Home() {
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://loyer.brussels')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 transition-colors shadow-lg"
+                    className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 hover:scale-110 transition-all duration-300 shadow-lg"
                     aria-label="Partager sur Facebook"
                   >
-                    <Facebook className="h-6 w-6 text-white" aria-hidden="true" />
+                    <Facebook className="h-5 w-5 text-white" aria-hidden="true" />
                   </Link>
                   <Link
                     href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://loyer.brussels')}&text=${encodeURIComponent('Rejoignez Wuune - Collectif contre les loyers abusifs')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 transition-colors shadow-lg"
+                    className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 hover:scale-110 transition-all duration-300 shadow-lg"
                     aria-label="Partager sur Twitter"
                   >
-                    <Twitter className="h-6 w-6 text-white" aria-hidden="true" />
+                    <Twitter className="h-5 w-5 text-white" aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -211,64 +197,75 @@ export default function Home() {
           <h2 className="wuune-section-title text-center text-gray-800 mb-12">
             {t('HomePage.news.title')}
           </h2>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="wuune-news-item">
-                <div className="wuune-news-date">
-                  {t('HomePage.news.items.permanences.date')}
-                </div>
-                <h3 className="wuune-news-title">
-                  {/* News article pages not yet created - linking to contact for more info */}
-                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
+              <Link href={`/${currentLocale}/contact`} className="group">
+                <div className="wuune-news-item group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                  <div className="wuune-news-date">
+                    {t('HomePage.news.items.permanences.date')}
+                  </div>
+                  <h3 className="wuune-news-title group-hover:text-red-600 transition-colors">
                     {t('HomePage.news.items.permanences.title')}
-                  </Link>
-                </h3>
-                <p className="wuune-news-excerpt">
-                  {t('HomePage.news.items.permanences.excerpt')}
-                </p>
-              </div>
-
-              <div className="wuune-news-item">
-                <div className="wuune-news-date">
-                  {t('HomePage.news.items.abusiveRent.date')}
+                  </h3>
+                  <p className="wuune-news-excerpt">
+                    {t('HomePage.news.items.permanences.excerpt')}
+                  </p>
+                  <div className="mt-4 text-red-600 font-semibold text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Lire la suite →
+                  </div>
                 </div>
-                <h3 className="wuune-news-title">
-                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
+              </Link>
+
+              <Link href={`/${currentLocale}/contact`} className="group">
+                <div className="wuune-news-item group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                  <div className="wuune-news-date">
+                    {t('HomePage.news.items.abusiveRent.date')}
+                  </div>
+                  <h3 className="wuune-news-title group-hover:text-red-600 transition-colors">
                     {t('HomePage.news.items.abusiveRent.title')}
-                  </Link>
-                </h3>
-                <p className="wuune-news-excerpt">
-                  {t('HomePage.news.items.abusiveRent.excerpt')}
-                </p>
-              </div>
-
-              <div className="wuune-news-item">
-                <div className="wuune-news-date">
-                  {t('HomePage.news.items.manifesto.date')}
+                  </h3>
+                  <p className="wuune-news-excerpt">
+                    {t('HomePage.news.items.abusiveRent.excerpt')}
+                  </p>
+                  <div className="mt-4 text-red-600 font-semibold text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Lire la suite →
+                  </div>
                 </div>
-                <h3 className="wuune-news-title">
-                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
+              </Link>
+
+              <Link href={`/${currentLocale}/contact`} className="group">
+                <div className="wuune-news-item group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                  <div className="wuune-news-date">
+                    {t('HomePage.news.items.manifesto.date')}
+                  </div>
+                  <h3 className="wuune-news-title group-hover:text-red-600 transition-colors">
                     {t('HomePage.news.items.manifesto.title')}
-                  </Link>
-                </h3>
-                <p className="wuune-news-excerpt">
-                  {t('HomePage.news.items.manifesto.excerpt')}
-                </p>
-              </div>
-
-              <div className="wuune-news-item">
-                <div className="wuune-news-date">
-                  {t('HomePage.news.items.formation.date')}
+                  </h3>
+                  <p className="wuune-news-excerpt">
+                    {t('HomePage.news.items.manifesto.excerpt')}
+                  </p>
+                  <div className="mt-4 text-red-600 font-semibold text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Lire la suite →
+                  </div>
                 </div>
-                <h3 className="wuune-news-title">
-                  <Link href={`/${currentLocale}/contact`} className="hover:text-red-600">
+              </Link>
+
+              <Link href={`/${currentLocale}/contact`} className="group">
+                <div className="wuune-news-item group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+                  <div className="wuune-news-date">
+                    {t('HomePage.news.items.formation.date')}
+                  </div>
+                  <h3 className="wuune-news-title group-hover:text-red-600 transition-colors">
                     {t('HomePage.news.items.formation.title')}
-                  </Link>
-                </h3>
-                <p className="wuune-news-excerpt">
-                  {t('HomePage.news.items.formation.excerpt')}
-                </p>
-              </div>
+                  </h3>
+                  <p className="wuune-news-excerpt">
+                    {t('HomePage.news.items.formation.excerpt')}
+                  </p>
+                  <div className="mt-4 text-red-600 font-semibold text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Lire la suite →
+                  </div>
+                </div>
+              </Link>
             </div>
 
             {/* Note: "View All News" button removed as /actualites page does not exist yet */}
@@ -368,15 +365,77 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer - simplified like wuune.be */}
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Heart className="h-6 w-6 text-red-500" aria-hidden="true" />
-            <span className="font-black text-xl tracking-wide">WUUNE</span>
+      {/* Footer - enhanced design with better visibility */}
+      <footer className="bg-gradient-to-b from-gray-900 to-black text-white py-12 md:py-16 border-t-4 border-red-600">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-8">
+              {/* Brand section */}
+              <div className="text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                  <Heart className="h-8 w-8 text-red-500" aria-hidden="true" />
+                  <span className="font-black text-2xl tracking-wide">WUUNE</span>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {t('HomePage.footer.description')}
+                </p>
+              </div>
+
+              {/* Quick links */}
+              <div className="text-center">
+                <h3 className="font-bold text-lg mb-4 uppercase tracking-wide">Navigation</h3>
+                <div className="flex flex-col gap-3">
+                  <Link href={`/${currentLocale}`} className="text-gray-300 hover:text-white hover:underline transition-colors">
+                    {t('HomePage.navigation.home')}
+                  </Link>
+                  <Link href={`/${currentLocale}/wuune`} className="text-gray-300 hover:text-white hover:underline transition-colors">
+                    {t('HomePage.navigation.about')}
+                  </Link>
+                  <Link href={`/${currentLocale}/campagne`} className="text-gray-300 hover:text-white hover:underline transition-colors">
+                    {t('HomePage.navigation.campaign')}
+                  </Link>
+                  <Link href={`/${currentLocale}/contact`} className="text-gray-300 hover:text-white hover:underline transition-colors">
+                    {t('HomePage.navigation.contact')}
+                  </Link>
+                </div>
+              </div>
+
+              {/* Social & CTA */}
+              <div className="text-center md:text-right">
+                <h3 className="font-bold text-lg mb-4 uppercase tracking-wide">Rejoignez-nous</h3>
+                <div className="flex justify-center md:justify-end gap-4 mb-6">
+                  <Link
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://loyer.brussels')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 p-3 rounded-full hover:bg-blue-700 hover:scale-110 transition-all duration-300 shadow-lg"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="h-5 w-5 text-white" aria-hidden="true" />
+                  </Link>
+                  <Link
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent('https://loyer.brussels')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-400 p-3 rounded-full hover:bg-blue-500 hover:scale-110 transition-all duration-300 shadow-lg"
+                    aria-label="Twitter"
+                  >
+                    <Twitter className="h-5 w-5 text-white" aria-hidden="true" />
+                  </Link>
+                </div>
+                <Link href={`/${currentLocale}/calculateur`}>
+                  <Button className="bg-red-600 text-white hover:bg-red-700 px-6 py-3 font-bold uppercase tracking-wide rounded-full shadow-lg hover:scale-105 transition-all">
+                    Calculer mon loyer
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Copyright */}
+            <div className="border-t border-gray-700 pt-8 text-center">
+              <p className="text-gray-400 text-sm">© 2025 {t('HomePage.footer.copyright')}</p>
+            </div>
           </div>
-          <p className="text-gray-300 text-sm mb-4">{t('HomePage.footer.description')}</p>
-          <p className="text-gray-400 text-xs">© 2025 {t('HomePage.footer.copyright')}</p>
         </div>
       </footer>
     </div>

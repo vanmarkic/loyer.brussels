@@ -85,11 +85,6 @@ export function PropertyTypeStep() {
                   Cliquez pour sélectionner
                 </div>
               </div>
-              <div className="ml-auto">
-                <div className="w-6 h-6 rounded-full border-2 border-gray-300 peer-data-[state=checked]:border-[#f18240] peer-data-[state=checked]:bg-[#f18240] [&:has([data-state=checked])]:border-[#f18240] [&:has([data-state=checked])]:bg-[#f18240] flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-white opacity-0 peer-data-[state=checked]:opacity-100 [&:has([data-state=checked])]:opacity-100"></div>
-                </div>
-              </div>
             </Label>
           </div>
         ))}

@@ -13,7 +13,6 @@ import { FormProvider } from "@/features/calculator/context/form-context";
 import { SessionRestoration } from "@/app/components/session-restoration";
 import {
   SessionManagerProvider,
-  SessionHealthIndicator,
 } from "@/app/components/session-manager";
 import { RentalCalculator } from "@/features/calculator/components/calculator";
 import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
@@ -67,6 +66,31 @@ export default function CalculatorStepPage() {
       ...initialGlobalState,
       currentStep: stepNumber,
     });
+
+    // Load session on mount
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        try {
+          const saved = sessionStorage.getItem("loyer-brussels-form-data");
+          if (saved) {
+            const parsedState = JSON.parse(saved);
+            const sessionAge = Date.now() - parsedState.lastUpdated;
+            const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+
+            if (sessionAge < maxAge) {
+              dispatch({ type: "RESTORE_SESSION", payload: { ...parsedState, currentStep: stepNumber } });
+              console.log("Session restored on mount:", parsedState.sessionId);
+            } else {
+              sessionStorage.removeItem("loyer-brussels-form-data");
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to load session on mount:", error);
+          sessionStorage.removeItem("loyer-brussels-form-data");
+        }
+      }
+    }, []);
+
     // Replicate all context methods
     const updateUserProfile = (updates: any) =>
       dispatch({ type: "UPDATE_USER_PROFILE", payload: updates });
@@ -80,9 +104,47 @@ export default function CalculatorStepPage() {
       dispatch({ type: "UPDATE_PROPERTY_ISSUES", payload: updates });
     const updateCalculationResults = (updates: any) =>
       dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates });
-    const saveSession = () => {};
-    const loadSession = () => {};
-    const clearSession = () => dispatch({ type: "RESET_FORM" });
+
+    const saveSession = useCallback(() => {
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem("loyer-brussels-form-data", JSON.stringify(state));
+          console.log("Session saved:", state.sessionId);
+        } catch (error) {
+          console.warn("Failed to save session:", error);
+        }
+      }
+    }, [state]);
+
+    const loadSession = useCallback(() => {
+      if (typeof window !== "undefined") {
+        try {
+          const saved = sessionStorage.getItem("loyer-brussels-form-data");
+          if (saved) {
+            const parsedState = JSON.parse(saved);
+            const sessionAge = Date.now() - parsedState.lastUpdated;
+            const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+
+            if (sessionAge < maxAge) {
+              dispatch({ type: "RESTORE_SESSION", payload: parsedState });
+              console.log("Session restored:", parsedState.sessionId);
+            } else {
+              sessionStorage.removeItem("loyer-brussels-form-data");
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to load session:", error);
+          sessionStorage.removeItem("loyer-brussels-form-data");
+        }
+      }
+    }, []);
+
+    const clearSession = useCallback(() => {
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("loyer-brussels-form-data");
+      }
+      dispatch({ type: "RESET_FORM" });
+    }, []);
     const getActualRent = useCallback(() => state.rentalInfo.actualRent, [state.rentalInfo.actualRent]);
     const getLivingSpace = useCallback(() => state.propertyInfo.size, [state.propertyInfo.size]);
     const getContactInfo = useCallback(() => ({
@@ -106,7 +168,7 @@ export default function CalculatorStepPage() {
         getLivingSpace,
         getContactInfo,
       }),
-      [state, getActualRent, getLivingSpace, getContactInfo],
+      [state, saveSession, loadSession, clearSession, getActualRent, getLivingSpace, getContactInfo],
     );
     return (
       <GlobalFormContext.Provider value={contextValue}>
@@ -141,7 +203,6 @@ export default function CalculatorStepPage() {
                   }}
                 />
                 <div className="space-y-4">
-                  <SessionHealthIndicator className="mb-4 p-2 bg-gray-50 rounded-lg" />
                   <StepCalculator stepNumber={stepNumber} />
                 </div>
               </StepNavigationProvider>

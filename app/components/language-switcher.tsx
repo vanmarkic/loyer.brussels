@@ -2,7 +2,7 @@
 
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/app/i18n/navigation";
-import { locales } from "@/app/i18n/request";
+import { routing } from "@/i18n/routing";
 import { Button } from "@/app/components/ui/button";
 import { useTransition } from "react";
 
@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-1">
-      {locales.map((locale) => (
+      {routing.locales.map((locale) => (
         <Button
           key={locale}
           variant={currentLocale === locale ? "secondary" : "ghost"}

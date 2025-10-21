@@ -170,8 +170,6 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
       });
-      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
-      navigateToStep(3);
     }
   };
 
@@ -181,26 +179,24 @@ export function PropertyDetailsStep() {
         type: "UPDATE_PROPERTY_INFO",
         payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
       });
-      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
-      navigateToStep(3);
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold">{t("title")}</h2>
-        <p className="text-muted-foreground mt-2">{t("description")}</p>
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
+        <h2 className="text-3xl font-bold text-gray-900">{t("title")}</h2>
+        <p className="text-gray-600 text-lg">{t("description")}</p>
       </div>
 
-      <div className="space-y-8">
-        <div>
-          <Label htmlFor="size" className="text-xl font-semibold mb-4 block">
+      <div className="space-y-10">
+        <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <Label htmlFor="size" className="text-xl font-bold mb-6 block text-gray-800 text-center">
             {t("sizeLabel")}
           </Label>
 
           <div className="space-y-4">
-            <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
+            <div className="flex items-center justify-center gap-4 sm:gap-6">
               <Button
                 ref={minusButtonRef}
                 type="button"
@@ -211,27 +207,23 @@ export function PropertyDetailsStep() {
                 onPointerLeave={handleDecrementStop}
                 onPointerCancel={handleDecrementStop}
                 disabled={state.propertyInfo.size <= 1}
-                className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0 select-none"
+                className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-gray-300 hover:border-red-400 hover:bg-red-50 disabled:opacity-50 disabled:hover:border-gray-300 disabled:hover:bg-transparent touch-manipulation flex-shrink-0 select-none transition-all duration-200 shadow-sm hover:shadow-md"
                 aria-label="Diminuer la superficie par 1m²"
                 data-testid="decrease-size-btn"
               >
-                <MinusCircle className="h-8 w-8" />
+                <MinusCircle className="h-7 w-7 sm:h-8 sm:w-8" />
               </Button>
-              <div className="bg-white rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[160px] text-center">
-                <div className="flex items-center justify-center gap-2">
-                  <Input
-                    id="size"
-                    type="number"
-                    value={state.propertyInfo.size || ""}
-                    onChange={handleSizeChange}
-                    className="text-4xl font-bold text-center border-0 bg-transparent p-0 h-auto focus:ring-0 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    placeholder="75"
-                    inputMode="numeric"
-                  />
-                  <span className="text-xl font-semibold text-gray-500">
-                    m²
-                  </span>
-                </div>
+              <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-md px-6 sm:px-10 py-5 min-w-[180px] text-center hover:border-red-300 transition-all duration-200">
+                <Input
+                  id="size"
+                  type="number"
+                  value={state.propertyInfo.size || ""}
+                  onChange={handleSizeChange}
+                  className="!text-5xl !font-bold text-center !border-0 bg-transparent !p-0 !h-auto w-full !focus:ring-0 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none text-gray-800 !leading-none"
+                  placeholder="75"
+                  inputMode="numeric"
+                />
+                <div className="text-sm font-semibold text-gray-500 mt-2">m²</div>
               </div>
               <Button
                 ref={plusButtonRef}
@@ -242,39 +234,39 @@ export function PropertyDetailsStep() {
                 onPointerUp={handleIncrementStop}
                 onPointerLeave={handleIncrementStop}
                 onPointerCancel={handleIncrementStop}
-                className="h-16 w-16 border-2 hover:border-gray-400 touch-manipulation flex-shrink-0 select-none"
+                className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-gray-300 hover:border-red-400 hover:bg-red-50 touch-manipulation flex-shrink-0 select-none transition-all duration-200 shadow-sm hover:shadow-md"
                 aria-label="Augmenter la superficie par 1m²"
                 data-testid="increase-size-btn"
               >
-                <PlusCircle className="h-8 w-8" />
+                <PlusCircle className="h-7 w-7 sm:h-8 sm:w-8" />
               </Button>
             </div>
           </div>
         </div>
 
-        <div>
-          <Label className="text-xl font-semibold mb-6 block">
+        <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <Label className="text-xl font-bold mb-6 block text-gray-800 text-center">
             {t("bedroomsLabel")}
           </Label>
-          <div className="flex items-center justify-center bg-gray-50 rounded-2xl p-6 gap-6 sm:gap-8">
+          <div className="flex items-center justify-center gap-4 sm:gap-6">
             <Button
               type="button"
               variant="outline"
               size="icon"
               onClick={decrementBedrooms}
               disabled={state.propertyInfo.bedrooms === 0}
-              className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0"
+              className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-gray-300 hover:border-red-400 hover:bg-red-50 disabled:opacity-50 disabled:hover:border-gray-300 disabled:hover:bg-transparent touch-manipulation flex-shrink-0 transition-all duration-200 shadow-sm hover:shadow-md"
               aria-label="Diminuer le nombre de chambres"
             >
-              <MinusCircle className="h-8 w-8" />
+              <MinusCircle className="h-7 w-7 sm:h-8 sm:w-8" />
             </Button>
-            <div className="bg-white rounded-xl border-2 border-gray-200 px-6 sm:px-8 py-4 min-w-[120px] text-center">
-              <span className="text-4xl font-bold text-gray-800">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-md px-8 sm:px-10 py-5 min-w-[160px] text-center hover:border-red-300 transition-all duration-200">
+              <span className="text-5xl font-bold text-gray-800 block">
                 {state.propertyInfo.bedrooms === 4
                   ? t("bedroomsCountMax")
                   : state.propertyInfo.bedrooms}
               </span>
-              <div className="text-sm text-gray-500 mt-1">chambres</div>
+              <div className="text-sm font-semibold text-gray-500 mt-2">chambres</div>
             </div>
             <Button
               type="button"
@@ -282,10 +274,10 @@ export function PropertyDetailsStep() {
               size="icon"
               onClick={incrementBedrooms}
               disabled={state.propertyInfo.bedrooms >= 4}
-              className="h-16 w-16 border-2 hover:border-gray-400 disabled:opacity-50 touch-manipulation flex-shrink-0"
+              className="h-14 w-14 sm:h-16 sm:w-16 rounded-full border-2 border-gray-300 hover:border-red-400 hover:bg-red-50 disabled:opacity-50 disabled:hover:border-gray-300 disabled:hover:bg-transparent touch-manipulation flex-shrink-0 transition-all duration-200 shadow-sm hover:shadow-md"
               aria-label="Augmenter le nombre de chambres"
             >
-              <PlusCircle className="h-8 w-8" />
+              <PlusCircle className="h-7 w-7 sm:h-8 sm:w-8" />
             </Button>
           </div>
         </div>

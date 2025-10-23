@@ -12,8 +12,6 @@ import type {
   UserProfile,
   PropertyInformation,
   RentalInformation,
-  HouseholdInformation,
-  PropertyIssues,
   CalculationResults,
 } from "@/features/calculator/types/global-form-types";
 
@@ -56,21 +54,6 @@ const defaultRentalInfo: RentalInformation = {
   fireInsurance: false,
 };
 
-const defaultHouseholdInfo: HouseholdInformation = {
-  monthlyIncome: "",
-  householdComposition: "",
-  paymentDelays: "",
-  evictionThreats: "",
-  mediationAttempts: "",
-};
-
-const defaultPropertyIssues: PropertyIssues = {
-  healthIssues: [],
-  majorDefects: [],
-  positiveAspects: [],
-  additionalComments: "",
-};
-
 const defaultCalculationResults: CalculationResults = {
   difficultyIndex: null,
   medianRent: null,
@@ -81,121 +64,79 @@ const defaultCalculationResults: CalculationResults = {
   errorCode: null,
 };
 
-const generateSessionId = (): string => {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2);
-};
-
 export const initialGlobalState: GlobalFormState = {
   currentStep: 1,
   currentPage: "calculator",
   userProfile: defaultUserProfile,
   propertyInfo: defaultPropertyInfo,
   rentalInfo: defaultRentalInfo,
-  householdInfo: defaultHouseholdInfo,
-  propertyIssues: defaultPropertyIssues,
   calculationResults: defaultCalculationResults,
-  lastUpdated: Date.now(),
-  sessionId: generateSessionId(),
 };
 
 // Action types
 type GlobalFormAction =
-  | { type: "RESTORE_SESSION"; payload: GlobalFormState }
   | { type: "UPDATE_USER_PROFILE"; payload: Partial<UserProfile> }
   | { type: "UPDATE_PROPERTY_INFO"; payload: Partial<PropertyInformation> }
   | { type: "UPDATE_RENTAL_INFO"; payload: Partial<RentalInformation> }
-  | { type: "UPDATE_HOUSEHOLD_INFO"; payload: Partial<HouseholdInformation> }
-  | { type: "UPDATE_PROPERTY_ISSUES"; payload: Partial<PropertyIssues> }
   | { type: "UPDATE_CALCULATION_RESULTS"; payload: Partial<CalculationResults> }
   | { type: "SET_CURRENT_STEP"; payload: number }
   | {
       type: "SET_CURRENT_PAGE";
       payload: "calculator" | "results" | "questionnaire";
     }
-  | { type: "RESET_FORM" }
-  | { type: "AUTO_SAVE" };
+  | { type: "RESET_FORM" };
 
 // Reducer
 export const globalFormReducer = (
   state: GlobalFormState,
   action: GlobalFormAction,
 ): GlobalFormState => {
-  const newState = (() => {
-    switch (action.type) {
-      case "RESTORE_SESSION":
-        return { ...action.payload, lastUpdated: Date.now() };
+  switch (action.type) {
+    case "UPDATE_USER_PROFILE":
+      return {
+        ...state,
+        userProfile: { ...state.userProfile, ...action.payload },
+      };
 
-      case "UPDATE_USER_PROFILE":
-        return {
-          ...state,
-          userProfile: { ...state.userProfile, ...action.payload },
-          lastUpdated: Date.now(),
-        };
+    case "UPDATE_PROPERTY_INFO":
+      return {
+        ...state,
+        propertyInfo: { ...state.propertyInfo, ...action.payload },
+      };
 
-      case "UPDATE_PROPERTY_INFO":
-        return {
-          ...state,
-          propertyInfo: { ...state.propertyInfo, ...action.payload },
-          lastUpdated: Date.now(),
-        };
+    case "UPDATE_RENTAL_INFO":
+      return {
+        ...state,
+        rentalInfo: { ...state.rentalInfo, ...action.payload },
+      };
 
-      case "UPDATE_RENTAL_INFO":
-        return {
-          ...state,
-          rentalInfo: { ...state.rentalInfo, ...action.payload },
-          lastUpdated: Date.now(),
-        };
+    case "UPDATE_CALCULATION_RESULTS":
+      return {
+        ...state,
+        calculationResults: {
+          ...state.calculationResults,
+          ...action.payload,
+        },
+      };
 
-      case "UPDATE_HOUSEHOLD_INFO":
-        return {
-          ...state,
-          householdInfo: { ...state.householdInfo, ...action.payload },
-          lastUpdated: Date.now(),
-        };
+    case "SET_CURRENT_STEP":
+      return {
+        ...state,
+        currentStep: action.payload,
+      };
 
-      case "UPDATE_PROPERTY_ISSUES":
-        return {
-          ...state,
-          propertyIssues: { ...state.propertyIssues, ...action.payload },
-          lastUpdated: Date.now(),
-        };
+    case "SET_CURRENT_PAGE":
+      return {
+        ...state,
+        currentPage: action.payload,
+      };
 
-      case "UPDATE_CALCULATION_RESULTS":
-        return {
-          ...state,
-          calculationResults: {
-            ...state.calculationResults,
-            ...action.payload,
-          },
-          lastUpdated: Date.now(),
-        };
+    case "RESET_FORM":
+      return { ...initialGlobalState };
 
-      case "SET_CURRENT_STEP":
-        return {
-          ...state,
-          currentStep: action.payload,
-          lastUpdated: Date.now(),
-        };
-
-      case "SET_CURRENT_PAGE":
-        return {
-          ...state,
-          currentPage: action.payload,
-          lastUpdated: Date.now(),
-        };
-
-      case "RESET_FORM":
-        return { ...initialGlobalState, sessionId: generateSessionId() };
-
-      case "AUTO_SAVE":
-        return { ...state, lastUpdated: Date.now() };
-
-      default:
-        return state;
-    }
-  })();
-
-  return newState;
+    default:
+      return state;
+  }
 };
 
 // Context type
@@ -207,13 +148,12 @@ interface GlobalFormContextType {
   updateUserProfile: (updates: Partial<UserProfile>) => void;
   updatePropertyInfo: (updates: Partial<PropertyInformation>) => void;
   updateRentalInfo: (updates: Partial<RentalInformation>) => void;
-  updateHouseholdInfo: (updates: Partial<HouseholdInformation>) => void;
-  updatePropertyIssues: (updates: Partial<PropertyIssues>) => void;
   updateCalculationResults: (updates: Partial<CalculationResults>) => void;
+  setCurrentStep: (step: number) => void;
+  resetForm: () => void;
 
   // Data getters to replace duplicate requests
   getActualRent: () => string;
-  getLivingSpace: () => number;
   getContactInfo: () => { email: string; phone: string };
 }
 
@@ -247,20 +187,6 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
-  const updateHouseholdInfo = useCallback(
-    (updates: Partial<HouseholdInformation>) => {
-      dispatch({ type: "UPDATE_HOUSEHOLD_INFO", payload: updates });
-    },
-    [],
-  );
-
-  const updatePropertyIssues = useCallback(
-    (updates: Partial<PropertyIssues>) => {
-      dispatch({ type: "UPDATE_PROPERTY_ISSUES", payload: updates });
-    },
-    [],
-  );
-
   const updateCalculationResults = useCallback(
     (updates: Partial<CalculationResults>) => {
       dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates });
@@ -268,14 +194,18 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
+  const setCurrentStep = useCallback((step: number) => {
+    dispatch({ type: "SET_CURRENT_STEP", payload: step });
+  }, []);
+
+  const resetForm = useCallback(() => {
+    dispatch({ type: "RESET_FORM" });
+  }, []);
+
   // Data getters - stabilized with useCallback to prevent unnecessary re-renders
   const getActualRent = useCallback((): string => {
     return state.rentalInfo.actualRent;
   }, [state.rentalInfo.actualRent]);
-
-  const getLivingSpace = useCallback((): number => {
-    return state.propertyInfo.size;
-  }, [state.propertyInfo.size]);
 
   const getContactInfo = useCallback((): { email: string; phone: string } => {
     return {
@@ -291,11 +221,10 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
       updateUserProfile,
       updatePropertyInfo,
       updateRentalInfo,
-      updateHouseholdInfo,
-      updatePropertyIssues,
       updateCalculationResults,
+      setCurrentStep,
+      resetForm,
       getActualRent,
-      getLivingSpace,
       getContactInfo,
     }),
     [
@@ -303,11 +232,10 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
       updateUserProfile,
       updatePropertyInfo,
       updateRentalInfo,
-      updateHouseholdInfo,
-      updatePropertyIssues,
       updateCalculationResults,
+      setCurrentStep,
+      resetForm,
       getActualRent,
-      getLivingSpace,
       getContactInfo,
     ],
   );
@@ -327,146 +255,3 @@ export const useGlobalForm = (): GlobalFormContextType => {
   }
   return context;
 };
-
-// Legacy compatibility - maps old form context to new global form context
-// export const useForm = () => {
-//   const globalForm = useGlobalForm();
-
-//   // Create a compatibility layer for the old FormState interface
-//   const legacyState = {
-//     step: globalForm.state.currentStep,
-//     postalCode: globalForm.state.propertyInfo.postalCode,
-//     streetName: globalForm.state.propertyInfo.streetName,
-//     streetNumber: globalForm.state.propertyInfo.streetNumber,
-//     propertyType: globalForm.state.propertyInfo.propertyType,
-//     size: globalForm.state.propertyInfo.size,
-//     bedrooms: globalForm.state.propertyInfo.bedrooms,
-//     bathrooms: globalForm.state.propertyInfo.bathrooms,
-//     numberOfGarages: globalForm.state.propertyInfo.numberOfGarages,
-//     energyClass: globalForm.state.propertyInfo.energyClass,
-//     constructedBefore2000: globalForm.state.propertyInfo.constructedBefore2000,
-//     propertyState: globalForm.state.propertyInfo.propertyState,
-//     hasCentralHeating: globalForm.state.propertyInfo.hasCentralHeating,
-//     hasThermalRegulation: globalForm.state.propertyInfo.hasThermalRegulation,
-//     hasDoubleGlazing: globalForm.state.propertyInfo.hasDoubleGlazing,
-//     hasSecondBathroom: globalForm.state.propertyInfo.hasSecondBathroom,
-//     hasRecreationalSpaces: globalForm.state.propertyInfo.hasRecreationalSpaces,
-//     hasStorageSpaces: globalForm.state.propertyInfo.hasStorageSpaces,
-//     difficultyIndex: globalForm.state.calculationResults.difficultyIndex,
-//     medianRent: globalForm.state.calculationResults.medianRent,
-//     minRent: globalForm.state.calculationResults.minRent,
-//     maxRent: globalForm.state.calculationResults.maxRent,
-//     isLoading: globalForm.state.calculationResults.isLoading,
-//     error: globalForm.state.calculationResults.error,
-//     errorCode: globalForm.state.calculationResults.errorCode,
-//   };
-
-//   const legacyDispatch = (action: any) => {
-//     // Map legacy actions to new actions
-//     switch (action.type) {
-//       case "NEXT_STEP":
-//         globalForm.dispatch({
-//           type: "SET_CURRENT_STEP",
-//           payload: globalForm.state.currentStep + 1,
-//         });
-//         break;
-//       case "PREV_STEP":
-//         globalForm.dispatch({
-//           type: "SET_CURRENT_STEP",
-//           payload: Math.max(1, globalForm.state.currentStep - 1),
-//         });
-//         break;
-//       case "GO_TO_STEP":
-//         globalForm.dispatch({
-//           type: "SET_CURRENT_STEP",
-//           payload: action.payload,
-//         });
-//         break;
-//       case "UPDATE_FIELD":
-//         // Map field updates to appropriate sections
-//         const field = action.field;
-//         const value = action.value;
-
-//         if (
-//           [
-//             "postalCode",
-//             "streetName",
-//             "streetNumber",
-//             "propertyType",
-//             "size",
-//             "bedrooms",
-//             "bathrooms",
-//             "numberOfGarages",
-//             "energyClass",
-//             "constructedBefore2000",
-//             "propertyState",
-//             "hasCentralHeating",
-//             "hasThermalRegulation",
-//             "hasDoubleGlazing",
-//             "hasSecondBathroom",
-//             "hasRecreationalSpaces",
-//             "hasStorageSpaces",
-//           ].includes(field)
-//         ) {
-//           globalForm.updatePropertyInfo({ [field]: value });
-//         } else if (
-//           [
-//             "difficultyIndex",
-//             "medianRent",
-//             "minRent",
-//             "maxRent",
-//             "isLoading",
-//             "error",
-//             "errorCode",
-//           ].includes(field)
-//         ) {
-//           globalForm.updateCalculationResults({ [field]: value });
-//         }
-//         break;
-//       case "FETCH_DIFFICULTY_INDEX_START":
-//         globalForm.updateCalculationResults({
-//           isLoading: true,
-//           error: null,
-//           errorCode: null,
-//         });
-//         break;
-//       case "FETCH_DIFFICULTY_INDEX_SUCCESS":
-//         globalForm.updateCalculationResults({
-//           difficultyIndex: action.payload,
-//           isLoading: false,
-//           error: null,
-//           errorCode: null,
-//         });
-//         break;
-//       case "FETCH_DIFFICULTY_INDEX_ERROR":
-//         globalForm.updateCalculationResults({
-//           isLoading: false,
-//           error: action.payload.message,
-//           errorCode: action.payload.code,
-//         });
-//         break;
-//       case "CALCULATE_RENT":
-//         // This would need to be handled by the parent component
-//         break;
-//       case "RESET_FORM":
-//         globalForm.dispatch({ type: "RESET_FORM" });
-//         break;
-//       default:
-//         console.warn("Unmapped legacy action:", action);
-//     }
-//   };
-
-//   return {
-//     state: legacyState,
-//     dispatch: legacyDispatch,
-//     fetchDifficultyIndexAndCalculate: async () => {
-//       // This would need to be implemented in the consuming component
-//       console.warn(
-//         "fetchDifficultyIndexAndCalculate needs to be implemented in the consuming component",
-//       );
-//     },
-//     clearError: () => {
-//       globalForm.updateCalculationResults({ error: null, errorCode: null });
-//     },
-//   };
-// };

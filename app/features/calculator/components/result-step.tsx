@@ -87,10 +87,10 @@ export function ResultStep() {
   );
 
   const handleReset = () => {
-    dispatch({ type: "RESET_FORM" });
+    globalForm.resetForm();
   };
   const handleEdit = () => {
-    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
+    globalForm.setCurrentStep(1);
   };
 
   // Removed: const handleDownloadPdf = handlePDF(state);

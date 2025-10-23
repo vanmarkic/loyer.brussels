@@ -77,19 +77,6 @@ describe("PropertyTypeStep Navigation", () => {
       boilerMaintenance: false,
       fireInsurance: false,
     },
-    householdInfo: {
-      monthlyIncome: "",
-      householdComposition: "",
-      paymentDelays: "",
-      evictionThreats: "",
-      mediationAttempts: "",
-    },
-    propertyIssues: {
-      healthIssues: [],
-      majorDefects: [],
-      positiveAspects: [],
-      additionalComments: "",
-    },
     calculationResults: {
       difficultyIndex: null,
       medianRent: null,
@@ -100,13 +87,16 @@ describe("PropertyTypeStep Navigation", () => {
       errorCode: null,
     },
     currentPage: "calculator" as const,
-    lastUpdated: Date.now(),
-    sessionId: "test-session-id",
   };
 
-  const mockSaveSession = vi.fn();
-  const mockLoadSession = vi.fn();
-  const mockClearSession = vi.fn();
+  const mockUpdateUserProfile = vi.fn();
+  const mockUpdatePropertyInfo = vi.fn();
+  const mockUpdateRentalInfo = vi.fn();
+  const mockUpdateCalculationResults = vi.fn();
+  const mockSetCurrentStep = vi.fn();
+  const mockResetForm = vi.fn();
+  const mockGetActualRent = vi.fn();
+  const mockGetContactInfo = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -144,18 +134,14 @@ describe("PropertyTypeStep Navigation", () => {
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
       dispatch: mockDispatch,
-      saveSession: mockSaveSession,
-      loadSession: mockLoadSession,
-      clearSession: mockClearSession,
-      updateUserProfile: vi.fn(),
-      updatePropertyInfo: vi.fn(),
-      updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
-      updateCalculationResults: vi.fn(),
-      getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 0),
-      getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
+      updateUserProfile: mockUpdateUserProfile,
+      updatePropertyInfo: mockUpdatePropertyInfo,
+      updateRentalInfo: mockUpdateRentalInfo,
+      updateCalculationResults: mockUpdateCalculationResults,
+      setCurrentStep: mockSetCurrentStep,
+      resetForm: mockResetForm,
+      getActualRent: mockGetActualRent.mockReturnValue(""),
+      getContactInfo: mockGetContactInfo.mockReturnValue({ email: "", phone: "" }),
     });
   });
 
@@ -176,13 +162,9 @@ describe("PropertyTypeStep Navigation", () => {
 
     fireEvent.click(continueButton);
 
-    // This test will initially fail because PropertyTypeStep doesn't dispatch SET_CURRENT_STEP
-    // After the fix, it should pass
+    // The component should use the setCurrentStep convenience method
     await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: "SET_CURRENT_STEP",
-        payload: 2,
-      });
+      expect(mockSetCurrentStep).toHaveBeenCalledWith(2);
     });
 
     await waitFor(() => {
@@ -203,18 +185,14 @@ describe("PropertyTypeStep Navigation", () => {
     (useGlobalForm as any).mockReturnValue({
       state: stateWithoutPropertyType,
       dispatch: mockDispatch,
-      saveSession: mockSaveSession,
-      loadSession: mockLoadSession,
-      clearSession: mockClearSession,
-      updateUserProfile: vi.fn(),
-      updatePropertyInfo: vi.fn(),
-      updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
-      updateCalculationResults: vi.fn(),
-      getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 0),
-      getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
+      updateUserProfile: mockUpdateUserProfile,
+      updatePropertyInfo: mockUpdatePropertyInfo,
+      updateRentalInfo: mockUpdateRentalInfo,
+      updateCalculationResults: mockUpdateCalculationResults,
+      setCurrentStep: mockSetCurrentStep,
+      resetForm: mockResetForm,
+      getActualRent: mockGetActualRent.mockReturnValue(""),
+      getContactInfo: mockGetContactInfo.mockReturnValue({ email: "", phone: "" }),
     });
 
     render(

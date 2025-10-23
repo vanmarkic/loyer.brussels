@@ -12,7 +12,7 @@ import { MinusCircle, PlusCircle } from "lucide-react";
 import { useStepNavigationContext } from "./step-wrapper";
 
 export function PropertyDetailsStep() {
-  const { state, dispatch } = useGlobalForm();
+  const { state, updatePropertyInfo, setCurrentStep } = useGlobalForm();
   const { navigateToStep } = useStepNavigationContext();
   const t = useTranslations("PropertyDetailsStep");
 
@@ -22,9 +22,9 @@ export function PropertyDetailsStep() {
   // Bootstrap size to 1 if it's 0 (UX improvement)
   useEffect(() => {
     if (state.propertyInfo.size === 0) {
-      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: 1 } });
+      updatePropertyInfo({ size: 1 });
     }
-  }, [dispatch, state.propertyInfo.size]);
+  }, [updatePropertyInfo, state.propertyInfo.size]);
 
   // Use a ref to track current size to avoid recreating callbacks
   const sizeRef = useRef(state.propertyInfo.size);
@@ -39,15 +39,15 @@ export function PropertyDetailsStep() {
     const currentSize = sizeRef.current;
     const newValue = currentSize + 1;
     sizeRef.current = newValue; // Update ref immediately
-    dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
-  }, [dispatch]);
+    updatePropertyInfo({ size: newValue });
+  }, [updatePropertyInfo]);
 
   const decrementSize = useCallback(() => {
     const currentSize = sizeRef.current;
     const newValue = Math.max(1, currentSize - 1);
     sizeRef.current = newValue; // Update ref immediately
-    dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: newValue } });
-  }, [dispatch]);
+    updatePropertyInfo({ size: newValue });
+  }, [updatePropertyInfo]);
 
   // Hold repeat hooks with acceleration
   const incrementControls = useHoldRepeat({
@@ -147,7 +147,7 @@ export function PropertyDetailsStep() {
     const value = e.target.value;
     if (value === "" || /^\d+$/.test(value)) {
       const numValue = value === "" ? 0 : parseInt(value, 10);
-      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: { size: numValue } });
+      updatePropertyInfo({ size: numValue });
     }
   };
 
@@ -157,32 +157,26 @@ export function PropertyDetailsStep() {
       !isNaN(state.propertyInfo.size) &&
       state.propertyInfo.propertyType
     ) {
-      dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
+      setCurrentStep(3);
       navigateToStep(3);
     }
   };
 
   const handleBack = () => {
-    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
+    setCurrentStep(1);
     navigateToStep(1);
   };
 
   // Bedroom increment/decrement functions
   const incrementBedrooms = () => {
     if (state.propertyInfo.bedrooms < 4) {
-      dispatch({
-        type: "UPDATE_PROPERTY_INFO",
-        payload: { bedrooms: state.propertyInfo.bedrooms + 1 },
-      });
+      updatePropertyInfo({ bedrooms: state.propertyInfo.bedrooms + 1 });
     }
   };
 
   const decrementBedrooms = () => {
     if (state.propertyInfo.bedrooms > 0) {
-      dispatch({
-        type: "UPDATE_PROPERTY_INFO",
-        payload: { bedrooms: state.propertyInfo.bedrooms - 1 },
-      });
+      updatePropertyInfo({ bedrooms: state.propertyInfo.bedrooms - 1 });
     }
   };
 

@@ -55,21 +55,6 @@ export interface RentalInformation {
   fireInsurance: boolean;
 }
 
-export interface HouseholdInformation {
-  monthlyIncome: string;
-  householdComposition: string;
-  paymentDelays: string;
-  evictionThreats: string;
-  mediationAttempts: string;
-}
-
-export interface PropertyIssues {
-  healthIssues: string[];
-  majorDefects: string[];
-  positiveAspects: string[];
-  additionalComments: string;
-}
-
 export interface CalculationResults {
   difficultyIndex: number | null;
   medianRent: number | null;
@@ -90,11 +75,5 @@ export interface GlobalFormState {
   userProfile: UserProfile;
   propertyInfo: PropertyInformation;
   rentalInfo: RentalInformation;
-  householdInfo: HouseholdInformation;
-  propertyIssues: PropertyIssues;
   calculationResults: CalculationResults;
-
-  // Session management
-  lastUpdated: number;
-  sessionId: string;
 }

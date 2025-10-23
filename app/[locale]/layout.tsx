@@ -44,15 +44,15 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-interface RootLayoutProps {
+interface LocaleLayoutProps {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
-}: RootLayoutProps) {
+}: LocaleLayoutProps) {
   const { locale } = await params;
 
   // Enable static rendering

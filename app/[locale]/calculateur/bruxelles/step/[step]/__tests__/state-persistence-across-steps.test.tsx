@@ -1,6 +1,7 @@
 import React from "react";
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { GlobalFormProvider } from "@/features/calculator/context/global-form-context";
 
 /**
  * INTEGRATION TEST: State Persistence Across Step Navigation
@@ -47,11 +48,20 @@ vi.mock("next-intl", () => ({
 
 // Mock the hold repeat hook
 vi.mock("@/features/calculator/hooks/use-hold-repeat", () => ({
-  useHoldRepeat: () => ({
-    start: vi.fn(),
-    stop: vi.fn(),
-    isActive: () => false,
-  }),
+useHoldRepeat: () => ({
+start: vi.fn(),
+stop: vi.fn(),
+isActive: () => false,
+}),
+}));
+
+// Mock dynamic imports to avoid Suspense loading states
+vi.mock("@/features/calculator/components/PropertyTypeStep", () => ({
+  default: () => <div>Property Type Step Content</div>,
+}));
+
+vi.mock("@/features/calculator/components/PropertyDetailsStep", () => ({
+  default: () => <div>Property Details Step Content</div>,
 }));
 
 // We need to import the actual page component
@@ -74,15 +84,26 @@ describe("State Persistence Across Steps - Integration Test", () => {
       step: "property-type",
     });
 
-    const { unmount } = render(<CalculatorStepPage />);
+    const { unmount } = render(
+    <GlobalFormProvider>
+    <CalculatorStepPage />
+    </GlobalFormProvider>
+    );
+
+    // Wait for the component to load (Suspense resolution) - increase timeout
+    await waitFor(() => {
+    const loadingElement = document.querySelector('.animate-pulse');
+      expect(loadingElement).toBeNull();
+    }, { timeout: 5000 });
 
     // User selects "apartment"
-    const apartmentOption = screen.getByText("types.apartment");
-    fireEvent.click(apartmentOption);
-
-    // Verify apartment is selected
     const apartmentRadio = screen.getByDisplayValue("apartment");
+    fireEvent.click(apartmentRadio);
+
+    // Wait for the selection to be applied
+    await waitFor(() => {
     expect(apartmentRadio).toBeChecked();
+    });
 
     // User clicks continue
     const continueButton = screen.getByText("continueButton");
@@ -103,7 +124,16 @@ describe("State Persistence Across Steps - Integration Test", () => {
       step: "property-details",
     });
 
-    render(<CalculatorStepPage />);
+    render(
+      <GlobalFormProvider>
+        <CalculatorStepPage />
+      </GlobalFormProvider>
+    );
+
+    // Wait for the component to load (Suspense resolution)
+    await waitFor(() => {
+    expect(screen.queryByText("continueButton")).toBeInTheDocument();
+    });
 
     // At this point, in the buggy version:
     // - A new GlobalFormProvider is created in the page
@@ -128,7 +158,16 @@ describe("State Persistence Across Steps - Integration Test", () => {
       step: "property-details",
     });
 
-    render(<CalculatorStepPage />);
+    render(
+    <GlobalFormProvider>
+    <CalculatorStepPage />
+    </GlobalFormProvider>
+    );
+
+    // Wait for the component to load (Suspense resolution)
+    await waitFor(() => {
+      expect(screen.queryByText("continueButton")).toBeInTheDocument();
+    });
 
     // Continue button should be disabled because propertyType is not set
     const continueButton = screen.getByText("continueButton");

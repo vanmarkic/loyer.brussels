@@ -99,7 +99,6 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
     // }
 
     const mockGlobalFormState = {
-      size: 0, // This shouldn't be here - it's a schema bug
       currentStep: 2,
       currentPage: "calculator" as const,
       propertyInfo: {
@@ -157,7 +156,6 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
         error: null,
         errorCode: null,
       },
-      currentPage: "calculator" as const,
     };
 
     (useGlobalForm as any).mockReturnValue({
@@ -195,7 +193,6 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
   it("should enable button when session is properly restored with valid propertyType", async () => {
     // This is what SHOULD happen after fixing the bug
     const mockGlobalFormState = {
-      // Remove the duplicate size field
       currentStep: 2,
       currentPage: "calculator" as const,
       propertyInfo: {
@@ -240,7 +237,6 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
         error: null,
         errorCode: null,
       },
-      currentPage: "calculator" as const,
     };
 
     (useGlobalForm as any).mockReturnValue({

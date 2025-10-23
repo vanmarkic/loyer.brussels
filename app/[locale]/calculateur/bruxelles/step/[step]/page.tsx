@@ -1,19 +1,13 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useReducer, useMemo, useCallback } from "react";
-import {
-  useGlobalForm,
-  GlobalFormContext,
-  initialGlobalState,
-  globalFormReducer,
-} from "@/features/calculator/context/global-form-context";
+import { useEffect } from "react";
+import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 import { UnifiedCalculatorLayout } from "@/app/components/layouts/unified-calculator-layout";
 import { FormProvider } from "@/features/calculator/context/form-context";
 import { RentalCalculator } from "@/features/calculator/components/calculator";
 import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
 import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
-import { PropertyInformation } from "@/features/calculator/types/global-form-types";
 
 // Step mapping
 const STEP_MAPPING = {
@@ -53,58 +47,6 @@ export default function CalculatorStepPage() {
     return null;
   }
 
-  function GlobalFormProviderWithStep({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
-    const [state, dispatch] = useReducer(globalFormReducer, {
-      ...initialGlobalState,
-      currentStep: stepNumber,
-    });
-
-    // Replicate all context methods
-    const updateUserProfile = useCallback((updates: any) =>
-      dispatch({ type: "UPDATE_USER_PROFILE", payload: updates }), []);
-    const updatePropertyInfo = useCallback((updates: Partial<PropertyInformation>) =>
-      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: updates }), []);
-    const updateRentalInfo = useCallback((updates: any) =>
-      dispatch({ type: "UPDATE_RENTAL_INFO", payload: updates }), []);
-    const updateCalculationResults = useCallback((updates: any) =>
-      dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates }), []);
-    const setCurrentStep = useCallback((step: number) =>
-      dispatch({ type: "SET_CURRENT_STEP", payload: step }), []);
-    const resetForm = useCallback(() =>
-      dispatch({ type: "RESET_FORM" }), []);
-
-    // Session management completely removed - no persistence
-    const getActualRent = useCallback(() => state.rentalInfo.actualRent, [state.rentalInfo.actualRent]);
-    const getContactInfo = useCallback(() => ({
-      email: state.userProfile.email,
-      phone: state.userProfile.phone,
-    }), [state.userProfile.email, state.userProfile.phone]);
-    const contextValue = useMemo(
-      () => ({
-        state,
-        dispatch,
-        updateUserProfile,
-        updatePropertyInfo,
-        updateRentalInfo,
-        updateCalculationResults,
-        setCurrentStep,
-        resetForm,
-        getActualRent,
-        getContactInfo,
-      }),
-      [state, updateUserProfile, updatePropertyInfo, updateRentalInfo, updateCalculationResults, setCurrentStep, resetForm, getActualRent, getContactInfo],
-    );
-    return (
-      <GlobalFormContext.Provider value={contextValue}>
-        {children}
-      </GlobalFormContext.Provider>
-    );
-  }
-
   return (
     <UnifiedCalculatorLayout
       title="Évaluation Bruxelles"
@@ -117,15 +59,13 @@ export default function CalculatorStepPage() {
       showProgress={false}
     >
       <div className="max-w-4xl mx-auto">
-        <GlobalFormProviderWithStep>
-          <FormProvider>
-            <StepNavigationProvider>
-              <div className="space-y-4">
-                <StepCalculator stepNumber={stepNumber} />
-              </div>
-            </StepNavigationProvider>
-          </FormProvider>
-        </GlobalFormProviderWithStep>
+        <FormProvider>
+          <StepNavigationProvider>
+            <div className="space-y-4">
+              <StepCalculator stepNumber={stepNumber} />
+            </div>
+          </StepNavigationProvider>
+        </FormProvider>
       </div>
     </UnifiedCalculatorLayout>
   );

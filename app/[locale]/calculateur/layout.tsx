@@ -1,7 +1,15 @@
+"use client";
+
+import { GlobalFormProvider } from "@/features/calculator/context/global-form-context";
+
 export default function CalculateurLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <GlobalFormProvider>
+      {children}
+    </GlobalFormProvider>
+  );
 }

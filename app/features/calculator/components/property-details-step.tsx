@@ -287,6 +287,7 @@ export function PropertyDetailsStep() {
         onNext={handleContinue}
         onPrevious={handleBack}
         nextDisabled={
+          !state.propertyInfo.size ||
           state.propertyInfo.size <= 0 ||
           isNaN(state.propertyInfo.size) ||
           !state.propertyInfo.propertyType

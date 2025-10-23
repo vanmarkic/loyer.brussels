@@ -64,22 +64,21 @@ export default function CalculatorStepPage() {
     });
 
     // Replicate all context methods
-    const updateUserProfile = (updates: any) =>
-      dispatch({ type: "UPDATE_USER_PROFILE", payload: updates });
-    const updatePropertyInfo = (updates: Partial<PropertyInformation>) =>
-      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: updates });
-    const updateRentalInfo = (updates: any) =>
-      dispatch({ type: "UPDATE_RENTAL_INFO", payload: updates });
-    const updateHouseholdInfo = (updates: any) =>
-      dispatch({ type: "UPDATE_HOUSEHOLD_INFO", payload: updates });
-    const updatePropertyIssues = (updates: any) =>
-      dispatch({ type: "UPDATE_PROPERTY_ISSUES", payload: updates });
-    const updateCalculationResults = (updates: any) =>
-      dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates });
+    const updateUserProfile = useCallback((updates: any) =>
+      dispatch({ type: "UPDATE_USER_PROFILE", payload: updates }), []);
+    const updatePropertyInfo = useCallback((updates: Partial<PropertyInformation>) =>
+      dispatch({ type: "UPDATE_PROPERTY_INFO", payload: updates }), []);
+    const updateRentalInfo = useCallback((updates: any) =>
+      dispatch({ type: "UPDATE_RENTAL_INFO", payload: updates }), []);
+    const updateCalculationResults = useCallback((updates: any) =>
+      dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates }), []);
+    const setCurrentStep = useCallback((step: number) =>
+      dispatch({ type: "SET_CURRENT_STEP", payload: step }), []);
+    const resetForm = useCallback(() =>
+      dispatch({ type: "RESET_FORM" }), []);
 
     // Session management completely removed - no persistence
     const getActualRent = useCallback(() => state.rentalInfo.actualRent, [state.rentalInfo.actualRent]);
-    const getLivingSpace = useCallback(() => state.propertyInfo.size, [state.propertyInfo.size]);
     const getContactInfo = useCallback(() => ({
       email: state.userProfile.email,
       phone: state.userProfile.phone,
@@ -91,14 +90,13 @@ export default function CalculatorStepPage() {
         updateUserProfile,
         updatePropertyInfo,
         updateRentalInfo,
-        updateHouseholdInfo,
-        updatePropertyIssues,
         updateCalculationResults,
+        setCurrentStep,
+        resetForm,
         getActualRent,
-        getLivingSpace,
         getContactInfo,
       }),
-      [state, getActualRent, getLivingSpace, getContactInfo],
+      [state, updateUserProfile, updatePropertyInfo, updateRentalInfo, updateCalculationResults, setCurrentStep, resetForm, getActualRent, getContactInfo],
     );
     return (
       <GlobalFormContext.Provider value={contextValue}>

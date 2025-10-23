@@ -75,30 +75,27 @@ function DetailedQuestionnaireContent() {
 
   // Get pre-filled data from global context
   const existingRent = globalForm.getActualRent();
-  const existingSpace = globalForm.getLivingSpace();
+  const existingSpace = globalForm.state.propertyInfo.size;
   const contactInfo = globalForm.getContactInfo();
 
   // Extract update functions (these are stable from useCallback in context)
-  const { updateRentalInfo, updateHouseholdInfo, updatePropertyIssues } =
-    globalForm;
+  const { updateRentalInfo } = globalForm;
 
   const [data, setData] = useState<QuestionnaireData>({
     leaseType: globalForm.state.rentalInfo.leaseType || "",
     leaseStartDate: globalForm.state.rentalInfo.leaseStartDate || "",
-    monthlyIncome: globalForm.state.householdInfo.monthlyIncome || "",
-    householdComposition:
-      globalForm.state.householdInfo.householdComposition || "",
+    monthlyIncome: "",
+    householdComposition: "",
     rentIndexation: globalForm.state.rentalInfo.rentIndexation || "",
-    paymentDelays: globalForm.state.householdInfo.paymentDelays || "",
-    evictionThreats: globalForm.state.householdInfo.evictionThreats || "",
-    mediationAttempts: globalForm.state.householdInfo.mediationAttempts || "",
+    paymentDelays: "",
+    evictionThreats: "",
+    mediationAttempts: "",
     boilerMaintenance: globalForm.state.rentalInfo.boilerMaintenance,
     fireInsurance: globalForm.state.rentalInfo.fireInsurance,
-    healthIssues: globalForm.state.propertyIssues.healthIssues || [],
-    majorDefects: globalForm.state.propertyIssues.majorDefects || [],
-    positiveAspects: globalForm.state.propertyIssues.positiveAspects || [],
-    additionalComments:
-      globalForm.state.propertyIssues.additionalComments || "",
+    healthIssues: [],
+    majorDefects: [],
+    positiveAspects: [],
+    additionalComments: "",
   });
 
   // Helper function to update both local and global state
@@ -114,6 +111,7 @@ function DetailedQuestionnaireContent() {
         const newData = { ...prev, ...computedUpdates };
 
         // Schedule global context updates for after render
+        // Note: Only rental info is synced to global state now
         Promise.resolve().then(() => {
           updateRentalInfo({
             leaseType: newData.leaseType,
@@ -122,27 +120,14 @@ function DetailedQuestionnaireContent() {
             boilerMaintenance: newData.boilerMaintenance,
             fireInsurance: newData.fireInsurance,
           });
-
-          updateHouseholdInfo({
-            monthlyIncome: newData.monthlyIncome,
-            householdComposition: newData.householdComposition,
-            paymentDelays: newData.paymentDelays,
-            evictionThreats: newData.evictionThreats,
-            mediationAttempts: newData.mediationAttempts,
-          });
-
-          updatePropertyIssues({
-            healthIssues: newData.healthIssues,
-            majorDefects: newData.majorDefects,
-            positiveAspects: newData.positiveAspects,
-            additionalComments: newData.additionalComments,
-          });
+          // householdInfo and propertyIssues removed from global state
+          // Questionnaire data is now stored locally only
         });
 
         return newData;
       });
     },
-    [updateRentalInfo, updateHouseholdInfo, updatePropertyIssues],
+    [updateRentalInfo],
   );
 
   const sections = [

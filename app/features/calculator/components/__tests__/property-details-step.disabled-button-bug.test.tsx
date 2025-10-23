@@ -52,7 +52,6 @@ vi.mock("@/features/calculator/hooks/use-hold-repeat", () => ({
 describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
   const mockPush = vi.fn();
   const mockNavigateToStep = vi.fn();
-  const mockDispatch = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -126,19 +125,6 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         boilerMaintenance: false,
         fireInsurance: false,
       },
-      householdInfo: {
-        monthlyIncome: "",
-        householdComposition: "",
-        paymentDelays: "",
-        evictionThreats: "",
-        mediationAttempts: "",
-      },
-      propertyIssues: {
-        healthIssues: [],
-        majorDefects: [],
-        positiveAspects: [],
-        additionalComments: "",
-      },
       calculationResults: {
         difficultyIndex: null,
         medianRent: null,
@@ -149,24 +135,17 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         errorCode: null,
       },
       currentPage: "calculator" as const,
-      lastUpdated: Date.now(),
-      sessionId: "test-session-id",
     };
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
-      dispatch: mockDispatch,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
       updatePropertyInfo: vi.fn(),
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 1),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 
@@ -232,19 +211,6 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         boilerMaintenance: false,
         fireInsurance: false,
       },
-      householdInfo: {
-        monthlyIncome: "",
-        householdComposition: "",
-        paymentDelays: "",
-        evictionThreats: "",
-        mediationAttempts: "",
-      },
-      propertyIssues: {
-        healthIssues: [],
-        majorDefects: [],
-        positiveAspects: [],
-        additionalComments: "",
-      },
       calculationResults: {
         difficultyIndex: null,
         medianRent: null,
@@ -255,30 +221,23 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         errorCode: null,
       },
       currentPage: "calculator" as const,
-      lastUpdated: Date.now(),
-      sessionId: "test-session-id",
     };
 
-    const mockDispatchImpl = vi.fn((action) => {
-      if (action.type === "UPDATE_PROPERTY_INFO" && action.payload.size !== undefined) {
-        currentSize = action.payload.size;
+    const mockUpdatePropertyInfo = vi.fn((updates) => {
+      if (updates.size !== undefined) {
+        currentSize = updates.size;
       }
     });
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
-      dispatch: mockDispatchImpl,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
-      updatePropertyInfo: vi.fn(),
+      updatePropertyInfo: mockUpdatePropertyInfo,
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => currentSize),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 
@@ -293,12 +252,11 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
     );
 
     // useEffect bootstraps size from 0 to 1
+    // Since we're using convenience methods now, we check if updatePropertyInfo was called
     await waitFor(() => {
-      expect(mockDispatchImpl).toHaveBeenCalledWith({
-        type: "UPDATE_PROPERTY_INFO",
-        payload: { size: 1 },
-      });
-    });
+      // The bootstrap effect should call updatePropertyInfo with size: 1
+      expect(mockUpdatePropertyInfo).toHaveBeenCalledWith({ size: 1 });
+    }, { timeout: 100 });
 
     // Force re-render to pick up the state change
     rerender(
@@ -353,19 +311,6 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         boilerMaintenance: false,
         fireInsurance: false,
       },
-      householdInfo: {
-        monthlyIncome: "",
-        householdComposition: "",
-        paymentDelays: "",
-        evictionThreats: "",
-        mediationAttempts: "",
-      },
-      propertyIssues: {
-        healthIssues: [],
-        majorDefects: [],
-        positiveAspects: [],
-        additionalComments: "",
-      },
       calculationResults: {
         difficultyIndex: null,
         medianRent: null,
@@ -376,24 +321,17 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         errorCode: null,
       },
       currentPage: "calculator" as const,
-      lastUpdated: Date.now(),
-      sessionId: "test-session-id",
     };
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
-      dispatch: mockDispatch,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
       updatePropertyInfo: vi.fn(),
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => NaN),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 
@@ -451,19 +389,6 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         boilerMaintenance: false,
         fireInsurance: false,
       },
-      householdInfo: {
-        monthlyIncome: "",
-        householdComposition: "",
-        paymentDelays: "",
-        evictionThreats: "",
-        mediationAttempts: "",
-      },
-      propertyIssues: {
-        healthIssues: [],
-        majorDefects: [],
-        positiveAspects: [],
-        additionalComments: "",
-      },
       calculationResults: {
         difficultyIndex: null,
         medianRent: null,
@@ -474,24 +399,17 @@ describe("PropertyDetailsStep - Disabled Button Bug Reproduction", () => {
         errorCode: null,
       },
       currentPage: "calculator" as const,
-      lastUpdated: Date.now(),
-      sessionId: "test-session-id",
     };
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
-      dispatch: mockDispatch,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
       updatePropertyInfo: vi.fn(),
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 75),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 

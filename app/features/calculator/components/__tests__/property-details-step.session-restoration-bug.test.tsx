@@ -157,24 +157,19 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
         error: null,
         errorCode: null,
       },
-      lastUpdated: 1761043299279,
-      sessionId: "mh0fpjnecmnf8wqf7qm",
+      currentPage: "calculator" as const,
     };
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
       dispatch: mockDispatch,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
       updatePropertyInfo: vi.fn(),
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 5),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 
@@ -236,19 +231,6 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
         boilerMaintenance: false,
         fireInsurance: false,
       },
-      householdInfo: {
-        monthlyIncome: "",
-        householdComposition: "",
-        paymentDelays: "",
-        evictionThreats: "",
-        mediationAttempts: "",
-      },
-      propertyIssues: {
-        healthIssues: [],
-        majorDefects: [],
-        positiveAspects: [],
-        additionalComments: "",
-      },
       calculationResults: {
         difficultyIndex: null,
         medianRent: null,
@@ -258,24 +240,19 @@ describe("PropertyDetailsStep - Session Restoration Bug", () => {
         error: null,
         errorCode: null,
       },
-      lastUpdated: Date.now(),
-      sessionId: "test-session-id",
+      currentPage: "calculator" as const,
     };
 
     (useGlobalForm as any).mockReturnValue({
       state: mockGlobalFormState,
       dispatch: mockDispatch,
-      saveSession: vi.fn(),
-      loadSession: vi.fn(),
-      clearSession: vi.fn(),
       updateUserProfile: vi.fn(),
       updatePropertyInfo: vi.fn(),
       updateRentalInfo: vi.fn(),
-      updateHouseholdInfo: vi.fn(),
-      updatePropertyIssues: vi.fn(),
       updateCalculationResults: vi.fn(),
+      setCurrentStep: vi.fn(),
+      resetForm: vi.fn(),
       getActualRent: vi.fn(() => ""),
-      getLivingSpace: vi.fn(() => 26),
       getContactInfo: vi.fn(() => ({ email: "", phone: "" })),
     });
 

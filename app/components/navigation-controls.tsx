@@ -75,9 +75,6 @@ export function NavigationControls({
   }, [currentStep, onNext, onPrevious]);
 
   const handleNext = () => {
-    // Add new state to history
-    window.history.pushState({ step: currentStep + 1 }, "", window.location.href);
-
     onNext?.();
   };
 

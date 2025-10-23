@@ -66,7 +66,6 @@ describe("Questionnaire Unit Tests", () => {
     overrides?: Partial<GlobalFormState>,
   ): GlobalFormState => {
     return {
-      size: 85,
       currentStep: 5,
       currentPage: "questionnaire",
       userProfile: {

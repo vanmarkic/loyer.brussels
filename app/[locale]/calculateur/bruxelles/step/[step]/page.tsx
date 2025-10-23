@@ -10,10 +10,6 @@ import {
 } from "@/features/calculator/context/global-form-context";
 import { UnifiedCalculatorLayout } from "@/app/components/layouts/unified-calculator-layout";
 import { FormProvider } from "@/features/calculator/context/form-context";
-import { SessionRestoration } from "@/app/components/session-restoration";
-import {
-  SessionManagerProvider,
-} from "@/app/components/session-manager";
 import { RentalCalculator } from "@/features/calculator/components/calculator";
 import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigation";
 import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
@@ -67,30 +63,6 @@ export default function CalculatorStepPage() {
       currentStep: stepNumber,
     });
 
-    // Load session on mount
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        try {
-          const saved = sessionStorage.getItem("loyer-brussels-form-data");
-          if (saved) {
-            const parsedState = JSON.parse(saved);
-            const sessionAge = Date.now() - parsedState.lastUpdated;
-            const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-
-            if (sessionAge < maxAge) {
-              dispatch({ type: "RESTORE_SESSION", payload: { ...parsedState, currentStep: stepNumber } });
-              console.log("Session restored on mount:", parsedState.sessionId);
-            } else {
-              sessionStorage.removeItem("loyer-brussels-form-data");
-            }
-          }
-        } catch (error) {
-          console.warn("Failed to load session on mount:", error);
-          sessionStorage.removeItem("loyer-brussels-form-data");
-        }
-      }
-    }, []);
-
     // Replicate all context methods
     const updateUserProfile = (updates: any) =>
       dispatch({ type: "UPDATE_USER_PROFILE", payload: updates });
@@ -105,46 +77,7 @@ export default function CalculatorStepPage() {
     const updateCalculationResults = (updates: any) =>
       dispatch({ type: "UPDATE_CALCULATION_RESULTS", payload: updates });
 
-    const saveSession = useCallback(() => {
-      if (typeof window !== "undefined") {
-        try {
-          sessionStorage.setItem("loyer-brussels-form-data", JSON.stringify(state));
-          console.log("Session saved:", state.sessionId);
-        } catch (error) {
-          console.warn("Failed to save session:", error);
-        }
-      }
-    }, [state]);
-
-    const loadSession = useCallback(() => {
-      if (typeof window !== "undefined") {
-        try {
-          const saved = sessionStorage.getItem("loyer-brussels-form-data");
-          if (saved) {
-            const parsedState = JSON.parse(saved);
-            const sessionAge = Date.now() - parsedState.lastUpdated;
-            const maxAge = 24 * 60 * 60 * 1000; // 24 hours
-
-            if (sessionAge < maxAge) {
-              dispatch({ type: "RESTORE_SESSION", payload: parsedState });
-              console.log("Session restored:", parsedState.sessionId);
-            } else {
-              sessionStorage.removeItem("loyer-brussels-form-data");
-            }
-          }
-        } catch (error) {
-          console.warn("Failed to load session:", error);
-          sessionStorage.removeItem("loyer-brussels-form-data");
-        }
-      }
-    }, []);
-
-    const clearSession = useCallback(() => {
-      if (typeof window !== "undefined") {
-        sessionStorage.removeItem("loyer-brussels-form-data");
-      }
-      dispatch({ type: "RESET_FORM" });
-    }, []);
+    // Session management completely removed - no persistence
     const getActualRent = useCallback(() => state.rentalInfo.actualRent, [state.rentalInfo.actualRent]);
     const getLivingSpace = useCallback(() => state.propertyInfo.size, [state.propertyInfo.size]);
     const getContactInfo = useCallback(() => ({
@@ -161,14 +94,11 @@ export default function CalculatorStepPage() {
         updateHouseholdInfo,
         updatePropertyIssues,
         updateCalculationResults,
-        saveSession,
-        loadSession,
-        clearSession,
         getActualRent,
         getLivingSpace,
         getContactInfo,
       }),
-      [state, saveSession, loadSession, clearSession, getActualRent, getLivingSpace, getContactInfo],
+      [state, getActualRent, getLivingSpace, getContactInfo],
     );
     return (
       <GlobalFormContext.Provider value={contextValue}>
@@ -190,24 +120,13 @@ export default function CalculatorStepPage() {
     >
       <div className="max-w-4xl mx-auto">
         <GlobalFormProviderWithStep>
-          <SessionManagerProvider autoSaveInterval={30} maxSessionAge={24}>
-            <FormProvider>
-              <StepNavigationProvider>
-                <SessionRestoration
-                  onSessionRestored={(wasRestored) => {
-                    if (wasRestored) {
-                      console.log("Session restored successfully");
-                    } else {
-                      console.log("Starting fresh session");
-                    }
-                  }}
-                />
-                <div className="space-y-4">
-                  <StepCalculator stepNumber={stepNumber} />
-                </div>
-              </StepNavigationProvider>
-            </FormProvider>
-          </SessionManagerProvider>
+          <FormProvider>
+            <StepNavigationProvider>
+              <div className="space-y-4">
+                <StepCalculator stepNumber={stepNumber} />
+              </div>
+            </StepNavigationProvider>
+          </FormProvider>
         </GlobalFormProviderWithStep>
       </div>
     </UnifiedCalculatorLayout>

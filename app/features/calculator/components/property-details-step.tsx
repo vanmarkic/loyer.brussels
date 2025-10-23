@@ -152,7 +152,11 @@ export function PropertyDetailsStep() {
   };
 
   const handleContinue = () => {
-    if (state.propertyInfo.size > 0 && state.propertyInfo.propertyType) {
+    if (
+      state.propertyInfo.size > 0 &&
+      !isNaN(state.propertyInfo.size) &&
+      state.propertyInfo.propertyType
+    ) {
       dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
       navigateToStep(3);
     }
@@ -289,7 +293,9 @@ export function PropertyDetailsStep() {
         onNext={handleContinue}
         onPrevious={handleBack}
         nextDisabled={
-          state.propertyInfo.size <= 0 || !state.propertyInfo.propertyType
+          state.propertyInfo.size <= 0 ||
+          isNaN(state.propertyInfo.size) ||
+          !state.propertyInfo.propertyType
         }
         nextText={t("continueButton")}
         previousText={t("backButton")}

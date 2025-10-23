@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, ArrowRight, RotateCcw, Save } from "lucide-react";
+import { useEffect } from "react";
+import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
 import {
   AlertDialog,
@@ -14,7 +14,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/app/components/ui/alert-dialog";
-import { useGlobalForm } from "@/features/calculator/context/global-form-context";
 
 interface NavigationControlsProps {
   currentStep: number;
@@ -27,8 +26,6 @@ interface NavigationControlsProps {
   nextText?: string;
   previousText?: string;
   isLoading?: boolean;
-  autoSaveEnabled?: boolean;
-  autoSaveInterval?: number; // in seconds
   className?: string;
 }
 
@@ -43,37 +40,14 @@ export function NavigationControls({
   nextText = "Suivant",
   previousText = "Précédent",
   isLoading = false,
-  autoSaveEnabled = true,
-  autoSaveInterval = 30,
   className = "",
 }: NavigationControlsProps) {
-  const { state, saveSession, clearSession } = useGlobalForm();
-  const [lastSave, setLastSave] = useState<Date | null>(null);
-  const [isNavigationWarningOpen, setIsNavigationWarningOpen] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState<"next" | "previous" | null>(
-    null
-  );
-
-  // Auto-save functionality
-  useEffect(() => {
-    if (!autoSaveEnabled) return;
-
-    const interval = setInterval(() => {
-      saveSession();
-      setLastSave(new Date());
-    }, autoSaveInterval * 1000);
-
-    return () => clearInterval(interval);
-  }, [autoSaveEnabled, autoSaveInterval, saveSession]);
 
   // Handle browser back/forward navigation
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       // Prevent the default browser navigation
       event.preventDefault();
-
-      // Save current state before navigation
-      saveSession();
 
       // Handle the navigation based on state
       if (event.state && event.state.step) {
@@ -98,38 +72,9 @@ export function NavigationControls({
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [currentStep, saveSession, onNext, onPrevious]);
-
-  // Handle page unload (refresh, close)
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      // Save session before page unload
-      saveSession();
-
-      // Show warning if user has unsaved progress
-      if (currentStep > 1) {
-        const message =
-          "Vous avez des données non sauvegardées. Êtes-vous sûr de vouloir quitter?";
-        event.preventDefault();
-        event.returnValue = message;
-        return message;
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [currentStep, saveSession]);
+  }, [currentStep, onNext, onPrevious]);
 
   const handleNext = () => {
-    if (currentStep > 1) {
-      // Save before navigation
-      saveSession();
-      setLastSave(new Date());
-    }
-
     // Add new state to history
     window.history.pushState({ step: currentStep + 1 }, "", window.location.href);
 
@@ -138,10 +83,6 @@ export function NavigationControls({
 
   const handlePrevious = () => {
     if (currentStep > 1) {
-      // Save before navigation
-      saveSession();
-      setLastSave(new Date());
-
       // Navigate using history API to maintain browser back/forward
       window.history.back();
     }
@@ -150,34 +91,11 @@ export function NavigationControls({
   };
 
   const handleReset = () => {
-    clearSession();
-    setLastSave(null);
     onReset?.();
-  };
-
-  const manualSave = () => {
-    saveSession();
-    setLastSave(new Date());
-  };
-
-  const formatLastSave = (date: Date) => {
-    return date.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
   };
 
   return (
     <div className={`space-y-3 ${className}`}>
-      {/* Auto-save indicator */}
-      {lastSave && (
-        <div className="text-xs text-gray-500 text-center flex items-center justify-center gap-1">
-          <Save className="h-3 w-3" />
-          Dernière sauvegarde: {formatLastSave(lastSave)}
-        </div>
-      )}
-
       {/* Navigation buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between items-stretch">
         {/* Back button */}
@@ -193,17 +111,6 @@ export function NavigationControls({
               <span className="truncate">{previousText}</span>
             </Button>
           )}
-
-          {/* Manual save button (always available) */}
-          <Button
-            onClick={manualSave}
-            variant="ghost"
-            className="flex items-center gap-1 touch-manipulation px-3 py-3 min-h-[44px] whitespace-nowrap"
-            title="Sauvegarder manuellement"
-            aria-label="Sauvegarder manuellement"
-          >
-            <Save className="h-4 w-4 flex-shrink-0" />
-          </Button>
         </div>
 
         {/* Next/Complete button */}
@@ -257,7 +164,7 @@ export function NavigationControls({
 
       {/* Progress indicator */}
       <div className="text-xs text-gray-500 text-center">
-        Étape {currentStep} sur {totalSteps} • Navigation sécurisée activée
+        Étape {currentStep} sur {totalSteps}
       </div>
     </div>
   );

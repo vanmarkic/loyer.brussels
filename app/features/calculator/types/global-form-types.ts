@@ -82,7 +82,6 @@ export interface CalculationResults {
 
 // Unified global form state
 export interface GlobalFormState {
-  size: unknown;
   // Flow control
   currentStep: number;
   currentPage: "calculator" | "results" | "questionnaire";

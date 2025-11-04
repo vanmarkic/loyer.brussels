@@ -5,6 +5,5 @@ export default createMiddleware(routing);
 
 export const config = {
   // Match only internationalized pathnames
-  // Skip paths like /api/, /_next/static/, /_next/image/, /assets/, /favicon.ico, and files with extensions
-  matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|.*\\..*).*)"],
+  matcher: ['/', '/(fr|nl|en)/:path*']
 };

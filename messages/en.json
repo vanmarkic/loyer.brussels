@@ -1,346 +1,157 @@
 {
-  "greeting": "Hello!",
-  "main_title": "HOW MUCH DOES IT COST TO RENT A PROPERTY IN BRUSSELS?",
-  "start_button": "Start",
-  "NotFound": {
-    "title": "Page not found",
-    "code": "404",
-    "description": "The page you are looking for doesn't exist or has been moved.",
-    "backHome": "Back to home",
-    "calculator": "Rent calculator",
-    "contact": "Contact us"
+  "common": {
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "loading": "Loading..."
   },
-  "test_subtitle": "Take the test!",
-  "test_description": "Whether you are a current or future tenant or landlord, this site will allow you to find out the indicative reference rent for the property you rent or plan to rent, taking into account its location and main characteristics.",
-  "info_box_text": "The rent grid website has been updated to make the calculation of the reference rent more transparent.",
-  "learn_more_button": "Learn more",
-  "share_text": "Share the site",
-  "about_ref_rents_title": "ABOUT REFERENCE RENTS",
-  "legal_basis_title": "LEGAL BASIS",
-  "faq_title": "FAQ",
-  "CalculatorPage": {
-    "regionalService": "BRUSSELS REGIONAL PUBLIC SERVICE - BRUSSELS HOUSING",
-    "agencyName": "BRUSSELS HOUSING",
-    "regionalServiceShort": "BRUSSELS REGIONAL PUBLIC SERVICE",
-    "backButton": "Back",
-    "title": "Indicative Rent Calculator",
-    "description": "Estimate the reference rent for a property in Brussels based on its characteristics",
-    "footer": "© 2023 Brussels Regional Public Service - Brussels Housing. All rights reserved."
+  "home": {
+    "title": "Loyer Brussels",
+    "subtitle": "Brussels Rent Calculator",
+    "description": "A political organizing tool using rent calculation as an entry point for tenant rights advocacy.",
+    "startCalculator": "Start calculation",
+    "calculateRent": "Calculate Rent",
+    "calculateRentDesc": "Coming soon: Multi-step calculator to determine fair rent based on Brussels regulations.",
+    "knowYourRights": "Know Your Rights",
+    "knowYourRightsDesc": "Coming soon: Comprehensive questionnaire and tenant rights information.",
+    "joinCommunity": "Join Community",
+    "joinCommunityDesc": "Coming soon: Connect with WUUNE and other tenants fighting for fair housing."
   },
-  "RentalCalculator": {
-    "stepProgress": "Step {currentStep} of {totalSteps}",
-    "saveForLater": "Save for later",
-    "timeRemaining": "{time} min remaining",
-    "almostDone": "Almost done!",
-    "autoSaved": "Auto-saved",
-    "sessionRestored": "Previous session restored",
-    "sessionCleared": "New session started"
-  },
-  "PropertyTypeStep": {
-    "title": "What type of property do you want to rent?",
-    "description": "Select the property type",
-    "types": {
-      "apartment": "Apartment",
+  "calculator": {
+    "title": "Reference Rent Calculator",
+    "subtitle": "Discover if your rent complies with Brussels regulations",
+    "progress": "Step {current} of {total}",
+    "step1": {
+      "title": "What type of housing do you have?",
+      "privateRental": "Private Rental",
+      "privateRentalDesc": "Property rented from private individual or company",
+      "privateRentalSubtitle": "Rent capping applies ✓",
+      "aisHousing": "AIS Housing",
+      "aisHousingDesc": "Social Rental Agency",
+      "aisHousingSubtitle": "Rent capping does NOT apply",
+      "socialHousing": "Social Housing",
+      "socialHousingDesc": "CPAS, SLSP or public housing authority",
+      "socialHousingSubtitle": "Rent capping does NOT apply"
+    },
+    "step2": {
+      "title": "What type of property?",
+      "studio": "Studio",
+      "studioDesc": "0 bedrooms, one main space",
+      "apartment1": "Apartment - 1 bedroom",
+      "apartment2": "Apartment - 2 bedrooms",
+      "apartment3": "Apartment - 3 bedrooms",
+      "apartment4": "Apartment - 4+ bedrooms",
       "house": "House",
-      "studio": "Studio"
+      "houseDesc": "Any bedroom count"
     },
-    "continueButton": "Continue"
-  },
-  "PropertyDetailsStep": {
-    "title": "Property Characteristics",
-    "description": "Indicate the details of your property",
-    "sizeLabel": "Total living area (m²)",
-    "bedroomsLabel": "Number of bedrooms",
-    "bedroomsCountMax": "4 and more",
-    "backButton": "Back",
-    "continueButton": "Continue"
-  },
-  "FeaturesStep": {
-    "title": "Additional Features",
-    "description": "Select the available amenities",
-    "yes": "Yes",
-    "no": "No",
-    "tableHeaders": {
-      "option": "Option",
-      "yes": "Yes",
-      "no": "No"
+    "step3": {
+      "title": "Property Details",
+      "livingSpace": "Living space",
+      "livingSpaceUnit": "m²",
+      "livingSpaceHelp": "Total habitable space, excluding cellars/attics unless converted",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "bathroomsHelp": "Count full bathrooms only (toilet + shower/bath)"
     },
-    "options": {
-      "centralHeating": "Central heating",
-      "thermalRegulation": "Thermal regulation",
-      "doubleGlazing": "Double glazing",
-      "secondBathroom": "2nd bathroom",
-      "recreationalSpaces": "Recreational spaces",
-      "storageSpaces": "Storage spaces",
-      "constructedBefore2000": "Built before 2000?"
+    "step4": {
+      "title": "Features & Amenities",
+      "subtitle": "What features does your property have?",
+      "centralHeating": "Central heating present?",
+      "thermalRegulation": "Thermal regulation (thermostat)?",
+      "doubleGlazing": "Double glazing on windows?",
+      "secondBathroom": "Second full bathroom?",
+      "recreationalSpaces": "Recreational spaces (terrace, balcony, garden)?",
+      "storageSpaces": "Storage spaces (cellar, attic)?",
+      "buildingAge": "Building constructed before 2000?",
+      "garages": "Number of garages/parking spaces",
+      "garagesCount": "{count} garage(s)"
     },
-    "garageLabel": "Number of garages",
-    "backButton": "Back",
-    "continueButton": "Continue"
-  },
-  "EnergyStep": {
-    "title": "Energy and heating",
-    "description": "Energy performance information",
-    "error": {
-      "databaseErrorTitle": "Database error",
-      "retryButton": "Retry"
+    "step5": {
+      "title": "Energy Rating",
+      "subtitle": "What is the energy performance certificate (PEB) rating?",
+      "classA": "Class A (best)",
+      "classB": "Class B",
+      "classC": "Class C",
+      "classD": "Class D",
+      "classE": "Class E",
+      "classF": "Class F",
+      "classG": "Class G (worst)",
+      "unknown": "Unknown/Don't have certificate",
+      "whatIsPeb": "What is PEB?",
+      "whereToFind": "Where do I find this?"
     },
-    "demoModeAlert": "Demo mode: Address data is not available. A default difficulty index will be used for the calculation.",
-    "energyClassLabel": "Energy class (EPC)",
-    "energyClassPlaceholder": "Select an energy class",
-    "backButton": "Back",
-    "continueButton": "Continue"
-  },
-  "AddressStep": {
-    "title": "Property address",
-    "description": "Indicate the complete address of the property in Brussels",
-    "demoModeAlert": "Demo mode: Address data is not available. A default difficulty index will be used for the calculation.",
-    "autocompleteLabel": "Search for an address",
-    "autocompletePlaceholder": "Ex: 1000 Rue de la Loi 16",
-    "manualEntryInstruction": "Or enter the address manually:",
-    "postalCodeLabel": "Postal code",
-    "postalCodePlaceholder": "1000",
-    "streetNameLabel": "Street name",
-    "streetNamePlaceholder": "Rue de la Loi",
-    "streetNumberLabel": "Number",
-    "streetNumberPlaceholder": "16",
-    "backButton": "Back",
-    "calculatingButton": "Calculating...",
-    "calculateButton": "Calculate rent"
-  },
-  "Metadata": {
-    "title": "Brussels Housing - How much does it cost to rent a property in Brussels?",
-    "description": "Brussels Regional Public Service - Brussels Housing. Estimate the indicative reference rent for a property in Brussels."
-  },
-  "QuestionnairePage": {
-    "sections": {
-      "retrievedInfo": "Retrieved Information",
-      "personalSituation": "Personal Situation and Lease",
-      "housingProblems": "Housing Problems",
-      "positiveAspects": "Positive Aspects of Housing",
-      "personalizedResult": "Personalized Result"
+    "step6": {
+      "title": "Where is the property located?",
+      "postalCode": "Postal code",
+      "postalCodePlaceholder": "1000-1210",
+      "postalCodeHelp": "Required for calculation",
+      "streetName": "Street name",
+      "streetNamePlaceholder": "Start typing...",
+      "streetNameHelp": "Optional but helpful",
+      "buildingNumber": "Building number",
+      "buildingNumberPlaceholder": "123 or 123A",
+      "buildingNumberHelp": "For complete documentation",
+      "invalidPostalCode": "This postal code is not in Brussels. Calculation only valid for Brussels addresses."
     },
-    "navigation": {
-      "back": "Back",
-      "previous": "Previous",
-      "next": "Next",
-      "finish": "Finish"
-    },
-    "header": {
-      "title": "Detailed Questionnaire",
-      "stepProgress": "Step {currentStep} of {totalSteps}",
-      "percentage": "{percentage}%"
-    },
-    "retrievedInfo": {
-      "title": "Detailed Questionnaire",
-      "description": "We use the information already collected from your evaluation",
-      "alreadyCollected": "✓ Information already collected",
-      "currentRent": "Current rent:",
-      "livingSpace": "Living space:",
-      "email": "Email:",
-      "phone": "Phone:",
-      "notProvided": "Not provided",
-      "notProvidedFeminine": "Not provided",
-      "infoMessage": "This detailed questionnaire will help us better understand your situation and give you more precise advice. No data will be asked again!"
-    },
-    "personalSituation": {
-      "title": "Personal situation and lease",
-      "description": "This information helps us better understand your situation",
-      "leaseType": "Type of lease",
-      "leaseStartDate": "Lease start date",
-      "monthlyIncome": "Approximate monthly income (optional)",
-      "monthlyIncomePlaceholder": "Ex: 2500",
-      "householdComposition": "Household composition",
-      "rentIndexation": "Has your rent been indexed recently?"
-    },
-    "leaseTypes": {
-      "nineYears": "9-year lease (main residence)",
-      "threeYears": "3-year lease",
-      "lessThanYear": "Less than one year lease",
-      "other": "Other"
-    },
-    "householdTypes": {
-      "single": "Single person",
-      "couple": "Couple without children",
-      "family": "Family with child(ren)",
-      "shared": "Shared accommodation"
-    },
-    "rentIndexation": {
-      "yesRecent": "Yes, in the last 12 months",
-      "yesOld": "Yes, but more than a year ago",
-      "no": "No, never",
-      "unknown": "I don't know"
-    },
-    "maintenance": {
-      "boilerMaintenance": "I perform annual boiler maintenance (if applicable)",
-      "fireInsurance": "I have current fire insurance"
-    },
-    "problems": {
-      "title": "Housing problems",
-      "description": "These defects can justify a rent reduction",
-      "healthIssues": {
-        "title": "Health or safety problems",
-        "items": [
-          "Excessive humidity or mold",
-          "Heating or insulation problems",
-          "Significant noise disturbances",
-          "Electricity or plumbing problems",
-          "Infestation (rats, cockroaches, etc.)",
-          "Lack of adequate ventilation"
-        ]
+    "results": {
+      "title": "Calculation Results",
+      "referenceRent": "Reference Rent",
+      "minimumRent": "Minimum fair rent",
+      "medianRent": "Median fair rent",
+      "maximumRent": "Maximum fair rent",
+      "yourRent": "Your current/proposed rent",
+      "yourRentPlaceholder": "€X,XXX",
+      "yourRentHelp": "Monthly rent excluding charges",
+      "comparison": "Comparison",
+      "downloadPdf": "Download PDF report",
+      "takeQuestionnaire": "Take detailed questionnaire",
+      "startNew": "New evaluation",
+      "editCalculation": "Edit calculation",
+      "abusiveRent": {
+        "title": "Your rent appears to exceed legal limits",
+        "message": "You are paying €{difference} more than the maximum legal rent (€{amount}/month or {percent}% over)",
+        "cta": "Get help from WUUNE"
       },
-      "majorDefects": {
-        "title": "Major housing defects",
-        "items": [
-          "Defective windows or doors",
-          "Floor coverings in poor condition",
-          "Peeling paint or peeling wallpaper",
-          "Faulty kitchen equipment",
-          "Bathroom problems (tiles, taps)",
-          "Insufficient lighting",
-          "Insufficient storage spaces"
-        ]
+      "highRent": {
+        "title": "Your rent is at the upper end of the legal range",
+        "message": "Your rent is €{difference} above the median ({percent}% over). While legal, negotiation may be possible.",
+        "cta": "Learn negotiation strategies"
       },
-      "warningMessage": "The more defects your housing has, the more arguments you will have to negotiate a rent reduction."
-    },
-    "positiveAspects": {
-      "title": "Positive aspects of housing",
-      "description": "These elements can justify a higher rent",
-      "advantages": "Advantages and equipment",
-      "items": [
-        "Recently renovated housing",
-        "Balcony, terrace or garden",
-        "Parking or garage included",
-        "Elevator in the building",
-        "Very well served neighborhood",
-        "Exceptional view",
-        "High-end equipment",
-        "Excellent thermal insulation",
-        "Security system",
-        "Cellar or storage room included"
-      ],
-      "additionalComments": "Additional comments",
-      "additionalCommentsPlaceholder": "Describe other particular aspects of your housing...",
-      "successMessage": "This information will allow us to give you a complete and personalized evaluation."
-    },
-    "personalizedResult": {
-      "title": "Your personalized situation",
-      "description": "Here is our evaluation based on your responses",
-      "wuune": {
-        "title": "Join Wuune!",
-        "description": "Whatever the result, together we are stronger to defend your rights.",
-        "joinCollective": "Join the collective",
-        "newEvaluation": "Make a new evaluation"
+      "fairRent": {
+        "title": "Your rent is within the legal reference range",
+        "message": "Your rent complies with Brussels regulations.",
+        "cta": "Help protect tenant rights"
+      },
+      "belowRent": {
+        "title": "Your rent is below the reference grid",
+        "message": "You have a favorable rental situation.",
+        "cta": "Support other tenants"
       }
     }
   },
-  "HomePage": {
-    "header": {
-      "collectiveTitle": "WUUNE COLLECTIVE - TOGETHER AGAINST ABUSIVE RENTS"
-    },
-    "navigation": {
-      "collective": "COLLECTIVE AGAINST ABUSIVE RENTS",
-      "home": "Home",
-      "about": "Wuune",
-      "campaign": "Our campaign",
-      "contact": "Contact",
-      "menu": "MENU"
-    },
-    "hero": {
-      "mainTitle": "FACING HOUSING PROBLEMS, DON'T STAY ALONE AND JOIN US!",
-      "title": "LOWER MY RENT",
-      "subtitle": "Together, let's fight against abusive rents!",
-      "description": "Join the Wuune collective and make your voice heard. Is your housing too expensive? Find out and take action!",
-      "startButton": "Get Started",
-      "shareText": "Share the fight",
-      "imageAlt": "Warm people demonstrating for fair rents"
-    },
-    "aboutUs": {
-      "title": "Who are we?",
-      "description1": "Too many of us live in housing that is too expensive, of poor quality and unsuitable for our needs. And when we want to move elsewhere, or are pushed out, it is almost impossible to find somewhere to relocate.",
-      "description2": "We must defend ourselves against the negligence of landlords and their discriminatory practices, and against that of public authorities who let rents soar or housing become unhealthy.",
-      "description3": "With Wuune, we want to do this together, being united and organized, at the scale of our neighborhoods and the city. We defend, through action, our right to a livable city and affordable housing, of quality and adapted to our needs, without discrimination.",
-      "learnMoreButton": "JOIN WUUNE",
-      "imageAlt": "Demonstration with warm and collective atmosphere"
-    },
-    "news": {
-      "title": "NEWS",
-      "viewAllButton": "All news",
-      "items": {
-        "permanences": {
-          "title": "MUTUAL AID SESSIONS BETWEEN TENANTS",
-          "date": "15/08/2025",
-          "excerpt": "You have heard about the possibility for a tenant..."
-        },
-        "abusiveRent": {
-          "title": "RENT TOO HIGH?",
-          "date": "30/06/2025",
-          "excerpt": "We explain how it works and how Wuune can help you..."
-        },
-        "manifesto": {
-          "title": "MINI-MANIFESTO TO DEFEND AGAINST LANDLORDS WHO ATTACK RENT CONTROL",
-          "date": "04/05/2025",
-          "excerpt": "Mini-manifesto to defend against landlords who attack rent control..."
-        },
-        "formation": {
-          "title": "SATURDAY MAY 24: TRAINING ON TACTICS AND TOOLS FOR RENT REDUCTION CAMPAIGNS",
-          "date": "15/04/2025",
-          "excerpt": "The vote of new ordinance that prohibits landlords from..."
-        }
-      }
-    },
-    "resources": {
-      "title": "Resources",
-      "links": {
-        "legalAid": "Free legal aid",
-        "tenantRights": "Tenant rights",
-        "rentControl": "Rent control guide",
-        "mediation": "Mediation services"
-      }
-    },
-    "newsletter": {
-      "title": "Keep me informed",
-      "namePlaceholder": "Your name",
-      "firstNamePlaceholder": "Your first name",
-      "emailPlaceholder": "Your email",
-      "subscribeButton": "Subscribe"
-    },
-    "callToAction": {
-      "joinCampaign": {
-        "title": "Join our campaign",
-        "description": "Together, we can make a difference against abusive rents.",
-        "button": "Learn more"
-      },
-      "evaluateRent": {
-        "title": "Evaluate your rent",
-        "description": "Discover if your rent complies with legal grids in force.",
-        "button": "Take the test"
-      },
-      "contactUs": {
-        "title": "Contact us",
-        "description": "A question? Need help? We are here to support you.",
-        "button": "Contact us"
-      }
-    },
-    "footer": {
-      "description": "Citizen collective for fair rents in Brussels.",
-      "usefulLinks": "Useful links",
-      "aboutLink": "About Wuune",
-      "campaignLink": "Our campaign",
-      "contactLink": "Contact",
-      "followUs": "Follow us",
-      "copyright": "© 2024 Wuune Collective. All rights reserved."
-    }
+  "questionnaire": {
+    "title": "Detailed Questionnaire",
+    "subtitle": "5-minute questionnaire for personalized support"
   },
-  "Navigation": {
-    "menu": "MENU",
-    "serviceTitle": "BRUSSELS REGIONAL PUBLIC SERVICE - BRUSSELS HOUSING",
-    "agencyTitle": "BRUSSELS HOUSING"
+  "contact": {
+    "title": "Join the Movement for Housing Rights",
+    "subtitle": "500+ Brussels tenants already organized",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "send": "Send",
+    "success": "Thank you! We'll contact you within 48 hours.",
+    "error": "An error occurred. Please try again."
   },
-  "Errors": {
-    "difficultyIndex": "An error occurred while retrieving the difficulty index",
-    "invalidData": "Invalid difficulty index data received.",
-    "systemError": "System error",
-    "formSubmission": "An error occurred while submitting the form"
+  "wuune": {
+    "name": "WUUNE",
+    "fullName": "Brussels Tenants Collective",
+    "contact": "contact@wuune.be",
+    "joinButton": "Join WUUNE"
   }
 }

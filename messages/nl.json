@@ -1,665 +1,157 @@
 {
-  "greeting": "Hallo!",
-  "main_title": "HOEVEEL KOST HET OM EEN WONING TE HUREN IN BRUSSEL?",
-  "start_button": "Start",
-  "NotFound": {
-    "title": "Pagina niet gevonden",
-    "code": "404",
-    "description": "De pagina die u zoekt bestaat niet of is verplaatst.",
-    "backHome": "Terug naar home",
-    "calculator": "Huurcalculator",
-    "contact": "Contacteer ons"
+  "common": {
+    "next": "Volgende",
+    "previous": "Vorige",
+    "submit": "Indienen",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "close": "Sluiten",
+    "loading": "Laden..."
   },
-  "test_subtitle": "Doe de test!",
-  "test_description": "Of u nu een huidige of toekomstige huurder of verhuurder bent, deze site stelt u in staat de indicatieve referentiehuurprijs te kennen voor de woning die u huurt of van plan bent te huren, rekening houdend met de locatie en de belangrijkste kenmerken.",
-  "info_box_text": "De website van het huurprijzenrooster is aangepast om de berekening van de referentiehuurprijs transparanter te maken.",
-  "learn_more_button": "Meer weten",
-  "share_text": "Deel de site",
-  "about_ref_rents_title": "OVER REFERENTIEHUURPRIJZEN",
-  "legal_basis_title": "WETTELIJKE BASIS",
-  "faq_title": "VEELGESTELDE VRAGEN",
-  "CalculatorPage": {
-    "regionalService": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL - BRUSSEL HUISVESTING",
-    "agencyName": "BRUSSEL HUISVESTING",
-    "regionalServiceShort": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL",
-    "backButton": "Terug",
-    "title": "Indicatieve huurcalculator",
-    "description": "Schat de referentiehuurprijs voor een woning in Brussel op basis van de kenmerken",
-    "footer": "© 2023 Gewestelijke Overheidsdienst Brussel - Brussel Huisvesting. Alle rechten voorbehouden."
+  "home": {
+    "title": "Loyer Brussels",
+    "subtitle": "Huurcalculator voor Brussel",
+    "description": "Een politiek organisatie-instrument dat huurberekening gebruikt als toegangspunt voor de verdediging van huurders rechten.",
+    "startCalculator": "Start berekening",
+    "calculateRent": "Huur Berekenen",
+    "calculateRentDesc": "Binnenkort beschikbaar: Meerstappen calculator om eerlijke huur te bepalen volgens Brusselse regelgeving.",
+    "knowYourRights": "Ken je Rechten",
+    "knowYourRightsDesc": "Binnenkort beschikbaar: Uitgebreide vragenlijst en informatie over huurders rechten.",
+    "joinCommunity": "Sluit je aan bij de Gemeenschap",
+    "joinCommunityDesc": "Binnenkort beschikbaar: Verbind met WUUNE en andere huurders die strijden voor eerlijke huisvesting."
   },
-  "RentalCalculator": {
-    "stepProgress": "Stap {currentStep} van {totalSteps}"
-  },
-  "PropertyTypeStep": {
-    "title": "Welk type woning wilt u huren?",
-    "description": "Selecteer het type woning",
-    "types": {
-      "apartment": "Appartement",
+  "calculator": {
+    "title": "Referentiehuur Calculator",
+    "subtitle": "Ontdek of uw huur voldoet aan de Brusselse regelgeving",
+    "progress": "Stap {current} van {total}",
+    "step1": {
+      "title": "Welk type huisvesting heeft u?",
+      "privateRental": "Particuliere Verhuur",
+      "privateRentalDesc": "Eigendom gehuurd van particulier of bedrijf",
+      "privateRentalSubtitle": "Huurplafond is van toepassing ✓",
+      "aisHousing": "AIS Huisvesting",
+      "aisHousingDesc": "Sociaal Verhuurkantoor",
+      "aisHousingSubtitle": "Huurplafond is NIET van toepassing",
+      "socialHousing": "Sociale Huisvesting",
+      "socialHousingDesc": "OCMW, SLSP of openbare huisvestingsautoriteit",
+      "socialHousingSubtitle": "Huurplafond is NIET van toepassing"
+    },
+    "step2": {
+      "title": "Welk type eigendom?",
+      "studio": "Studio",
+      "studioDesc": "0 slaapkamers, één hoofdruimte",
+      "apartment1": "Appartement - 1 slaapkamer",
+      "apartment2": "Appartement - 2 slaapkamers",
+      "apartment3": "Appartement - 3 slaapkamers",
+      "apartment4": "Appartement - 4+ slaapkamers",
       "house": "Huis",
-      "studio": "Studio"
+      "houseDesc": "Elk aantal slaapkamers"
     },
-    "continueButton": "Doorgaan"
-  },
-  "PropertyDetailsStep": {
-    "title": "Kenmerken van de woning",
-    "description": "Geef de details van uw woning op",
-    "sizeLabel": "Totale bewoonbare oppervlakte (m²)",
-    "bedroomsLabel": "Aantal slaapkamers",
-    "bedroomsCountMax": "4 en meer",
-    "backButton": "Terug",
-    "continueButton": "Doorgaan"
-  },
-  "FeaturesStep": {
-    "title": "Extra kenmerken",
-    "description": "Selecteer de beschikbare voorzieningen",
-    "yes": "Ja",
-    "no": "Nee",
-    "tableHeaders": {
-      "option": "Optie",
-      "yes": "Ja",
-      "no": "Nee"
-    },
-    "options": {
-      "centralHeating": "Centrale verwarming",
-      "thermalRegulation": "Thermische regeling",
-      "doubleGlazing": "Dubbele beglazing",
-      "secondBathroom": "2e badkamer",
-      "recreationalSpaces": "Recreatieruimtes",
-      "storageSpaces": "Opbergruimtes",
-      "constructedBefore2000": "Bouwjaar voor 2000?"
-    },
-    "garageLabel": "Aantal garages",
-    "backButton": "Terug",
-    "continueButton": "Doorgaan"
-  },
-  "EnergyStep": {
-    "title": "Energie en verwarming",
-    "description": "Informatie over energieprestaties",
-    "error": {
-      "databaseErrorTitle": "Databasefout",
-      "retryButton": "Opnieuw proberen"
-    },
-    "demoModeAlert": "Demomodus: Adresgegevens zijn niet beschikbaar. Een standaard moeilijkheidsindex wordt gebruikt voor de berekening.",
-    "energyClassLabel": "Energieklasse (EPB)",
-    "energyClassPlaceholder": "Selecteer een energieklasse",
-    "backButton": "Terug",
-    "continueButton": "Doorgaan"
-  },
-  "AddressStep": {
-    "title": "Adres van de woning",
-    "description": "Geef het volledige adres van de woning in Brussel op",
-    "demoModeAlert": "Demomodus: Adresgegevens zijn niet beschikbaar. Een standaard moeilijkheidsindex wordt gebruikt voor de berekening.",
-    "autocompleteLabel": "Zoek een adres",
-    "autocompletePlaceholder": "Bv: 1000 Wetstraat 16",
-    "manualEntryInstruction": "Of voer het adres handmatig in:",
-    "postalCodeLabel": "Postcode",
-    "postalCodePlaceholder": "1000",
-    "streetNameLabel": "Straatnaam",
-    "streetNamePlaceholder": "Wetstraat",
-    "streetNumberLabel": "Huisnummer",
-    "streetNumberPlaceholder": "16",
-    "backButton": "Terug",
-    "calculatingButton": "Berekenen...",
-    "calculateButton": "Huurprijs berekenen"
-  },
-  "ResultStep": {
-    "initialInsertError": {
-      "title": "Fout:",
-      "message": "Kan de initiële schatting niet opslaan. Probeer het later opnieuw. ({error})"
-    },
-    "title": "Resultaat van de schatting",
-    "description": "Hier is de indicatieve huurprijs voor deze woning",
-    "estimatedRentLabel": "Geschatte maandelijkse huurprijs",
-    "priceRangeLabel": "Prijsvork",
-    "priceRangeTooltip": "Volgens de Brusselse wetgeving kan de referentiehuurprijs ±20% variëren",
-    "actualRentSection": {
-      "title": "Bevestig uw huidige huurprijs",
-      "description": "Help ons onze schattingen te verbeteren en contact met u op te nemen indien nodig door uw huidige huurprijs en contactgegevens te delen (optioneel).",
-      "rentLabel": "Uw huidige maandelijkse huurprijs (€) *",
-      "rentPlaceholder": "Bv: 950",
-      "emailLabel": "Uw e-mailadres (Optioneel)",
-      "emailPlaceholder": "Bv: voorbeeld@domein.com",
-      "phoneLabel": "Uw telefoonnummer (Optioneel)",
-      "phonePlaceholder": "Bv: 04XX XX XX XX",
-      "updatingButton": "Bijwerken...",
-      "updatedButton": "Huurprijs bijgewerkt!",
-      "confirmButton": "Bevestig en sla mijn huurprijs op",
-      "successMessage": "Bedankt voor uw bijdrage!",
-      "errorMessage": "Fout bij het bijwerken. Controleer het bedrag en probeer opnieuw."
-    },
-    "summary": {
-      "title": "Samenvatting van de woning",
-      "addressLabel": "Adres",
-      "city": "Brussel",
-      "propertyTypeLabel": "Type woning",
-      "sizeLabel": "Oppervlakte",
-      "bedroomsLabel": "Slaapkamers",
-      "bathroomsLabel": "Badkamers",
-      "energyClassLabel": "Energieklasse",
-      "featuresLabel": "Voorzieningen",
-      "featuresNone": "Geen"
-    },
-    "calculationMethod": {
-      "title": "Berekeningsmethode",
-      "description": "De referentiehuurprijs wordt berekend volgens de officiële formule van het Brussels Hoofdstedelijk Gewest, die rekening houdt met het type woning, de oppervlakte, het aantal slaapkamers, de staat van de woning en de moeilijkheidsindex van de wijk."
-    },
-    "importantInfo": {
-      "title": "Belangrijke informatie",
-      "description1": "De referentiehuurprijs is niet bindend. Buiten specifieke regelgevende kaders wordt de huurprijs vrij bepaald door de verhuurder op de private markt.",
-      "description2": "De referentiehuurprijs moet echter verplicht vermeld worden naast de werkelijke huurprijs in huurovereenkomsten voor woningen in het Brussels Hoofdstedelijk Gewest."
-    },
-    "downloadPdfButton": "Download PDF",
-    "downloadingPdfButton": "Downloaden...",
-    "shareButton": "Delen",
-    "modifyButton": "Schatting wijzigen",
-    "newEstimationButton": "Nieuwe schatting"
-  },
-  "AddressAutocomplete": {
-    "error": {
-      "searchError": "Fout bij het zoeken naar adressen",
-      "insufficientQuery": "Voer ten minste de straatnaam in",
-      "noResults": "Geen adressen gevonden. Probeer een andere zoekopdracht.",
-      "genericError": "Fout: {message}",
-      "unknownError": "Er is een fout opgetreden"
-    },
-    "manualEntryButton": "Handmatig invoeren",
-    "demoModeAlert": "Demomodus: Gebruik de optie \"Handmatig invoeren\" om een adres in te voeren.",
-    "city": "Brussel"
-  },
-  "Metadata": {
-    "title": "Brussel Huisvesting - Hoeveel kost het om een woning te huren in Brussel?",
-    "description": "Gewestelijke Overheidsdienst Brussel - Brussel Huisvesting. Schat de indicatieve referentiehuurprijs voor een woning in Brussel."
-  },
-  "BruxellesPage": {
-    "header": {
-      "backToRegion": "Terug naar regioselectie",
-      "title": "Brussel Evaluatie"
-    },
-    "housingType": {
-      "title": "Type woning",
-      "description": "In welk type woning woont u of wilt u wonen?",
-      "privateMarket": {
-        "title": "Private markt",
-        "description": "Directe verhuur met een private verhuurder",
-        "status": "Huurprijsbeheersing van toepassing"
-      },
-      "aisHousing": {
-        "title": "SIK Woning",
-        "description": "Sociaal Verhuurkantoor",
-        "status": "Huurprijsbeheersing niet van toepassing"
-      },
-      "socialHousing": {
-        "title": "Sociale woning",
-        "description": "OCMW, SLSP of andere publieke organisaties",
-        "status": "Huurprijsbeheersing niet van toepassing"
-      },
-      "infoBox": {
-        "title": "Belangrijke informatie",
-        "description": "Huurprijsbeheersing in Brussel geldt alleen voor woningen op de private markt. Sociale woningen en SIK hebben hun eigen specifieke regelgeving."
-      },
-      "alert": "Huurprijsbeheersing is niet van toepassing op SIK of sociale woningen."
-    },
-    "userType": {
-      "title": "Welkom bij de evaluatietool",
-      "description": "Wie bent u?",
-      "dataProtection": {
-        "title": "Uw gegevens zijn beschermd",
-        "description": "Deze tool helpt u te evalueren of uw huurprijs voldoet aan de wettelijke regelgeving. Al uw gegevens blijven anoniem en vertrouwelijk.",
-        "consent": "Ik ga ermee akkoord dat mijn geanonimiseerde gegevens kunnen worden gebruikt voor onderzoeksdoeleinden om het huisvestingsbeleid te verbeteren.",
-        "consentRequired": "Gelieve het gebruik van gegevens te accepteren om verder te gaan"
-      },
-      "tenant": {
-        "title": "Huurder",
-        "description": "Ik huur of wil een woning huren"
-      },
-      "landlord": {
-        "title": "Verhuurder",
-        "description": "Ik verhuur of wil mijn woning verhuren"
-      },
-      "other": {
-        "title": "Andere",
-        "description": "Nieuwsgierig, student, professional..."
-      }
-    },
-    "calculator": {
-      "header": "WUUNE COLLECTIEF - HUUREVALUATIE",
-      "navigation": {
-        "title": "HUURDER EVALUATIE",
-        "subtitle": "BRUSSELS HOOFDSTEDELIJK GEWEST",
-        "back": "Terug"
-      },
-      "title": "Evalueer uw huurprijs",
-      "description": "Ontdek of uw huurprijs voldoet aan het Brusselse wettelijke kader",
-      "footer": "© 2024 Wuune Collectief. Huurevaluatietool."
-    }
-  },
-  "CalculatorRegionPage": {
-    "header": {
-      "backToHome": "Terug naar home",
-      "title": "Huurevaluatie"
-    },
-    "title": "Evalueer uw huurprijs",
-    "description": "In welk gewest bevindt uw woning zich?",
-    "regions": {
-      "brussels": {
-        "title": "Brussel",
-        "description": "Brussels Hoofdstedelijk Gewest",
-        "status": "Huurprijsbeheersing van kracht"
-      },
-      "wallonia": {
-        "title": "Wallonië",
-        "description": "Waals Gewest",
-        "status": "Evaluatie beschikbaar"
-      },
-      "flanders": {
-        "title": "Vlaanderen",
-        "description": "Vlaams Gewest",
-        "status": "In evaluatie"
-      }
-    },
-    "brusselsInfo": {
-      "title": "Brussels Hoofdstedelijk Gewest",
-      "activeFramework": {
-        "title": "Huurprijsbeheersing van kracht",
-        "description": "In Brussel worden huurprijzen gereguleerd door een wettelijk referentierooster. Onze tool stelt u in staat te evalueren of uw huurprijs voldoet aan dit rooster."
-      },
-      "dataProtection": {
-        "title": "Uw gegevens zijn beschermd",
-        "description": "Alle informatie die u verstrekt blijft anoniem en vertrouwelijk. Het wordt alleen gebruikt om uw evaluatie te berekenen."
-      },
-      "continueButton": "Evaluatie voortzetten"
-    },
-    "walloniaInfo": {
-      "title": "Waals Gewest",
-      "warning": {
-        "title": "Huurprijsbeheersing nog niet geïmplementeerd",
-        "description": "Huurprijsbeheersing is nog niet van kracht in Wallonië, maar u kunt nog steeds uw situatie evalueren om u voor te bereiden op toekomstige ontwikkelingen.",
-        "note": "Deze evaluatie geeft u een indicatie van de eerlijkheid van uw huurprijs volgens normen die in ontwikkeling zijn."
-      },
-      "continueButton": "Evaluatie voortzetten (indicatief)",
-      "changeRegionButton": "Van gewest veranderen"
-    },
-    "flandersInfo": {
-      "title": "Vlaams Gewest",
-      "inDevelopment": {
-        "title": "Tool in evaluatie",
-        "description": "We werken momenteel aan de aanpassing van onze tool voor het Vlaams Gewest. Deze functionaliteit zal binnenkort beschikbaar zijn.",
-        "note": "In de tussentijd kunt u contact met ons opnemen voor vragen betreffende uw huursituatie."
-      },
-      "contactButton": "Contact opnemen",
-      "changeRegionButton": "Van gewest veranderen"
-    }
-  },
-  "ContactPage": {
-    "header": {
-      "backToHome": "Terug naar home",
-      "title": "WUUNE"
-    },
-    "hero": {
-      "title": "Contacteer ons",
-      "description": "Een vraag? Hulp nodig? Wilt u zich bij ons aansluiten? We zijn er om u te ondersteunen."
-    },
-    "contactInfo": {
-      "email": {
-        "title": "Email",
-        "description": "Schrijf ons op:",
-        "address": "contact@wuune.be"
-      },
-      "assemblies": {
-        "title": "Lokale Vergaderingen",
-        "description": "Neem deel aan onze bijeenkomsten:",
-        "schedule": "Elke eerste dinsdag van de maand",
-        "time": "19u - Wisselende locatie"
-      },
-      "newsletter": {
-        "title": "Nieuwsbrief",
-        "description": "Blijf op de hoogte:",
-        "action": "Schrijf u hieronder in",
-        "content": "Nieuws en evenementen"
-      }
-    },
-    "form": {
-      "title": "Stuur ons een bericht",
-      "description": "Vul het onderstaande formulier in en we zullen zo snel mogelijk reageren.",
-      "fields": {
-        "name": {
-          "label": "Volledige naam *",
-          "placeholder": "Uw voor- en achternaam"
-        },
-        "email": {
-          "label": "Email *",
-          "placeholder": "uw.email@voorbeeld.com"
-        },
-        "subject": {
-          "label": "Onderwerp *",
-          "placeholder": "Het onderwerp van uw bericht"
-        },
-        "message": {
-          "label": "Bericht *",
-          "placeholder": "Beschrijf uw verzoek, vraag of situatie..."
-        }
-      },
-      "checkboxes": {
-        "newsletter": "Ik wil de WUUNE nieuwsbrief ontvangen",
-        "assembly": "Ik wil geïnformeerd worden over lokale vergaderingen"
-      },
-      "urgentInfo": {
-        "title": "Noodsituatie?",
-        "description": "Als u zich in een noodsituatie bevindt (dreiging van uitzetting, misbruikelijke huurprijs, enz.), neem dan direct contact met ons op per telefoon of email voor een prioritaire reactie."
-      },
-      "submitButton": "Bericht verzenden",
-      "successMessage": "Uw bericht is verzonden! We zullen zo snel mogelijk reageren.",
-      "privacyDisclaimer": "Door dit formulier in te dienen, gaat u ermee akkoord dat uw gegevens worden gebruikt om op uw verzoek te reageren. Wij verbinden ons ertoe uw privacy te respecteren en zullen uw informatie nooit met derden delen."
-    },
-    "resources": {
-      "title": "Nuttige Bronnen",
-      "links": {
-        "legalAid": "Gratis juridische hulp",
-        "tenantRights": "Rechten van huurders",
-        "rentControl": "Huurprijsbeheersing gids",
-        "mediation": "Bemiddelingsdiensten"
-      }
-    },
-    "additionalInfo": {
-      "heading": "Hoe kunnen wij u helpen?"
-    }
-  },
-  "QuestionnairePage": {
-    "sections": {
-      "retrievedInfo": "Opgehaalde Informatie",
-      "personalSituation": "Persoonlijke en huurovereenkomst situatie",
-      "housingProblems": "Woningproblemen",
-      "positiveAspects": "Positieve aspecten van de woning",
-      "personalizedResult": "Gepersonaliseerd resultaat"
-    },
-    "navigation": {
-      "back": "Terug",
-      "previous": "Vorige",
-      "next": "Volgende",
-      "finish": "Voltooien"
-    },
-    "header": {
-      "title": "Gedetailleerde vragenlijst",
-      "stepProgress": "Stap {currentStep} van {totalSteps}",
-      "percentage": "{percentage}%"
-    },
-    "retrievedInfo": {
-      "title": "Gedetailleerde vragenlijst",
-      "description": "We gebruiken de informatie die al is verzameld uit uw evaluatie",
-      "alreadyCollected": "✓ Informatie al verzameld",
-      "currentRent": "Huidige huurprijs:",
-      "livingSpace": "Woonoppervlakte:",
-      "email": "Email:",
-      "phone": "Telefoon:",
-      "notProvided": "Niet opgegeven",
-      "notProvidedFeminine": "Niet opgegeven",
-      "infoMessage": "Deze gedetailleerde vragenlijst stelt ons in staat uw situatie beter te begrijpen en u preciezer advies te geven. Er worden geen gegevens opnieuw gevraagd!"
-    },
-    "personalSituation": {
-      "title": "Persoonlijke en huurovereenkomst situatie",
-      "description": "Deze informatie helpt ons uw situatie beter te begrijpen",
-      "leaseType": "Type huurovereenkomst",
-      "leaseStartDate": "Startdatum huurovereenkomst",
-      "monthlyIncome": "Geschat maandelijks inkomen (optioneel)",
-      "monthlyIncomePlaceholder": "Bijv: 2500",
-      "householdComposition": "Huishoudsamenstelling",
-      "rentIndexation": "Is uw huurprijs recent geïndexeerd?"
-    },
-    "leaseTypes": {
-      "nineYears": "9-jarige huurovereenkomst (hoofdverblijfplaats)",
-      "threeYears": "3-jarige huurovereenkomst",
-      "lessThanYear": "Huurovereenkomst van minder dan een jaar",
-      "other": "Andere"
-    },
-    "householdTypes": {
-      "single": "Alleenstaande",
-      "couple": "Koppel zonder kinderen",
-      "family": "Familie met kind(eren)",
-      "shared": "Gedeelde accommodatie"
-    },
-    "rentIndexation": {
-      "yesRecent": "Ja, in de laatste 12 maanden",
-      "yesOld": "Ja, maar meer dan een jaar geleden",
-      "no": "Nee, nooit",
-      "unknown": "Ik weet het niet"
-    },
-    "maintenance": {
-      "boilerMaintenance": "Ik voer jaarlijks ketelonderhoud uit (indien van toepassing)",
-      "fireInsurance": "Ik heb een geldige brandverzekering"
-    },
-    "problems": {
-      "title": "Mogelijke woningproblemen",
-      "description": "Deze gebreken kunnen een huurvermindering rechtvaardigen",
-      "healthIssues": {
-        "title": "Gezondheids- of sanitaire problemen",
-        "items": [
-          "Overmatige vochtigheid of schimmel",
-          "Verwarmings- of isolatieproblemen",
-          "Belangrijke geluidshinder",
-          "Elektrische of loodgietersproblemen",
-          "Ongedierteplaag (ratten, kakkerlakken, etc.)",
-          "Afwezigheid van adequate ventilatie"
-        ]
-      },
-      "majorDefects": {
-        "title": "Belangrijke woninggebreken",
-        "items": [
-          "Defecte ramen of deuren",
-          "Vloerbedekking in slechte staat",
-          "Afbladderende verf of behang",
-          "Defecte keukenapparatuur",
-          "Badkamerproblemen (tegels, kranen)",
-          "Onvoldoende verlichting",
-          "Onvoldoende opbergruimte"
-        ]
-      },
-      "warningMessage": "Hoe meer gebreken uw woning heeft, hoe meer argumenten u hebt om een huurvermindering te onderhandelen."
-    },
-    "positiveAspects": {
-      "title": "Positieve aspecten van de woning",
-      "description": "Deze elementen kunnen een hogere huurprijs rechtvaardigen",
-      "advantages": "Voordelen en uitrusting",
-      "items": [
-        "Recent gerenoveerde woning",
-        "Balkon, terras of tuin",
-        "Parking of garage inbegrepen",
-        "Lift in het gebouw",
-        "Zeer goed bediende buurt",
-        "Uitzonderlijk uitzicht",
-        "Hoogwaardige uitrusting",
-        "Uitstekende thermische isolatie",
-        "Beveiligingssysteem",
-        "Kelder of berging inbegrepen"
-      ],
-      "additionalComments": "Aanvullende opmerkingen",
-      "additionalCommentsPlaceholder": "Beschrijf andere bijzondere aspecten van uw woning...",
-      "successMessage": "Deze informatie stelt ons in staat u een volledige en gepersonaliseerde evaluatie te geven."
-    },
-    "personalizedResult": {
-      "title": "Uw gepersonaliseerde situatie",
-      "description": "Hier is onze evaluatie gebaseerd op uw antwoorden",
-      "wuune": {
-        "title": "Sluit je aan bij Wuune!",
-        "description": "Wat het resultaat ook is, samen zijn we sterker om uw rechten te verdedigen.",
-        "joinCollective": "Sluit je aan bij het collectief",
-        "newEvaluation": "Maak een nieuwe evaluatie"
-      }
-    }
-  },
-  "PDF": {
-    "title": "Indicatieve Huurschatting",
-    "headers": {
-      "userInputs": "Invoerparameter",
-      "value": "Waarde",
-      "constants": "Toegepaste Constante / Aanpassing",
-      "appliedFormula": "Toegepaste Formule (voor deze woning)",
-      "results": "Resultaten"
-    },
-    "labels": {
-      "address": "Adres",
-      "propertyType": "Type woning",
-      "bedrooms": "Aantal slaapkamers",
-      "bedroomsMax": "4 en meer",
-      "surface": "Oppervlakte",
-      "propertyState": "Staat van de woning",
-      "constructedBefore2000": "Gebouwd voor 2000",
+    "step3": {
+      "title": "Eigendom Details",
+      "livingSpace": "Woonoppervlakte",
+      "livingSpaceUnit": "m²",
+      "livingSpaceHelp": "Totale bewoonbare ruimte, exclusief kelders/zolders tenzij verbouwd",
+      "bedrooms": "Slaapkamers",
       "bathrooms": "Badkamers",
-      "garages": "Garage(s)",
-      "energyClass": "Energieklasse",
-      "centralHeating": "Centrale verwarming",
-      "thermalRegulation": "Thermische regeling",
-      "doubleGlazing": "Dubbele beglazing",
-      "secondBathroom": "2e badkamer",
-      "recreationalSpaces": "Recreatieruimtes",
-      "storageSpaces": "Opbergruimtes",
-      "difficultyIndex": "Moeilijkheidsindex",
-      "estimatedRent": "Geschatte Mediane Huurprijs",
-      "priceRange": "Indicatieve Marge (±10%)"
+      "bathroomsHelp": "Tel alleen volledige badkamers (toilet + douche/bad)"
     },
-    "propertyStates": {
-      "bad": "Slechte staat",
-      "good": "Goede staat",
-      "excellent": "Uitstekende staat",
-      "default": "Niet gespecificeerd (standaard: Goede staat)"
+    "step4": {
+      "title": "Kenmerken en Voorzieningen",
+      "subtitle": "Welke kenmerken heeft uw eigendom?",
+      "centralHeating": "Centrale verwarming aanwezig?",
+      "thermalRegulation": "Thermische regulatie (thermostaat)?",
+      "doubleGlazing": "Dubbele beglazing op ramen?",
+      "secondBathroom": "Tweede volledige badkamer?",
+      "recreationalSpaces": "Recreatieruimtes (terras, balkon, tuin)?",
+      "storageSpaces": "Opslagruimtes (kelder, zolder)?",
+      "buildingAge": "Gebouw gebouwd voor 2000?",
+      "garages": "Aantal garages/parkeerplaatsen",
+      "garagesCount": "{count} garage(s)"
     },
-    "propertyTypes": {
-      "apartment": "Appartement",
-      "house": "Huis",
-      "studio": "Studio"
+    "step5": {
+      "title": "Energieclassificatie",
+      "subtitle": "Wat is de energieprestatiecertificaat (EPB) classificatie?",
+      "classA": "Klasse A (beste)",
+      "classB": "Klasse B",
+      "classC": "Klasse C",
+      "classD": "Klasse D",
+      "classE": "Klasse E",
+      "classF": "Klasse F",
+      "classG": "Klasse G (slechtste)",
+      "unknown": "Onbekend/Ik heb geen certificaat",
+      "whatIsPeb": "Wat is EPB?",
+      "whereToFind": "Waar vind ik dit?"
     },
-    "adjustments": {
-      "baseConstant": "Basisconstante",
-      "multiplier": "Vermenigvuldiger",
-      "difficultyMultiplier": "Moeilijkheidsvermenigvuldiger",
-      "stateGood": "Staatscorrectie (Goed)",
-      "stateExcellent": "Staatscorrectie (Uitstekend)",
-      "pebA": "Energieklasse A Correctie",
-      "pebB": "Energieklasse B Correctie",
-      "pebC": "Energieklasse C Correctie",
-      "pebD": "Energieklasse D Correctie",
-      "pebF": "Energieklasse F Correctie",
-      "pebG": "Energieklasse G Correctie",
-      "noCentralHeating": "Geen Centrale Verwarming Correctie",
-      "noThermalRegulation": "Geen Thermische Regeling Correctie",
-      "secondBathroom": "Tweede Badkamer Correctie",
-      "noRecreationalSpaces": "Geen Recreatieruimtes Correctie",
-      "storageSpaces": "Opbergruimtes Correctie",
-      "garage": "Garage Correctie"
+    "step6": {
+      "title": "Waar bevindt het eigendom zich?",
+      "postalCode": "Postcode",
+      "postalCodePlaceholder": "1000-1210",
+      "postalCodeHelp": "Vereist voor berekening",
+      "streetName": "Straatnaam",
+      "streetNamePlaceholder": "Begin met typen...",
+      "streetNameHelp": "Optioneel maar nuttig",
+      "buildingNumber": "Gebouwnummer",
+      "buildingNumberPlaceholder": "123 of 123A",
+      "buildingNumberHelp": "Voor volledige documentatie",
+      "invalidPostalCode": "Deze postcode is niet in Brussel. Berekening alleen geldig voor Brusselse adressen."
     },
-    "formatters": {
-      "notSpecified": "Niet gespecificeerd",
-      "yes": "Ja",
-      "no": "Nee",
-      "notAvailable": "N.v.t."
+    "results": {
+      "title": "Berekeningsresultaten",
+      "referenceRent": "Referentiehuur",
+      "minimumRent": "Minimale eerlijke huur",
+      "medianRent": "Mediaan eerlijke huur",
+      "maximumRent": "Maximale eerlijke huur",
+      "yourRent": "Uw huidige/voorgestelde huur",
+      "yourRentPlaceholder": "€X,XXX",
+      "yourRentHelp": "Maandelijkse huur exclusief kosten",
+      "comparison": "Vergelijking",
+      "downloadPdf": "PDF-rapport downloaden",
+      "takeQuestionnaire": "Gedetailleerde vragenlijst invullen",
+      "startNew": "Nieuwe evaluatie",
+      "editCalculation": "Berekening bewerken",
+      "abusiveRent": {
+        "title": "Uw huur lijkt de wettelijke limieten te overschrijden",
+        "message": "U betaalt €{difference} meer dan de maximale wettelijke huur (€{amount}/maand of {percent}% meer)",
+        "cta": "Krijg hulp van WUUNE"
+      },
+      "highRent": {
+        "title": "Uw huur ligt aan de bovenkant van het wettelijk bereik",
+        "message": "Uw huur is €{difference} boven de mediaan ({percent}% meer). Hoewel legaal, is onderhandeling mogelijk.",
+        "cta": "Leer onderhandelingsstrategieën"
+      },
+      "fairRent": {
+        "title": "Uw huur ligt binnen het wettelijk referentiebereik",
+        "message": "Uw huur voldoet aan de Brusselse regelgeving.",
+        "cta": "Help huurders rechten te beschermen"
+      },
+      "belowRent": {
+        "title": "Uw huur ligt onder het referentieraster",
+        "message": "U heeft een gunstige huursituatie.",
+        "cta": "Steun andere huurders"
+      }
     }
   },
-  "HomePage": {
-    "header": {
-      "collectiveTitle": "WUUNE COLLECTIEF - SAMEN TEGEN MISBRUIKELIJKE HUURPRIJZEN"
-    },
-    "navigation": {
-      "collective": "COLLECTIEF TEGEN MISBRUIKELIJKE HUURPRIJZEN",
-      "home": "Home",
-      "about": "Wuune",
-      "campaign": "Onze campagne",
-      "contact": "Contact",
-      "menu": "MENU"
-    },
-    "hero": {
-      "mainTitle": "GECONFRONTEERD MET HUISVESTINGSPROBLEMEN, BLIJF NIET ALLEEN EN DOE MET ONS MEE!",
-      "title": "VERLAAG MIJN HUURPRIJS",
-      "subtitle": "Samen vechten we tegen misbruikelijke huurprijzen!",
-      "description": "Sluit je aan bij het Wuune collectief en laat je stem horen. Is jouw huisvesting te duur? Kom erachter en onderneem actie!",
-      "startButton": "Beginnen",
-      "shareText": "Deel de strijd",
-      "imageAlt": "Warme mensen die demonstreren voor eerlijke huurprijzen"
-    },
-    "aboutUs": {
-      "title": "Wie zijn wij?",
-      "description1": "Te veel van ons wonen in huisvesting die te duur is, van slechte kwaliteit en niet geschikt voor onze behoeften. En wanneer we ergens anders willen gaan wonen, of eruit worden geduwd, is het bijna onmogelijk om een nieuwe plek te vinden.",
-      "description2": "We moeten ons verdedigen tegen de nalatigheid van verhuurders en hun discriminerende praktijken, en tegen die van overheidsinstanties die huurprijzen laten stijgen of huisvesting ongezond laten worden.",
-      "description3": "Met Wuune willen we dit samen doen, door verenigd en georganiseerd te zijn, op de schaal van onze wijken en de stad. We verdedigen, door actie, ons recht op een leefbare stad en betaalbare huisvesting, van kwaliteit en aangepast aan onze behoeften, zonder discriminatie.",
-      "learnMoreButton": "DOE MEE MET WUUNE",
-      "imageAlt": "Demonstratie met warme en collectieve sfeer"
-    },
-    "news": {
-      "title": "NIEUWS",
-      "viewAllButton": "Alle nieuws",
-      "items": {
-        "permanences": {
-          "title": "WEDERZIJDSE HULP SESSIES TUSSEN HUURDERS",
-          "date": "15/08/2025",
-          "excerpt": "Je hebt gehoord over de mogelijkheid voor een huurder..."
-        },
-        "abusiveRent": {
-          "title": "HUURPRIJS TE HOOG?",
-          "date": "30/06/2025",
-          "excerpt": "We leggen uit hoe het werkt en hoe Wuune je kan helpen..."
-        },
-        "manifesto": {
-          "title": "MINI-MANIFEST OM TE VERDEDIGEN TEGEN VERHUURDERS DIE HUURCONTROLE AANVALLEN",
-          "date": "04/05/2025",
-          "excerpt": "Mini-manifest om te verdedigen tegen verhuurders die huurcontrole aanvallen..."
-        },
-        "formation": {
-          "title": "ZATERDAG 24 MEI: TRAINING OVER TACTIEKEN EN HULPMIDDELEN VOOR HUURVERLAGING CAMPAGNES",
-          "date": "15/04/2025",
-          "excerpt": "De stemming van nieuwe verordening die verhuurders verbiedt om..."
-        }
-      }
-    },
-    "resources": {
-      "title": "Bronnen",
-      "links": {
-        "legalAid": "Gratis juridische hulp",
-        "tenantRights": "Huurderrechten",
-        "rentControl": "Huurcontrole gids",
-        "mediation": "Bemiddelingsdiensten"
-      }
-    },
-    "newsletter": {
-      "title": "Hou me op de hoogte",
-      "namePlaceholder": "Jouw naam",
-      "firstNamePlaceholder": "Jouw voornaam",
-      "emailPlaceholder": "Jouw e-mail",
-      "subscribeButton": "Inschrijven"
-    },
-    "callToAction": {
-      "joinCampaign": {
-        "title": "Doe mee aan onze campagne",
-        "description": "Samen kunnen we het verschil maken tegen misbruikelijke huurprijzen.",
-        "button": "Meer weten"
-      },
-      "evaluateRent": {
-        "title": "Evalueer uw huurprijs",
-        "description": "Ontdek of uw huurprijs voldoet aan de geldende wettelijke roosters.",
-        "button": "Doe de test"
-      },
-      "contactUs": {
-        "title": "Contacteer ons",
-        "description": "Een vraag? Hulp nodig? We zijn er om je te ondersteunen.",
-        "button": "Contact opnemen"
-      }
-    },
-    "footer": {
-      "description": "Burgercollectief voor eerlijke huurprijzen in Brussel.",
-      "usefulLinks": "Nuttige links",
-      "aboutLink": "Over Wuune",
-      "campaignLink": "Onze campagne",
-      "contactLink": "Contact",
-      "followUs": "Volg ons",
-      "copyright": "© 2024 Wuune Collectief. Alle rechten voorbehouden."
-    }
+  "questionnaire": {
+    "title": "Gedetailleerde Vragenlijst",
+    "subtitle": "5-minuten vragenlijst voor gepersonaliseerde ondersteuning"
   },
-  "Navigation": {
-    "menu": "MENU",
-    "serviceTitle": "GEWESTELIJKE OVERHEIDSDIENST BRUSSEL - BRUSSEL HUISVESTING",
-    "agencyTitle": "BRUSSEL HUISVESTING"
+  "contact": {
+    "title": "Sluit je aan bij de Beweging voor Huisvestingsrechten",
+    "subtitle": "Meer dan 500 Brusselse huurders al georganiseerd",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "message": "Bericht",
+    "send": "Versturen",
+    "success": "Bedankt! We nemen binnen 48 uur contact met u op.",
+    "error": "Er is een fout opgetreden. Probeer het opnieuw."
   },
-  "Errors": {
-    "difficultyIndex": "Er is een fout opgetreden bij het ophalen van de moeilijkheidsindex",
-    "invalidData": "Ongeldige moeilijkheidsindex gegevens ontvangen.",
-    "systemError": "Systeemfout",
-    "formSubmission": "Er is een fout opgetreden bij het indienen van het formulier"
+  "wuune": {
+    "name": "WUUNE",
+    "fullName": "Brussels Huurders Collectief",
+    "contact": "contact@wuune.be",
+    "joinButton": "Sluit je aan bij WUUNE"
   }
 }

@@ -1,0 +1,157 @@
+{
+  "common": {
+    "next": "Volgende",
+    "previous": "Vorige",
+    "submit": "Indienen",
+    "cancel": "Annuleren",
+    "save": "Opslaan",
+    "edit": "Bewerken",
+    "delete": "Verwijderen",
+    "close": "Sluiten",
+    "loading": "Laden..."
+  },
+  "home": {
+    "title": "Loyer Brussels",
+    "subtitle": "Huurcalculator voor Brussel",
+    "description": "Een politiek organisatie-instrument dat huurberekening gebruikt als toegangspunt voor de verdediging van huurders rechten.",
+    "startCalculator": "Start berekening",
+    "calculateRent": "Huur Berekenen",
+    "calculateRentDesc": "Binnenkort beschikbaar: Meerstappen calculator om eerlijke huur te bepalen volgens Brusselse regelgeving.",
+    "knowYourRights": "Ken je Rechten",
+    "knowYourRightsDesc": "Binnenkort beschikbaar: Uitgebreide vragenlijst en informatie over huurders rechten.",
+    "joinCommunity": "Sluit je aan bij de Gemeenschap",
+    "joinCommunityDesc": "Binnenkort beschikbaar: Verbind met WUUNE en andere huurders die strijden voor eerlijke huisvesting."
+  },
+  "calculator": {
+    "title": "Referentiehuur Calculator",
+    "subtitle": "Ontdek of uw huur voldoet aan de Brusselse regelgeving",
+    "progress": "Stap {current} van {total}",
+    "step1": {
+      "title": "Welk type huisvesting heeft u?",
+      "privateRental": "Particuliere Verhuur",
+      "privateRentalDesc": "Eigendom gehuurd van particulier of bedrijf",
+      "privateRentalSubtitle": "Huurplafond is van toepassing ✓",
+      "aisHousing": "AIS Huisvesting",
+      "aisHousingDesc": "Sociaal Verhuurkantoor",
+      "aisHousingSubtitle": "Huurplafond is NIET van toepassing",
+      "socialHousing": "Sociale Huisvesting",
+      "socialHousingDesc": "OCMW, SLSP of openbare huisvestingsautoriteit",
+      "socialHousingSubtitle": "Huurplafond is NIET van toepassing"
+    },
+    "step2": {
+      "title": "Welk type eigendom?",
+      "studio": "Studio",
+      "studioDesc": "0 slaapkamers, één hoofdruimte",
+      "apartment1": "Appartement - 1 slaapkamer",
+      "apartment2": "Appartement - 2 slaapkamers",
+      "apartment3": "Appartement - 3 slaapkamers",
+      "apartment4": "Appartement - 4+ slaapkamers",
+      "house": "Huis",
+      "houseDesc": "Elk aantal slaapkamers"
+    },
+    "step3": {
+      "title": "Eigendom Details",
+      "livingSpace": "Woonoppervlakte",
+      "livingSpaceUnit": "m²",
+      "livingSpaceHelp": "Totale bewoonbare ruimte, exclusief kelders/zolders tenzij verbouwd",
+      "bedrooms": "Slaapkamers",
+      "bathrooms": "Badkamers",
+      "bathroomsHelp": "Tel alleen volledige badkamers (toilet + douche/bad)"
+    },
+    "step4": {
+      "title": "Kenmerken en Voorzieningen",
+      "subtitle": "Welke kenmerken heeft uw eigendom?",
+      "centralHeating": "Centrale verwarming aanwezig?",
+      "thermalRegulation": "Thermische regulatie (thermostaat)?",
+      "doubleGlazing": "Dubbele beglazing op ramen?",
+      "secondBathroom": "Tweede volledige badkamer?",
+      "recreationalSpaces": "Recreatieruimtes (terras, balkon, tuin)?",
+      "storageSpaces": "Opslagruimtes (kelder, zolder)?",
+      "buildingAge": "Gebouw gebouwd voor 2000?",
+      "garages": "Aantal garages/parkeerplaatsen",
+      "garagesCount": "{count} garage(s)"
+    },
+    "step5": {
+      "title": "Energieclassificatie",
+      "subtitle": "Wat is de energieprestatiecertificaat (EPB) classificatie?",
+      "classA": "Klasse A (beste)",
+      "classB": "Klasse B",
+      "classC": "Klasse C",
+      "classD": "Klasse D",
+      "classE": "Klasse E",
+      "classF": "Klasse F",
+      "classG": "Klasse G (slechtste)",
+      "unknown": "Onbekend/Ik heb geen certificaat",
+      "whatIsPeb": "Wat is EPB?",
+      "whereToFind": "Waar vind ik dit?"
+    },
+    "step6": {
+      "title": "Waar bevindt het eigendom zich?",
+      "postalCode": "Postcode",
+      "postalCodePlaceholder": "1000-1210",
+      "postalCodeHelp": "Vereist voor berekening",
+      "streetName": "Straatnaam",
+      "streetNamePlaceholder": "Begin met typen...",
+      "streetNameHelp": "Optioneel maar nuttig",
+      "buildingNumber": "Gebouwnummer",
+      "buildingNumberPlaceholder": "123 of 123A",
+      "buildingNumberHelp": "Voor volledige documentatie",
+      "invalidPostalCode": "Deze postcode is niet in Brussel. Berekening alleen geldig voor Brusselse adressen."
+    },
+    "results": {
+      "title": "Berekeningsresultaten",
+      "referenceRent": "Referentiehuur",
+      "minimumRent": "Minimale eerlijke huur",
+      "medianRent": "Mediaan eerlijke huur",
+      "maximumRent": "Maximale eerlijke huur",
+      "yourRent": "Uw huidige/voorgestelde huur",
+      "yourRentPlaceholder": "€X,XXX",
+      "yourRentHelp": "Maandelijkse huur exclusief kosten",
+      "comparison": "Vergelijking",
+      "downloadPdf": "PDF-rapport downloaden",
+      "takeQuestionnaire": "Gedetailleerde vragenlijst invullen",
+      "startNew": "Nieuwe evaluatie",
+      "editCalculation": "Berekening bewerken",
+      "abusiveRent": {
+        "title": "Uw huur lijkt de wettelijke limieten te overschrijden",
+        "message": "U betaalt €{difference} meer dan de maximale wettelijke huur (€{amount}/maand of {percent}% meer)",
+        "cta": "Krijg hulp van WUUNE"
+      },
+      "highRent": {
+        "title": "Uw huur ligt aan de bovenkant van het wettelijk bereik",
+        "message": "Uw huur is €{difference} boven de mediaan ({percent}% meer). Hoewel legaal, is onderhandeling mogelijk.",
+        "cta": "Leer onderhandelingsstrategieën"
+      },
+      "fairRent": {
+        "title": "Uw huur ligt binnen het wettelijk referentiebereik",
+        "message": "Uw huur voldoet aan de Brusselse regelgeving.",
+        "cta": "Help huurders rechten te beschermen"
+      },
+      "belowRent": {
+        "title": "Uw huur ligt onder het referentieraster",
+        "message": "U heeft een gunstige huursituatie.",
+        "cta": "Steun andere huurders"
+      }
+    }
+  },
+  "questionnaire": {
+    "title": "Gedetailleerde Vragenlijst",
+    "subtitle": "5-minuten vragenlijst voor gepersonaliseerde ondersteuning"
+  },
+  "contact": {
+    "title": "Sluit je aan bij de Beweging voor Huisvestingsrechten",
+    "subtitle": "Meer dan 500 Brusselse huurders al georganiseerd",
+    "email": "E-mail",
+    "phone": "Telefoon",
+    "message": "Bericht",
+    "send": "Versturen",
+    "success": "Bedankt! We nemen binnen 48 uur contact met u op.",
+    "error": "Er is een fout opgetreden. Probeer het opnieuw."
+  },
+  "wuune": {
+    "name": "WUUNE",
+    "fullName": "Brussels Huurders Collectief",
+    "contact": "contact@wuune.be",
+    "joinButton": "Sluit je aan bij WUUNE"
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "common": {
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "loading": "Chargement..."
+  },
+  "home": {
+    "title": "Loyer Brussels",
+    "subtitle": "Calculateur de Loyer pour Bruxelles",
+    "description": "Un outil d'organisation politique utilisant le calcul du loyer comme point d'entrée pour la défense des droits des locataires.",
+    "startCalculator": "Commencer le calcul",
+    "calculateRent": "Calculer le Loyer",
+    "calculateRentDesc": "Bientôt disponible : Calculateur en plusieurs étapes pour déterminer un loyer équitable selon la réglementation bruxelloise.",
+    "knowYourRights": "Connaître vos Droits",
+    "knowYourRightsDesc": "Bientôt disponible : Questionnaire complet et informations sur les droits des locataires.",
+    "joinCommunity": "Rejoindre la Communauté",
+    "joinCommunityDesc": "Bientôt disponible : Connectez-vous avec WUUNE et d'autres locataires luttant pour un logement équitable."
+  },
+  "calculator": {
+    "title": "Calculateur de Loyer de Référence",
+    "subtitle": "Découvrez si votre loyer est conforme à la réglementation bruxelloise",
+    "progress": "Étape {current} sur {total}",
+    "step1": {
+      "title": "Quel type de logement avez-vous ?",
+      "privateRental": "Location Privée",
+      "privateRentalDesc": "Propriété louée à un particulier ou une entreprise",
+      "privateRentalSubtitle": "Le plafonnement des loyers s'applique ✓",
+      "aisHousing": "Logement AIS",
+      "aisHousingDesc": "Agence Immobilière Sociale",
+      "aisHousingSubtitle": "Le plafonnement des loyers ne s'applique PAS",
+      "socialHousing": "Logement Social",
+      "socialHousingDesc": "CPAS, SLSP ou autorité publique de logement",
+      "socialHousingSubtitle": "Le plafonnement des loyers ne s'applique PAS"
+    },
+    "step2": {
+      "title": "Quel type de propriété ?",
+      "studio": "Studio",
+      "studioDesc": "0 chambre, un espace principal",
+      "apartment1": "Appartement - 1 chambre",
+      "apartment2": "Appartement - 2 chambres",
+      "apartment3": "Appartement - 3 chambres",
+      "apartment4": "Appartement - 4+ chambres",
+      "house": "Maison",
+      "houseDesc": "Tout nombre de chambres"
+    },
+    "step3": {
+      "title": "Détails de la Propriété",
+      "livingSpace": "Surface habitable",
+      "livingSpaceUnit": "m²",
+      "livingSpaceHelp": "Surface habitable totale, hors caves/greniers sauf s'ils sont aménagés",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "bathroomsHelp": "Comptez uniquement les salles de bain complètes (toilettes + douche/baignoire)"
+    },
+    "step4": {
+      "title": "Caractéristiques et Équipements",
+      "subtitle": "Quelles caractéristiques possède votre propriété ?",
+      "centralHeating": "Chauffage central présent ?",
+      "thermalRegulation": "Régulation thermique (thermostat) ?",
+      "doubleGlazing": "Double vitrage sur les fenêtres ?",
+      "secondBathroom": "Deuxième salle de bain complète ?",
+      "recreationalSpaces": "Espaces récréatifs (terrasse, balcon, jardin) ?",
+      "storageSpaces": "Espaces de rangement (cave, grenier) ?",
+      "buildingAge": "Bâtiment construit avant 2000 ?",
+      "garages": "Nombre de garages/places de parking",
+      "garagesCount": "{count} garage(s)"
+    },
+    "step5": {
+      "title": "Classement Énergétique",
+      "subtitle": "Quel est le classement du certificat de performance énergétique (PEB) ?",
+      "classA": "Classe A (meilleure)",
+      "classB": "Classe B",
+      "classC": "Classe C",
+      "classD": "Classe D",
+      "classE": "Classe E",
+      "classF": "Classe F",
+      "classG": "Classe G (pire)",
+      "unknown": "Inconnu/Je n'ai pas de certificat",
+      "whatIsPeb": "Qu'est-ce que le PEB ?",
+      "whereToFind": "Où puis-je trouver cela ?"
+    },
+    "step6": {
+      "title": "Où se trouve la propriété ?",
+      "postalCode": "Code postal",
+      "postalCodePlaceholder": "1000-1210",
+      "postalCodeHelp": "Requis pour le calcul",
+      "streetName": "Nom de la rue",
+      "streetNamePlaceholder": "Commencez à taper...",
+      "streetNameHelp": "Optionnel mais utile",
+      "buildingNumber": "Numéro du bâtiment",
+      "buildingNumberPlaceholder": "123 ou 123A",
+      "buildingNumberHelp": "Pour une documentation complète",
+      "invalidPostalCode": "Ce code postal n'est pas à Bruxelles. Le calcul n'est valable que pour les adresses bruxelloises."
+    },
+    "results": {
+      "title": "Résultats du Calcul",
+      "referenceRent": "Loyer de Référence",
+      "minimumRent": "Loyer minimum équitable",
+      "medianRent": "Loyer médian équitable",
+      "maximumRent": "Loyer maximum équitable",
+      "yourRent": "Votre loyer actuel/proposé",
+      "yourRentPlaceholder": "€X,XXX",
+      "yourRentHelp": "Loyer mensuel hors charges (services publics, etc.)",
+      "comparison": "Comparaison",
+      "downloadPdf": "Télécharger le rapport PDF",
+      "takeQuestionnaire": "Répondre au questionnaire détaillé",
+      "startNew": "Nouvelle évaluation",
+      "editCalculation": "Modifier le calcul",
+      "abusiveRent": {
+        "title": "Votre loyer semble dépasser les limites légales",
+        "message": "Vous payez €{difference} de plus que le loyer maximum légal (€{amount}/mois ou {percent}% au-dessus)",
+        "cta": "Obtenir de l'aide de WUUNE"
+      },
+      "highRent": {
+        "title": "Votre loyer se situe dans la fourchette haute",
+        "message": "Votre loyer est €{difference} au-dessus de la médiane ({percent}% au-dessus). Bien que légal, une négociation peut être possible.",
+        "cta": "Apprendre les stratégies de négociation"
+      },
+      "fairRent": {
+        "title": "Votre loyer est dans la fourchette de référence légale",
+        "message": "Votre loyer est conforme à la réglementation bruxelloise.",
+        "cta": "Aider à protéger les droits des locataires"
+      },
+      "belowRent": {
+        "title": "Votre loyer est inférieur à la grille de référence",
+        "message": "Vous bénéficiez d'une situation locative favorable.",
+        "cta": "Soutenir les autres locataires"
+      }
+    }
+  },
+  "questionnaire": {
+    "title": "Questionnaire Détaillé",
+    "subtitle": "Questionnaire de 5 minutes pour un soutien personnalisé",
+    "section1": {
+      "title": "Résumé des Informations Collectées",
+      "intro": "Voici ce que vous avez déjà partagé :"
+    },
+    "section2": {
+      "title": "Situation Personnelle",
+      "leaseType": "Type de bail",
+      "leaseStartDate": "Date de début du bail",
+      "monthlyIncome": "Revenu mensuel du ménage",
+      "householdComposition": "Composition du ménage",
+      "rentIndexation": "Indexation du loyer",
+      "boilerMaintenance": "Entretien de la chaudière inclus dans le loyer ?",
+      "fireInsurance": "Assurance incendie incluse dans le loyer ?"
+    },
+    "section3": {
+      "title": "Problèmes de Logement",
+      "subtitle": "Rencontrez-vous l'un de ces problèmes de logement ?"
+    },
+    "section4": {
+      "title": "Aspects Positifs",
+      "subtitle": "Qu'appréciez-vous dans votre logement ?"
+    },
+    "section5": {
+      "title": "Vos Résultats Personnalisés et Prochaines Étapes"
+    }
+  },
+  "contact": {
+    "title": "Rejoignez le Mouvement pour les Droits au Logement",
+    "subtitle": "Plus de 500 locataires bruxellois déjà organisés",
+    "email": "Email",
+    "phone": "Téléphone",
+    "message": "Message",
+    "send": "Envoyer",
+    "success": "Merci ! Nous vous contacterons dans les 48 heures.",
+    "error": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "wuune": {
+    "name": "WUUNE",
+    "fullName": "Collectif des Locataires Bruxellois",
+    "contact": "contact@wuune.be",
+    "joinButton": "Rejoindre WUUNE"
+  }
+}

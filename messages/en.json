@@ -1,0 +1,157 @@
+{
+  "common": {
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "loading": "Loading..."
+  },
+  "home": {
+    "title": "Loyer Brussels",
+    "subtitle": "Brussels Rent Calculator",
+    "description": "A political organizing tool using rent calculation as an entry point for tenant rights advocacy.",
+    "startCalculator": "Start calculation",
+    "calculateRent": "Calculate Rent",
+    "calculateRentDesc": "Coming soon: Multi-step calculator to determine fair rent based on Brussels regulations.",
+    "knowYourRights": "Know Your Rights",
+    "knowYourRightsDesc": "Coming soon: Comprehensive questionnaire and tenant rights information.",
+    "joinCommunity": "Join Community",
+    "joinCommunityDesc": "Coming soon: Connect with WUUNE and other tenants fighting for fair housing."
+  },
+  "calculator": {
+    "title": "Reference Rent Calculator",
+    "subtitle": "Discover if your rent complies with Brussels regulations",
+    "progress": "Step {current} of {total}",
+    "step1": {
+      "title": "What type of housing do you have?",
+      "privateRental": "Private Rental",
+      "privateRentalDesc": "Property rented from private individual or company",
+      "privateRentalSubtitle": "Rent capping applies ✓",
+      "aisHousing": "AIS Housing",
+      "aisHousingDesc": "Social Rental Agency",
+      "aisHousingSubtitle": "Rent capping does NOT apply",
+      "socialHousing": "Social Housing",
+      "socialHousingDesc": "CPAS, SLSP or public housing authority",
+      "socialHousingSubtitle": "Rent capping does NOT apply"
+    },
+    "step2": {
+      "title": "What type of property?",
+      "studio": "Studio",
+      "studioDesc": "0 bedrooms, one main space",
+      "apartment1": "Apartment - 1 bedroom",
+      "apartment2": "Apartment - 2 bedrooms",
+      "apartment3": "Apartment - 3 bedrooms",
+      "apartment4": "Apartment - 4+ bedrooms",
+      "house": "House",
+      "houseDesc": "Any bedroom count"
+    },
+    "step3": {
+      "title": "Property Details",
+      "livingSpace": "Living space",
+      "livingSpaceUnit": "m²",
+      "livingSpaceHelp": "Total habitable space, excluding cellars/attics unless converted",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "bathroomsHelp": "Count full bathrooms only (toilet + shower/bath)"
+    },
+    "step4": {
+      "title": "Features & Amenities",
+      "subtitle": "What features does your property have?",
+      "centralHeating": "Central heating present?",
+      "thermalRegulation": "Thermal regulation (thermostat)?",
+      "doubleGlazing": "Double glazing on windows?",
+      "secondBathroom": "Second full bathroom?",
+      "recreationalSpaces": "Recreational spaces (terrace, balcony, garden)?",
+      "storageSpaces": "Storage spaces (cellar, attic)?",
+      "buildingAge": "Building constructed before 2000?",
+      "garages": "Number of garages/parking spaces",
+      "garagesCount": "{count} garage(s)"
+    },
+    "step5": {
+      "title": "Energy Rating",
+      "subtitle": "What is the energy performance certificate (PEB) rating?",
+      "classA": "Class A (best)",
+      "classB": "Class B",
+      "classC": "Class C",
+      "classD": "Class D",
+      "classE": "Class E",
+      "classF": "Class F",
+      "classG": "Class G (worst)",
+      "unknown": "Unknown/Don't have certificate",
+      "whatIsPeb": "What is PEB?",
+      "whereToFind": "Where do I find this?"
+    },
+    "step6": {
+      "title": "Where is the property located?",
+      "postalCode": "Postal code",
+      "postalCodePlaceholder": "1000-1210",
+      "postalCodeHelp": "Required for calculation",
+      "streetName": "Street name",
+      "streetNamePlaceholder": "Start typing...",
+      "streetNameHelp": "Optional but helpful",
+      "buildingNumber": "Building number",
+      "buildingNumberPlaceholder": "123 or 123A",
+      "buildingNumberHelp": "For complete documentation",
+      "invalidPostalCode": "This postal code is not in Brussels. Calculation only valid for Brussels addresses."
+    },
+    "results": {
+      "title": "Calculation Results",
+      "referenceRent": "Reference Rent",
+      "minimumRent": "Minimum fair rent",
+      "medianRent": "Median fair rent",
+      "maximumRent": "Maximum fair rent",
+      "yourRent": "Your current/proposed rent",
+      "yourRentPlaceholder": "€X,XXX",
+      "yourRentHelp": "Monthly rent excluding charges",
+      "comparison": "Comparison",
+      "downloadPdf": "Download PDF report",
+      "takeQuestionnaire": "Take detailed questionnaire",
+      "startNew": "New evaluation",
+      "editCalculation": "Edit calculation",
+      "abusiveRent": {
+        "title": "Your rent appears to exceed legal limits",
+        "message": "You are paying €{difference} more than the maximum legal rent (€{amount}/month or {percent}% over)",
+        "cta": "Get help from WUUNE"
+      },
+      "highRent": {
+        "title": "Your rent is at the upper end of the legal range",
+        "message": "Your rent is €{difference} above the median ({percent}% over). While legal, negotiation may be possible.",
+        "cta": "Learn negotiation strategies"
+      },
+      "fairRent": {
+        "title": "Your rent is within the legal reference range",
+        "message": "Your rent complies with Brussels regulations.",
+        "cta": "Help protect tenant rights"
+      },
+      "belowRent": {
+        "title": "Your rent is below the reference grid",
+        "message": "You have a favorable rental situation.",
+        "cta": "Support other tenants"
+      }
+    }
+  },
+  "questionnaire": {
+    "title": "Detailed Questionnaire",
+    "subtitle": "5-minute questionnaire for personalized support"
+  },
+  "contact": {
+    "title": "Join the Movement for Housing Rights",
+    "subtitle": "500+ Brussels tenants already organized",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "send": "Send",
+    "success": "Thank you! We'll contact you within 48 hours.",
+    "error": "An error occurred. Please try again."
+  },
+  "wuune": {
+    "name": "WUUNE",
+    "fullName": "Brussels Tenants Collective",
+    "contact": "contact@wuune.be",
+    "joinButton": "Join WUUNE"
+  }
+}

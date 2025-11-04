@@ -94,7 +94,6 @@ export function PropertyTypeStep() {
         onContinue={handleContinue}
         continueText={t("continueButton")}
         disabled={!state.propertyInfo.propertyType}
-        autoSaveInterval={30}
       />
     </div>
   );

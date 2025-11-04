@@ -74,6 +74,7 @@
     "postcss": "^8",
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.17",
+    "tdd-guard-vitest": "^0.1.6",
     "tsx": "^4.20.6",
     "typescript": "^5",
     "vite": "^5.4.11",

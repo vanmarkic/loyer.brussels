@@ -24,7 +24,6 @@ export function WuuneResultStep() {
   const {
     state,
     getActualRent,
-    getLivingSpace,
     getContactInfo,
     updateRentalInfo,
     updateUserProfile,

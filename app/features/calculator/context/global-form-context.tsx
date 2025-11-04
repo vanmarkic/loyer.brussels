@@ -13,6 +13,8 @@ import type {
   PropertyInformation,
   RentalInformation,
   CalculationResults,
+  HouseholdInfo,
+  PropertyIssues,
 } from "@/features/calculator/types/global-form-types";
 
 // Session storage completely removed - no persistence
@@ -64,6 +66,21 @@ const defaultCalculationResults: CalculationResults = {
   errorCode: null,
 };
 
+const defaultHouseholdInfo: HouseholdInfo = {
+  monthlyIncome: "",
+  householdComposition: "",
+  paymentDelays: "",
+  evictionThreats: "",
+  mediationAttempts: "",
+};
+
+const defaultPropertyIssues: PropertyIssues = {
+  healthIssues: [],
+  majorDefects: [],
+  positiveAspects: [],
+  additionalComments: "",
+};
+
 export const initialGlobalState: GlobalFormState = {
   currentStep: 1,
   currentPage: "calculator",
@@ -71,6 +88,10 @@ export const initialGlobalState: GlobalFormState = {
   propertyInfo: defaultPropertyInfo,
   rentalInfo: defaultRentalInfo,
   calculationResults: defaultCalculationResults,
+  householdInfo: defaultHouseholdInfo,
+  propertyIssues: defaultPropertyIssues,
+  sessionId: "",
+  lastUpdated: Date.now(),
 };
 
 // Action types
@@ -79,6 +100,8 @@ type GlobalFormAction =
   | { type: "UPDATE_PROPERTY_INFO"; payload: Partial<PropertyInformation> }
   | { type: "UPDATE_RENTAL_INFO"; payload: Partial<RentalInformation> }
   | { type: "UPDATE_CALCULATION_RESULTS"; payload: Partial<CalculationResults> }
+  | { type: "UPDATE_HOUSEHOLD_INFO"; payload: Partial<HouseholdInfo> }
+  | { type: "UPDATE_PROPERTY_ISSUES"; payload: Partial<PropertyIssues> }
   | { type: "SET_CURRENT_STEP"; payload: number }
   | {
       type: "SET_CURRENT_PAGE";
@@ -119,6 +142,18 @@ export const globalFormReducer = (
         },
       };
 
+    case "UPDATE_HOUSEHOLD_INFO":
+      return {
+        ...state,
+        householdInfo: { ...state.householdInfo, ...action.payload },
+      };
+
+    case "UPDATE_PROPERTY_ISSUES":
+      return {
+        ...state,
+        propertyIssues: { ...state.propertyIssues, ...action.payload },
+      };
+
     case "SET_CURRENT_STEP":
       return {
         ...state,
@@ -149,6 +184,8 @@ interface GlobalFormContextType {
   updatePropertyInfo: (updates: Partial<PropertyInformation>) => void;
   updateRentalInfo: (updates: Partial<RentalInformation>) => void;
   updateCalculationResults: (updates: Partial<CalculationResults>) => void;
+  updateHouseholdInfo: (updates: Partial<HouseholdInfo>) => void;
+  updatePropertyIssues: (updates: Partial<PropertyIssues>) => void;
   setCurrentStep: (step: number) => void;
   resetForm: () => void;
 
@@ -194,6 +231,20 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
     [],
   );
 
+  const updateHouseholdInfo = useCallback(
+    (updates: Partial<HouseholdInfo>) => {
+      dispatch({ type: "UPDATE_HOUSEHOLD_INFO", payload: updates });
+    },
+    [],
+  );
+
+  const updatePropertyIssues = useCallback(
+    (updates: Partial<PropertyIssues>) => {
+      dispatch({ type: "UPDATE_PROPERTY_ISSUES", payload: updates });
+    },
+    [],
+  );
+
   const setCurrentStep = useCallback((step: number) => {
     dispatch({ type: "SET_CURRENT_STEP", payload: step });
   }, []);
@@ -222,6 +273,8 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
       updatePropertyInfo,
       updateRentalInfo,
       updateCalculationResults,
+      updateHouseholdInfo,
+      updatePropertyIssues,
       setCurrentStep,
       resetForm,
       getActualRent,
@@ -233,6 +286,8 @@ export const GlobalFormProvider: React.FC<{ children: React.ReactNode }> = ({
       updatePropertyInfo,
       updateRentalInfo,
       updateCalculationResults,
+      updateHouseholdInfo,
+      updatePropertyIssues,
       setCurrentStep,
       resetForm,
       getActualRent,

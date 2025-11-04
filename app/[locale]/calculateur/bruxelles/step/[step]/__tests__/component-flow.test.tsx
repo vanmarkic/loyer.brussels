@@ -6,7 +6,6 @@ import { useStepNavigation } from "@/features/calculator/hooks/use-step-navigati
 import { StepNavigationProvider } from "@/features/calculator/components/step-wrapper";
 import { GlobalFormProvider } from "@/features/calculator/context/global-form-context";
 import { FormProvider } from "@/features/calculator/context/form-context";
-import { SessionManagerProvider } from "@/app/components/session-manager";
 import { vi } from "vitest";
 
 // Mock Next.js navigation

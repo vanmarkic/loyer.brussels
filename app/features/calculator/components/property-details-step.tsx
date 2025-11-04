@@ -294,8 +294,6 @@ export function PropertyDetailsStep() {
         }
         nextText={t("continueButton")}
         previousText={t("backButton")}
-        autoSaveEnabled={true}
-        autoSaveInterval={30}
         className="mt-8"
       />
     </div>

@@ -183,7 +183,6 @@ export function AddressStep() {
             state.calculationResults.isLoading
           }
           isLastStep={true}
-          autoSaveInterval={30}
         />
       </div>
     </div>

@@ -65,6 +65,21 @@ export interface CalculationResults {
   errorCode: string | null;
 }
 
+export interface HouseholdInfo {
+  monthlyIncome: string;
+  householdComposition: string;
+  paymentDelays: string;
+  evictionThreats: string;
+  mediationAttempts: string;
+}
+
+export interface PropertyIssues {
+  healthIssues: string[];
+  majorDefects: string[];
+  positiveAspects: string[];
+  additionalComments: string;
+}
+
 // Unified global form state
 export interface GlobalFormState {
   // Flow control
@@ -76,4 +91,10 @@ export interface GlobalFormState {
   propertyInfo: PropertyInformation;
   rentalInfo: RentalInformation;
   calculationResults: CalculationResults;
+  householdInfo: HouseholdInfo;
+  propertyIssues: PropertyIssues;
+
+  // Session tracking
+  sessionId: string;
+  lastUpdated: number;
 }

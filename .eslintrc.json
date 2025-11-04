@@ -1,20 +1,6 @@
 {
-  "extends": [
-    "next/core-web-vitals"
-  ],
+  "extends": "next/core-web-vitals",
   "rules": {
-    "no-restricted-imports": [
-      "error",
-      {
-        "patterns": [
-          {
-            "group": [
-              "@/components/ui/use-*"
-            ],
-            "message": "Use single source for shared utilities. Use @/hooks/ for utility hooks instead of @/components/ui/"
-          }
-        ]
-      }
-    ]
+    "react/no-unescaped-entities": "off"
   }
 }

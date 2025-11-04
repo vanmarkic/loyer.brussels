@@ -1,0 +1,72 @@
+{
+  "project": {
+    "name": "Loyer Brussels",
+    "description": "Brussels rent calculator application built with Next.js 15",
+    "type": "web-app",
+    "framework": "Next.js",
+    "language": "TypeScript"
+  },
+  "context": {
+    "stack": [
+      "Next.js 15 (App Router)",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS",
+      "Radix UI",
+      "react-hook-form",
+      "next-intl (i18n)",
+      "Supabase",
+      "Vitest",
+      "Playwright"
+    ],
+    "conventions": {
+      "components": "Use TypeScript with explicit types",
+      "styling": "Tailwind CSS with design system consistency",
+      "state": "React hooks and Server Components",
+      "forms": "react-hook-form for form management",
+      "testing": "Vitest for unit/integration, Playwright for E2E",
+      "i18n": "next-intl for French/Dutch translations"
+    },
+    "key_directories": {
+      "app": "Next.js App Router pages and layouts",
+      "components": "Reusable React components",
+      "lib": "Utility functions and helpers",
+      "docs": "Project documentation"
+    }
+  },
+  "superpowers": {
+    "enabled": true,
+    "commands": [
+      "/refactor - Intelligent code refactoring",
+      "/optimize - Performance optimization",
+      "/debug - Advanced debugging",
+      "/test - Smart test generation",
+      "/security - Security audit",
+      "/architecture - Architecture analysis",
+      "/pr - Create pull request"
+    ]
+  },
+  "ux_ui_skills": {
+    "enabled": true,
+    "commands": [
+      "/ui-review - Comprehensive UI/UX review",
+      "/component - Create new component with best practices",
+      "/accessibility - Accessibility audit and fixes",
+      "/responsive - Responsive design check",
+      "/design-system - Design system consistency",
+      "/i18n - Internationalization review",
+      "/ux-improve - UX improvement suggestions",
+      "/animation - Add smooth animations",
+      "/forms - Optimize form UX"
+    ]
+  },
+  "priorities": [
+    "User experience and accessibility",
+    "Type safety and code quality",
+    "Performance and Core Web Vitals",
+    "Mobile-first responsive design",
+    "Internationalization (FR/NL)",
+    "Test coverage",
+    "Design system consistency"
+  ]
+}

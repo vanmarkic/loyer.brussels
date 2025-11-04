@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCalculator } from '@/contexts/CalculatorContext';
 import { calculateReferenceRent, compareRent } from '@/lib/rent-calculator';
 import { formatCurrency } from '@/lib/utils';
+import { generateRentCalculationPDF, downloadPDF } from '@/lib/pdf-generator';
 import { Download, AlertTriangle, CheckCircle, Info, TrendingDown } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { RentCalculationResult, RentComparison } from '@/types/calculator';
@@ -20,6 +21,7 @@ export function Step7Results() {
   const [userRent, setUserRent] = useState(state.currentRent?.toString() || '');
   const [calculation, setCalculation] = useState<RentCalculationResult | null>(null);
   const [comparison, setComparison] = useState<RentComparison | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   useEffect(() => {
     const result = calculateReferenceRent(state);
@@ -36,6 +38,22 @@ export function Step7Results() {
       setComparison(null);
     }
   }, [userRent, calculation, updateCurrentRent]);
+
+  const handleDownloadPDF = async () => {
+    if (!calculation) return;
+
+    setIsGeneratingPdf(true);
+    try {
+      const pdfBlob = await generateRentCalculationPDF(state, calculation, comparison);
+      const filename = `loyer-brussels-${new Date().toISOString().split('T')[0]}.pdf`;
+      downloadPDF(pdfBlob, filename);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   if (!calculation) {
     return (
@@ -185,9 +203,15 @@ export function Step7Results() {
 
       {/* Action Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Button size="lg" variant="outline" className="w-full">
+        <Button
+          size="lg"
+          variant="outline"
+          className="w-full"
+          onClick={handleDownloadPDF}
+          disabled={isGeneratingPdf}
+        >
           <Download className="w-5 h-5 mr-2" />
-          {t('downloadPdf')}
+          {isGeneratingPdf ? 'Generating PDF...' : t('downloadPdf')}
         </Button>
         <Button size="lg" variant="outline" onClick={resetCalculator} className="w-full">
           {t('startNew')}

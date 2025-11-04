@@ -42,21 +42,21 @@ export async function submitContact(formData: ContactFormData, calculationId?: s
         html: `
           <h1>Thank you for contacting WUUNE!</h1>
           <p>Dear ${formData.firstName} ${formData.lastName},</p>
-          <p>We've received your message and will get back to you within 48 hours.</p>
+          <p>We have received your message and will get back to you within 48 hours.</p>
 
           ${
             formData.wantsMembership
-              ? '<p><strong>Membership:</strong> We'll send you information about joining WUUNE.</p>'
+              ? '<p><strong>Membership:</strong> We will send you information about joining WUUNE.</p>'
               : ''
           }
           ${
             formData.wantsNewsletter
-              ? '<p><strong>Newsletter:</strong> You've been added to our mailing list.</p>'
+              ? '<p><strong>Newsletter:</strong> You have been added to our mailing list.</p>'
               : ''
           }
           ${
             formData.wantsAssemblyInvites
-              ? '<p><strong>Assemblies:</strong> You'll receive invitations to our monthly meetings.</p>'
+              ? '<p><strong>Assemblies:</strong> You will receive invitations to our monthly meetings.</p>'
               : ''
           }
 

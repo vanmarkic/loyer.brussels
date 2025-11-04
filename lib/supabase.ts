@@ -11,13 +11,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Server-side admin client (use only in server components/API routes)
 export function createAdminClient() {
+  const adminUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseServiceKey) {
-    throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
+  if (!adminUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase environment variables for admin client');
   }
 
-  return createClient(supabaseUrl, supabaseServiceKey, {
+  return createClient(adminUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false

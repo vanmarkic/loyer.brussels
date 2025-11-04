@@ -1,9 +1,6 @@
-import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
 export default function QuestionnairePage() {
-  const t = useTranslations('questionnaire');
-
   return (
     <main className="min-h-screen bg-gray-50 py-8 px-4 md:px-8">
       <div className="max-w-4xl mx-auto">
@@ -17,8 +14,8 @@ export default function QuestionnairePage() {
         </div>
 
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
-          <p className="text-xl text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-4xl font-bold mb-4">Detailed Questionnaire</h1>
+          <p className="text-xl text-gray-600">5-minute questionnaire for personalized support</p>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-8 text-center">
